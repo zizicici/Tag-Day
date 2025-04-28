@@ -6,30 +6,25 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		14B239B62DBF13F30007152C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B239B22DBF13F30007152C /* SceneDelegate.swift */; };
+		14B239B72DBF13F30007152C /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B239B32DBF13F30007152C /* CalendarViewController.swift */; };
+		14B239B82DBF13F30007152C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B239AE2DBF13F30007152C /* AppDelegate.swift */; };
+		14B239B92DBF13F30007152C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 14B239B12DBF13F30007152C /* LaunchScreen.storyboard */; };
+		14B239BA2DBF13F30007152C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 14B239AF2DBF13F30007152C /* Assets.xcassets */; };
+		14B239C72DBF765B0007152C /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 14B239C62DBF765B0007152C /* Localizable.xcstrings */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
+		14B239AE2DBF13F30007152C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		14B239AF2DBF13F30007152C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		14B239B02DBF13F30007152C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		14B239B22DBF13F30007152C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		14B239B32DBF13F30007152C /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
+		14B239B42DBF13F30007152C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		14B239C62DBF765B0007152C /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		14CD76AD2DBE6BA10035DF1F /* Tag Day.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Tag Day.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		14CD76BF2DBE6BA20035DF1F /* Exceptions for "Tag Day" folder in "Tag Day" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = 14CD76AC2DBE6BA10035DF1F /* Tag Day */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		14CD76AF2DBE6BA10035DF1F /* Tag Day */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				14CD76BF2DBE6BA20035DF1F /* Exceptions for "Tag Day" folder in "Tag Day" target */,
-			);
-			path = "Tag Day";
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		14CD76AA2DBE6BA10035DF1F /* Frameworks */ = {
@@ -42,10 +37,32 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		14B239C12DBF75120007152C /* Tag Day */ = {
+			isa = PBXGroup;
+			children = (
+				14B239AE2DBF13F30007152C /* AppDelegate.swift */,
+				14B239B22DBF13F30007152C /* SceneDelegate.swift */,
+				14B239C32DBF75F70007152C /* Calendar */,
+				14B239AF2DBF13F30007152C /* Assets.xcassets */,
+				14B239B02DBF13F30007152C /* Info.plist */,
+				14B239B12DBF13F30007152C /* LaunchScreen.storyboard */,
+				14B239C62DBF765B0007152C /* Localizable.xcstrings */,
+			);
+			path = "Tag Day";
+			sourceTree = "<group>";
+		};
+		14B239C32DBF75F70007152C /* Calendar */ = {
+			isa = PBXGroup;
+			children = (
+				14B239B32DBF13F30007152C /* CalendarViewController.swift */,
+			);
+			path = Calendar;
+			sourceTree = "<group>";
+		};
 		14CD76A42DBE6BA10035DF1F = {
 			isa = PBXGroup;
 			children = (
-				14CD76AF2DBE6BA10035DF1F /* Tag Day */,
+				14B239C12DBF75120007152C /* Tag Day */,
 				14CD76AE2DBE6BA10035DF1F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -72,9 +89,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				14CD76AF2DBE6BA10035DF1F /* Tag Day */,
 			);
 			name = "Tag Day";
 			packageProductDependencies = (
@@ -104,6 +118,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 14CD76A42DBE6BA10035DF1F;
 			minimizedProjectReferenceProxies = 1;
@@ -122,6 +137,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				14B239B92DBF13F30007152C /* LaunchScreen.storyboard in Resources */,
+				14B239BA2DBF13F30007152C /* Assets.xcassets in Resources */,
+				14B239C72DBF765B0007152C /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -132,10 +150,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				14B239B62DBF13F30007152C /* SceneDelegate.swift in Sources */,
+				14B239B72DBF13F30007152C /* CalendarViewController.swift in Sources */,
+				14B239B82DBF13F30007152C /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		14B239B12DBF13F30007152C /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				14B239B42DBF13F30007152C /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		14CD76C12DBE6BA20035DF1F /* Debug */ = {
@@ -197,6 +229,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -252,6 +285,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -261,6 +295,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -309,6 +344,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
