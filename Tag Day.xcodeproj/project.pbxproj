@@ -13,6 +13,11 @@
 		14B239B92DBF13F30007152C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 14B239B12DBF13F30007152C /* LaunchScreen.storyboard */; };
 		14B239BA2DBF13F30007152C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 14B239AF2DBF13F30007152C /* Assets.xcassets */; };
 		14B239C72DBF765B0007152C /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 14B239C62DBF765B0007152C /* Localizable.xcstrings */; };
+		14B239CC2DBF77B10007152C /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 14B239CB2DBF77B10007152C /* SnapKit */; };
+		14B239CF2DBF78CD0007152C /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = 14B239CE2DBF78CD0007152C /* GRDB */; };
+		14B239D22DBF78F10007152C /* AppInfo in Frameworks */ = {isa = PBXBuildFile; productRef = 14B239D12DBF78F10007152C /* AppInfo */; };
+		14B239D52DBF790A0007152C /* ZCCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 14B239D42DBF790A0007152C /* ZCCalendar */; };
+		14B239D82DBF791E0007152C /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 14B239D72DBF791E0007152C /* Toast */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +36,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				14B239D22DBF78F10007152C /* AppInfo in Frameworks */,
+				14B239D52DBF790A0007152C /* ZCCalendar in Frameworks */,
+				14B239CC2DBF77B10007152C /* SnapKit in Frameworks */,
+				14B239D82DBF791E0007152C /* Toast in Frameworks */,
+				14B239CF2DBF78CD0007152C /* GRDB in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -92,6 +102,11 @@
 			);
 			name = "Tag Day";
 			packageProductDependencies = (
+				14B239CB2DBF77B10007152C /* SnapKit */,
+				14B239CE2DBF78CD0007152C /* GRDB */,
+				14B239D12DBF78F10007152C /* AppInfo */,
+				14B239D42DBF790A0007152C /* ZCCalendar */,
+				14B239D72DBF791E0007152C /* Toast */,
 			);
 			productName = "Tag Day";
 			productReference = 14CD76AD2DBE6BA10035DF1F /* Tag Day.app */;
@@ -122,6 +137,13 @@
 			);
 			mainGroup = 14CD76A42DBE6BA10035DF1F;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				14B239CA2DBF77B10007152C /* XCRemoteSwiftPackageReference "SnapKit" */,
+				14B239CD2DBF78CD0007152C /* XCRemoteSwiftPackageReference "GRDB" */,
+				14B239D02DBF78F10007152C /* XCRemoteSwiftPackageReference "AppInfo" */,
+				14B239D32DBF790A0007152C /* XCRemoteSwiftPackageReference "ZCCalendar" */,
+				14B239D62DBF791E0007152C /* XCRemoteSwiftPackageReference "Toast-Swift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 14CD76AE2DBE6BA10035DF1F /* Products */;
 			projectDirPath = "";
@@ -371,6 +393,77 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		14B239CA2DBF77B10007152C /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+		14B239CD2DBF78CD0007152C /* XCRemoteSwiftPackageReference "GRDB" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/groue/GRDB.swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
+		14B239D02DBF78F10007152C /* XCRemoteSwiftPackageReference "AppInfo" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/zizicici/AppInfo";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.0;
+			};
+		};
+		14B239D32DBF790A0007152C /* XCRemoteSwiftPackageReference "ZCCalendar" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/zizicici/ZCCalendar";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.3;
+			};
+		};
+		14B239D62DBF791E0007152C /* XCRemoteSwiftPackageReference "Toast-Swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scalessec/Toast-Swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.1.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		14B239CB2DBF77B10007152C /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 14B239CA2DBF77B10007152C /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		14B239CE2DBF78CD0007152C /* GRDB */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 14B239CD2DBF78CD0007152C /* XCRemoteSwiftPackageReference "GRDB" */;
+			productName = GRDB;
+		};
+		14B239D12DBF78F10007152C /* AppInfo */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 14B239D02DBF78F10007152C /* XCRemoteSwiftPackageReference "AppInfo" */;
+			productName = AppInfo;
+		};
+		14B239D42DBF790A0007152C /* ZCCalendar */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 14B239D32DBF790A0007152C /* XCRemoteSwiftPackageReference "ZCCalendar" */;
+			productName = ZCCalendar;
+		};
+		14B239D72DBF791E0007152C /* Toast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 14B239D62DBF791E0007152C /* XCRemoteSwiftPackageReference "Toast-Swift" */;
+			productName = Toast;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 14CD76A52DBE6BA10035DF1F /* Project object */;
 }
