@@ -62,25 +62,25 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Calendar"
+            "value" : "Tag Day"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "日历"
+            "value" : "标签日"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "日曆"
+            "value" : "標籤日"
           }
         },
         "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "日曆"
+            "value" : "標籤日"
           }
         }
       }

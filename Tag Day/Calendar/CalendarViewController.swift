@@ -20,7 +20,20 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     // UIBarButtonItem
         
     private var moreButton: UIBarButtonItem?
-    private var customButton: UIButton = {
+    private var yearPickerButton: UIButton = {
+        var configuration = UIButton.Configuration.borderless()
+        configuration.titleAlignment = .center
+        configuration.image = UIImage(systemName: "chevron.up.chevron.down", withConfiguration: UIImage.SymbolConfiguration(pointSize: 10, weight: .medium))
+        configuration.imagePlacement = .trailing
+        configuration.imagePadding = 2.0
+        configuration.contentInsets.leading = 0.0
+        configuration.contentInsets.trailing = 0.0
+        let button = UIButton(configuration: configuration)
+        button.showsMenuAsPrimaryAction = true
+        return button
+    }()
+    
+    private var bookPickerButton: UIButton = {
         var configuration = UIButton.Configuration.borderedTinted()
         configuration.titleAlignment = .center
         configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer({ incoming in
@@ -29,9 +42,6 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
             
             return outgoing
         })
-        configuration.image = UIImage(systemName: "chevron.up.chevron.down", withConfiguration: UIImage.SymbolConfiguration(pointSize: 10, weight: .bold))
-        configuration.imagePlacement = .trailing
-        configuration.imagePadding = 4.0
         let button = UIButton(configuration: configuration)
         button.showsMenuAsPrimaryAction = true
         return button
@@ -61,7 +71,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         
         displayHandler = DayDisplayHandler(delegate: self)
         
-        tabBarItem = UITabBarItem(title: String(localized: "controller.calendar.title"), image: UIImage(systemName: "calendar"), tag: 0)
+        tabBarItem = UITabBarItem(title: String(localized: "controller.calendar.title"), image: UIImage(systemName: "tag"), tag: 0)
     }
     
     required init?(coder: NSCoder) {
@@ -91,12 +101,10 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         
         addGestures()
         
-        moreButton = UIBarButtonItem(image: UIImage(systemName: "ellipsis"), style: .plain, target: self, action: nil)
+        moreButton = UIBarButtonItem(image: UIImage(systemName: "ellipsis", withConfiguration: UIImage.SymbolConfiguration(weight: .thin)), style: .plain, target: self, action: nil)
         updateMoreMenu()
-        if let moreButton = moreButton {
-            navigationItem.rightBarButtonItem = moreButton
-        }
-        customButton.configurationUpdateHandler = { [weak self] button in
+        
+        yearPickerButton.configurationUpdateHandler = { [weak self] button in
             guard let self = self else { return }
             var config = button.configuration
             
@@ -105,8 +113,18 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
             button.configuration = config
             button.menu = UIMenu(children: self.displayHandler.getCatalogueMenuElements())
         }
+        bookPickerButton.configurationUpdateHandler = { [weak self] button in
+            guard let self = self else { return }
+            var config = button.configuration
+            
+            config?.title = "调班"
+            
+            button.configuration = config
+            button.menu = UIMenu(children: self.displayHandler.getCatalogueMenuElements())
+        }
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: customButton)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: bookPickerButton)
+        navigationItem.rightBarButtonItems = [moreButton!, .fixedSpace(0), UIBarButtonItem(customView: yearPickerButton)]
         
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .DatabaseUpdated, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .TodayUpdated, object: nil)
@@ -223,9 +241,11 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     internal func reloadData() {
         let startWeekdayOrder = WeekdayOrder(rawValue: WeekStartType.current.rawValue) ?? WeekdayOrder.firstDayOfWeek
         weekdayOrderView.startWeekdayOrder = startWeekdayOrder
-        customButton.setNeedsUpdateConfiguration()
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: customButton)
-        
+        bookPickerButton.setNeedsUpdateConfiguration()
+        yearPickerButton.setNeedsUpdateConfiguration()
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: bookPickerButton)
+        navigationItem.rightBarButtonItems = [moreButton!, .fixedSpace(0), UIBarButtonItem(customView: yearPickerButton)]
+
         applyData()
     }
     
@@ -262,5 +282,28 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         let children: [UIMenuElement] = [getWeekStartTypeMenu()]
         
         moreButton?.menu = UIMenu(title: "", options: .displayInline, children: children)
+    }
+}
+
+extension UIImage {
+    func rotatedCounterClockwise90() -> UIImage? {
+        let rotatedSize = CGSize(width: size.height, height: size.width)
+        
+        UIGraphicsBeginImageContextWithOptions(rotatedSize, false, scale)
+        defer { UIGraphicsEndImageContext() }
+        
+        guard let context = UIGraphicsGetCurrentContext(), let cgImage = cgImage else {
+            return nil
+        }
+        
+        context.translateBy(x: rotatedSize.width / 2, y: rotatedSize.height / 2)
+        context.rotate(by: -CGFloat.pi / 2)
+        context.draw(cgImage,
+                    in: CGRect(x: -size.width / 2,
+                              y: -size.height / 2,
+                              width: size.width,
+                              height: size.height))
+        
+        return UIGraphicsGetImageFromCurrentImageContext()
     }
 }
