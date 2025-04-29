@@ -12,7 +12,7 @@ extension CalendarViewController {
         let containerWidth = environment.container.contentSize.width
 
         let itemWidth = DayGrid.itemWidth(in: containerWidth)
-        let itemHeight = DayGrid.itemHeight
+        let itemHeight = DayGrid.itemHeight(in: containerWidth)
         let interSpacing = DayGrid.interSpacing
         let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(itemWidth),
                                              heightDimension: .fractionalHeight(1.0))

@@ -13,12 +13,26 @@ struct DayGrid {
     static func itemWidth(in containerWidth: CGFloat) -> CGFloat {
         if containerWidth <= 320 {
             return 40.0
+        } else if containerWidth <= 375 {
+            return 45.0
+        } else if containerWidth <= 400 {
+            return 47.0
         } else {
-            return 45.0            
+            return 50.0
         }
     }
     
-    static let itemHeight: CGFloat = 72.0
+    static func itemHeight(in containerWidth: CGFloat) -> CGFloat {
+        if containerWidth <= 320 {
+            return 64.0
+        } else if containerWidth <= 375 {
+            return 73.0
+        } else if containerWidth <= 400 {
+            return 76.0
+        } else {
+            return 82.0
+        }
+    }
     
     static let interSpacing: CGFloat = 2.0
 }
