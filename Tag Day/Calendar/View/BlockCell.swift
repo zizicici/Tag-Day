@@ -48,7 +48,7 @@ class BlockCell: BlockBaseCell {
     var paperView: UIView = {
         let view = UIView()
         view.layer.cornerCurve = .continuous
-        view.layer.cornerRadius = 6.0
+        view.layer.cornerRadius = 2.0
         
         return view
     }()
@@ -56,7 +56,7 @@ class BlockCell: BlockBaseCell {
     var highlightView: UIView = {
         let view = UIView()
         view.layer.cornerCurve = .continuous
-        view.layer.cornerRadius = 6.0
+        view.layer.cornerRadius = 2.0
         
         return view
     }()
@@ -72,16 +72,6 @@ class BlockCell: BlockBaseCell {
         return label
     }()
     
-    var cornerMark: UIImageView = {
-        let view = UIImageView(image: UIImage(named: "OffDayMark"))
-        view.layer.cornerRadius = 4.0
-        view.layer.cornerCurve = .continuous
-        view.layer.maskedCorners = [.layerMaxXMinYCorner]
-        view.layer.masksToBounds = true
-        
-        return view
-    }()
-    
     var defaultBackgroundColor: UIColor = AppColor.paper
     var highlightColor: UIColor = .gray.withAlphaComponent(0.5)
     
@@ -92,12 +82,11 @@ class BlockCell: BlockBaseCell {
         label.text = nil
         label.backgroundColor = .clear
         paperView.backgroundColor = defaultBackgroundColor
-        cornerMark.isHidden = true
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        paperView.layer.shadowPath = UIBezierPath(roundedRect: CGRect(origin: CGPoint.init(x: 0, y: 0), size: CGSize(width: frame.width, height: frame.height)), cornerRadius: 6.0).cgPath
+        paperView.layer.shadowPath = UIBezierPath(roundedRect: CGRect(origin: CGPoint.init(x: 0, y: 0), size: CGSize(width: frame.width, height: frame.height)), cornerRadius: 2.0).cgPath
     }
     
     private func setupViewsIfNeeded() {
@@ -119,12 +108,6 @@ class BlockCell: BlockBaseCell {
         paperView.layer.cornerCurve = .continuous
         paperView.backgroundColor = defaultBackgroundColor
         
-        paperView.addSubview(cornerMark)
-        cornerMark.snp.makeConstraints { make in
-            make.right.top.equalTo(paperView)
-            make.width.height.equalTo(15.0)
-        }
-        
         paperView.addSubview(highlightView)
         highlightView.snp.makeConstraints { make in
             make.edges.equalTo(paperView)
@@ -132,12 +115,11 @@ class BlockCell: BlockBaseCell {
         
         paperView.addSubview(label)
         label.snp.makeConstraints { make in
-            make.edges.equalTo(paperView).inset(3)
+            make.top.equalTo(paperView).inset(10)
+            make.leading.trailing.equalTo(paperView).inset(3)
         }
-        label.layer.cornerRadius = 4.0
+        label.layer.cornerRadius = 2.0
         label.clipsToBounds = true
-        
-        paperView.bringSubviewToFront(cornerMark)
         
         isAccessibilityElement = true
         accessibilityTraits = .button
