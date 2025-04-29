@@ -1,0 +1,29 @@
+//
+//  BlockItem.swift
+//  Tag Day
+//
+//  Created by Ci Zi on 2025/4/29.
+//
+
+import Foundation
+import ZCCalendar
+import UIKit
+
+struct BlockItem: Hashable {
+    var index: Int
+    var backgroundColor: UIColor
+    var foregroundColor: UIColor
+    var isToday: Bool
+}
+
+extension BlockItem {
+    var day: GregorianDay {
+        return GregorianDay(JDN: index)
+    }
+}
+
+extension BlockItem {
+    var calendarString: String {
+        return (day.completeFormatString() ?? "")
+    }
+}
