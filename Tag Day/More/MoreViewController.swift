@@ -12,7 +12,7 @@ import AppInfo
 import StoreKit
 
 class MoreViewController: UIViewController {
-    static let supportEmail = "offday@zi.ci"
+    static let supportEmail = "tagday@zi.ci"
 
     private var tableView: UITableView!
     private var dataSource: DataSource!
