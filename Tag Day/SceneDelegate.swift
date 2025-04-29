@@ -20,8 +20,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window = UIWindow(windowScene: windowScene)
         let tabBarController = TabbarController()
-        tabBarController.view.tintColor = AppColor.offDay
-        tabBarController.tabBar.tintColor = AppColor.offDay
+        tabBarController.view.tintColor = AppColor.main
+        tabBarController.tabBar.tintColor = AppColor.main
         tabBarController.viewControllers = [
             NavigationController(rootViewController: CalendarViewController()),
         ]

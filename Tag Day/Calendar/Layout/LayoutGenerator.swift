@@ -26,7 +26,7 @@ struct LayoutGenerater {
                     return Item.invisible(uuid)
                 }))
             }
-            snapshot.appendItems([.month(MonthItem(text: gregorianMonth.month.name, color: .label.withAlphaComponent(0.8)))])
+            snapshot.appendItems([.month(MonthItem(text: gregorianMonth.month.name, color: AppColor.tintedText))])
             
             snapshot.appendSections([.row(gregorianMonth)])
             if firstOffset >= 1 {

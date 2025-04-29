@@ -20,6 +20,22 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     // UIBarButtonItem
         
     private var moreButton: UIBarButtonItem?
+    private var customButton: UIButton = {
+        var configuration = UIButton.Configuration.borderedTinted()
+        configuration.titleAlignment = .center
+        configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer({ incoming in
+            var outgoing = incoming
+            outgoing.font = UIFont.preferredFont(forTextStyle: .headline)
+            
+            return outgoing
+        })
+        configuration.image = UIImage(systemName: "chevron.up.chevron.down", withConfiguration: UIImage.SymbolConfiguration(pointSize: 10, weight: .bold))
+        configuration.imagePlacement = .trailing
+        configuration.imagePadding = 4.0
+        let button = UIButton(configuration: configuration)
+        button.showsMenuAsPrimaryAction = true
+        return button
+    }()
 
     // Data
     
@@ -69,7 +85,6 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
             make.leading.trailing.equalTo(view)
             make.height.equalTo(18)
         }
-        updateNavigationTitleView()
         
         configureHierarchy()
         configureDataSource()
@@ -81,6 +96,17 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         if let moreButton = moreButton {
             navigationItem.rightBarButtonItem = moreButton
         }
+        customButton.configurationUpdateHandler = { [weak self] button in
+            guard let self = self else { return }
+            var config = button.configuration
+            
+            config?.title = self.displayHandler.getTitle()
+            
+            button.configuration = config
+            button.menu = UIMenu(children: self.displayHandler.getCatalogueMenuElements())
+        }
+        
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: customButton)
         
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .DatabaseUpdated, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .TodayUpdated, object: nil)
@@ -197,7 +223,8 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     internal func reloadData() {
         let startWeekdayOrder = WeekdayOrder(rawValue: WeekStartType.current.rawValue) ?? WeekdayOrder.firstDayOfWeek
         weekdayOrderView.startWeekdayOrder = startWeekdayOrder
-        self.updateNavigationTitleView()
+        customButton.setNeedsUpdateConfiguration()
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: customButton)
         
         applyData()
     }
@@ -235,28 +262,5 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         let children: [UIMenuElement] = [getWeekStartTypeMenu()]
         
         moreButton?.menu = UIMenu(title: "", options: .displayInline, children: children)
-    }
-    
-    private func updateNavigationTitleView() {
-        let menu = UIMenu(children: displayHandler.getCatalogueMenuElements())
-        navigationItem.setTitle(displayHandler.getTitle(), menu: menu)
-    }
-}
-
-extension UINavigationItem {
-    func setTitle(_ title: String, menu: UIMenu?) {
-        var configuration = UIButton.Configuration.bordered()
-        configuration.title = title
-        configuration.titleAlignment = .center
-        configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer({ incoming in
-            var outgoing = incoming
-            outgoing.font = UIFont.preferredFont(forTextStyle: .headline)
-            
-            return outgoing
-        })
-        let button = UIButton(configuration: configuration)
-        button.showsMenuAsPrimaryAction = true
-        button.menu = menu
-        titleView = button
     }
 }

@@ -68,6 +68,7 @@ class BlockCell: BlockBaseCell {
         label.font = UIFont.systemFont(ofSize: 15, weight: .regular)
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
+        label.alpha = 0.8
         
         return label
     }()
@@ -115,7 +116,7 @@ class BlockCell: BlockBaseCell {
         
         paperView.addSubview(label)
         label.snp.makeConstraints { make in
-            make.top.equalTo(paperView).inset(10)
+            make.top.equalTo(paperView).inset(8)
             make.leading.trailing.equalTo(paperView).inset(3)
         }
         label.layer.cornerRadius = 2.0

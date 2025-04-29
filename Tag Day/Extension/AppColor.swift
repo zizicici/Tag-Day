@@ -8,10 +8,9 @@
 import UIKit
 
 struct AppColor {
-    static let offDay = UIColor.offDay
-    static let workDay = UIColor.workDay
-    static let weekEnd = UIColor.weekEnd
+    static let main = UIColor.main
     static let text = UIColor.text
+    static let tintedText = UIColor.tintedText
     static let paper = UIColor.paper
     static let background = UIColor.background
     static let navigationBar = UIColor.navigationBar
