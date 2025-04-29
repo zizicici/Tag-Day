@@ -46,6 +46,9 @@
 		14D272B12DC073EB00267572 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D272AB2DC073EB00267572 /* Date+Extension.swift */; };
 		14D272B22DC073EB00267572 /* AppDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D272A22DC073EB00267572 /* AppDatabase.swift */; };
 		14D272B82DC074B300267572 /* Toast+Stryle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D272B72DC074B300267572 /* Toast+Stryle.swift */; };
+		14D272BD2DC0884E00267572 /* SpecificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D272BB2DC0884E00267572 /* SpecificationsViewController.swift */; };
+		14D272BE2DC0884E00267572 /* SettingOptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D272BA2DC0884E00267572 /* SettingOptionsViewController.swift */; };
+		14D272BF2DC0884E00267572 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D272B92DC0884E00267572 /* MoreViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -85,6 +88,9 @@
 		14D272A42DC073EB00267572 /* TimestampedRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimestampedRecord.swift; sourceTree = "<group>"; };
 		14D272AB2DC073EB00267572 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		14D272B72DC074B300267572 /* Toast+Stryle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Toast+Stryle.swift"; sourceTree = "<group>"; };
+		14D272B92DC0884E00267572 /* MoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
+		14D272BA2DC0884E00267572 /* SettingOptionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingOptionsViewController.swift; sourceTree = "<group>"; };
+		14D272BB2DC0884E00267572 /* SpecificationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpecificationsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +125,7 @@
 				14B239B22DBF13F30007152C /* SceneDelegate.swift */,
 				14ACBE552DBFAD2E0056B1FD /* BaseViewController */,
 				14B239C32DBF75F70007152C /* Calendar */,
+				14D272BC2DC0884E00267572 /* More */,
 				14D272AD2DC073EB00267572 /* Database */,
 				14D2729E2DC072D700267572 /* Settings */,
 				14D2729C2DC0721000267572 /* Extension */,
@@ -257,6 +264,16 @@
 			path = Database;
 			sourceTree = "<group>";
 		};
+		14D272BC2DC0884E00267572 /* More */ = {
+			isa = PBXGroup;
+			children = (
+				14D272B92DC0884E00267572 /* MoreViewController.swift */,
+				14D272BA2DC0884E00267572 /* SettingOptionsViewController.swift */,
+				14D272BB2DC0884E00267572 /* SpecificationsViewController.swift */,
+			);
+			path = More;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -365,6 +382,9 @@
 				14D2727B2DC0716E00267572 /* CalendarViewController+Popover.swift in Sources */,
 				14D272AF2DC073EB00267572 /* Persistence.swift in Sources */,
 				14D272B02DC073EB00267572 /* TimestampedRecord.swift in Sources */,
+				14D272BD2DC0884E00267572 /* SpecificationsViewController.swift in Sources */,
+				14D272BE2DC0884E00267572 /* SettingOptionsViewController.swift in Sources */,
+				14D272BF2DC0884E00267572 /* MoreViewController.swift in Sources */,
 				14D272B12DC073EB00267572 /* Date+Extension.swift in Sources */,
 				14D272B22DC073EB00267572 /* AppDatabase.swift in Sources */,
 				14D272812DC0718D00267572 /* DayByDayHandler.swift in Sources */,
