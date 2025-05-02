@@ -141,6 +141,18 @@
         }
       }
     },
+    "database.firstBook" : {
+
+    },
+    "database.firstDayRecord.comment" : {
+
+    },
+    "database.firstTag.comment" : {
+
+    },
+    "database.firstTag.name" : {
+
+    },
     "more.item.about.email" : {
       "localizations" : {
         "en" : {

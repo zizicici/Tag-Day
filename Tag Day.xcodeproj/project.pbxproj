@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		14833D332DC4FED3001B61D5 /* Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D322DC4FED3001B61D5 /* Icon.swift */; };
+		14833D352DC50310001B61D5 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D342DC50310001B61D5 /* Book.swift */; };
+		14833D372DC50420001B61D5 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D362DC50420001B61D5 /* Tag.swift */; };
+		14833D392DC504B9001B61D5 /* DayRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D382DC504B9001B61D5 /* DayRecord.swift */; };
+		14833D3B2DC5179F001B61D5 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D3A2DC5179F001B61D5 /* UIColor+Extension.swift */; };
 		14ACBE562DBFAD2E0056B1FD /* TabbarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14ACBE542DBFAD2E0056B1FD /* TabbarController.swift */; };
 		14ACBE572DBFAD2E0056B1FD /* NavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14ACBE532DBFAD2E0056B1FD /* NavigationViewController.swift */; };
 		14B239B62DBF13F30007152C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B239B22DBF13F30007152C /* SceneDelegate.swift */; };
@@ -52,6 +57,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		14833D322DC4FED3001B61D5 /* Icon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Icon.swift; sourceTree = "<group>"; };
+		14833D342DC50310001B61D5 /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
+		14833D362DC50420001B61D5 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
+		14833D382DC504B9001B61D5 /* DayRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRecord.swift; sourceTree = "<group>"; };
+		14833D3A2DC5179F001B61D5 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		14ACBE532DBFAD2E0056B1FD /* NavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationViewController.swift; sourceTree = "<group>"; };
 		14ACBE542DBFAD2E0056B1FD /* TabbarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbarController.swift; sourceTree = "<group>"; };
 		14B239AE2DBF13F30007152C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -222,6 +232,7 @@
 			isa = PBXGroup;
 			children = (
 				14D272712DC0712A00267572 /* AppColor.swift */,
+				14833D3A2DC5179F001B61D5 /* UIColor+Extension.swift */,
 				14D272A02DC0736A00267572 /* UIViewController+Extension.swift */,
 				14D272B72DC074B300267572 /* Toast+Stryle.swift */,
 				14D2729A2DC0720600267572 /* UIFont+Extension.swift */,
@@ -240,6 +251,10 @@
 		14D272AA2DC073EB00267572 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				14833D322DC4FED3001B61D5 /* Icon.swift */,
+				14833D342DC50310001B61D5 /* Book.swift */,
+				14833D362DC50420001B61D5 /* Tag.swift */,
+				14833D382DC504B9001B61D5 /* DayRecord.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -364,6 +379,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				14D272A12DC0736A00267572 /* UIViewController+Extension.swift in Sources */,
+				14833D372DC50420001B61D5 /* Tag.swift in Sources */,
 				14B239B62DBF13F30007152C /* SceneDelegate.swift in Sources */,
 				14ACBE562DBFAD2E0056B1FD /* TabbarController.swift in Sources */,
 				14D2729F2DC072D700267572 /* Settings.swift in Sources */,
@@ -377,6 +393,7 @@
 				14D272952DC071B000267572 /* ImpactGenerator.swift in Sources */,
 				14D272962DC071B000267572 /* WeekdayOrderView.swift in Sources */,
 				14D272972DC071B000267572 /* BlockCell.swift in Sources */,
+				14833D392DC504B9001B61D5 /* DayRecord.swift in Sources */,
 				14D272982DC071B000267572 /* UIDraggableCollectionView.swift in Sources */,
 				14D272992DC071B000267572 /* HoverGestureRecognizer.swift in Sources */,
 				14D2727B2DC0716E00267572 /* CalendarViewController+Popover.swift in Sources */,
@@ -386,6 +403,7 @@
 				14D272BE2DC0884E00267572 /* SettingOptionsViewController.swift in Sources */,
 				14D272BF2DC0884E00267572 /* MoreViewController.swift in Sources */,
 				14D272B12DC073EB00267572 /* Date+Extension.swift in Sources */,
+				14833D332DC4FED3001B61D5 /* Icon.swift in Sources */,
 				14D272B22DC073EB00267572 /* AppDatabase.swift in Sources */,
 				14D272812DC0718D00267572 /* DayByDayHandler.swift in Sources */,
 				14D272822DC0718D00267572 /* DisplayHandler.swift in Sources */,
@@ -394,7 +412,9 @@
 				14D2727D2DC0716E00267572 /* CalendarViewController+Enum.swift in Sources */,
 				14D272722DC0712A00267572 /* AppColor.swift in Sources */,
 				14D2728A2DC071A500267572 /* BlockItem.swift in Sources */,
+				14833D352DC50310001B61D5 /* Book.swift in Sources */,
 				14B239B72DBF13F30007152C /* CalendarViewController.swift in Sources */,
+				14833D3B2DC5179F001B61D5 /* UIColor+Extension.swift in Sources */,
 				14B239B82DBF13F30007152C /* AppDelegate.swift in Sources */,
 				14D272702DC0709300267572 /* CalendarBaseViewController.swift in Sources */,
 			);
