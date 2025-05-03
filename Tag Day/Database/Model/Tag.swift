@@ -14,6 +14,8 @@ struct Tag: Identifiable, Hashable {
     var creationTime: Int64?
     var modificationTime: Int64?
     
+    var bookID: Int64
+
     var name: String
     var comment: String?
     var color: String?
@@ -33,10 +35,11 @@ extension Tag: Codable, FetchableRecord, TimestampedRecord {
         
         static let creationTime = Column(CodingKeys.creationTime)
         static let modificationTime = Column(CodingKeys.modificationTime)
+        static let bookID = Column(CodingKeys.bookID)
     }
     
     enum CodingKeys: String, CodingKey {
-        case id, creationTime = "creation_time", modificationTime = "modification_time", name, comment, color
+        case id, creationTime = "creation_time", modificationTime = "modification_time", bookID = "book_id", name, comment, color
     }
     
     mutating func didInsert(_ inserted: InsertionSuccess) {

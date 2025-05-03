@@ -47,7 +47,7 @@ extension Book: Codable, FetchableRecord, TimestampedRecord {
 }
 
 extension Book {
-    static let icon = belongsTo(Icon.self).forKey("icon")
+    static let icon = belongsTo(Icon.self)
 
     var icon: QueryInterfaceRequest<Icon> {
         request(for: Book.icon)

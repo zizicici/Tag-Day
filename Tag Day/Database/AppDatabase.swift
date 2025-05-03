@@ -57,6 +57,10 @@ final class AppDatabase {
                 table.column("creation_time", .integer).notNull()
                 table.column("modification_time", .integer).notNull()
                 
+                table.column("book_id", .integer).notNull()
+                    .indexed()
+                    .references("book", onDelete: .cascade)
+                
                 table.column("name", .text).notNull()
                 table.column("comment", .text)
                 table.column("color")
@@ -84,12 +88,14 @@ final class AppDatabase {
                 var firstBook = Book(name: String(localized: "database.firstBook"), order: 0)
                 try? firstBook.save(db)
                 
-                var firstTag = Tag(name: String(localized: "database.firstTag.name"), comment: String(localized: "database.firstTag.comment"), color: UIColor.orange.generateLightDarkString())
-                try? firstTag.save(db)
-                
-                if let bookId = firstBook.id, let tagId = firstTag.id {
-                    var firstDayRecord = DayRecord(bookID: bookId, tagID: tagId, day: Int64(ZCCalendar.manager.today.julianDay), comment: String(localized: "database.firstDayRecord.comment"))
-                    try? firstDayRecord.save(db)
+                if let bookID = firstBook.id {
+                    var firstTag = Tag(bookID: bookID, name: String(localized: "database.firstTag.name"), comment: String(localized: "database.firstTag.comment"), color: UIColor.orange.generateLightDarkString())
+                    try? firstTag.save(db)
+                    
+                    if let bookId = firstBook.id, let tagId = firstTag.id {
+                        var firstDayRecord = DayRecord(bookID: bookId, tagID: tagId, day: Int64(ZCCalendar.manager.today.julianDay), comment: String(localized: "database.firstDayRecord.comment"))
+                        try? firstDayRecord.save(db)
+                    }
                 }
             }
         }
