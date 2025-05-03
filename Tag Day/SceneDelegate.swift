@@ -25,6 +25,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         tabBarController.viewControllers = [
             NavigationController(rootViewController: CalendarViewController()),
             NavigationController(rootViewController: BookListViewController()),
+            NavigationController(rootViewController: TagListViewController()),
             NavigationController(rootViewController: MoreViewController())
         ]
         window?.rootViewController = tabBarController
