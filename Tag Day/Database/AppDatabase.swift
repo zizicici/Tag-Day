@@ -49,6 +49,7 @@ final class AppDatabase {
                 table.column("icon_id", .text)
                     .indexed()
                     .references("icon", onDelete: .setNull)
+                table.column("book_type", .integer).notNull()
                 table.column("order", .integer).notNull()
             }
             try db.create(table: "tag") { table in
@@ -61,7 +62,6 @@ final class AppDatabase {
                     .indexed()
                     .references("book", onDelete: .cascade)
                 
-                table.column("book_type", .integer).notNull()
                 table.column("name", .text).notNull()
                 table.column("comment", .text)
                 table.column("color")
