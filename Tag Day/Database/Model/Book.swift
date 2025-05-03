@@ -8,6 +8,12 @@
 import Foundation
 import GRDB
 
+enum BookType: Int, Codable {
+    case active = 0
+    case hidden = 1
+    case archived = 2
+}
+
 struct Book: Identifiable, Hashable {
     var id: Int64?
     
@@ -17,6 +23,7 @@ struct Book: Identifiable, Hashable {
     var name: String
     var comment: String?
     var iconID: Int64?
+    var bookType: BookType = .active
     var order: Int
 }
 
@@ -34,11 +41,12 @@ extension Book: Codable, FetchableRecord, TimestampedRecord {
         
         static let creationTime = Column(CodingKeys.creationTime)
         static let modificationTime = Column(CodingKeys.modificationTime)
+        static let bookType = Column(CodingKeys.bookType)
         static let iconID = Column(CodingKeys.iconID)
     }
     
     enum CodingKeys: String, CodingKey {
-        case id, creationTime = "creation_time", modificationTime = "modification_time", name, comment, iconID = "icon_id", order
+        case id, creationTime = "creation_time", modificationTime = "modification_time", name, comment, iconID = "icon_id", bookType = "book_type", order
     }
     
     mutating func didInsert(_ inserted: InsertionSuccess) {

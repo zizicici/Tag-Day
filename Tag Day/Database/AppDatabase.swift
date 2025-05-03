@@ -61,6 +61,7 @@ final class AppDatabase {
                     .indexed()
                     .references("book", onDelete: .cascade)
                 
+                table.column("book_type", .integer).notNull()
                 table.column("name", .text).notNull()
                 table.column("comment", .text)
                 table.column("color")
