@@ -48,7 +48,7 @@ class BlockCell: BlockBaseCell {
     var paperView: UIView = {
         let view = UIView()
         view.layer.cornerCurve = .continuous
-        view.layer.cornerRadius = 2.0
+        view.layer.cornerRadius = 5.0
         
         return view
     }()
@@ -56,7 +56,7 @@ class BlockCell: BlockBaseCell {
     var highlightView: UIView = {
         let view = UIView()
         view.layer.cornerCurve = .continuous
-        view.layer.cornerRadius = 2.0
+        view.layer.cornerRadius = 5.0
         
         return view
     }()
@@ -87,7 +87,7 @@ class BlockCell: BlockBaseCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        paperView.layer.shadowPath = UIBezierPath(roundedRect: CGRect(origin: CGPoint.init(x: 0, y: 0), size: CGSize(width: frame.width, height: frame.height)), cornerRadius: 2.0).cgPath
+        paperView.layer.shadowPath = UIBezierPath(roundedRect: CGRect(origin: CGPoint.init(x: 0, y: 0), size: CGSize(width: frame.width, height: frame.height)), cornerRadius: 5.0).cgPath
     }
     
     private func setupViewsIfNeeded() {
@@ -119,7 +119,7 @@ class BlockCell: BlockBaseCell {
             make.top.equalTo(paperView).inset(8)
             make.leading.trailing.equalTo(paperView).inset(3)
         }
-        label.layer.cornerRadius = 2.0
+        label.layer.cornerRadius = 5.0
         label.clipsToBounds = true
         
         isAccessibilityElement = true

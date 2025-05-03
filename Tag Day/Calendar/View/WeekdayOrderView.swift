@@ -47,8 +47,8 @@ class WeekdayOrderView: UIView {
         self.addSubview(stackView)
         stackView.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self).inset(12)
-            make.top.equalTo(self)
-            make.bottom.equalTo(self).inset(2)
+            make.top.greaterThanOrEqualTo(self)
+            make.bottom.equalTo(self).inset(6)
         }
         
         updateLabels()
@@ -63,6 +63,7 @@ class WeekdayOrderView: UIView {
         self.itemCount = itemCount
         self.itemWidth = itemWidth
         self.interSpacing = interSpacing
+        self.stackView.spacing = interSpacing
     }
     
     override func layoutSubviews() {
@@ -87,7 +88,7 @@ class WeekdayOrderView: UIView {
         for weekdayOrder in weekdayOrders {
             let label = UILabel()
             label.textAlignment = .center
-            label.font = UIFont.systemFont(ofSize: 10, weight: .bold)
+            label.font = UIFont.systemFont(ofSize: 12, weight: .bold)
             label.textColor = .white
             label.text = weekdayOrder.getVeryShortSymbol()
             label.accessibilityLabel = weekdayOrder.getSymbol()

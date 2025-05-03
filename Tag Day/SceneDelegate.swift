@@ -19,16 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         window = UIWindow(windowScene: windowScene)
-        let tabBarController = TabbarController()
-        tabBarController.view.tintColor = AppColor.main
-        tabBarController.tabBar.tintColor = AppColor.main
-        tabBarController.viewControllers = [
-            NavigationController(rootViewController: CalendarViewController()),
-            NavigationController(rootViewController: BookListViewController()),
-            NavigationController(rootViewController: TagListViewController()),
-            NavigationController(rootViewController: MoreViewController())
-        ]
-        window?.rootViewController = tabBarController
+        window?.rootViewController = MainViewController(rootViewController: CalendarViewController())
         window?.makeKeyAndVisible()
     }
 

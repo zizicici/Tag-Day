@@ -20,6 +20,7 @@
 		14AD28842DC5C0D20018DAF3 /* HeaderReuseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AD28832DC5C0D20018DAF3 /* HeaderReuseView.swift */; };
 		14AD28862DC5C21E0018DAF3 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AD28852DC5C21E0018DAF3 /* DataManager.swift */; };
 		14AD28882DC5C8EC0018DAF3 /* TagCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AD28872DC5C8EC0018DAF3 /* TagCell.swift */; };
+		14AD288D2DC5E2DE0018DAF3 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AD288C2DC5E2DE0018DAF3 /* MainViewController.swift */; };
 		14B239B62DBF13F30007152C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B239B22DBF13F30007152C /* SceneDelegate.swift */; };
 		14B239B72DBF13F30007152C /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B239B32DBF13F30007152C /* CalendarViewController.swift */; };
 		14B239B82DBF13F30007152C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B239AE2DBF13F30007152C /* AppDelegate.swift */; };
@@ -76,6 +77,7 @@
 		14AD28832DC5C0D20018DAF3 /* HeaderReuseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderReuseView.swift; sourceTree = "<group>"; };
 		14AD28852DC5C21E0018DAF3 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		14AD28872DC5C8EC0018DAF3 /* TagCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagCell.swift; sourceTree = "<group>"; };
+		14AD288C2DC5E2DE0018DAF3 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		14B239AE2DBF13F30007152C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		14B239AF2DBF13F30007152C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		14B239B02DBF13F30007152C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -180,6 +182,7 @@
 			children = (
 				14B239AE2DBF13F30007152C /* AppDelegate.swift */,
 				14B239B22DBF13F30007152C /* SceneDelegate.swift */,
+				14AD288C2DC5E2DE0018DAF3 /* MainViewController.swift */,
 				14ACBE552DBFAD2E0056B1FD /* BaseViewController */,
 				14B239C32DBF75F70007152C /* Calendar */,
 				14AD287C2DC5B6E70018DAF3 /* Book */,
@@ -429,6 +432,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				14D272A12DC0736A00267572 /* UIViewController+Extension.swift in Sources */,
+				14AD288D2DC5E2DE0018DAF3 /* MainViewController.swift in Sources */,
 				14833D372DC50420001B61D5 /* Tag.swift in Sources */,
 				14B239B62DBF13F30007152C /* SceneDelegate.swift in Sources */,
 				14ACBE562DBFAD2E0056B1FD /* TabbarController.swift in Sources */,

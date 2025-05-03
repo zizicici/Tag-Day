@@ -21,29 +21,12 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         
     private var moreButton: UIBarButtonItem?
     private var yearPickerButton: UIButton = {
-        var configuration = UIButton.Configuration.borderless()
+        var configuration = UIButton.Configuration.filled()
         configuration.titleAlignment = .center
-        configuration.image = UIImage(systemName: "chevron.up.chevron.down", withConfiguration: UIImage.SymbolConfiguration(pointSize: 10, weight: .medium))
-        configuration.imagePlacement = .trailing
-        configuration.imagePadding = 2.0
-        configuration.contentInsets.leading = 0.0
-        configuration.contentInsets.trailing = 0.0
+        configuration.cornerStyle = .capsule
         let button = UIButton(configuration: configuration)
         button.showsMenuAsPrimaryAction = true
-        return button
-    }()
-    
-    private var bookPickerButton: UIButton = {
-        var configuration = UIButton.Configuration.borderedTinted()
-        configuration.titleAlignment = .center
-        configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer({ incoming in
-            var outgoing = incoming
-            outgoing.font = UIFont.preferredFont(forTextStyle: .headline)
-            
-            return outgoing
-        })
-        let button = UIButton(configuration: configuration)
-        button.showsMenuAsPrimaryAction = true
+        button.tintColor = AppColor.main
         return button
     }()
 
@@ -93,7 +76,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         weekdayOrderView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide)
             make.leading.trailing.equalTo(view)
-            make.height.equalTo(18)
+            make.height.equalTo(30)
         }
         
         configureHierarchy()
@@ -101,8 +84,9 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         
         addGestures()
         
-        moreButton = UIBarButtonItem(image: UIImage(systemName: "ellipsis", withConfiguration: UIImage.SymbolConfiguration(weight: .thin)), style: .plain, target: self, action: nil)
-        updateMoreMenu()
+        moreButton = UIBarButtonItem(image: UIImage(systemName: "ellipsis", withConfiguration: UIImage.SymbolConfiguration(weight: .thin)), style: .plain, target: self, action: #selector(moreAction))
+//        updateMoreMenu()
+        navigationItem.rightBarButtonItem = moreButton
         
         yearPickerButton.configurationUpdateHandler = { [weak self] button in
             guard let self = self else { return }
@@ -113,18 +97,8 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
             button.configuration = config
             button.menu = UIMenu(children: self.displayHandler.getCatalogueMenuElements())
         }
-        bookPickerButton.configurationUpdateHandler = { [weak self] button in
-            guard let self = self else { return }
-            var config = button.configuration
-            
-            config?.title = "调班"
-            
-            button.configuration = config
-            button.menu = UIMenu(children: self.displayHandler.getCatalogueMenuElements())
-        }
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: bookPickerButton)
-        navigationItem.rightBarButtonItems = [moreButton!, .fixedSpace(0), UIBarButtonItem(customView: yearPickerButton)]
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: yearPickerButton)
         
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .DatabaseUpdated, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .TodayUpdated, object: nil)
@@ -241,10 +215,8 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     internal func reloadData() {
         let startWeekdayOrder = WeekdayOrder(rawValue: WeekStartType.current.rawValue) ?? WeekdayOrder.firstDayOfWeek
         weekdayOrderView.startWeekdayOrder = startWeekdayOrder
-        bookPickerButton.setNeedsUpdateConfiguration()
         yearPickerButton.setNeedsUpdateConfiguration()
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: bookPickerButton)
-        navigationItem.rightBarButtonItems = [moreButton!, .fixedSpace(0), UIBarButtonItem(customView: yearPickerButton)]
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: yearPickerButton)
 
         applyData()
     }
@@ -257,7 +229,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
             }
             self.updateVisibleItems()
         }
-        updateMoreMenu()
+//        updateMoreMenu()
     }
     
     func scrollToToday() {
@@ -282,6 +254,11 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         let children: [UIMenuElement] = [getWeekStartTypeMenu()]
         
         moreButton?.menu = UIMenu(title: "", options: .displayInline, children: children)
+    }
+    
+    @objc
+    func moreAction() {
+        navigationController?.present(NavigationController(rootViewController: MoreViewController()), animated: true)
     }
 }
 

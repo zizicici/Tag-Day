@@ -34,5 +34,5 @@ struct DayGrid {
         }
     }
     
-    static let interSpacing: CGFloat = 2.0
+    static let interSpacing: CGFloat = 3.0
 }
