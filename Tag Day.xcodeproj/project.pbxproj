@@ -14,6 +14,11 @@
 		14833D3B2DC5179F001B61D5 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D3A2DC5179F001B61D5 /* UIColor+Extension.swift */; };
 		14ACBE562DBFAD2E0056B1FD /* TabbarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14ACBE542DBFAD2E0056B1FD /* TabbarController.swift */; };
 		14ACBE572DBFAD2E0056B1FD /* NavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14ACBE532DBFAD2E0056B1FD /* NavigationViewController.swift */; };
+		14AD287B2DC5B6DD0018DAF3 /* BookListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AD287A2DC5B6DD0018DAF3 /* BookListViewController.swift */; };
+		14AD287E2DC5B7010018DAF3 /* TagListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AD287D2DC5B7010018DAF3 /* TagListViewController.swift */; };
+		14AD28812DC5BCC50018DAF3 /* BookCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AD28802DC5BCC50018DAF3 /* BookCell.swift */; };
+		14AD28842DC5C0D20018DAF3 /* HeaderReuseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AD28832DC5C0D20018DAF3 /* HeaderReuseView.swift */; };
+		14AD28862DC5C21E0018DAF3 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AD28852DC5C21E0018DAF3 /* DataManager.swift */; };
 		14B239B62DBF13F30007152C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B239B22DBF13F30007152C /* SceneDelegate.swift */; };
 		14B239B72DBF13F30007152C /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B239B32DBF13F30007152C /* CalendarViewController.swift */; };
 		14B239B82DBF13F30007152C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B239AE2DBF13F30007152C /* AppDelegate.swift */; };
@@ -64,6 +69,11 @@
 		14833D3A2DC5179F001B61D5 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		14ACBE532DBFAD2E0056B1FD /* NavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationViewController.swift; sourceTree = "<group>"; };
 		14ACBE542DBFAD2E0056B1FD /* TabbarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbarController.swift; sourceTree = "<group>"; };
+		14AD287A2DC5B6DD0018DAF3 /* BookListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookListViewController.swift; sourceTree = "<group>"; };
+		14AD287D2DC5B7010018DAF3 /* TagListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagListViewController.swift; sourceTree = "<group>"; };
+		14AD28802DC5BCC50018DAF3 /* BookCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookCell.swift; sourceTree = "<group>"; };
+		14AD28832DC5C0D20018DAF3 /* HeaderReuseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderReuseView.swift; sourceTree = "<group>"; };
+		14AD28852DC5C21E0018DAF3 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		14B239AE2DBF13F30007152C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		14B239AF2DBF13F30007152C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		14B239B02DBF13F30007152C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -128,6 +138,32 @@
 			path = BaseViewController;
 			sourceTree = "<group>";
 		};
+		14AD287C2DC5B6E70018DAF3 /* Book */ = {
+			isa = PBXGroup;
+			children = (
+				14AD287A2DC5B6DD0018DAF3 /* BookListViewController.swift */,
+				14AD28822DC5BCCC0018DAF3 /* View */,
+			);
+			path = Book;
+			sourceTree = "<group>";
+		};
+		14AD287F2DC5B7090018DAF3 /* Tag */ = {
+			isa = PBXGroup;
+			children = (
+				14AD287D2DC5B7010018DAF3 /* TagListViewController.swift */,
+			);
+			path = Tag;
+			sourceTree = "<group>";
+		};
+		14AD28822DC5BCCC0018DAF3 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				14AD28802DC5BCC50018DAF3 /* BookCell.swift */,
+				14AD28832DC5C0D20018DAF3 /* HeaderReuseView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		14B239C12DBF75120007152C /* Tag Day */ = {
 			isa = PBXGroup;
 			children = (
@@ -135,6 +171,8 @@
 				14B239B22DBF13F30007152C /* SceneDelegate.swift */,
 				14ACBE552DBFAD2E0056B1FD /* BaseViewController */,
 				14B239C32DBF75F70007152C /* Calendar */,
+				14AD287C2DC5B6E70018DAF3 /* Book */,
+				14AD287F2DC5B7090018DAF3 /* Tag */,
 				14D272BC2DC0884E00267572 /* More */,
 				14D272AD2DC073EB00267572 /* Database */,
 				14D2729E2DC072D700267572 /* Settings */,
@@ -273,6 +311,7 @@
 				14D272A22DC073EB00267572 /* AppDatabase.swift */,
 				14D272A32DC073EB00267572 /* Persistence.swift */,
 				14D272A42DC073EB00267572 /* TimestampedRecord.swift */,
+				14AD28852DC5C21E0018DAF3 /* DataManager.swift */,
 				14D272AA2DC073EB00267572 /* Model */,
 				14D272AC2DC073EB00267572 /* Extension */,
 			);
@@ -402,11 +441,15 @@
 				14D272BD2DC0884E00267572 /* SpecificationsViewController.swift in Sources */,
 				14D272BE2DC0884E00267572 /* SettingOptionsViewController.swift in Sources */,
 				14D272BF2DC0884E00267572 /* MoreViewController.swift in Sources */,
+				14AD28812DC5BCC50018DAF3 /* BookCell.swift in Sources */,
 				14D272B12DC073EB00267572 /* Date+Extension.swift in Sources */,
 				14833D332DC4FED3001B61D5 /* Icon.swift in Sources */,
 				14D272B22DC073EB00267572 /* AppDatabase.swift in Sources */,
+				14AD28862DC5C21E0018DAF3 /* DataManager.swift in Sources */,
 				14D272812DC0718D00267572 /* DayByDayHandler.swift in Sources */,
 				14D272822DC0718D00267572 /* DisplayHandler.swift in Sources */,
+				14AD287E2DC5B7010018DAF3 /* TagListViewController.swift in Sources */,
+				14AD287B2DC5B6DD0018DAF3 /* BookListViewController.swift in Sources */,
 				14D2727C2DC0716E00267572 /* CalendarViewController+Menu.swift in Sources */,
 				14D2729B2DC0720600267572 /* UIFont+Extension.swift in Sources */,
 				14D2727D2DC0716E00267572 /* CalendarViewController+Enum.swift in Sources */,
@@ -414,6 +457,7 @@
 				14D2728A2DC071A500267572 /* BlockItem.swift in Sources */,
 				14833D352DC50310001B61D5 /* Book.swift in Sources */,
 				14B239B72DBF13F30007152C /* CalendarViewController.swift in Sources */,
+				14AD28842DC5C0D20018DAF3 /* HeaderReuseView.swift in Sources */,
 				14833D3B2DC5179F001B61D5 /* UIColor+Extension.swift in Sources */,
 				14B239B82DBF13F30007152C /* AppDelegate.swift in Sources */,
 				14D272702DC0709300267572 /* CalendarBaseViewController.swift in Sources */,

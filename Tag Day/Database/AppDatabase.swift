@@ -120,6 +120,65 @@ final class AppDatabase {
 }
 
 extension AppDatabase {
+    func update(book: Book, postNotification: Bool = true) -> Bool {
+        guard book.id != nil else {
+            // No ID
+            return false
+        }
+        do {
+            _ = try dbWriter?.write{ db in
+                var saveBook = book
+                try saveBook.updateWithTimestamp(db)
+            }
+        }
+        catch {
+            print(error)
+            return false
+        }
+        if postNotification {
+            NotificationCenter.default.post(Notification(name: Notification.Name.DatabaseUpdated))
+        }
+        return true
+    }
+    
+    func add(book: Book) -> Book? {
+        guard book.id == nil else {
+            // Should no ID
+            return nil
+        }
+        var saveBook: Book = book
+        do {
+            _ = try dbWriter?.write{ db in
+                try saveBook.save(db)
+            }
+        }
+        catch {
+            print(error)
+            return nil
+        }
+        NotificationCenter.default.post(Notification(name: Notification.Name.DatabaseUpdated))
+        return saveBook
+    }
+    
+    func delete(book: Book) -> Bool {
+        guard let bookID = book.id else {
+            return false
+        }
+        do {
+            _ = try dbWriter?.write{ db in
+                try Book.deleteAll(db, ids: [bookID])
+            }
+        }
+        catch {
+            print(error)
+            return false
+        }
+        NotificationCenter.default.post(Notification(name: Notification.Name.DatabaseUpdated))
+        return true
+    }
+}
+
+extension AppDatabase {
     /// Provides a read-only access to the database
     var reader: DatabaseReader? {
         dbWriter

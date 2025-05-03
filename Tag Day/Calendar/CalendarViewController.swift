@@ -71,7 +71,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         
         displayHandler = DayDisplayHandler(delegate: self)
         
-        tabBarItem = UITabBarItem(title: String(localized: "controller.calendar.title"), image: UIImage(systemName: "tag"), tag: 0)
+        tabBarItem = UITabBarItem(title: String(localized: "controller.calendar.title"), image: UIImage(systemName: "calendar"), tag: 0)
     }
     
     required init?(coder: NSCoder) {

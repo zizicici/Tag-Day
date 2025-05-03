@@ -1,6 +1,12 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "bookType.active.title" : {
+
+    },
+    "bookType.archived.title" : {
+
+    },
     "calendar.title.year.current" : {
       "localizations" : {
         "en" : {
@@ -56,6 +62,9 @@
           }
         }
       }
+    },
+    "controller.books.title" : {
+
     },
     "controller.calendar.title" : {
       "localizations" : {

@@ -24,6 +24,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         tabBarController.tabBar.tintColor = AppColor.main
         tabBarController.viewControllers = [
             NavigationController(rootViewController: CalendarViewController()),
+            NavigationController(rootViewController: BookListViewController()),
             NavigationController(rootViewController: MoreViewController())
         ]
         window?.rootViewController = tabBarController

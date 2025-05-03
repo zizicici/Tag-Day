@@ -65,4 +65,10 @@ extension Book {
 struct BookInfo: Decodable, FetchableRecord, Equatable, Hashable {
     var book: Book
     var icon: Icon?
+    
+    var name: String {
+        get {
+            return book.name
+        }
+    }
 }
