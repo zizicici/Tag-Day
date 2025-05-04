@@ -320,19 +320,19 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "排班表"
+            "value" : "工作排班"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "排班表"
+            "value" : "工作排班"
           }
         },
         "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "排班表"
+            "value" : "工作排班"
           }
         }
       }
