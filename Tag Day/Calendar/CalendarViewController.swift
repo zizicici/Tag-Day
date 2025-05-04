@@ -24,6 +24,12 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         var configuration = UIButton.Configuration.filled()
         configuration.titleAlignment = .center
         configuration.cornerStyle = .capsule
+        configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer({ incoming in
+            var outgoing = incoming
+            outgoing.font = UIFont.preferredMonospacedFont(for: .body, weight: .medium)
+            
+            return outgoing
+        })
         let button = UIButton(configuration: configuration)
         button.showsMenuAsPrimaryAction = false
         button.tintColor = AppColor.main
@@ -99,6 +105,9 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         yearPickerButton.addTarget(self, action: #selector(showYearPicker(_ :)), for: .touchUpInside)
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: yearPickerButton)
+        yearPickerButton.snp.makeConstraints { make in
+            make.height.greaterThanOrEqualTo(40)
+        }
         
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .DatabaseUpdated, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .TodayUpdated, object: nil)

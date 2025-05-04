@@ -57,11 +57,8 @@ extension CalendarYearPickerViewController: UIPickerViewDataSource {
         return Self.maxYear - Self.minYear + 1
     }
     
-    func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         let text = String(format: String(localized: "calendar.title.year%i"), Self.minYear + row)
-        var attributes = [NSAttributedString.Key: Any]()
-        attributes[.foregroundColor] = UIColor.label
-        
-        return NSAttributedString(string: text, attributes: attributes)
+        return text
     }
 }
