@@ -81,12 +81,16 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         view.addSubview(weekdayOrderView)
         weekdayOrderView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide)
-            make.leading.trailing.equalTo(view)
-            make.height.equalTo(30)
+            make.leading.trailing.equalTo(view).inset(-8.0)
+            make.height.equalTo(30.0)
         }
+        weekdayOrderView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+        weekdayOrderView.layer.cornerRadius = 30.0
         
         configureHierarchy()
         configureDataSource()
+        
+        view.bringSubviewToFront(weekdayOrderView)
         
         addGestures()
         
@@ -213,11 +217,11 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         collectionView.delegate = self
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(weekdayOrderView.snp.bottom)
+            make.top.equalTo(view)
             make.leading.trailing.bottom.equalTo(view)
         }
-        collectionView.scrollIndicatorInsets = UIEdgeInsets(top: CGFloat.leastNormalMagnitude, left: 0.0, bottom: 0.0, right: 0.0)
-        collectionView.contentInset = .init(top: 0.0, left: 0.0, bottom: 100.0, right: 0.0)
+        collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 26.0, left: 0.0, bottom: 10.0, right: 0.0)
+        collectionView.contentInset = .init(top: 30.0, left: 0.0, bottom: 100.0, right: 0.0)
     }
 
     @objc
