@@ -35,9 +35,6 @@ extension IconSource: DatabaseValueConvertible {
 struct Icon: Identifiable, Hashable {
     var id: Int64?
     
-    var creationTime: Int64?
-    var modificationTime: Int64?
-    
     var name: String
     var source: IconSource
     var content: String
@@ -54,19 +51,16 @@ extension Icon {
     }
 }
 
-extension Icon: Codable, FetchableRecord, TimestampedRecord {
+extension Icon: Codable, FetchableRecord, MutablePersistableRecord {
     enum Columns: String, ColumnExpression {
         case id
         case name
         case source
         case content
-        
-        static let creationTime = Column(CodingKeys.creationTime)
-        static let modificationTime = Column(CodingKeys.modificationTime)
     }
     
     enum CodingKeys: String, CodingKey {
-        case id, creationTime = "creation_time", modificationTime = "modification_time", name, source, content
+        case id, name, source, content
     }
     
     mutating func didInsert(_ inserted: InsertionSuccess) {

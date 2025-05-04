@@ -30,9 +30,6 @@ final class AppDatabase {
         migrator.registerMigration("icon___book___tag___record") { db in
             try db.create(table: "icon") { table in
                 table.autoIncrementedPrimaryKey("id")
-
-                table.column("creation_time", .integer).notNull()
-                table.column("modification_time", .integer).notNull()
                 
                 table.column("name", .text).notNull()
                 table.column("source", .integer).notNull()
@@ -41,26 +38,20 @@ final class AppDatabase {
             try db.create(table: "book") { table in
                 table.autoIncrementedPrimaryKey("id")
                 
-                table.column("creation_time", .integer).notNull()
-                table.column("modification_time", .integer).notNull()
-                
                 table.column("name", .text).notNull()
                 table.column("comment", .text)
                 table.column("icon_id", .text)
                     .indexed()
-                    .references("icon", onDelete: .setNull)
+//                    .references("icon", onDelete: .setNull)
                 table.column("book_type", .integer).notNull()
                 table.column("order", .integer).notNull()
             }
             try db.create(table: "tag") { table in
                 table.autoIncrementedPrimaryKey("id")
                 
-                table.column("creation_time", .integer).notNull()
-                table.column("modification_time", .integer).notNull()
-                
                 table.column("book_id", .integer).notNull()
                     .indexed()
-                    .references("book", onDelete: .cascade)
+//                    .references("book", onDelete: .cascade)
                 
                 table.column("name", .text).notNull()
                 table.column("comment", .text)
@@ -69,15 +60,12 @@ final class AppDatabase {
             try db.create(table: "day_record") { table in
                 table.autoIncrementedPrimaryKey("id")
                 
-                table.column("creation_time", .integer).notNull()
-                table.column("modification_time", .integer).notNull()
-                
                 table.column("book_id", .integer).notNull()
                     .indexed()
-                    .references("book", onDelete: .cascade)
+//                    .references("book", onDelete: .cascade)
                 table.column("tag_id", .integer).notNull()
                     .indexed()
-                    .references("tag", onDelete: .cascade)
+//                    .references("tag", onDelete: .cascade)
                 
                 table.column("day", .integer).notNull()
                 table.column("comment", .text).notNull()
@@ -127,8 +115,7 @@ extension AppDatabase {
         }
         do {
             _ = try dbWriter?.write{ db in
-                var saveBook = book
-                try saveBook.updateWithTimestamp(db)
+                try book.update(db)
             }
         }
         catch {
@@ -141,10 +128,10 @@ extension AppDatabase {
         return true
     }
     
-    func add(book: Book) -> Book? {
+    func add(book: Book) -> Bool {
         guard book.id == nil else {
             // Should no ID
-            return nil
+            return false
         }
         var saveBook: Book = book
         do {
@@ -154,10 +141,10 @@ extension AppDatabase {
         }
         catch {
             print(error)
-            return nil
+            return false
         }
         NotificationCenter.default.post(Notification(name: Notification.Name.DatabaseUpdated))
-        return saveBook
+        return true
     }
     
     func delete(book: Book) -> Bool {

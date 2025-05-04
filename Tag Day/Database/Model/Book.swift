@@ -17,9 +17,6 @@ enum BookType: Int, Codable {
 struct Book: Identifiable, Hashable {
     var id: Int64?
     
-    var creationTime: Int64?
-    var modificationTime: Int64?
-    
     var name: String
     var comment: String?
     var iconID: Int64?
@@ -32,21 +29,19 @@ extension Book: TableRecord {
 }
 
 
-extension Book: Codable, FetchableRecord, TimestampedRecord {
+extension Book: Codable, FetchableRecord, MutablePersistableRecord {
     enum Columns: String, ColumnExpression {
         case id
         case name
         case comment
         case order
         
-        static let creationTime = Column(CodingKeys.creationTime)
-        static let modificationTime = Column(CodingKeys.modificationTime)
         static let bookType = Column(CodingKeys.bookType)
         static let iconID = Column(CodingKeys.iconID)
     }
     
     enum CodingKeys: String, CodingKey {
-        case id, creationTime = "creation_time", modificationTime = "modification_time", name, comment, iconID = "icon_id", bookType = "book_type", order
+        case id, name, comment, iconID = "icon_id", bookType = "book_type", order
     }
     
     mutating func didInsert(_ inserted: InsertionSuccess) {

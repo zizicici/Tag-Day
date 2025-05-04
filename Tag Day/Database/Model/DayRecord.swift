@@ -17,9 +17,6 @@ enum AmountType: Int, Codable {
 struct DayRecord: Identifiable, Hashable {
     var id: Int64?
     
-    var creationTime: Int64?
-    var modificationTime: Int64?
-    
     var bookID: Int64
     var tagID: Int64
     var day: Int64
@@ -33,7 +30,7 @@ extension DayRecord: TableRecord {
     static var databaseTableName: String = "day_record"
 }
 
-extension DayRecord: Codable, FetchableRecord, TimestampedRecord {
+extension DayRecord: Codable, FetchableRecord, MutablePersistableRecord {
     enum Columns: String, ColumnExpression {
         case id
         case day
@@ -41,14 +38,12 @@ extension DayRecord: Codable, FetchableRecord, TimestampedRecord {
         
         static let bookID = Column(CodingKeys.bookID)
         static let tagID = Column(CodingKeys.tagID)
-        static let creationTime = Column(CodingKeys.creationTime)
-        static let modificationTime = Column(CodingKeys.modificationTime)
         static let amountType = Column(CodingKeys.amountType)
         static let amountValue = Column(CodingKeys.amountValue)
     }
     
     enum CodingKeys: String, CodingKey {
-        case id, creationTime = "creation_time", modificationTime = "modification_time", bookID = "book_id", tagID = "tag_id", day, comment, amountType = "amount_type", amountValue = "amount_value"
+        case id, bookID = "book_id", tagID = "tag_id", day, comment, amountType = "amount_type", amountValue = "amount_value"
     }
     
     mutating func didInsert(_ inserted: InsertionSuccess) {
