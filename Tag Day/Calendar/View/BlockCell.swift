@@ -74,7 +74,7 @@ class BlockCell: BlockBaseCell {
     }()
     
     var defaultBackgroundColor: UIColor = AppColor.paper
-    var highlightColor: UIColor = .gray.withAlphaComponent(0.5)
+    var highlightColor: UIColor = .gray.withAlphaComponent(0.25)
     
     override func prepareForReuse() {
         super.prepareForReuse()
