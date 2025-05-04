@@ -51,6 +51,10 @@ class DayDisplayHandler: DisplayHandler {
         selectedYear = year
     }
     
+    func getSelectedYear() -> Int {
+        return selectedYear
+    }
+    
     func getSnapshot() -> NSDiffableDataSourceSnapshot<Section, Item>? {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
         

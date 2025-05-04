@@ -20,4 +20,7 @@ protocol DisplayHandler {
     func getSnapshot() -> NSDiffableDataSourceSnapshot<Section, Item>?
     func getCatalogueMenuElements() -> [UIMenuElement]
     func getTitle() -> String
+    
+    func updateSelectedYear(to year: Int)
+    func getSelectedYear() -> Int
 }

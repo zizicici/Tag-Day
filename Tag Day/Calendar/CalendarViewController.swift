@@ -25,7 +25,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         configuration.titleAlignment = .center
         configuration.cornerStyle = .capsule
         let button = UIButton(configuration: configuration)
-        button.showsMenuAsPrimaryAction = true
+        button.showsMenuAsPrimaryAction = false
         button.tintColor = AppColor.main
         return button
     }()
@@ -95,8 +95,8 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
             config?.title = self.displayHandler.getTitle()
             
             button.configuration = config
-            button.menu = UIMenu(children: self.displayHandler.getCatalogueMenuElements())
         }
+        yearPickerButton.addTarget(self, action: #selector(showYearPicker(_ :)), for: .touchUpInside)
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: yearPickerButton)
         
@@ -208,7 +208,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
             make.leading.trailing.bottom.equalTo(view)
         }
         collectionView.scrollIndicatorInsets = UIEdgeInsets(top: CGFloat.leastNormalMagnitude, left: 0.0, bottom: 0.0, right: 0.0)
-        collectionView.contentInset = .init(top: 0.0, left: 0.0, bottom: 10.0, right: 0.0)
+        collectionView.contentInset = .init(top: 0.0, left: 0.0, bottom: 100.0, right: 0.0)
     }
 
     @objc
@@ -260,27 +260,12 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     func moreAction() {
         navigationController?.present(NavigationController(rootViewController: MoreViewController()), animated: true)
     }
-}
-
-extension UIImage {
-    func rotatedCounterClockwise90() -> UIImage? {
-        let rotatedSize = CGSize(width: size.height, height: size.width)
-        
-        UIGraphicsBeginImageContextWithOptions(rotatedSize, false, scale)
-        defer { UIGraphicsEndImageContext() }
-        
-        guard let context = UIGraphicsGetCurrentContext(), let cgImage = cgImage else {
-            return nil
+    
+    @objc
+    func showYearPicker(_ sender: UIView) {
+        let picker = CalendarYearPickerViewController(currentYear: self.displayHandler.getSelectedYear()) { [weak self] selectYear in
+            self?.displayHandler.updateSelectedYear(to: selectYear)
         }
-        
-        context.translateBy(x: rotatedSize.width / 2, y: rotatedSize.height / 2)
-        context.rotate(by: -CGFloat.pi / 2)
-        context.draw(cgImage,
-                    in: CGRect(x: -size.width / 2,
-                              y: -size.height / 2,
-                              width: size.width,
-                              height: size.height))
-        
-        return UIGraphicsGetImageFromCurrentImageContext()
+        showPopoverView(at: sender, contentViewController: picker, width: 140)
     }
 }
