@@ -27,7 +27,7 @@ class MainViewController: NavigationController {
         configuration.image = UIImage.tag
         let button = UIButton(configuration: configuration)
         button.showsMenuAsPrimaryAction = true
-        button.tintColor = UIColor(hex: "#75c594", alpha: 1.0)
+        button.tintColor = AppColor.action
         button.layer.cornerCurve = .continuous
         button.layer.cornerRadius = 20.0
         button.clipsToBounds = true
@@ -53,7 +53,7 @@ class MainViewController: NavigationController {
         })
         configuration.cornerStyle = .capsule
         let button = UIButton(configuration: configuration)
-        button.tintColor = UIColor(hex: "#75c594", alpha: 1.0)
+        button.tintColor = AppColor.action
         button.showsMenuAsPrimaryAction = true
         return button
     }()
