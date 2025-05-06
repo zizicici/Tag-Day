@@ -14,6 +14,8 @@ struct BlockItem: Hashable {
     var backgroundColor: UIColor
     var foregroundColor: UIColor
     var isToday: Bool
+    var tags: [Tag]
+    var records: [DayRecord]
 }
 
 extension BlockItem {

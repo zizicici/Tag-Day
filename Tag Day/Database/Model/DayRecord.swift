@@ -20,7 +20,7 @@ struct DayRecord: Identifiable, Hashable {
     var bookID: Int64
     var tagID: Int64
     var day: Int64
-    var comment: String
+    var comment: String?
     
     var amountType: AmountType = .none
     var amountValue: Int?

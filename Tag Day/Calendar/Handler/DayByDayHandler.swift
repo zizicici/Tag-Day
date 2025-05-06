@@ -55,10 +55,12 @@ class DayDisplayHandler: DisplayHandler {
         return selectedYear
     }
     
-    func getSnapshot() -> NSDiffableDataSourceSnapshot<Section, Item>? {
+    func getSnapshot(tags: [Tag], records: [DayRecord]) -> NSDiffableDataSourceSnapshot<Section, Item>? {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
         
-        LayoutGenerater.dayLayout(for: &snapshot, year: selectedYear)
+        let filterRecords = records.filter { ($0.day >= ZCCalendar.manager.firstDay(at: .jan, year: selectedYear).julianDay) && ($0.day <= ZCCalendar.manager.lastDay(at: .dec, year: selectedYear).julianDay) }
+        
+        LayoutGenerater.dayLayout(for: &snapshot, year: selectedYear, tags: tags, records: filterRecords)
         
         return snapshot
     }

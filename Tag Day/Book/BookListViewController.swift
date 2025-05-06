@@ -103,7 +103,7 @@ class BookListViewController: UIViewController {
         var snapshot = NSDiffableDataSourceSnapshot<Section, BookCellItem>()
         snapshot.appendSections([.active])
         var items: [BookCellItem] = []
-        if let activeBook = try? DataManager.shared.fetchAllBooks(bookType: .active) {
+        if let activeBook = try? DataManager.shared.fetchAllBooks(for: .active) {
             items = activeBook.map{ BookCellItem(book: $0) }
             snapshot.appendItems(items, toSection: .active)
         }

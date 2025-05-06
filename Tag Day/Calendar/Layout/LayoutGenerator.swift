@@ -9,7 +9,7 @@ import UIKit
 import ZCCalendar
 
 struct LayoutGenerater {
-    static func dayLayout(for snapshot: inout NSDiffableDataSourceSnapshot<Section, Item>, year: Int) {
+    static func dayLayout(for snapshot: inout NSDiffableDataSourceSnapshot<Section, Item>, year: Int, tags: [Tag], records: [DayRecord]) {
         let firstDayOfWeek: WeekdayOrder = WeekdayOrder(rawValue: WeekStartType.current.rawValue) ?? WeekdayOrder.firstDayOfWeek
         
         for month in Month.allCases {
@@ -41,9 +41,8 @@ struct LayoutGenerater {
                 
                 let backgroundColor: UIColor = AppColor.paper
                 let foregroundColor: UIColor = AppColor.text
-
                 
-                return Item.block(BlockItem(index: julianDay, backgroundColor: backgroundColor, foregroundColor: foregroundColor, isToday: ZCCalendar.manager.isToday(gregorianDay: gregorianDay)))
+                return Item.block(BlockItem(index: julianDay, backgroundColor: backgroundColor, foregroundColor: foregroundColor, isToday: ZCCalendar.manager.isToday(gregorianDay: gregorianDay), tags: tags, records: records.filter{ $0.day == gregorianDay.julianDay }))
             }))
         }
     }

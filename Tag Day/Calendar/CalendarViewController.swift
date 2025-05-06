@@ -113,7 +113,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
             make.height.greaterThanOrEqualTo(40)
         }
         
-        NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .DatabaseUpdated, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .CurrentBookChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .TodayUpdated, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .SettingsUpdate, object: nil)
     }
@@ -235,14 +235,15 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     }
     
     private func applyData() {
-        if let snapshot = displayHandler.getSnapshot() {
+        let tags = DataManager.shared.tags
+        let records = DataManager.shared.dayRecords
+        if let snapshot = displayHandler.getSnapshot(tags: tags, records: records) {
             dataSource.apply(snapshot, animatingDifferences: true) { [weak self] in
                 guard let self = self, !self.didScrollToday else { return }
                 self.didScrollToday = true
             }
             self.updateVisibleItems()
         }
-//        updateMoreMenu()
     }
     
     func scrollToToday() {

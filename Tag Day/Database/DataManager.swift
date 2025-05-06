@@ -8,6 +8,13 @@
 import Foundation
 import GRDB
 
+extension Notification.Name {
+    static let CurrentBookChanged = Notification.Name(rawValue: "com.zizicici.data.current.changed")
+    static let BooksUpdated = Notification.Name(rawValue: "com.zizicici.data.books.updated")
+    static let TagsUpdated = Notification.Name(rawValue: "com.zizicici.data.tags.updated")
+    static let DayRecordsUpdated = Notification.Name(rawValue: "com.zizicici.data.dayRecords.updated")
+}
+
 class DataManager {
     static let shared = DataManager()
     
@@ -17,20 +24,45 @@ class DataManager {
                 // Update DayRecords and Tags
                 updateTags()
                 updateDayRecords()
+                NotificationCenter.default.post(Notification(name: Notification.Name.CurrentBookChanged))
             }
         }
     }
-    var tags: [Tag] = []
-    var dayRecords: [DayRecord] = []
+    
+    var books: [Book] = [] {
+        didSet {
+            NotificationCenter.default.post(Notification(name: Notification.Name.BooksUpdated))
+        }
+    }
+    
+    var tags: [Tag] = [] {
+        didSet {
+            NotificationCenter.default.post(Notification(name: Notification.Name.TagsUpdated))
+        }
+    }
+    
+    var dayRecords: [DayRecord] = [] {
+        didSet {
+            NotificationCenter.default.post(Notification(name: Notification.Name.DayRecordsUpdated))
+        }
+    }
     
     init() {
-        currentBook = try? fetchAllBooks(bookType: .active).first
+        currentBook = try? fetchAllBooks(for: .active).first
+        updateBooks()
         updateTags()
         updateDayRecords()
+        NotificationCenter.default.post(Notification(name: Notification.Name.CurrentBookChanged))
     }
     
     public func select(book: Book?) {
         self.currentBook = book
+    }
+    
+    private func updateBooks() {
+        if let result = try? fetchAllBooks() {
+            books = result
+        }
     }
     
     private func updateTags() {
@@ -48,7 +80,24 @@ class DataManager {
 
 // Book
 extension DataManager {
-    func fetchAllBooks(bookType: BookType) throws -> [Book] {
+    func fetchAllBooks() throws -> [Book] {
+        var result: [Book] = []
+        try AppDatabase.shared.reader?.read{ db in
+            do {
+                let orderColumn = Book.Columns.order
+                result = try Book
+                    .order(orderColumn.asc)
+                    .fetchAll(db)
+            }
+            catch {
+                print(error)
+            }
+        }
+        
+        return result
+    }
+    
+    func fetchAllBooks(for bookType: BookType) throws -> [Book] {
         var result: [Book] = []
         try AppDatabase.shared.reader?.read{ db in
             do {

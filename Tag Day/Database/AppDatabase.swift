@@ -47,7 +47,7 @@ final class AppDatabase {
                 
                 table.column("name", .text).notNull()
                 table.column("comment", .text)
-                table.column("color")
+                table.column("color").notNull()
                 table.column("order", .integer).notNull()
             }
             try db.create(table: "day_record") { table in
@@ -61,7 +61,7 @@ final class AppDatabase {
 //                    .references("tag", onDelete: .cascade)
                 
                 table.column("day", .integer).notNull()
-                table.column("comment", .text).notNull()
+                table.column("comment", .text)
                 table.column("amount_type", .integer).notNull()
                 table.column("amount_value", .integer)
             }
@@ -71,12 +71,30 @@ final class AppDatabase {
                 try? firstBook.save(db)
                 
                 if let bookID = firstBook.id {
-                    var firstTag = Tag(bookID: bookID, name: String(localized: "database.firstTag.name"), comment: String(localized: "database.firstTag.comment"), color: UIColor.orange.generateLightDarkString(), order: 0)
+                    var firstTag = Tag(bookID: bookID, name: String(localized: "database.firstTag.name"), comment: String(localized: "database.firstTag.comment"), color: UIColor.systemMint.generateLightDarkString(), order: 0)
                     try? firstTag.save(db)
                     
                     if let bookId = firstBook.id, let tagId = firstTag.id {
-                        var firstDayRecord = DayRecord(bookID: bookId, tagID: tagId, day: Int64(ZCCalendar.manager.today.julianDay), comment: String(localized: "database.firstDayRecord.comment"))
-                        try? firstDayRecord.save(db)
+                        var day1 = DayRecord(bookID: bookId, tagID: tagId, day: Int64(ZCCalendar.manager.today.julianDay), comment: String(localized: "database.firstDayRecord.comment"))
+                        try? day1.save(db)
+                        var day2 = DayRecord(bookID: bookId, tagID: tagId, day: Int64(ZCCalendar.manager.today.julianDay + 1), comment: String(localized: "database.firstDayRecord.comment"))
+                        try? day2.save(db)
+                        var day3 = DayRecord(bookID: bookId, tagID: tagId, day: Int64(ZCCalendar.manager.today.julianDay + 2), comment: String(localized: "database.firstDayRecord.comment"))
+                        try? day3.save(db)
+                    }
+                    
+                    var secondTag = Tag(bookID: bookID, name: String(localized: "database.secondTag.name"), comment: nil, color: UIColor.systemPurple.generateLightDarkString(), order: 1)
+                    try? secondTag.save(db)
+                    if let bookId = firstBook.id, let tagId = secondTag.id {
+                        var day4 = DayRecord(bookID: bookId, tagID: tagId, day: Int64(ZCCalendar.manager.today.julianDay + 3))
+                        try? day4.save(db)
+                    }
+                    
+                    var thirdTag = Tag(bookID: bookID, name: String(localized: "database.thirdTag.name"), comment: nil, color: UIColor.systemCyan.generateLightDarkString(), order: 2)
+                    try? thirdTag.save(db)
+                    if let bookId = firstBook.id, let tagId = thirdTag.id {
+                        var day5 = DayRecord(bookID: bookId, tagID: tagId, day: Int64(ZCCalendar.manager.today.julianDay + 4))
+                        try? day5.save(db)
                     }
                 }
             }

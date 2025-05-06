@@ -124,13 +124,12 @@ class MainViewController: NavigationController {
     
     func getBooksMenu() -> UIMenu {
         var elements: [UIMenuElement] = []
-        if let books = try? DataManager.shared.fetchAllBooks(bookType: .active) {
-            let bookElements: [UIMenuElement] = books.map{
-                return UIAction(title: $0.name, subtitle: $0.comment, state: DataManager.shared.currentBook?.id == $0.id ? .on : .off) { [weak self] _ in
-                    guard let self = self else { return }
-                    //
+        if let books = try? DataManager.shared.fetchAllBooks(for: .active) {
+            let bookElements: [UIMenuElement] = books.map({ book in
+                return UIAction(title: book.name, subtitle: book.comment, state: DataManager.shared.currentBook?.id == book.id ? .on : .off) { _ in
+                    DataManager.shared.select(book: book)
                 }
-            }
+            })
             elements.append(contentsOf: bookElements)
         }
         

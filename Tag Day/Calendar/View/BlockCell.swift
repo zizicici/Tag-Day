@@ -73,6 +73,13 @@ class BlockCell: BlockBaseCell {
         return label
     }()
     
+    var tagContainerView: UIView = {
+        let view = UIView()
+        view.clipsToBounds = true
+        
+        return view
+    }()
+    
     var defaultBackgroundColor: UIColor = AppColor.paper
     var highlightColor: UIColor = .gray.withAlphaComponent(0.25)
     
@@ -83,6 +90,9 @@ class BlockCell: BlockBaseCell {
         label.text = nil
         label.backgroundColor = .clear
         paperView.backgroundColor = defaultBackgroundColor
+        tagContainerView.subviews.forEach { subview in
+            subview.removeFromSuperview()
+        }
     }
     
     override func layoutSubviews() {
@@ -92,11 +102,6 @@ class BlockCell: BlockBaseCell {
     
     private func setupViewsIfNeeded() {
         guard paperView.superview == nil else { return }
-        
-//        contentView.backgroundColor = defaultBackgroundColor
-//        contentView.layer.cornerCurve = .continuous
-//        contentView.layer.cornerRadius = 3.0
-//        contentView.layer.masksToBounds = true
         
         contentView.addSubview(paperView)
         paperView.snp.makeConstraints { make in
@@ -118,9 +123,17 @@ class BlockCell: BlockBaseCell {
         label.snp.makeConstraints { make in
             make.top.equalTo(paperView).inset(8)
             make.leading.trailing.equalTo(paperView).inset(6)
+            make.height.equalTo(18)
         }
         label.layer.cornerRadius = 6.0
         label.clipsToBounds = true
+        
+        paperView.addSubview(tagContainerView)
+        tagContainerView.snp.makeConstraints { make in
+            make.top.equalTo(label.snp.bottom).offset(6)
+            make.leading.trailing.equalTo(paperView)//.inset(3)
+            make.bottom.equalTo(paperView).inset(4)
+        }
         
         isAccessibilityElement = true
         accessibilityTraits = .button
@@ -141,6 +154,32 @@ class BlockCell: BlockBaseCell {
             
             label.textColor = item.foregroundColor
             label.text = item.day.dayString()
+            
+            var lastRecordView: UIView? = nil
+            for (_, record) in item.records.enumerated() {
+//                let isLast = item.records.count == index + 1
+                if let tag = item.tags.filter({ $0.id == record.tagID }).first {
+                    let recordView = TagView()
+                    recordView.update(tag: tag, record: record)
+                    tagContainerView.addSubview(recordView)
+                    if let lastView = lastRecordView {
+                        recordView.snp.makeConstraints { make in
+                            make.leading.trailing.equalTo(tagContainerView).inset(2)
+                            make.height.equalTo(20)
+                            make.top.equalTo(lastView.snp.bottom).offset(3)
+                        }
+                    } else {
+                        recordView.snp.makeConstraints { make in
+                            make.leading.trailing.equalTo(tagContainerView).inset(2)
+                            make.height.equalTo(20)
+                            make.top.equalTo(tagContainerView)
+                        }
+                    }
+
+                    lastRecordView = recordView
+                }
+            }
+            
             if item.isToday {
                 label.backgroundColor = AppColor.today
                 accessibilityLabel = String(localized: "weekCalendar.today") + (item.day.completeFormatString() ?? "")
@@ -157,6 +196,47 @@ class BlockCell: BlockBaseCell {
     override var isHighlighted: Bool {
         didSet {
             setNeedsUpdateConfiguration()
+        }
+    }
+}
+
+class TagView: UIView {
+    var label: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 12, weight: .bold)
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.5
+        
+        return label
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        addSubview(label)
+        label.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(self).inset(3)
+            make.top.bottom.equalTo(self)
+        }
+        
+        self.layer.cornerRadius = 2.0
+        self.layer.masksToBounds = true
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func update(tag: Tag, record: DayRecord) {
+        label.text = tag.name
+        if let tagColor = UIColor(string: tag.color) {
+            if tagColor.isSimilar(to: UIColor.white) {
+                label.textColor = .label
+            } else {
+                label.textColor = .white
+            }
+            backgroundColor = tagColor
         }
     }
 }

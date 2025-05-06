@@ -104,3 +104,40 @@ extension UIColor {
         }
     }
 }
+
+extension UIColor {
+    var isLight: Bool {
+        var red: CGFloat = 0, green: CGFloat = 0, blue: CGFloat = 0
+        getRed(&red, green: &green, blue: &blue, alpha: nil)
+        let threshold: CGFloat = 75.0 // 自定义阈值(0-1)，数值越小，认为颜色越暗
+        let gray = YtoLstar(Y: rgbToY(r: red, g: green, b: blue)) // 计算灰度值（在RGB空间内）
+        return gray > threshold
+    }
+    
+    func sRGBtoLin(_ colorChannel: CGFloat) -> CGFloat {
+        if colorChannel <= 0.04045 {
+            return colorChannel / 12.92
+        }
+        return pow((colorChannel + 0.055) / 1.055, 2.4)
+    }
+
+    func rgbToY(r: CGFloat, g: CGFloat, b: CGFloat) -> CGFloat {
+        return 0.2126 * sRGBtoLin(r) + 0.7152 * sRGBtoLin(g) + 0.0722 * sRGBtoLin(b)
+    }
+
+    func YtoLstar(Y: CGFloat) -> CGFloat {
+        if Y <= (216 / 24389) {
+            return Y * (24389 / 27)
+        }
+        return pow(Y, (1 / 3)) * 116 - 16
+    }
+    
+    func isSimilar(to color: UIColor, threshold: CGFloat = 0.2) -> Bool {
+        var r1: CGFloat = 0, g1: CGFloat = 0, b1: CGFloat = 0, a1: CGFloat = 0
+        self.getRed(&r1, green: &g1, blue: &b1, alpha: &a1)
+        var r2: CGFloat = 0, g2: CGFloat = 0, b2: CGFloat = 0, a2: CGFloat = 0
+        color.getRed(&r2, green: &g2, blue: &b2, alpha: &a2)
+        let distance = sqrt(pow(r1 - r2, 2) + pow(g1 - g2, 2) + pow(b1 - b2, 2))
+        return distance <= threshold
+    }
+}

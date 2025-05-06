@@ -426,7 +426,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Day Shift"
+            "value" : "Day"
           }
         },
         "zh-Hans" : {
@@ -445,6 +445,62 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "白班"
+          }
+        }
+      }
+    },
+    "database.secondTag.name" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Night"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "夜班"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "夜班"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "夜班"
+          }
+        }
+      }
+    },
+    "database.thirdTag.name" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rest"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "休息"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "休息"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "休息"
           }
         }
       }

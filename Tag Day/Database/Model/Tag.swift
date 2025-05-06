@@ -15,7 +15,7 @@ struct Tag: Identifiable, Hashable {
 
     var name: String
     var comment: String?
-    var color: String?
+    var color: String
     var order: Int
 }
 
