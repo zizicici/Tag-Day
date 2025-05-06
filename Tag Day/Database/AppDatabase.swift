@@ -33,8 +33,6 @@ final class AppDatabase {
                 
                 table.column("name", .text).notNull()
                 table.column("comment", .text)
-                    .indexed()
-//                    .references("icon", onDelete: .setNull)
                 table.column("book_type", .integer).notNull()
                 table.column("order", .integer).notNull()
             }
@@ -43,7 +41,6 @@ final class AppDatabase {
                 
                 table.column("book_id", .integer).notNull()
                     .indexed()
-//                    .references("book", onDelete: .cascade)
                 
                 table.column("name", .text).notNull()
                 table.column("comment", .text)
@@ -55,10 +52,9 @@ final class AppDatabase {
                 
                 table.column("book_id", .integer).notNull()
                     .indexed()
-//                    .references("book", onDelete: .cascade)
+                
                 table.column("tag_id", .integer).notNull()
                     .indexed()
-//                    .references("tag", onDelete: .cascade)
                 
                 table.column("day", .integer).notNull()
                 table.column("comment", .text)
