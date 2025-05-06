@@ -126,7 +126,7 @@ class MainViewController: NavigationController {
         var elements: [UIMenuElement] = []
         if let books = try? DataManager.shared.fetchAllBooks(bookType: .active) {
             let bookElements: [UIMenuElement] = books.map{
-                return UIAction(title: $0.name, subtitle: nil, state: DataManager.shared.currentBook?.id == $0.id ? .on : .off) { [weak self] _ in
+                return UIAction(title: $0.name, subtitle: $0.comment, state: DataManager.shared.currentBook?.id == $0.id ? .on : .off) { [weak self] _ in
                     guard let self = self else { return }
                     //
                 }

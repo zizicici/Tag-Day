@@ -66,7 +66,7 @@ final class AppDatabase {
             }
             
             if true {
-                var firstBook = Book(name: String(localized: "database.firstBook"), order: 0)
+                var firstBook = Book(name: String(localized: "database.firstBook"), comment: String(localized: "database.firstBook.comment"), order: 0)
                 try? firstBook.save(db)
                 
                 if let bookID = firstBook.id {

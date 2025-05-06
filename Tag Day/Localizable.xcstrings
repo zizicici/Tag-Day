@@ -314,7 +314,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Schedule"
+            "value" : "Work Schedule"
           }
         },
         "zh-Hans" : {
@@ -333,6 +333,34 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "工作排班"
+          }
+        }
+      }
+    },
+    "database.firstBook.comment" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Demo Data"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "演示数据"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "演示數據"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "演示數據"
           }
         }
       }
