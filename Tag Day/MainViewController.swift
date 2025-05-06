@@ -14,7 +14,7 @@ class MainViewController: NavigationController {
     
     var buttonContainer: UIView = {
         var container = UIView()
-        container.backgroundColor = UIColor(hex: "#b4ddc1", alpha: 1.0)
+        container.backgroundColor = AppColor.toolbar
         container.layer.cornerCurve = .continuous
         container.layer.cornerRadius = 25.0
         container.clipsToBounds = true

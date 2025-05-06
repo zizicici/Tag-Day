@@ -32,7 +32,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         })
         let button = UIButton(configuration: configuration)
         button.showsMenuAsPrimaryAction = false
-        button.tintColor = AppColor.main
+        button.tintColor = AppColor.action
         return button
     }()
 

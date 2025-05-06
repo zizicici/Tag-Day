@@ -231,10 +231,10 @@ class TagView: UIView {
     func update(tag: Tag, record: DayRecord) {
         label.text = tag.name
         if let tagColor = UIColor(string: tag.color) {
-            if tagColor.isSimilar(to: UIColor.white) {
-                label.textColor = .label
+            if tagColor.isLight {
+                label.textColor = .black.withAlphaComponent(0.8)
             } else {
-                label.textColor = .white
+                label.textColor = .white.withAlphaComponent(0.95)
             }
             backgroundColor = tagColor
         }
