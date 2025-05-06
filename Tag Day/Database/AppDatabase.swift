@@ -27,20 +27,12 @@ final class AppDatabase {
 #if DEBUG
         migrator.eraseDatabaseOnSchemaChange = true
 #endif
-        migrator.registerMigration("icon___book___tag___record") { db in
-            try db.create(table: "icon") { table in
-                table.autoIncrementedPrimaryKey("id")
-                
-                table.column("name", .text).notNull()
-                table.column("source", .integer).notNull()
-                table.column("content", .text).notNull()
-            }
+        migrator.registerMigration("book___tag___record") { db in
             try db.create(table: "book") { table in
                 table.autoIncrementedPrimaryKey("id")
                 
                 table.column("name", .text).notNull()
                 table.column("comment", .text)
-                table.column("icon_id", .text)
                     .indexed()
 //                    .references("icon", onDelete: .setNull)
                 table.column("book_type", .integer).notNull()

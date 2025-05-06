@@ -14,7 +14,7 @@ class DataManager {
     var currentBook: Book?
     
     init() {
-        currentBook = try? fetchFirstBookInfos(bookType: .active).first?.book
+        currentBook = try? fetchAllBooks(bookType: .active).first
     }
     
     func select(book: Book?) {
@@ -24,8 +24,8 @@ class DataManager {
 
 // Book
 extension DataManager {
-    func fetchFirstBookInfos(bookType: BookType) throws -> [BookInfo] {
-        var result: [BookInfo] = []
+    func fetchAllBooks(bookType: BookType) throws -> [Book] {
+        var result: [Book] = []
         try AppDatabase.shared.reader?.read{ db in
             do {
                 let orderColumn = Book.Columns.order
@@ -33,27 +33,6 @@ extension DataManager {
                 result = try Book
                     .order(orderColumn.asc)
                     .filter(bookTypeColumn == bookType.rawValue)
-                    .asRequest(of: BookInfo.self)
-                    .fetchAll(db)
-            }
-            catch {
-                print(error)
-            }
-        }
-        
-        return result
-    }
-    
-    func fetchAllBookInfos(bookType: BookType) throws -> [BookInfo] {
-        var result: [BookInfo] = []
-        try AppDatabase.shared.reader?.read{ db in
-            do {
-                let orderColumn = Book.Columns.order
-                let bookTypeColumn = Book.Columns.bookType
-                result = try Book
-                    .order(orderColumn.asc)
-                    .filter(bookTypeColumn == bookType.rawValue)
-                    .asRequest(of: BookInfo.self)
                     .fetchAll(db)
             }
             catch {

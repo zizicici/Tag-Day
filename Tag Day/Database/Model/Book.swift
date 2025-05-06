@@ -19,7 +19,6 @@ struct Book: Identifiable, Hashable {
     
     var name: String
     var comment: String?
-    var iconID: Int64?
     var bookType: BookType = .active
     var order: Int
 }
@@ -37,33 +36,13 @@ extension Book: Codable, FetchableRecord, MutablePersistableRecord {
         case order
         
         static let bookType = Column(CodingKeys.bookType)
-        static let iconID = Column(CodingKeys.iconID)
     }
     
     enum CodingKeys: String, CodingKey {
-        case id, name, comment, iconID = "icon_id", bookType = "book_type", order
+        case id, name, comment, bookType = "book_type", order
     }
     
     mutating func didInsert(_ inserted: InsertionSuccess) {
         id = inserted.rowID
-    }
-}
-
-extension Book {
-    static let icon = belongsTo(Icon.self)
-
-    var icon: QueryInterfaceRequest<Icon> {
-        request(for: Book.icon)
-    }
-}
-
-struct BookInfo: Decodable, FetchableRecord, Equatable, Hashable {
-    var book: Book
-    var icon: Icon?
-    
-    var name: String {
-        get {
-            return book.name
-        }
     }
 }

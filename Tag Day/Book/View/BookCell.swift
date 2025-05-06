@@ -14,7 +14,7 @@ fileprivate extension UIConfigurationStateCustomKey {
 }
 
 struct BookCellItem: Hashable {
-    var bookInfo: BookInfo
+    var book: Book
 }
 
 private extension UICellConfigurationState {
@@ -44,7 +44,7 @@ class BookListCell: BookBaseCell {
     private func defaultListContentConfiguration() -> UIListContentConfiguration { return .valueCell() }
     private lazy var listContentView = UIListContentView(configuration: defaultListContentConfiguration())
 
-    var iconView: IconView = IconView()
+    var iconView: UIImageView = UIImageView()
     
     func setupViewsIfNeeded() {
         guard iconView.superview == nil else {
@@ -70,13 +70,13 @@ class BookListCell: BookBaseCell {
         setupViewsIfNeeded()
         var content = defaultListContentConfiguration().updated(for: state)
         content.imageProperties.preferredSymbolConfiguration = .init(font: content.textProperties.font, scale: .large)
-        content.text = state.bookItem?.bookInfo.name
+        content.text = state.bookItem?.book.name
         content.axesPreservingSuperviewLayoutMargins = []
         listContentView.configuration = content
         
-        if let icon = state.bookItem?.bookInfo.icon {
-            iconView.update(icon)
-        }
+//        if let icon = state.bookItem?.book.icon {
+//            iconView.update(icon)
+//        }
         
         backgroundConfiguration = BookCellBackgroundConfiguration.configuration(for: state)
     }
@@ -89,40 +89,5 @@ struct BookCellBackgroundConfiguration {
             background.backgroundColor = .clear
         }
         return background
-    }
-}
-
-class IconView: UIImageView {
-    private var icon: Icon? {
-        didSet {
-            updateImage()
-        }
-    }
-    
-    public func update(_ icon: Icon) {
-        self.icon = icon
-    }
-    
-    private func updateImage() {
-        guard let icon = icon else { return }
-        
-//        if let image = StickerManager.shared.hasCached(for: sticker) {
-//            self.image = image
-//            isHidden = false
-//        } else {
-//            StickerManager.shared.fetchImage(sticker) { [weak self] image, imageSticker in
-//                guard let self = self else { return }
-//                if self.sticker == imageSticker {
-//                    self.image = image
-//                    self.isHidden = false
-//                }
-//            }
-//        }
-        contentMode = .scaleAspectFit
-        isAccessibilityElement = false
-    }
-    
-    func prepareForReuse() {
-        image = nil
     }
 }

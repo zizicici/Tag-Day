@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		14833D332DC4FED3001B61D5 /* Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D322DC4FED3001B61D5 /* Icon.swift */; };
 		14833D352DC50310001B61D5 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D342DC50310001B61D5 /* Book.swift */; };
 		14833D372DC50420001B61D5 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D362DC50420001B61D5 /* Tag.swift */; };
 		14833D392DC504B9001B61D5 /* DayRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D382DC504B9001B61D5 /* DayRecord.swift */; };
@@ -65,7 +64,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		14833D322DC4FED3001B61D5 /* Icon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Icon.swift; sourceTree = "<group>"; };
 		14833D342DC50310001B61D5 /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
 		14833D362DC50420001B61D5 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
 		14833D382DC504B9001B61D5 /* DayRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRecord.swift; sourceTree = "<group>"; };
@@ -308,7 +306,6 @@
 		14D272AA2DC073EB00267572 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				14833D322DC4FED3001B61D5 /* Icon.swift */,
 				14833D342DC50310001B61D5 /* Book.swift */,
 				14833D362DC50420001B61D5 /* Tag.swift */,
 				14833D382DC504B9001B61D5 /* DayRecord.swift */,
@@ -463,7 +460,6 @@
 				14D272BF2DC0884E00267572 /* MoreViewController.swift in Sources */,
 				14AD28812DC5BCC50018DAF3 /* BookCell.swift in Sources */,
 				14D272B12DC073EB00267572 /* Date+Extension.swift in Sources */,
-				14833D332DC4FED3001B61D5 /* Icon.swift in Sources */,
 				14D272B22DC073EB00267572 /* AppDatabase.swift in Sources */,
 				14AD28862DC5C21E0018DAF3 /* DataManager.swift in Sources */,
 				14D272812DC0718D00267572 /* DayByDayHandler.swift in Sources */,
