@@ -16,6 +16,7 @@ struct Tag: Identifiable, Hashable {
     var name: String
     var comment: String?
     var color: String?
+    var order: Int
 }
 
 extension Tag: TableRecord {
@@ -29,11 +30,12 @@ extension Tag: Codable, FetchableRecord, MutablePersistableRecord {
         case name
         case comment
         case color
+        case order
         static let bookID = Column(CodingKeys.bookID)
     }
     
     enum CodingKeys: String, CodingKey {
-        case id, bookID = "book_id", name, comment, color
+        case id, bookID = "book_id", name, comment, color, order
     }
     
     mutating func didInsert(_ inserted: InsertionSuccess) {

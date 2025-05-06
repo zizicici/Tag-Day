@@ -48,6 +48,7 @@ final class AppDatabase {
                 table.column("name", .text).notNull()
                 table.column("comment", .text)
                 table.column("color")
+                table.column("order", .integer).notNull()
             }
             try db.create(table: "day_record") { table in
                 table.autoIncrementedPrimaryKey("id")
@@ -70,7 +71,7 @@ final class AppDatabase {
                 try? firstBook.save(db)
                 
                 if let bookID = firstBook.id {
-                    var firstTag = Tag(bookID: bookID, name: String(localized: "database.firstTag.name"), comment: String(localized: "database.firstTag.comment"), color: UIColor.orange.generateLightDarkString())
+                    var firstTag = Tag(bookID: bookID, name: String(localized: "database.firstTag.name"), comment: String(localized: "database.firstTag.comment"), color: UIColor.orange.generateLightDarkString(), order: 0)
                     try? firstTag.save(db)
                     
                     if let bookId = firstBook.id, let tagId = firstTag.id {
