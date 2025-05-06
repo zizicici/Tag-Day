@@ -92,6 +92,12 @@ class MainViewController: NavigationController {
             make.height.width.equalTo(44)
         }
         
+        tagButton.configurationUpdateHandler = { [weak self] button in
+            guard let self = self else { return }
+            
+            button.menu = self.getTagsMenu()
+        }
+        
         view.addSubview(separator)
         separator.snp.makeConstraints { make in
             make.trailing.equalTo(tagButton.snp.leading).offset(-7)
@@ -119,13 +125,22 @@ class MainViewController: NavigationController {
             button.menu = self.getBooksMenu()
         }
         
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .CurrentBookChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .ActiveTagsUpdated, object: nil)
+
+        reloadData()
+    }
+    
+    @objc
+    func reloadData() {
         bookPickerButton.setNeedsUpdateConfiguration()
+        tagButton.setNeedsUpdateConfiguration()
     }
     
     func getBooksMenu() -> UIMenu {
         var elements: [UIMenuElement] = []
         if let books = try? DataManager.shared.fetchAllBooks(for: .active) {
-            let bookElements: [UIMenuElement] = books.map({ book in
+            let bookElements: [UIMenuElement] = books.reversed().map({ book in
                 return UIAction(title: book.name, subtitle: book.comment, state: DataManager.shared.currentBook?.id == book.id ? .on : .off) { _ in
                     DataManager.shared.select(book: book)
                 }
@@ -137,6 +152,43 @@ class MainViewController: NavigationController {
             self
         }
         let newAction = UIAction(title: String(localized: "books.new"), image: UIImage(systemName: "plus")) { [weak self] action in
+            self
+        }
+        
+        let currentPageDivider = UIMenu(title: "", options: .displayInline, children: [newAction, manageAction])
+        elements.append(currentPageDivider)
+        
+        return UIMenu(children: elements)
+    }
+    
+    func getTagsMenu() -> UIMenu {
+        var elements: [UIMenuElement] = []
+        let tags = DataManager.shared.tags
+        let activeTags = DataManager.shared.activeTags
+
+        if tags.count > 0 {
+            let deselectAllAction = UIAction(title: String(localized: "tags.deselect.all"), image: UIImage(systemName: "xmark.square"), state: activeTags.count == 0 ? .on : .off) { _ in
+                DataManager.shared.resetActiveToggle(blank: true)
+            }
+            let selectAllAction = UIAction(title: String(localized: "tags.select.all"), image: UIImage(systemName: "checkmark.square"), state: tags.count == activeTags.count ? .on : .off) { _ in
+                DataManager.shared.resetActiveToggle(blank: false)
+            }
+            let currentPageDivider = UIMenu(title: "", options: .displayInline, children: [deselectAllAction, selectAllAction])
+            elements.append(currentPageDivider)
+        }
+        
+        let tagElements: [UIMenuElement] = tags.reversed().map({ tag in
+            return UIAction(title: tag.name, subtitle: tag.comment, image: UIImage(systemName: "square.fill")?.withTintColor(UIColor(string: tag.color) ?? .white, renderingMode: .alwaysOriginal), state: activeTags.contains(tag) ? .on : .off) { _ in
+                DataManager.shared.toggleActiveState(to: tag)
+            }
+        })
+        let tagsDivider = UIMenu(title: "", options: .displayInline, children: tagElements)
+        elements.append(tagsDivider)
+        
+        let manageAction = UIAction(title: String(localized: "tags.management"), image: UIImage(systemName: "list.bullet")) { [weak self] action in
+            self
+        }
+        let newAction = UIAction(title: String(localized: "tags.new"), image: UIImage(systemName: "plus")) { [weak self] action in
             self
         }
         

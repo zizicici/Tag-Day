@@ -114,6 +114,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .CurrentBookChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .ActiveTagsUpdated, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .TodayUpdated, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .SettingsUpdate, object: nil)
     }
@@ -235,7 +236,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     }
     
     private func applyData() {
-        let tags = DataManager.shared.tags
+        let tags = DataManager.shared.activeTags
         let records = DataManager.shared.dayRecords
         if let snapshot = displayHandler.getSnapshot(tags: tags, records: records) {
             dataSource.apply(snapshot, animatingDifferences: true) { [weak self] in

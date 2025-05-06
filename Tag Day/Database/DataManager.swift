@@ -9,9 +9,10 @@ import Foundation
 import GRDB
 
 extension Notification.Name {
-    static let CurrentBookChanged = Notification.Name(rawValue: "com.zizicici.data.current.changed")
+    static let CurrentBookChanged = Notification.Name(rawValue: "com.zizicici.data.currentBook.changed")
     static let BooksUpdated = Notification.Name(rawValue: "com.zizicici.data.books.updated")
     static let TagsUpdated = Notification.Name(rawValue: "com.zizicici.data.tags.updated")
+    static let ActiveTagsUpdated = Notification.Name(rawValue: "com.zizicici.data.activeTags.updated")
     static let DayRecordsUpdated = Notification.Name(rawValue: "com.zizicici.data.dayRecords.updated")
 }
 
@@ -37,7 +38,14 @@ class DataManager {
     
     var tags: [Tag] = [] {
         didSet {
+            activeTags = tags
             NotificationCenter.default.post(Notification(name: Notification.Name.TagsUpdated))
+        }
+    }
+    
+    var activeTags: [Tag] = [] {
+        didSet {
+            NotificationCenter.default.post(Notification(name: Notification.Name.ActiveTagsUpdated))
         }
     }
     
@@ -74,6 +82,23 @@ class DataManager {
     private func updateDayRecords() {
         if let currentBookID = currentBook?.id, let result = try? fetchAllDayRecords(for: currentBookID) {
             dayRecords = result
+        }
+    }
+    
+    public func toggleActiveState(to tag: Tag) {
+        guard tags.contains(tag) else { return }
+        if activeTags.contains(tag) {
+            activeTags.removeAll(where: { $0 == tag })
+        } else {
+            activeTags.append(tag)
+        }
+    }
+    
+    public func resetActiveToggle(blank: Bool) {
+        if blank {
+            activeTags = []
+        } else {
+            activeTags = tags
         }
     }
 }
