@@ -59,8 +59,6 @@ class TagListCell: TagBaseCell {
         setupViewsIfNeeded()
         var content = defaultListContentConfiguration().updated(for: state)
         content.imageProperties.preferredSymbolConfiguration = .init(font: content.textProperties.font, scale: .large)
-        content.text = state.tagItem?.tag.name
-        content.secondaryText = state.tagItem?.tag.comment
         content.axesPreservingSuperviewLayoutMargins = []
         listContentView.configuration = content
         

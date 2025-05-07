@@ -229,7 +229,7 @@ class TagView: UIView {
     }
     
     func update(tag: Tag, record: DayRecord) {
-        label.text = tag.name
+        label.text = tag.title
         if let tagColor = UIColor(string: tag.color) {
             if tagColor.isLight {
                 label.textColor = .black.withAlphaComponent(0.8)

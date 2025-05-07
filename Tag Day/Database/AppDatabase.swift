@@ -31,7 +31,7 @@ final class AppDatabase {
             try db.create(table: "book") { table in
                 table.autoIncrementedPrimaryKey("id")
                 
-                table.column("name", .text).notNull()
+                table.column("title", .text).notNull()
                 table.column("comment", .text)
                 table.column("book_type", .integer).notNull()
                 table.column("order", .integer).notNull()
@@ -42,8 +42,8 @@ final class AppDatabase {
                 table.column("book_id", .integer).notNull()
                     .indexed()
                 
-                table.column("name", .text).notNull()
-                table.column("comment", .text)
+                table.column("title", .text).notNull()
+                table.column("subtitle", .text)
                 table.column("color").notNull()
                 table.column("order", .integer).notNull()
             }
@@ -63,11 +63,11 @@ final class AppDatabase {
             }
             
             if true {
-                var firstBook = Book(name: String(localized: "database.firstBook"), comment: String(localized: "database.firstBook.comment"), order: 0)
+                var firstBook = Book(title: String(localized: "database.firstBook"), comment: String(localized: "database.firstBook.comment"), order: 0)
                 try? firstBook.save(db)
                 
                 if let bookID = firstBook.id {
-                    var firstTag = Tag(bookID: bookID, name: String(localized: "database.firstTag.name"), comment: String(localized: "database.firstTag.comment"), color: UIColor.systemMint.generateLightDarkString(), order: 0)
+                    var firstTag = Tag(bookID: bookID, title: String(localized: "database.firstTag.name"), subtitle: String(localized: "database.firstTag.comment"), color: UIColor.systemMint.generateLightDarkString(), order: 0)
                     try? firstTag.save(db)
                     
                     if let bookId = firstBook.id, let tagId = firstTag.id {
@@ -79,14 +79,14 @@ final class AppDatabase {
                         try? day3.save(db)
                     }
                     
-                    var secondTag = Tag(bookID: bookID, name: String(localized: "database.secondTag.name"), comment: nil, color: UIColor.systemPurple.generateLightDarkString(), order: 1)
+                    var secondTag = Tag(bookID: bookID, title: String(localized: "database.secondTag.name"), subtitle: nil, color: UIColor.systemPurple.generateLightDarkString(), order: 1)
                     try? secondTag.save(db)
                     if let bookId = firstBook.id, let tagId = secondTag.id {
                         var day4 = DayRecord(bookID: bookId, tagID: tagId, day: Int64(ZCCalendar.manager.today.julianDay + 3))
                         try? day4.save(db)
                     }
                     
-                    var thirdTag = Tag(bookID: bookID, name: String(localized: "database.thirdTag.name"), comment: nil, color: UIColor.systemCyan.generateLightDarkString(), order: 2)
+                    var thirdTag = Tag(bookID: bookID, title: String(localized: "database.thirdTag.name"), subtitle: nil, color: UIColor.systemCyan.generateLightDarkString(), order: 2)
                     try? thirdTag.save(db)
                     if let bookId = firstBook.id, let tagId = thirdTag.id {
                         var day5 = DayRecord(bookID: bookId, tagID: tagId, day: Int64(ZCCalendar.manager.today.julianDay + 4))

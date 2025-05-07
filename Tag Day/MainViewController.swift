@@ -119,7 +119,7 @@ class MainViewController: NavigationController {
             
             var config = button.configuration
             
-            config?.title = DataManager.shared.currentBook?.name
+            config?.title = DataManager.shared.currentBook?.title
             
             button.configuration = config
             button.menu = self.getBooksMenu()
@@ -141,7 +141,7 @@ class MainViewController: NavigationController {
         var elements: [UIMenuElement] = []
         if let books = try? DataManager.shared.fetchAllBooks(for: .active) {
             let bookElements: [UIMenuElement] = books.reversed().map({ book in
-                return UIAction(title: book.name, subtitle: book.comment, state: DataManager.shared.currentBook?.id == book.id ? .on : .off) { _ in
+                return UIAction(title: book.title, subtitle: book.comment, state: DataManager.shared.currentBook?.id == book.id ? .on : .off) { _ in
                     DataManager.shared.select(book: book)
                 }
             })
@@ -178,7 +178,7 @@ class MainViewController: NavigationController {
         }
         
         let tagElements: [UIMenuElement] = tags.reversed().map({ tag in
-            return UIAction(title: tag.name, subtitle: tag.comment, image: UIImage(systemName: "square.fill")?.withTintColor(UIColor(string: tag.color) ?? .white, renderingMode: .alwaysOriginal), state: activeTags.contains(tag) ? .on : .off) { _ in
+            return UIAction(title: tag.title, subtitle: tag.subtitle, image: UIImage(systemName: "square.fill")?.withTintColor(UIColor(string: tag.color) ?? .white, renderingMode: .alwaysOriginal), state: activeTags.contains(tag) ? .on : .off) { _ in
                 DataManager.shared.toggleActiveState(to: tag)
             }
         })

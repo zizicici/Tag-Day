@@ -70,7 +70,7 @@ class BookListCell: BookBaseCell {
         setupViewsIfNeeded()
         var content = defaultListContentConfiguration().updated(for: state)
         content.imageProperties.preferredSymbolConfiguration = .init(font: content.textProperties.font, scale: .large)
-        content.text = state.bookItem?.book.name
+        content.text = state.bookItem?.book.title
         content.axesPreservingSuperviewLayoutMargins = []
         listContentView.configuration = content
         
