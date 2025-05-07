@@ -41,7 +41,15 @@ class TagListViewController: UIViewController {
         title = String(localized: "controller.tags.title")
         
         view.backgroundColor = AppColor.background
-        updateNavigationBarStyle()
+
+        let doneBarItem = UIBarButtonItem(title: String(localized: "tags.done"), style: .plain, target: self, action: #selector(close))
+        doneBarItem.tintColor = AppColor.main
+        navigationItem.rightBarButtonItem = doneBarItem
+        
+        let newBarItem = UIBarButtonItem(title: String(localized: "tags.new"), style: .plain, target: self, action: #selector(new))
+        newBarItem.tintColor = AppColor.main
+        toolbarItems = [newBarItem]
+        navigationController?.setToolbarHidden(false, animated: false)
         
         configureHierarchy()
         configureDataSource()
@@ -67,13 +75,25 @@ class TagListViewController: UIViewController {
     
     func configureDataSource() {
         // list cell
-        let bookCellRegistration = UICollectionView.CellRegistration<TagListCell, TagCellItem> { (cell, indexPath, item) in
+        let bookCellRegistration = UICollectionView.CellRegistration<TagListCell, TagCellItem> { [weak self] (cell, indexPath, item) in
+            guard let self = self else { return }
+            cell.detail = self.detailAccessoryForListCellItem(item)
             cell.update(with: item)
         }
         
         // data source
         dataSource = UICollectionViewDiffableDataSource<Section, TagCellItem>(collectionView: collectionView) { (collectionView, indexPath, item) -> UICollectionViewCell? in
             return collectionView.dequeueConfiguredReusableCell(using: bookCellRegistration, for: indexPath, item: item)
+        }
+        
+        dataSource.reorderingHandlers.canReorderItem = { _ in
+            return true
+        }
+        
+        dataSource.reorderingHandlers.didReorder = { [weak self] _ in
+            DispatchQueue.main.async {
+//                self?.updateBlankCell()
+            }
         }
     }
     
@@ -88,6 +108,38 @@ class TagListViewController: UIViewController {
             snapshot.appendItems(items, toSection: .main)
         }
         dataSource.apply(snapshot, animatingDifferences: true)
+    }
+    
+    func detailAccessoryForListCellItem(_ item: TagCellItem) -> UICellAccessory {
+        return UICellAccessory.detail(options: UICellAccessory.DetailOptions(reservedLayoutWidth: .custom(44), tintColor: AppColor.main), actionHandler: { [weak self] in
+            self?.goToDetail(for: item)
+        })
+    }
+    
+    @objc
+    func new() {
+        guard let bookID = DataManager.shared.currentBook?.id else {
+            return
+        }
+        var tagIndex = 0
+        if let latestTag = DataManager.shared.tags.last {
+            tagIndex = latestTag.order + 1
+        }
+        let newTag = Tag(bookID: bookID, title: "", color: "", order: tagIndex)
+        let nav = NavigationController(rootViewController: TagDetailViewController(tag: newTag))
+        
+        navigationController?.present(nav, animated: true)
+    }
+    
+    @objc
+    func close() {
+        dismiss(animated: true)
+    }
+    
+    func goToDetail(for item: TagCellItem) {
+        let nav = NavigationController(rootViewController: TagDetailViewController(tag: item.tag))
+
+        navigationController?.present(nav, animated: true)
     }
 }
 

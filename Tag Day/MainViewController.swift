@@ -186,15 +186,35 @@ class MainViewController: NavigationController {
         elements.append(tagsDivider)
         
         let manageAction = UIAction(title: String(localized: "tags.management"), image: UIImage(systemName: "list.bullet")) { [weak self] action in
-            self
+            self?.showTagManagement()
         }
         let newAction = UIAction(title: String(localized: "tags.new"), image: UIImage(systemName: "plus")) { [weak self] action in
-            self
+            self?.showTagEditorForAdd()
         }
         
         let currentPageDivider = UIMenu(title: "", options: .displayInline, children: [newAction, manageAction])
         elements.append(currentPageDivider)
         
         return UIMenu(children: elements)
+    }
+    
+    func showTagManagement() {
+        let tagListVC = TagListViewController()
+        let nav = NavigationController(rootViewController: tagListVC)
+        present(nav, animated: true)
+    }
+    
+    func showTagEditorForAdd() {
+        guard let bookID = DataManager.shared.currentBook?.id else {
+            return
+        }
+        var tagIndex = 0
+        if let latestTag = DataManager.shared.tags.last {
+            tagIndex = latestTag.order + 1
+        }
+        let newTag = Tag(bookID: bookID, title: "", color: "", order: tagIndex)
+        let nav = NavigationController(rootViewController: TagDetailViewController(tag: newTag))
+        
+        present(nav, animated: true)
     }
 }

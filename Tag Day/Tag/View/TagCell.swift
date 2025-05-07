@@ -24,7 +24,7 @@ private extension UICellConfigurationState {
     }
 }
 
-class TagBaseCell: UICollectionViewCell {
+class TagBaseCell: UICollectionViewListCell {
     private var bookItem: TagCellItem? = nil
     
     func update(with newBook: TagCellItem) {
@@ -41,8 +41,16 @@ class TagBaseCell: UICollectionViewCell {
 }
 
 class TagListCell: TagBaseCell {
+    var detail: UICellAccessory?
+    
     private func defaultListContentConfiguration() -> UIListContentConfiguration { return .subtitleCell() }
     private lazy var listContentView = UIListContentView(configuration: defaultListContentConfiguration())
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        detail = nil
+    }
     
     func setupViewsIfNeeded() {
         guard listContentView.superview == nil else {
@@ -57,9 +65,26 @@ class TagListCell: TagBaseCell {
     
     override func updateConfiguration(using state: UICellConfigurationState) {
         setupViewsIfNeeded()
+        
+        accessories = [detail, .reorder(displayed: .always)].compactMap{ $0 }
+        
         var content = defaultListContentConfiguration().updated(for: state)
         content.imageProperties.preferredSymbolConfiguration = .init(font: content.textProperties.font, scale: .large)
-        content.axesPreservingSuperviewLayoutMargins = []
+        content.textToSecondaryTextVerticalPadding = 6.0
+        var layoutMargins = content.directionalLayoutMargins
+        layoutMargins.leading = 10.0
+        layoutMargins.top = 10.0
+        layoutMargins.bottom = 10.0
+        content.directionalLayoutMargins = layoutMargins
+        
+        if let tag = state.tagItem?.tag {
+            content.image = UIImage(systemName: "square.fill")?.withTintColor(UIColor(string: tag.color) ?? .white, renderingMode: .alwaysOriginal)
+            content.text = tag.title
+            content.textProperties.color = AppColor.text
+            content.secondaryText = tag.subtitle
+            content.secondaryTextProperties.color = AppColor.text.withAlphaComponent(0.75)
+        }
+        
         listContentView.configuration = content
         
         backgroundConfiguration = TagCellBackgroundConfiguration.configuration(for: state)
