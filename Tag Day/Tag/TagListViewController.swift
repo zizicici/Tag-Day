@@ -92,7 +92,7 @@ class TagListViewController: UIViewController {
         
         dataSource.reorderingHandlers.didReorder = { [weak self] _ in
             DispatchQueue.main.async {
-//                self?.updateBlankCell()
+                self?.updateOrder()
             }
         }
     }
@@ -140,6 +140,17 @@ class TagListViewController: UIViewController {
         let nav = NavigationController(rootViewController: TagDetailViewController(tag: item.tag))
 
         navigationController?.present(nav, animated: true)
+    }
+    
+    func updateOrder() {
+        let tags = dataSource.snapshot().itemIdentifiers(inSection: .main)
+        var newTags: [Tag] = []
+        for (index, tag) in tags.enumerated() {
+            var newOrderTag = tag.tag
+            newOrderTag.order = index
+            newTags.append(newOrderTag)
+        }
+        _ = DataManager.shared.update(tags: newTags)
     }
 }
 

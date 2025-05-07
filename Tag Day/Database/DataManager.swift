@@ -192,6 +192,10 @@ extension DataManager {
         return AppDatabase.shared.update(tag: tag)
     }
     
+    func update(tags: [Tag]) -> Bool {
+        return AppDatabase.shared.update(tags: tags)
+    }
+    
     func add(tag: Tag) -> Bool {
         return AppDatabase.shared.add(tag: tag)
     }

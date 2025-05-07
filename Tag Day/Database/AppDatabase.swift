@@ -201,6 +201,26 @@ extension AppDatabase {
         return true
     }
     
+    func update(tags: [Tag]) -> Bool {
+        guard !tags.contains(where: { $0.id == nil }) else {
+            // No ID
+            return false
+        }
+        do {
+            _ = try dbWriter?.write{ db in
+                for tag in tags {
+                    try tag.update(db)
+                }
+            }
+        }
+        catch {
+            print(error)
+            return false
+        }
+        NotificationCenter.default.post(Notification(name: Notification.Name.DatabaseUpdated))
+        return true
+    }
+    
     func add(tag: Tag) -> Bool {
         guard tag.id == nil else {
             // Should no ID
