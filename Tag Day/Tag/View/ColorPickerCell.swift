@@ -55,12 +55,12 @@ class ColorPickerCell: UITableViewCell {
         })
     }
     
-    public func update(colors: [UIColor], selectedColor: UIColor) {
+    public func update(colors: [UIColor], selectedColor: UIColor, isLight: Bool) {
         var snapshot = NSDiffableDataSourceSnapshot<Int, ColorBlockCell.Item>()
         snapshot.appendSections([0])
         snapshot.appendItems([ColorBlockCell.Item(color: .white, type: .pickerItem)])
         snapshot.appendItems(colors.enumerated().map({ (index, color) in
-            return ColorBlockCell.Item(color: color, type: color.generateLightDarkString() == selectedColor.generateLightDarkString() ? .colorSelected : .colorUnselected)
+            return ColorBlockCell.Item(color: color, type: color.generateLightDarkString(isLight ? .light : .dark) == selectedColor.generateLightDarkString(isLight ? .light : .dark) ? .colorSelected : .colorUnselected)
         }))
         dataSource.apply(snapshot, animatingDifferences: true)
     }

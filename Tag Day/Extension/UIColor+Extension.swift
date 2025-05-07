@@ -73,10 +73,20 @@ extension UIColor {
         return hexString
     }
     
-    func generateLightDarkString() -> String {
-        let lightColorHexString = resolvedColor(with: UITraitCollection(userInterfaceStyle: .light)).toHexString() ?? ""
-        let darkColorHexString = resolvedColor(with: UITraitCollection(userInterfaceStyle: .dark)).toHexString() ?? ""
-        return "\(lightColorHexString),\(darkColorHexString)"
+    func generateLightDarkString(_ userInterfaceStyle: UIUserInterfaceStyle? = nil) -> String {
+        guard let userInterfaceStyle = userInterfaceStyle else {
+            let lightColorHexString = generateLightDarkString(.light)
+            let darkColorHexString = generateLightDarkString(.dark)
+            return "\(lightColorHexString),\(darkColorHexString)"
+        }
+        switch userInterfaceStyle {
+        case .unspecified, .light:
+            return resolvedColor(with: UITraitCollection(userInterfaceStyle: .light)).toHexString() ?? ""
+        case .dark:
+            return resolvedColor(with: UITraitCollection(userInterfaceStyle: .dark)).toHexString() ?? ""
+        @unknown default:
+            fatalError()
+        }
     }
     
     convenience init?(string: String) {

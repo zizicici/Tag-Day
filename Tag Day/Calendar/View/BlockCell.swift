@@ -228,6 +228,16 @@ class TagView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func update(title: String, color: UIColor) {
+        label.text = title
+        if color.isLight {
+            label.textColor = .black.withAlphaComponent(0.8)
+        } else {
+            label.textColor = .white.withAlphaComponent(0.95)
+        }
+        backgroundColor = color
+    }
+    
     func update(tag: Tag, record: DayRecord) {
         label.text = tag.title
         if let tagColor = UIColor(string: tag.color) {

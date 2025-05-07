@@ -34,6 +34,7 @@
 		14BBA3762DCB0B0700AD7BAC /* TagDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BBA3752DCB0B0700AD7BAC /* TagDetailViewController.swift */; };
 		14BBA3782DCB101100AD7BAC /* TextInputCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BBA3772DCB101100AD7BAC /* TextInputCell.swift */; };
 		14BBA37A2DCB142900AD7BAC /* ColorPickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BBA3792DCB142900AD7BAC /* ColorPickerCell.swift */; };
+		14BBA37C2DCB2EE900AD7BAC /* TagPreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BBA37B2DCB2EE900AD7BAC /* TagPreviewCell.swift */; };
 		14D272702DC0709300267572 /* CalendarBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D2726F2DC0709300267572 /* CalendarBaseViewController.swift */; };
 		14D272722DC0712A00267572 /* AppColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D272712DC0712A00267572 /* AppColor.swift */; };
 		14D272792DC0716E00267572 /* CalendarViewController+CellRegistration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D272732DC0716E00267572 /* CalendarViewController+CellRegistration.swift */; };
@@ -90,6 +91,7 @@
 		14BBA3752DCB0B0700AD7BAC /* TagDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagDetailViewController.swift; sourceTree = "<group>"; };
 		14BBA3772DCB101100AD7BAC /* TextInputCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputCell.swift; sourceTree = "<group>"; };
 		14BBA3792DCB142900AD7BAC /* ColorPickerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerCell.swift; sourceTree = "<group>"; };
+		14BBA37B2DCB2EE900AD7BAC /* TagPreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPreviewCell.swift; sourceTree = "<group>"; };
 		14CD76AD2DBE6BA10035DF1F /* Tag Day.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Tag Day.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		14D2726F2DC0709300267572 /* CalendarBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarBaseViewController.swift; sourceTree = "<group>"; };
 		14D272712DC0712A00267572 /* AppColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColor.swift; sourceTree = "<group>"; };
@@ -181,6 +183,7 @@
 			isa = PBXGroup;
 			children = (
 				14AD28872DC5C8EC0018DAF3 /* TagCell.swift */,
+				14BBA37B2DCB2EE900AD7BAC /* TagPreviewCell.swift */,
 				14BBA3772DCB101100AD7BAC /* TextInputCell.swift */,
 				14BBA3792DCB142900AD7BAC /* ColorPickerCell.swift */,
 			);
@@ -475,6 +478,7 @@
 				14AD28862DC5C21E0018DAF3 /* DataManager.swift in Sources */,
 				14D272812DC0718D00267572 /* DayByDayHandler.swift in Sources */,
 				14D272822DC0718D00267572 /* DisplayHandler.swift in Sources */,
+				14BBA37C2DCB2EE900AD7BAC /* TagPreviewCell.swift in Sources */,
 				14AD287E2DC5B7010018DAF3 /* TagListViewController.swift in Sources */,
 				14AD28882DC5C8EC0018DAF3 /* TagCell.swift in Sources */,
 				14ED63D12DC702F000384068 /* CalendarYearPickerViewController.swift in Sources */,
