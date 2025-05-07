@@ -230,7 +230,7 @@ class TagView: UIView {
     
     func update(title: String, color: UIColor) {
         label.text = title
-        if color.isLight {
+        if color.resolvedColor(with: UITraitCollection(userInterfaceStyle: overrideUserInterfaceStyle)).isLight {
             label.textColor = .black.withAlphaComponent(0.8)
         } else {
             label.textColor = .white.withAlphaComponent(0.95)

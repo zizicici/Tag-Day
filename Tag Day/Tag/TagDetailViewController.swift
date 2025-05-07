@@ -84,8 +84,8 @@ class TagDetailViewController: UIViewController {
     }
     
     private var customColors: [UIColor] = []
-    private weak var titleCell: TextInputCell?
     private var isEdited: Bool = false
+    private weak var titleCell: TextInputCell?
     private weak var previewCell: TagPreviewCell?
     private weak var lightColorCell: ColorPickerCell?
     private weak var darkColorCell: ColorPickerCell?
@@ -116,7 +116,20 @@ class TagDetailViewController: UIViewController {
         }
         
         var footer: String? {
-            return nil
+            switch self {
+            case .preview:
+                return nil
+            case .title:
+                return String(localized: "tags.detail.title.hint")
+            case .subtitle:
+                return nil
+            case .lightColor:
+                return nil
+            case .darkColor:
+                return nil
+            case .delete:
+                return nil
+            }
         }
     }
     
@@ -170,11 +183,11 @@ class TagDetailViewController: UIViewController {
         view.backgroundColor = AppColor.background
         navigationController?.navigationBar.tintColor = AppColor.main
         
-        let saveItem = UIBarButtonItem(title: String(localized: "tags.detail.save"), style: .plain, target: self, action: #selector(save))
+        let saveItem = UIBarButtonItem(title: String(localized: "button.save"), style: .plain, target: self, action: #selector(save))
         saveItem.isEnabled = false
         navigationItem.rightBarButtonItem = saveItem
         
-        let cancelItem = UIBarButtonItem(title: String(localized: "tags.detail.cancel"), style: .plain, target: self, action: #selector(cancel))
+        let cancelItem = UIBarButtonItem(title: String(localized: "button.cancel"), style: .plain, target: self, action: #selector(dismissViewController))
         navigationItem.leftBarButtonItem = cancelItem
         
         configureHierarchy()
@@ -264,7 +277,7 @@ class TagDetailViewController: UIViewController {
                 let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(UITableViewCell.self), for: indexPath)
                 cell.accessoryType = .none
                 var content = cell.defaultContentConfiguration()
-                content.text = String(localized: "tags.detail.delete")
+                content.text = String(localized: "button.delete")
                 content.textProperties.color = .systemRed
                 content.textProperties.alignment = .center
                 cell.contentConfiguration = content
@@ -295,8 +308,7 @@ class TagDetailViewController: UIViewController {
     }
     
     func updateTagColor(lightColor: UIColor, darkColor: UIColor) {
-        tagColor = UIColor(dynamicProvider: { [weak self] collection in
-            guard let self = self else { return .black}
+        tagColor = UIColor(dynamicProvider: { collection in
             switch collection.userInterfaceStyle {
             case .light, .unspecified:
                 return lightColor
@@ -335,26 +347,46 @@ class TagDetailViewController: UIViewController {
     }
     
     func allowSave() -> Bool {
-        let titleFlag = tagTitle.isValidEventTitle()
+        let titleFlag = tagTitle.isValidTagTitle()
         return titleFlag
     }
     
     @objc
     func save() {
-        
+        if isEditMode() {
+            // Modify Old
+            let result = DataManager.shared.update(tag: tag)
+            if result {
+                dismissViewController()
+            }
+        } else {
+            // Create New
+            let result = DataManager.shared.add(tag: tag)
+            if result {
+                dismissViewController()
+            }
+        }
     }
     
     @objc
-    func cancel() {
+    func dismissViewController() {
         dismiss(animated: true)
     }
     
     func delete() {
-        
+        let result = DataManager.shared.delete(tag: tag)
+        if result {
+            dismissViewController()
+        }
     }
     
     func showDeleteAlert() {
-        let alertController = UIAlertController(title: String(localized: "tags.detail.delete.alert.title"), message: String(localized: "tags.detail.delete.alert.message"), preferredStyle: .alert)
+        guard let tagID = tag.id else { return }
+        guard let records = try? DataManager.shared.fetchAllDayRecords(tagID: tagID) else { return }
+        
+        let message = (records.count > 0) ? String(format: String(localized: "tags.detail.delete.alert.message.%i"), records.count) : String(localized: "tags.detail.delete.alert.message")
+        
+        let alertController = UIAlertController(title: String(localized: "tags.detail.delete.alert.title"), message: message, preferredStyle: .alert)
         let deleteAction = UIAlertAction(title: String(localized: "button.delete"), style: .destructive) { [weak self] _ in
             alertController.dismiss(animated: true)
             self?.delete()
@@ -445,8 +477,8 @@ extension TagDetailViewController: UIColorPickerViewControllerDelegate {
 }
 
 extension String {
-    func isValidEventTitle() -> Bool{
-        return count > 0 && count <= 150
+    func isValidTagTitle() -> Bool{
+        return count > 0 && count <= 60
     }
 }
 

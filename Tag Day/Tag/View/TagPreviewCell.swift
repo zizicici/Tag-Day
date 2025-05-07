@@ -91,6 +91,7 @@ class TagPreviewView: UIView {
     
     func update(title: String, color: UIColor) {
         label.text = "14"
+        tagView.overrideUserInterfaceStyle = overrideUserInterfaceStyle
         tagView.update(title: title, color: color)
     }
 }

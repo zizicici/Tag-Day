@@ -32,14 +32,18 @@ class DataManager {
     
     var books: [Book] = [] {
         didSet {
-            NotificationCenter.default.post(Notification(name: Notification.Name.BooksUpdated))
+            if oldValue != books {
+                NotificationCenter.default.post(Notification(name: Notification.Name.BooksUpdated))
+            }
         }
     }
     
     var tags: [Tag] = [] {
         didSet {
-            activeTags = tags
-            NotificationCenter.default.post(Notification(name: Notification.Name.TagsUpdated))
+            if oldValue != tags {
+                activeTags = tags
+                NotificationCenter.default.post(Notification(name: Notification.Name.TagsUpdated))
+            }
         }
     }
     
@@ -51,16 +55,25 @@ class DataManager {
     
     var dayRecords: [DayRecord] = [] {
         didSet {
-            NotificationCenter.default.post(Notification(name: Notification.Name.DayRecordsUpdated))
+            if oldValue != dayRecords {
+                NotificationCenter.default.post(Notification(name: Notification.Name.DayRecordsUpdated))
+            }
         }
     }
     
     init() {
         currentBook = try? fetchAllBooks(for: .active).first
+        self.updateDataWithCurrentBook()
+        NotificationCenter.default.post(Notification(name: Notification.Name.CurrentBookChanged))
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(updateDataWithCurrentBook), name: .DatabaseUpdated, object: nil)
+    }
+    
+    @objc
+    func updateDataWithCurrentBook() {
         updateBooks()
         updateTags()
         updateDayRecords()
-        NotificationCenter.default.post(Notification(name: Notification.Name.CurrentBookChanged))
     }
     
     public func select(book: Book?) {
@@ -80,7 +93,7 @@ class DataManager {
     }
     
     private func updateDayRecords() {
-        if let currentBookID = currentBook?.id, let result = try? fetchAllDayRecords(for: currentBookID) {
+        if let currentBookID = currentBook?.id, let result = try? fetchAllDayRecords(bookID: currentBookID) {
             dayRecords = result
         }
     }
@@ -174,11 +187,23 @@ extension DataManager {
         
         return result
     }
+    
+    func update(tag: Tag) -> Bool {
+        return AppDatabase.shared.update(tag: tag)
+    }
+    
+    func add(tag: Tag) -> Bool {
+        return AppDatabase.shared.add(tag: tag)
+    }
+    
+    func delete(tag: Tag) -> Bool {
+        return AppDatabase.shared.delete(tag: tag)
+    }
 }
 
 // Day Records
 extension DataManager {
-    func fetchAllDayRecords(for bookID: Int64) throws -> [DayRecord] {
+    func fetchAllDayRecords(bookID: Int64) throws -> [DayRecord] {
         var result: [DayRecord] = []
         try AppDatabase.shared.reader?.read { db in
             do {
@@ -186,6 +211,25 @@ extension DataManager {
                 let dayColumn = DayRecord.Columns.day
                 result = try DayRecord
                     .filter(bookIDColumn == bookID)
+                    .order(dayColumn.asc)
+                    .fetchAll(db)
+            }
+            catch {
+                print(error)
+            }
+        }
+        
+        return result
+    }
+    
+    func fetchAllDayRecords(tagID: Int64) throws -> [DayRecord] {
+        var result: [DayRecord] = []
+        try AppDatabase.shared.reader?.read { db in
+            do {
+                let bookIDColumn = DayRecord.Columns.tagID
+                let dayColumn = DayRecord.Columns.day
+                result = try DayRecord
+                    .filter(bookIDColumn == tagID)
                     .order(dayColumn.asc)
                     .fetchAll(db)
             }

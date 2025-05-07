@@ -42,7 +42,7 @@ class TagListViewController: UIViewController {
         
         view.backgroundColor = AppColor.background
 
-        let doneBarItem = UIBarButtonItem(title: String(localized: "tags.done"), style: .plain, target: self, action: #selector(close))
+        let doneBarItem = UIBarButtonItem(title: String(localized: "button.done"), style: .plain, target: self, action: #selector(close))
         doneBarItem.tintColor = AppColor.main
         navigationItem.rightBarButtonItem = doneBarItem
         

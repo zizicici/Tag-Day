@@ -114,6 +114,7 @@ final class AppDatabase {
     }
 }
 
+// Book
 extension AppDatabase {
     func update(book: Book, postNotification: Bool = true) -> Bool {
         guard book.id != nil else {
@@ -161,6 +162,132 @@ extension AppDatabase {
         do {
             _ = try dbWriter?.write{ db in
                 try Book.deleteAll(db, ids: [bookID])
+                // Delete Day Records
+                let bookIDColumnInDayRecord = DayRecord.Columns.bookID
+                let dayRecordRequest = DayRecord.filter(bookIDColumnInDayRecord == bookID)
+                try dayRecordRequest.deleteAll(db)
+                // Delete Tags
+                let bookIDColumnInTag = Tag.Columns.bookID
+                let tagRequest = Tag.filter(bookIDColumnInTag == bookID)
+                try tagRequest.deleteAll(db)
+            }
+        }
+        catch {
+            print(error)
+            return false
+        }
+        NotificationCenter.default.post(Notification(name: Notification.Name.DatabaseUpdated))
+        return true
+    }
+}
+
+// Tag
+extension AppDatabase {
+    func update(tag: Tag) -> Bool {
+        guard tag.id != nil else {
+            // No ID
+            return false
+        }
+        do {
+            _ = try dbWriter?.write{ db in
+                try tag.update(db)
+            }
+        }
+        catch {
+            print(error)
+            return false
+        }
+        NotificationCenter.default.post(Notification(name: Notification.Name.DatabaseUpdated))
+        return true
+    }
+    
+    func add(tag: Tag) -> Bool {
+        guard tag.id == nil else {
+            // Should no ID
+            return false
+        }
+        var saveTag: Tag = tag
+        do {
+            _ = try dbWriter?.write{ db in
+                try saveTag.save(db)
+            }
+        }
+        catch {
+            print(error)
+            return false
+        }
+        NotificationCenter.default.post(Notification(name: Notification.Name.DatabaseUpdated))
+        return true
+    }
+    
+    func delete(tag: Tag) -> Bool {
+        guard let tagID = tag.id else {
+            return false
+        }
+        do {
+            _ = try dbWriter?.write{ db in
+                try Tag.deleteAll(db, ids: [tagID])
+                // Delete Day Records
+                let tagIDColumnInDayRecord = DayRecord.Columns.tagID
+                let dayRecordRequest = DayRecord.filter(tagIDColumnInDayRecord == tagID)
+                try dayRecordRequest.deleteAll(db)
+            }
+        }
+        catch {
+            print(error)
+            return false
+        }
+        NotificationCenter.default.post(Notification(name: Notification.Name.DatabaseUpdated))
+        return true
+    }
+}
+
+// Day Records
+extension AppDatabase {
+    func update(dayRecord: DayRecord) -> Bool {
+        guard dayRecord.id != nil else {
+            // No ID
+            return false
+        }
+        do {
+            _ = try dbWriter?.write{ db in
+                try dayRecord.update(db)
+            }
+        }
+        catch {
+            print(error)
+            return false
+        }
+        NotificationCenter.default.post(Notification(name: Notification.Name.DatabaseUpdated))
+        return true
+    }
+    
+    func add(dayRecord: DayRecord) -> Bool {
+        guard dayRecord.id == nil else {
+            // Should no ID
+            return false
+        }
+        var saveRecord: DayRecord = dayRecord
+        do {
+            _ = try dbWriter?.write{ db in
+                try saveRecord.save(db)
+            }
+        }
+        catch {
+            print(error)
+            return false
+        }
+        NotificationCenter.default.post(Notification(name: Notification.Name.DatabaseUpdated))
+        return true
+    }
+    
+    func delete(dayRecord: DayRecord) -> Bool {
+        guard let recordID = dayRecord.id else {
+            return false
+        }
+        do {
+            _ = try dbWriter?.write{ db in
+                try DayRecord.deleteAll(db, ids: [recordID])
             }
         }
         catch {
