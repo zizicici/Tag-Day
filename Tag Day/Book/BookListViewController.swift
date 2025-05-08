@@ -24,8 +24,25 @@ class BookListViewController: UIViewController {
         }
     }
     
+    enum Item: Hashable {
+        case book(BookCellItem)
+        case activeHint
+        case archivedHint
+        
+        var title: String? {
+            switch self {
+            case .book:
+                return nil
+            case .activeHint:
+                return String(localized: "bookType.active.hint")
+            case .archivedHint:
+                return String(localized: "bookType.archived.hint")
+            }
+        }
+    }
+    
     var collectionView: UICollectionView!
-    var dataSource: UICollectionViewDiffableDataSource<Section, BookCellItem>!
+    var dataSource: UICollectionViewDiffableDataSource<Section, Item>!
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -51,11 +68,21 @@ class BookListViewController: UIViewController {
         title = String(localized: "controller.books.title")
         
         view.backgroundColor = AppColor.background
-        updateNavigationBarStyle()
+        
+        let doneBarItem = UIBarButtonItem(title: String(localized: "button.done"), style: .plain, target: self, action: #selector(close))
+        doneBarItem.tintColor = AppColor.main
+        navigationItem.rightBarButtonItem = doneBarItem
+        
+        let newBarItem = UIBarButtonItem(title: String(localized: "books.new"), style: .plain, target: self, action: #selector(new))
+        newBarItem.tintColor = AppColor.main
+        toolbarItems = [newBarItem]
+        navigationController?.setToolbarHidden(false, animated: false)
         
         configureHierarchy()
         configureDataSource()
-        applySnapshots()
+        reloadData()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .DatabaseUpdated, object: nil)
     }
     
     func createLayout() -> UICollectionViewLayout {
@@ -77,8 +104,18 @@ class BookListViewController: UIViewController {
     
     func configureDataSource() {
         // list cell
-        let bookCellRegistration = UICollectionView.CellRegistration<BookListCell, BookCellItem> { (cell, indexPath, item) in
+        let bookCellRegistration = UICollectionView.CellRegistration<BookListCell, BookCellItem> { [weak self] (cell, indexPath, item) in
+            guard let self = self else { return }
+            cell.detail = self.detailAccessoryForListCellItem(item)
             cell.update(with: item)
+        }
+        
+        let hintCellRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, Item> { (cell, indexPath, item) in
+            var content = UIListContentConfiguration.valueCell()
+            content.text = item.title
+            content.textProperties.alignment = .center
+            content.textProperties.color = .secondaryLabel
+            cell.contentConfiguration = content
         }
         
         let headerRegistration = UICollectionView.SupplementaryRegistration
@@ -90,24 +127,132 @@ class BookListViewController: UIViewController {
         }
         
         // data source
-        dataSource = UICollectionViewDiffableDataSource<Section, BookCellItem>(collectionView: collectionView) { (collectionView, indexPath, item) -> UICollectionViewCell? in
-            return collectionView.dequeueConfiguredReusableCell(using: bookCellRegistration, for: indexPath, item: item)
+        dataSource = UICollectionViewDiffableDataSource<Section, Item>(collectionView: collectionView) { (collectionView, indexPath, item) -> UICollectionViewCell? in
+            switch item {
+            case .activeHint, .archivedHint:
+                return collectionView.dequeueConfiguredReusableCell(using: hintCellRegistration, for: indexPath, item: item)
+            case .book(let bookCellItem):
+                return collectionView.dequeueConfiguredReusableCell(using: bookCellRegistration, for: indexPath, item: bookCellItem)
+            }
         }
         
         dataSource.supplementaryViewProvider = { collectionView, kind, index in
             return collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: index)
         }
+        
+        dataSource.reorderingHandlers.canReorderItem = { item in
+            switch item {
+            case .book:
+                return true
+            case .activeHint:
+                return false
+            case .archivedHint:
+                return false
+            }
+        }
+        
+        dataSource.reorderingHandlers.didReorder = { [weak self] _ in
+            DispatchQueue.main.async {
+                self?.updateOrder()
+            }
+        }
     }
     
-    func applySnapshots() {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, BookCellItem>()
-        snapshot.appendSections([.active])
-        var items: [BookCellItem] = []
-        if let activeBook = try? DataManager.shared.fetchAllBooks(for: .active) {
-            items = activeBook.map{ BookCellItem(book: $0) }
+    @objc
+    func reloadData() {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
+        // Active
+        if let activeBooks = try? DataManager.shared.fetchAllBooks(for: .active) {
+            snapshot.appendSections([.active])
+            
+            var items: [Item] = []
+            if activeBooks.count == 0 {
+                items = [.activeHint]
+            } else {
+                items = activeBooks.map{ Item.book(BookCellItem(book: $0)) }
+            }
+            
             snapshot.appendItems(items, toSection: .active)
         }
+        // Archived
+        if let archivedBooks = try? DataManager.shared.fetchAllBooks(for: .archived) {
+            snapshot.appendSections([.archived])
+            
+            var items: [Item] = []
+            if archivedBooks.count == 0 {
+                items = [.archivedHint]
+            } else {
+                items = archivedBooks.map{ Item.book(BookCellItem(book: $0)) }
+            }
+            
+            snapshot.appendItems(items, toSection: .archived)
+        }
         dataSource.apply(snapshot, animatingDifferences: true)
+    }
+    
+    func detailAccessoryForListCellItem(_ item: BookCellItem) -> UICellAccessory {
+        return UICellAccessory.detail(options: UICellAccessory.DetailOptions(reservedLayoutWidth: .custom(44), tintColor: AppColor.main), actionHandler: { [weak self] in
+            self?.goToDetail(for: item)
+        })
+    }
+    
+    @objc
+    func new() {
+//        var bookIndex = 0
+//        if let latestBook = DataManager.shared.books.last {
+//            bookIndex = latestBook.order + 1
+//        }
+//        let newTag = Tag(bookID: bookID, title: "", color: "", order: bookIndex)
+//        let nav = NavigationController(rootViewController: TagDetailViewController(tag: newTag))
+//        
+//        navigationController?.present(nav, animated: true)
+    }
+    
+    @objc
+    func close() {
+        dismiss(animated: true)
+    }
+    
+    func goToDetail(for item: BookCellItem) {
+//        let nav = NavigationController(rootViewController: TagDetailViewController(tag: item.tag))
+//
+//        navigationController?.present(nav, animated: true)
+    }
+    
+    func updateOrder() {
+        var newBooks: [Book] = []
+
+        // Active
+        let activeBooks = dataSource.snapshot().itemIdentifiers(inSection: .active).compactMap { item in
+            switch item {
+            case .book(let cellItem):
+                return cellItem.book
+            default:
+                return nil
+            }
+        }
+        for (index, book) in activeBooks.enumerated() {
+            var newOrderBook = book
+            newOrderBook.bookType = .active
+            newOrderBook.order = index
+            newBooks.append(newOrderBook)
+        }
+        // Archived
+        let archivedBooks = dataSource.snapshot().itemIdentifiers(inSection: .archived).compactMap { item in
+            switch item {
+            case .book(let cellItem):
+                return cellItem.book
+            default:
+                return nil
+            }
+        }
+        for (index, book) in archivedBooks.enumerated() {
+            var newOrderBook = book
+            newOrderBook.bookType = .archived
+            newOrderBook.order = index
+            newBooks.append(newOrderBook)
+        }
+        _ = DataManager.shared.update(books: newBooks)
     }
 }
 

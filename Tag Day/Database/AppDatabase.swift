@@ -93,6 +93,8 @@ final class AppDatabase {
                         try? day5.save(db)
                     }
                 }
+                var secondBook = Book(title: String(localized: "database.secondBook"), order: 1)
+                try? secondBook.save(db)
             }
         }
         
@@ -116,7 +118,7 @@ final class AppDatabase {
 
 // Book
 extension AppDatabase {
-    func update(book: Book, postNotification: Bool = true) -> Bool {
+    func update(book: Book) -> Bool {
         guard book.id != nil else {
             // No ID
             return false
@@ -130,9 +132,27 @@ extension AppDatabase {
             print(error)
             return false
         }
-        if postNotification {
-            NotificationCenter.default.post(Notification(name: Notification.Name.DatabaseUpdated))
+        NotificationCenter.default.post(Notification(name: Notification.Name.DatabaseUpdated))
+        return true
+    }
+    
+    func update(books: [Book]) -> Bool {
+        guard !books.contains(where: { $0.id == nil }) else {
+            // No ID
+            return false
         }
+        do {
+            _ = try dbWriter?.write{ db in
+                for book in books {
+                    try book.update(db)
+                }
+            }
+        }
+        catch {
+            print(error)
+            return false
+        }
+        NotificationCenter.default.post(Notification(name: Notification.Name.DatabaseUpdated))
         return true
     }
     

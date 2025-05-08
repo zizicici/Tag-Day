@@ -149,7 +149,7 @@ class MainViewController: NavigationController {
         }
         
         let manageAction = UIAction(title: String(localized: "books.management"), image: UIImage(systemName: "books.vertical")) { [weak self] action in
-            self
+            self?.showBookManagement()
         }
         let newAction = UIAction(title: String(localized: "books.new"), image: UIImage(systemName: "plus")) { [weak self] action in
             self
@@ -159,6 +159,12 @@ class MainViewController: NavigationController {
         elements.append(currentPageDivider)
         
         return UIMenu(children: elements)
+    }
+    
+    func showBookManagement() {
+        let bookListVC = BookListViewController()
+        let nav = NavigationController(rootViewController: bookListVC)
+        present(nav, animated: true)
     }
     
     func getTagsMenu() -> UIMenu {

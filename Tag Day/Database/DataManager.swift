@@ -154,8 +154,12 @@ extension DataManager {
         return result
     }
     
-    func update(book: Book, postNotification: Bool = true) -> Bool {
-        return AppDatabase.shared.update(book: book, postNotification: postNotification)
+    func update(book: Book) -> Bool {
+        return AppDatabase.shared.update(book: book)
+    }
+    
+    func update(books: [Book]) -> Bool {
+        return AppDatabase.shared.update(books: books)
     }
     
     func add(book: Book) -> Bool {

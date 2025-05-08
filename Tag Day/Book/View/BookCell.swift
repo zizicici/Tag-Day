@@ -24,7 +24,7 @@ private extension UICellConfigurationState {
     }
 }
 
-class BookBaseCell: UICollectionViewCell {
+class BookBaseCell: UICollectionViewListCell {
     private var bookItem: BookCellItem? = nil
     
     func update(with newBook: BookCellItem) {
@@ -41,42 +41,50 @@ class BookBaseCell: UICollectionViewCell {
 }
 
 class BookListCell: BookBaseCell {
-    private func defaultListContentConfiguration() -> UIListContentConfiguration { return .valueCell() }
+    var detail: UICellAccessory?
+
+    private func defaultListContentConfiguration() -> UIListContentConfiguration { return .subtitleCell() }
     private lazy var listContentView = UIListContentView(configuration: defaultListContentConfiguration())
 
-    var iconView: UIImageView = UIImageView()
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        detail = nil
+    }
     
     func setupViewsIfNeeded() {
-        guard iconView.superview == nil else {
+        guard listContentView.superview == nil else {
             return
-        }
-        
-        contentView.addSubview(iconView)
-        iconView.snp.makeConstraints { make in
-            make.leading.equalTo(contentView).inset(20.0)
-            make.centerY.equalTo(contentView)
-            make.height.equalTo(30.0)
-            make.width.equalTo(30.0)
         }
         
         contentView.addSubview(listContentView)
         listContentView.snp.makeConstraints { make in
-            make.leading.equalTo(iconView.snp.trailing)
-            make.top.bottom.trailing.equalTo(contentView)
+            make.edges.equalTo(contentView)
         }
     }
     
     override func updateConfiguration(using state: UICellConfigurationState) {
         setupViewsIfNeeded()
+        
+        accessories = [detail, .reorder(displayed: .always)].compactMap{ $0 }
+        
         var content = defaultListContentConfiguration().updated(for: state)
         content.imageProperties.preferredSymbolConfiguration = .init(font: content.textProperties.font, scale: .large)
-        content.text = state.bookItem?.book.title
-        content.axesPreservingSuperviewLayoutMargins = []
-        listContentView.configuration = content
+        content.textToSecondaryTextVerticalPadding = 6.0
+        var layoutMargins = content.directionalLayoutMargins
+        layoutMargins.leading = 10.0
+        layoutMargins.top = 10.0
+        layoutMargins.bottom = 10.0
+        content.directionalLayoutMargins = layoutMargins
         
-//        if let icon = state.bookItem?.book.icon {
-//            iconView.update(icon)
-//        }
+        if let book = state.bookItem?.book {
+            content.text = book.title
+            content.textProperties.color = AppColor.text
+            content.secondaryText = book.comment
+            content.secondaryTextProperties.color = AppColor.text.withAlphaComponent(0.75)
+        }
+
+        listContentView.configuration = content
         
         backgroundConfiguration = BookCellBackgroundConfiguration.configuration(for: state)
     }
