@@ -45,6 +45,7 @@ class BookDetailViewController: UIViewController {
     enum Section: Int, Hashable {
         case title
         case comment
+        case tag
         case delete
         
         var header: String? {
@@ -52,6 +53,8 @@ class BookDetailViewController: UIViewController {
             case .title:
                 return nil
             case .comment:
+                return nil
+            case .tag:
                 return nil
             case .delete:
                 return nil
@@ -64,6 +67,8 @@ class BookDetailViewController: UIViewController {
                 return String(localized: "books.detail.title.hint")
             case .comment:
                 return nil
+            case .tag:
+                return nil
             case .delete:
                 return nil
             }
@@ -73,6 +78,8 @@ class BookDetailViewController: UIViewController {
     enum Item: Hashable {
         case title(String)
         case comment(String?)
+        case tagEntry
+        case tag(Tag)
         case delete
     }
     
@@ -127,6 +134,8 @@ class BookDetailViewController: UIViewController {
         configureHierarchy()
         configureDataSource()
         reloadData()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .DatabaseUpdated, object: nil)
     }
     
     func configureHierarchy() {
@@ -134,6 +143,7 @@ class BookDetailViewController: UIViewController {
         tableView.backgroundColor = AppColor.background
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: NSStringFromClass(UITableViewCell.self))
         tableView.register(TextInputCell.self, forCellReuseIdentifier: NSStringFromClass(TextInputCell.self))
+        tableView.register(BookTagCell.self, forCellReuseIdentifier: NSStringFromClass(BookTagCell.self))
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 50.0
         tableView.delegate = self
@@ -170,6 +180,34 @@ class BookDetailViewController: UIViewController {
                     cell.tintColor = AppColor.main
                 }
                 return cell
+            case .tag(let tag):
+                let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(BookTagCell.self), for: indexPath)
+                cell.accessoryType = .none
+                var content = UIListContentConfiguration.subtitleCell()
+                content.imageProperties.preferredSymbolConfiguration = .init(font: content.textProperties.font, scale: .large)
+                content.textToSecondaryTextVerticalPadding = 6.0
+                var layoutMargins = content.directionalLayoutMargins
+                layoutMargins.top = 10.0
+                layoutMargins.bottom = 10.0
+                content.directionalLayoutMargins = layoutMargins
+                content.image = UIImage(systemName: "square.fill")?.withTintColor(UIColor(string: tag.color) ?? .white, renderingMode: .alwaysOriginal)
+                content.text = tag.title
+                content.textProperties.color = AppColor.text
+                content.textProperties.alignment = .natural
+                content.secondaryText = tag.subtitle
+                content.secondaryTextProperties.color = AppColor.text.withAlphaComponent(0.75)
+                cell.contentConfiguration = content
+                return cell
+            case .tagEntry:
+                let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(UITableViewCell.self), for: indexPath)
+                cell.accessoryType = .none
+                var content = cell.defaultContentConfiguration()
+                content.text = String(localized: "tags.management")
+                content.textProperties.color = AppColor.main
+                content.textProperties.alignment = .center
+                cell.contentConfiguration = content
+                cell.separatorInset = .zero
+                return cell
             case .delete:
                 let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(UITableViewCell.self), for: indexPath)
                 cell.accessoryType = .none
@@ -183,6 +221,7 @@ class BookDetailViewController: UIViewController {
         }
     }
     
+    @objc
     func reloadData() {
         updateAddButtonStatus()
         
@@ -192,6 +231,11 @@ class BookDetailViewController: UIViewController {
         snapshot.appendSections([.comment])
         snapshot.appendItems([.comment(comment)], toSection: .comment)
         if isEditMode() {
+            snapshot.appendSections([.tag])
+            if let bookID = book.id, let tags = try? DataManager.shared.fetchAllTags(bookID: bookID) {
+                snapshot.appendItems(tags.map{ Item.tag($0) }, toSection: .tag)
+            }
+            snapshot.appendItems([.tagEntry], toSection: .tag)
             snapshot.appendSections([.delete])
             snapshot.appendItems([.delete], toSection: .delete)
         }
@@ -269,6 +313,12 @@ class BookDetailViewController: UIViewController {
         alertController.addAction(cancelAction)
         present(alertController, animated: true)
     }
+    
+    func showTagManagement() {
+        let tagListVC = TagListViewController(bookID: book.id)
+        let nav = NavigationController(rootViewController: tagListVC)
+        present(nav, animated: true)
+    }
 }
 
 extension BookDetailViewController: UITableViewDelegate {
@@ -280,6 +330,10 @@ extension BookDetailViewController: UITableViewDelegate {
                 break
             case .comment:
                 break
+            case .tag:
+                break
+            case .tagEntry:
+                showTagManagement()
             case .delete:
                 showDeleteAlert()
             }
@@ -291,4 +345,8 @@ extension String {
     func isValidBookTitle() -> Bool{
         return count > 0 && count <= 60
     }
+}
+
+class BookTagCell: UITableViewCell {
+    
 }

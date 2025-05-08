@@ -14,6 +14,8 @@ class TagListViewController: UIViewController {
         case main
     }
     
+    private var bookID: Int64?
+    
     var collectionView: UICollectionView!
     var dataSource: UICollectionViewDiffableDataSource<Section, TagCellItem>!
     
@@ -29,6 +31,11 @@ class TagListViewController: UIViewController {
     
     deinit {
         print("TagListViewController is deinited")
+    }
+    
+    convenience init(bookID: Int64?) {
+        self.init(nibName: nil, bundle: nil)
+        self.bookID = bookID
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -99,7 +106,7 @@ class TagListViewController: UIViewController {
     
     @objc
     func reloadData() {
-        guard let bookID = DataManager.shared.currentBook?.id else { return }
+        guard let bookID = self.bookID else { return }
         var snapshot = NSDiffableDataSourceSnapshot<Section, TagCellItem>()
         snapshot.appendSections([.main])
         var items: [TagCellItem] = []
@@ -118,7 +125,7 @@ class TagListViewController: UIViewController {
     
     @objc
     func new() {
-        guard let bookID = DataManager.shared.currentBook?.id else {
+        guard let bookID = self.bookID else {
             return
         }
         var tagIndex = 0

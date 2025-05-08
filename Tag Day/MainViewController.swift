@@ -226,7 +226,7 @@ class MainViewController: NavigationController {
     }
     
     func showTagManagement() {
-        let tagListVC = TagListViewController()
+        let tagListVC = TagListViewController(bookID: DataManager.shared.currentBook?.id)
         let nav = NavigationController(rootViewController: tagListVC)
         present(nav, animated: true)
     }
