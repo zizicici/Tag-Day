@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		14337F802DCC6CE50043447A /* Debounce.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14337F7F2DCC6CE50043447A /* Debounce.swift */; };
 		14833D352DC50310001B61D5 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D342DC50310001B61D5 /* Book.swift */; };
 		14833D372DC50420001B61D5 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D362DC50420001B61D5 /* Tag.swift */; };
 		14833D392DC504B9001B61D5 /* DayRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D382DC504B9001B61D5 /* DayRecord.swift */; };
@@ -68,6 +69,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		14337F7F2DCC6CE50043447A /* Debounce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debounce.swift; sourceTree = "<group>"; };
 		14833D342DC50310001B61D5 /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
 		14833D362DC50420001B61D5 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
 		14833D382DC504B9001B61D5 /* DayRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRecord.swift; sourceTree = "<group>"; };
@@ -303,6 +305,7 @@
 				14D272A02DC0736A00267572 /* UIViewController+Extension.swift */,
 				14D272B72DC074B300267572 /* Toast+Stryle.swift */,
 				14D2729A2DC0720600267572 /* UIFont+Extension.swift */,
+				14337F7F2DCC6CE50043447A /* Debounce.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -467,6 +470,7 @@
 				14D272982DC071B000267572 /* UIDraggableCollectionView.swift in Sources */,
 				14D272992DC071B000267572 /* HoverGestureRecognizer.swift in Sources */,
 				14D2727B2DC0716E00267572 /* CalendarViewController+Popover.swift in Sources */,
+				14337F802DCC6CE50043447A /* Debounce.swift in Sources */,
 				14D272AF2DC073EB00267572 /* Persistence.swift in Sources */,
 				14D272B02DC073EB00267572 /* TimestampedRecord.swift in Sources */,
 				14D272BD2DC0884E00267572 /* SpecificationsViewController.swift in Sources */,

@@ -50,7 +50,9 @@ class DataManager {
     
     var activeTags: [Tag] = [] {
         didSet {
-            NotificationCenter.default.post(Notification(name: Notification.Name.ActiveTagsUpdated))
+            if oldValue != activeTags {
+                NotificationCenter.default.post(Notification(name: Notification.Name.ActiveTagsUpdated))
+            }
         }
     }
     

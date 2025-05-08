@@ -55,6 +55,9 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         }
     }
     
+    // Debounce
+    private var reloadDataDebounce: Debounce<Int>!
+    
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         
@@ -113,10 +116,23 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
             make.height.greaterThanOrEqualTo(40)
         }
         
-        NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .CurrentBookChanged, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .ActiveTagsUpdated, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .TodayUpdated, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .SettingsUpdate, object: nil)
+        reloadDataDebounce = Debounce(duration: 0.02, block: { [weak self] value in
+            await self?.commit()
+        })
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(needReload), name: .CurrentBookChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(needReload), name: .ActiveTagsUpdated, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(needReload), name: .TodayUpdated, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(needReload), name: .SettingsUpdate, object: nil)
+    }
+    
+    @objc
+    func needReload() {
+        reloadDataDebounce.emit(value: 0)
+    }
+    
+    func commit() {
+        reloadData()
     }
     
     override func viewDidAppear(_ animated: Bool) {
