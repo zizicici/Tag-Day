@@ -162,27 +162,27 @@ class BookListViewController: UIViewController {
     func reloadData() {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
         // Active
-        if let activeBooks = try? DataManager.shared.fetchAllBooks(for: .active) {
+        if let activeBooks = try? DataManager.shared.fetchAllBookInfos(for: .active) {
             snapshot.appendSections([.active])
             
             var items: [Item] = []
             if activeBooks.count == 0 {
                 items = [.activeHint]
             } else {
-                items = activeBooks.map{ Item.book(BookCellItem(book: $0)) }
+                items = activeBooks.map{ Item.book(BookCellItem(bookInfo: $0)) }
             }
             
             snapshot.appendItems(items, toSection: .active)
         }
         // Archived
-        if let archivedBooks = try? DataManager.shared.fetchAllBooks(for: .archived) {
+        if let archivedBooks = try? DataManager.shared.fetchAllBookInfos(for: .archived) {
             snapshot.appendSections([.archived])
             
             var items: [Item] = []
             if archivedBooks.count == 0 {
                 items = [.archivedHint]
             } else {
-                items = archivedBooks.map{ Item.book(BookCellItem(book: $0)) }
+                items = archivedBooks.map{ Item.book(BookCellItem(bookInfo: $0)) }
             }
             
             snapshot.appendItems(items, toSection: .archived)
@@ -216,7 +216,7 @@ class BookListViewController: UIViewController {
     }
     
     func goToDetail(for item: BookCellItem) {
-        let nav = NavigationController(rootViewController: BookDetailViewController(book: item.book))
+        let nav = NavigationController(rootViewController: BookDetailViewController(book: item.bookInfo.book))
         
         navigationController?.present(nav, animated: true)
     }
@@ -228,7 +228,7 @@ class BookListViewController: UIViewController {
         let activeBooks = dataSource.snapshot().itemIdentifiers(inSection: .active).compactMap { item in
             switch item {
             case .book(let cellItem):
-                return cellItem.book
+                return cellItem.bookInfo.book
             default:
                 return nil
             }
@@ -243,7 +243,7 @@ class BookListViewController: UIViewController {
         let archivedBooks = dataSource.snapshot().itemIdentifiers(inSection: .archived).compactMap { item in
             switch item {
             case .book(let cellItem):
-                return cellItem.book
+                return cellItem.bookInfo.book
             default:
                 return nil
             }

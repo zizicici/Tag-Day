@@ -46,3 +46,13 @@ extension Book: Codable, FetchableRecord, MutablePersistableRecord {
         id = inserted.rowID
     }
 }
+
+struct BookInfo: Hashable {
+    var book: Book
+    var tagCount: Int
+    var dayRecordCount: Int
+    
+    func subtitle() -> String {
+        String(format: String(localized: "bookInfo.subtitle.tag%i"), tagCount) + " / " + String(format: String(localized: "bookInfo.subtitle.dayRecord%i"), dayRecordCount)
+    }
+}

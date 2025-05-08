@@ -161,16 +161,78 @@ extension DataManager {
         return result
     }
     
+    func fetchAllBookInfos() throws -> [BookInfo] {
+        var result: [BookInfo] = []
+        
+        try AppDatabase.shared.reader?.read{ db in
+            do {
+                let bookTypeColumn = Book.Columns.bookType
+                let orderColumn = Book.Columns.order
+                let books = try Book
+                    .order(bookTypeColumn.asc)
+                    .order(orderColumn.asc)
+                    .fetchAll(db)
+                result = books.compactMap({ book in
+                    if let bookID = book.id {
+                        let dayRecordBookColumn = DayRecord.Columns.bookID
+                        let dayRecordCount = try? DayRecord.filter(dayRecordBookColumn == bookID).fetchCount(db)
+                        let tagBookColumn = Tag.Columns.bookID
+                        let tagCount = try? Tag.filter(tagBookColumn == bookID).fetchCount(db)
+                        return BookInfo(book: book, tagCount: tagCount ?? 0, dayRecordCount: dayRecordCount ?? 0)
+                    } else {
+                        return nil
+                    }
+                })
+            }
+            catch {
+                print(error)
+            }
+        }
+        
+        return result
+    }
+    
     func fetchAllBooks(for bookType: BookType) throws -> [Book] {
         var result: [Book] = []
         try AppDatabase.shared.reader?.read{ db in
             do {
-                let orderColumn = Book.Columns.order
                 let bookTypeColumn = Book.Columns.bookType
+                let orderColumn = Book.Columns.order
                 result = try Book
-                    .order(orderColumn.asc)
                     .filter(bookTypeColumn == bookType.rawValue)
+                    .order(orderColumn.asc)
                     .fetchAll(db)
+            }
+            catch {
+                print(error)
+            }
+        }
+        
+        return result
+    }
+    
+    func fetchAllBookInfos(for bookType: BookType) throws -> [BookInfo] {
+        var result: [BookInfo] = []
+        
+        try AppDatabase.shared.reader?.read{ db in
+            do {
+                let bookTypeColumn = Book.Columns.bookType
+                let orderColumn = Book.Columns.order
+                let books = try Book
+                    .filter(bookTypeColumn == bookType.rawValue)
+                    .order(orderColumn.asc)
+                    .fetchAll(db)
+                result = books.compactMap({ book in
+                    if let bookID = book.id {
+                        let dayRecordBookColumn = DayRecord.Columns.bookID
+                        let dayRecordCount = try? DayRecord.filter(dayRecordBookColumn == bookID).fetchCount(db)
+                        let tagBookColumn = Tag.Columns.bookID
+                        let tagCount = try? Tag.filter(tagBookColumn == bookID).fetchCount(db)
+                        return BookInfo(book: book, tagCount: tagCount ?? 0, dayRecordCount: dayRecordCount ?? 0)
+                    } else {
+                        return nil
+                    }
+                })
             }
             catch {
                 print(error)

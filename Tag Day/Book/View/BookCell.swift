@@ -14,7 +14,7 @@ fileprivate extension UIConfigurationStateCustomKey {
 }
 
 struct BookCellItem: Hashable {
-    var book: Book
+    var bookInfo: BookInfo
 }
 
 private extension UICellConfigurationState {
@@ -77,10 +77,10 @@ class BookListCell: BookBaseCell {
         layoutMargins.bottom = 10.0
         content.directionalLayoutMargins = layoutMargins
         
-        if let book = state.bookItem?.book {
-            content.text = book.title
+        if let bookInfo = state.bookItem?.bookInfo {
+            content.text = bookInfo.book.title
             content.textProperties.color = AppColor.text
-            content.secondaryText = book.comment
+            content.secondaryText = bookInfo.subtitle()
             content.secondaryTextProperties.color = AppColor.text.withAlphaComponent(0.75)
         }
 

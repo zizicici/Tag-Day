@@ -147,10 +147,10 @@ class MainViewController: NavigationController {
     
     func getBooksMenu() -> UIMenu {
         var elements: [UIMenuElement] = []
-        if let books = try? DataManager.shared.fetchAllBooks(for: .active) {
-            let bookElements: [UIMenuElement] = books.reversed().map({ book in
-                return UIAction(title: book.title, subtitle: book.comment, state: DataManager.shared.currentBook?.id == book.id ? .on : .off) { _ in
-                    DataManager.shared.select(book: book)
+        if let books = try? DataManager.shared.fetchAllBookInfos(for: .active) {
+            let bookElements: [UIMenuElement] = books.reversed().map({ info in
+                return UIAction(title: info.book.title, subtitle: info.subtitle(), state: DataManager.shared.currentBook?.id == info.book.id ? .on : .off) { _ in
+                    DataManager.shared.select(book: info.book)
                 }
             })
             elements.append(contentsOf: bookElements)
