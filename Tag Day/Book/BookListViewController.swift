@@ -198,14 +198,16 @@ class BookListViewController: UIViewController {
     
     @objc
     func new() {
-//        var bookIndex = 0
-//        if let latestBook = DataManager.shared.books.last {
-//            bookIndex = latestBook.order + 1
-//        }
-//        let newTag = Tag(bookID: bookID, title: "", color: "", order: bookIndex)
-//        let nav = NavigationController(rootViewController: TagDetailViewController(tag: newTag))
-//        
-//        navigationController?.present(nav, animated: true)
+        let activeBooks = DataManager.shared.books.filter({ $0.bookType == .active }).sorted(by: { $0.order < $1.order })
+
+        var bookOrder = 0
+        if let lastestBook = activeBooks.last {
+            bookOrder = lastestBook.order + 1
+        }
+        let newBook = Book(title: "", order: bookOrder)
+        let nav = NavigationController(rootViewController: BookDetailViewController(book: newBook))
+        
+        navigationController?.present(nav, animated: true)
     }
     
     @objc
@@ -214,9 +216,9 @@ class BookListViewController: UIViewController {
     }
     
     func goToDetail(for item: BookCellItem) {
-//        let nav = NavigationController(rootViewController: TagDetailViewController(tag: item.tag))
-//
-//        navigationController?.present(nav, animated: true)
+        let nav = NavigationController(rootViewController: BookDetailViewController(book: item.book))
+        
+        navigationController?.present(nav, animated: true)
     }
     
     func updateOrder() {

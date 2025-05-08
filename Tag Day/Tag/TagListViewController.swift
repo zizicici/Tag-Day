@@ -103,7 +103,7 @@ class TagListViewController: UIViewController {
         var snapshot = NSDiffableDataSourceSnapshot<Section, TagCellItem>()
         snapshot.appendSections([.main])
         var items: [TagCellItem] = []
-        if let tags = try? DataManager.shared.fetchAllTags(for: bookID) {
+        if let tags = try? DataManager.shared.fetchAllTags(bookID: bookID) {
             items = tags.map{ TagCellItem(tag: $0) }
             snapshot.appendItems(items, toSection: .main)
         }
@@ -122,8 +122,8 @@ class TagListViewController: UIViewController {
             return
         }
         var tagIndex = 0
-        if let latestTag = DataManager.shared.tags.last {
-            tagIndex = latestTag.order + 1
+        if let lastestTag = DataManager.shared.tags.last {
+            tagIndex = lastestTag.order + 1
         }
         let newTag = Tag(bookID: bookID, title: "", color: "", order: tagIndex)
         let nav = NavigationController(rootViewController: TagDetailViewController(tag: newTag))

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		14337F802DCC6CE50043447A /* Debounce.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14337F7F2DCC6CE50043447A /* Debounce.swift */; };
+		14337F822DCC70DA0043447A /* BookDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14337F812DCC70DA0043447A /* BookDetailViewController.swift */; };
 		14833D352DC50310001B61D5 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D342DC50310001B61D5 /* Book.swift */; };
 		14833D372DC50420001B61D5 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D362DC50420001B61D5 /* Tag.swift */; };
 		14833D392DC504B9001B61D5 /* DayRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D382DC504B9001B61D5 /* DayRecord.swift */; };
@@ -70,6 +71,7 @@
 
 /* Begin PBXFileReference section */
 		14337F7F2DCC6CE50043447A /* Debounce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debounce.swift; sourceTree = "<group>"; };
+		14337F812DCC70DA0043447A /* BookDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailViewController.swift; sourceTree = "<group>"; };
 		14833D342DC50310001B61D5 /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
 		14833D362DC50420001B61D5 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
 		14833D382DC504B9001B61D5 /* DayRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRecord.swift; sourceTree = "<group>"; };
@@ -157,6 +159,7 @@
 			isa = PBXGroup;
 			children = (
 				14AD287A2DC5B6DD0018DAF3 /* BookListViewController.swift */,
+				14337F812DCC70DA0043447A /* BookDetailViewController.swift */,
 				14AD28822DC5BCCC0018DAF3 /* View */,
 			);
 			path = Book;
@@ -490,6 +493,7 @@
 				14AD287B2DC5B6DD0018DAF3 /* BookListViewController.swift in Sources */,
 				14D2727C2DC0716E00267572 /* CalendarViewController+Menu.swift in Sources */,
 				14D2729B2DC0720600267572 /* UIFont+Extension.swift in Sources */,
+				14337F822DCC70DA0043447A /* BookDetailViewController.swift in Sources */,
 				14D2727D2DC0716E00267572 /* CalendarViewController+Enum.swift in Sources */,
 				14D272722DC0712A00267572 /* AppColor.swift in Sources */,
 				14D2728A2DC071A500267572 /* BlockItem.swift in Sources */,

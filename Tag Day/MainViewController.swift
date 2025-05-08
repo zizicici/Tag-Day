@@ -160,7 +160,7 @@ class MainViewController: NavigationController {
             self?.showBookManagement()
         }
         let newAction = UIAction(title: String(localized: "books.new"), image: UIImage(systemName: "plus")) { [weak self] action in
-            self
+            self?.showBookEditorForAdd()
         }
         
         let currentPageDivider = UIMenu(title: "", options: .displayInline, children: [newAction, manageAction])
@@ -172,6 +172,19 @@ class MainViewController: NavigationController {
     func showBookManagement() {
         let bookListVC = BookListViewController()
         let nav = NavigationController(rootViewController: bookListVC)
+        present(nav, animated: true)
+    }
+    
+    func showBookEditorForAdd() {
+        let activeBooks = DataManager.shared.books.filter({ $0.bookType == .active }).sorted(by: { $0.order < $1.order })
+
+        var bookOrder = 0
+        if let lastestBook = activeBooks.last {
+            bookOrder = lastestBook.order + 1
+        }
+        let newBook = Book(title: "", order: bookOrder)
+        let nav = NavigationController(rootViewController: BookDetailViewController(book: newBook))
+        
         present(nav, animated: true)
     }
     
@@ -223,8 +236,8 @@ class MainViewController: NavigationController {
             return
         }
         var tagIndex = 0
-        if let latestTag = DataManager.shared.tags.last {
-            tagIndex = latestTag.order + 1
+        if let lastestTag = DataManager.shared.tags.last {
+            tagIndex = lastestTag.order + 1
         }
         let newTag = Tag(bookID: bookID, title: "", color: "", order: tagIndex)
         let nav = NavigationController(rootViewController: TagDetailViewController(tag: newTag))

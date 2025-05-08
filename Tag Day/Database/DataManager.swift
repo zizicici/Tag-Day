@@ -109,7 +109,7 @@ class DataManager {
     }
     
     private func updateTags() {
-        if let currentBookID = currentBook?.id, let result = try? fetchAllTags(for: currentBookID) {
+        if let currentBookID = currentBook?.id, let result = try? fetchAllTags(bookID: currentBookID) {
             tags = result
         } else {
             tags = []
@@ -199,7 +199,7 @@ extension DataManager {
 
 // Tag
 extension DataManager {
-    func fetchAllTags(for bookID: Int64) throws -> [Tag] {
+    func fetchAllTags(bookID: Int64) throws -> [Tag] {
         var result: [Tag] = []
         try AppDatabase.shared.reader?.read { db in
             do {
