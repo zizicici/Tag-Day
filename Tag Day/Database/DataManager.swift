@@ -21,10 +21,10 @@ class DataManager {
     
     var currentBook: Book? {
         didSet {
+            // Update DayRecords and Tags
+            updateTags()
+            updateDayRecords()
             if oldValue != currentBook {
-                // Update DayRecords and Tags
-                updateTags()
-                updateDayRecords()
                 NotificationCenter.default.post(Notification(name: Notification.Name.CurrentBookChanged))
             }
         }
@@ -33,6 +33,7 @@ class DataManager {
     var books: [Book] = [] {
         didSet {
             if oldValue != books {
+                updateCurrentBookIfNeeded()
                 NotificationCenter.default.post(Notification(name: Notification.Name.BooksUpdated))
             }
         }
@@ -62,18 +63,35 @@ class DataManager {
     }
     
     init() {
-        currentBook = try? fetchAllBooks(for: .active).first
-        self.updateDataWithCurrentBook()
+        reloadData()
+        
         NotificationCenter.default.post(Notification(name: Notification.Name.CurrentBookChanged))
         
-        NotificationCenter.default.addObserver(self, selector: #selector(updateDataWithCurrentBook), name: .DatabaseUpdated, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .DatabaseUpdated, object: nil)
+    }
+    
+    func updateCurrentBookIfNeeded() {
+        let activeBooks = books.filter({ $0.bookType == .active }).sorted(by: { $0.order < $1.order })
+        if activeBooks.count == 0 {
+            currentBook = nil
+        } else {
+            if let selectedBook = currentBook {
+                // Check in activeBooks
+                if activeBooks.first(where: { $0.id == selectedBook.id }) == nil {
+                    currentBook = activeBooks.first
+                } else {
+                    currentBook = selectedBook
+                }
+            } else {
+                currentBook = activeBooks.first
+            }
+        }
     }
     
     @objc
-    func updateDataWithCurrentBook() {
+    func reloadData() {
         updateBooks()
-        updateTags()
-        updateDayRecords()
+        updateCurrentBookIfNeeded()
     }
     
     public func select(book: Book?) {
@@ -83,18 +101,24 @@ class DataManager {
     private func updateBooks() {
         if let result = try? fetchAllBooks() {
             books = result
+        } else {
+            books = []
         }
     }
     
     private func updateTags() {
         if let currentBookID = currentBook?.id, let result = try? fetchAllTags(for: currentBookID) {
             tags = result
+        } else {
+            tags = []
         }
     }
     
     private func updateDayRecords() {
         if let currentBookID = currentBook?.id, let result = try? fetchAllDayRecords(bookID: currentBookID) {
             dayRecords = result
+        } else {
+            dayRecords = []
         }
     }
     

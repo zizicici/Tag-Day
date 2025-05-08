@@ -28,7 +28,7 @@ class TagListViewController: UIViewController {
     }
     
     deinit {
-        print("CalendarViewController is deinited")
+        print("TagListViewController is deinited")
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {

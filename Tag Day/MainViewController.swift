@@ -96,6 +96,11 @@ class MainViewController: NavigationController {
             guard let self = self else { return }
             
             button.menu = self.getTagsMenu()
+            if DataManager.shared.currentBook == nil {
+                button.isEnabled = false
+            } else {
+                button.isEnabled = true
+            }
         }
         
         view.addSubview(separator)
@@ -118,8 +123,11 @@ class MainViewController: NavigationController {
             guard let self = self else { return }
             
             var config = button.configuration
-            
-            config?.title = DataManager.shared.currentBook?.title
+            if let title = DataManager.shared.currentBook?.title {
+                config?.title = title
+            } else {
+                config?.title = String(localized: "books.empty")
+            }
             
             button.configuration = config
             button.menu = self.getBooksMenu()

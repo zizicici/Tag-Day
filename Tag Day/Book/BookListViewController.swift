@@ -55,7 +55,7 @@ class BookListViewController: UIViewController {
     }
     
     deinit {
-        print("CalendarViewController is deinited")
+        print("BookListViewController is deinited")
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
