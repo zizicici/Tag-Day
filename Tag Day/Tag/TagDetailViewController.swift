@@ -9,6 +9,8 @@ import UIKit
 import SnapKit
 
 class TagDetailViewController: UIViewController {
+    static let defaultColor = UIColor.systemGreen
+    
     private var tag: Tag!
     
     private var tableView: UITableView!
@@ -42,7 +44,7 @@ class TagDetailViewController: UIViewController {
     
     private var tagColor: UIColor {
         get {
-            return UIColor(string: tag.color) ?? .systemGreen
+            return UIColor(string: tag.color) ?? Self.defaultColor
         }
         set {
             tag.color = newValue.generateLightDarkString()
@@ -54,8 +56,8 @@ class TagDetailViewController: UIViewController {
             if let color = UIColor(string: tag.color)?.resolvedColor(with: .init(userInterfaceStyle: .light)) {
                 return color
             } else {
-                var first: UIColor = .systemGreen
-                if !defaultColors().contains(.systemGreen) {
+                var first: UIColor = Self.defaultColor
+                if !defaultColors().contains(first) {
                     first = defaultColors().first ?? .white
                 }
                 return first
@@ -71,8 +73,8 @@ class TagDetailViewController: UIViewController {
             if let color = UIColor(string: tag.color)?.resolvedColor(with: .init(userInterfaceStyle: .dark)) {
                 return color
             } else {
-                var first: UIColor = .systemGreen
-                if !defaultColors().contains(.systemGreen) {
+                var first: UIColor = Self.defaultColor
+                if !defaultColors().contains(first) {
                     first = defaultColors().first ?? .white
                 }
                 return first
@@ -153,6 +155,9 @@ class TagDetailViewController: UIViewController {
     convenience init(tag: Tag) {
         self.init()
         self.tag = tag
+        if UIColor(string: tag.color) == nil {
+            self.tag.color = Self.defaultColor.generateLightDarkString()
+        }
     }
     
     class DataSource: UITableViewDiffableDataSource<Section, Item> {
