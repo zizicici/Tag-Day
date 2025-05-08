@@ -83,9 +83,9 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         weekdayOrderView.backgroundColor = AppColor.navigationBar
         view.addSubview(weekdayOrderView)
         weekdayOrderView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide)
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(-5.0)
             make.leading.trailing.equalTo(view).inset(-15.0)
-            make.height.equalTo(30.0)
+            make.height.equalTo(35.0)
         }
         weekdayOrderView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
         weekdayOrderView.layer.cornerRadius = 30.0
