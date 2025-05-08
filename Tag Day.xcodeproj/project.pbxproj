@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		14337F802DCC6CE50043447A /* Debounce.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14337F7F2DCC6CE50043447A /* Debounce.swift */; };
 		14337F822DCC70DA0043447A /* BookDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14337F812DCC70DA0043447A /* BookDetailViewController.swift */; };
+		14337F862DCC99220043447A /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 14337F852DCC99220043447A /* InfoPlist.xcstrings */; };
 		14833D352DC50310001B61D5 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D342DC50310001B61D5 /* Book.swift */; };
 		14833D372DC50420001B61D5 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D362DC50420001B61D5 /* Tag.swift */; };
 		14833D392DC504B9001B61D5 /* DayRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D382DC504B9001B61D5 /* DayRecord.swift */; };
@@ -72,6 +73,7 @@
 /* Begin PBXFileReference section */
 		14337F7F2DCC6CE50043447A /* Debounce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debounce.swift; sourceTree = "<group>"; };
 		14337F812DCC70DA0043447A /* BookDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailViewController.swift; sourceTree = "<group>"; };
+		14337F852DCC99220043447A /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		14833D342DC50310001B61D5 /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
 		14833D362DC50420001B61D5 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
 		14833D382DC504B9001B61D5 /* DayRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRecord.swift; sourceTree = "<group>"; };
@@ -214,6 +216,7 @@
 				14B239B02DBF13F30007152C /* Info.plist */,
 				14B239B12DBF13F30007152C /* LaunchScreen.storyboard */,
 				14B239C62DBF765B0007152C /* Localizable.xcstrings */,
+				14337F852DCC99220043447A /* InfoPlist.xcstrings */,
 			);
 			path = "Tag Day";
 			sourceTree = "<group>";
@@ -440,6 +443,7 @@
 			files = (
 				14B239B92DBF13F30007152C /* LaunchScreen.storyboard in Resources */,
 				14B239BA2DBF13F30007152C /* Assets.xcassets in Resources */,
+				14337F862DCC99220043447A /* InfoPlist.xcstrings in Resources */,
 				14B239C72DBF765B0007152C /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
