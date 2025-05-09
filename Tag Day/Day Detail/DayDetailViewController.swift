@@ -194,7 +194,7 @@ extension DayDetailViewController {
     func getMenu() -> UIMenu {
         let recordDay = day.julianDay
         var children: [UIMenuElement] = []
-        children = tags.map({ tag in
+        children = tags.reversed().map({ tag in
             return UIAction(title: tag.title, subtitle: tag.subtitle, image: UIImage(systemName: "square.fill")?.withTintColor(UIColor(string: tag.color) ?? .white, renderingMode: .alwaysOriginal)) { [weak self] _ in
                 guard let bookID = self?.book.id,let tagID = tag.id else {
                     return
