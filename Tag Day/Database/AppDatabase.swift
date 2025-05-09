@@ -58,8 +58,13 @@ final class AppDatabase {
                 
                 table.column("day", .integer).notNull()
                 table.column("comment", .text)
-                table.column("amount_type", .integer).notNull()
-                table.column("amount_value", .integer)
+                
+                table.column("start_time", .integer)
+                table.column("end_time", .integer)
+                table.column("duration", .integer)
+                
+                table.column("currency_code", .text)
+                table.column("currency_value", .integer)
             }
             
             if true {
