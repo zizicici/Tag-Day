@@ -268,8 +268,8 @@ class MoreViewController: UIViewController {
         snapshot.appendSections([.general])
         snapshot.appendItems([.settings(.language)], toSection: .general)
         
-        snapshot.appendSections([.help])
-        snapshot.appendItems([.help], toSection: .help)
+//        snapshot.appendSections([.help])
+//        snapshot.appendItems([.help], toSection: .help)
         
         snapshot.appendSections([.appjun])
         var appItems: [Item] = [.appjun(.otherApps(.offDay)), .appjun(.otherApps(.lemon)), .appjun(.otherApps(.moontake)), .appjun(.otherApps(.coconut)), .appjun(.otherApps(.pigeon))]
