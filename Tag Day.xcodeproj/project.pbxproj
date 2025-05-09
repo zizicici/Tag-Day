@@ -156,9 +156,17 @@
 			isa = PBXGroup;
 			children = (
 				14AA3E062DCDB31300E1F4F8 /* DayDetailViewController.swift */,
-				14AA3E0A2DCDF3BE00E1F4F8 /* DayDetailCell.swift */,
+				14AA3E0C2DCE3B5200E1F4F8 /* View */,
 			);
 			path = "Day Detail";
+			sourceTree = "<group>";
+		};
+		14AA3E0C2DCE3B5200E1F4F8 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				14AA3E0A2DCDF3BE00E1F4F8 /* DayDetailCell.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		14ACBE552DBFAD2E0056B1FD /* BaseViewController */ = {

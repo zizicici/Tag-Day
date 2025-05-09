@@ -24,6 +24,21 @@ class DayDetailViewController: UIViewController {
         var record: DayRecord
     }
     
+    private var newButton: UIButton = {
+        var configuration = UIButton.Configuration.plain()
+        configuration.titleAlignment = .center
+        configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer({ incoming in
+            var outgoing = incoming
+            outgoing.font = UIFont.preferredMonospacedFont(for: .body, weight: .medium)
+            
+            return outgoing
+        })
+        configuration.baseForegroundColor = AppColor.main
+        let button = UIButton(configuration: configuration)
+        button.showsMenuAsPrimaryAction = true
+        return button
+    }()
+    
     var dataSource: UICollectionViewDiffableDataSource<Section, Item>! = nil
     var collectionView: UICollectionView! = nil
     
@@ -52,6 +67,11 @@ class DayDetailViewController: UIViewController {
         configureCollectionView()
         configureDataSource()
         reloadData()
+        
+        let newBarItem = UIBarButtonItem(systemItem: .add, menu: getMenu())
+        newBarItem.tintColor = AppColor.main
+        toolbarItems = [newBarItem]
+        navigationController?.setToolbarHidden(false, animated: false)
         
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .DatabaseUpdated, object: nil)
     }
@@ -169,5 +189,20 @@ extension DayDetailViewController {
         alertController.addAction(deleteAction)
         alertController.addAction(cancelAction)
         present(alertController, animated: true)
+    }
+    
+    func getMenu() -> UIMenu {
+        let recordDay = day.julianDay
+        var children: [UIMenuElement] = []
+        children = tags.map({ tag in
+            return UIAction(title: tag.title, subtitle: tag.subtitle, image: UIImage(systemName: "square.fill")?.withTintColor(UIColor(string: tag.color) ?? .white, renderingMode: .alwaysOriginal)) { [weak self] _ in
+                guard let bookID = self?.book.id,let tagID = tag.id else {
+                    return
+                }
+                let newRecord = DayRecord(bookID: bookID, tagID: tagID, day: Int64(recordDay))
+                _ = DataManager.shared.add(dayRecord: newRecord)
+            }
+        })
+        return UIMenu(title: "", children: children)
     }
 }
