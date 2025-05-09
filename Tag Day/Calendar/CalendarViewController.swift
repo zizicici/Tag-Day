@@ -122,6 +122,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         
         NotificationCenter.default.addObserver(self, selector: #selector(needReload), name: .CurrentBookChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(needReload), name: .ActiveTagsUpdated, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(needReload), name: .DayRecordsUpdated, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(needReload), name: .TodayUpdated, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(needReload), name: .SettingsUpdate, object: nil)
     }
@@ -175,8 +176,10 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     }
     
     private func tap(in targetView: UIView, for blockItem: BlockItem) {
-//        let detailViewController = BlockDetailViewController(blockItem: blockItem)
-//        showPopoverView(at: targetView, contentViewController: detailViewController)
+        guard let current = DataManager.shared.currentBook else { return }
+        let detailViewController = DayDetailViewController(day: blockItem.day, book: current)
+        let nav = NavigationController(rootViewController: detailViewController)
+        showPopoverView(at: targetView, contentViewController: nav, width: view.frame.width - 50.0)
     }
     
     private func createLayout() -> UICollectionViewLayout {

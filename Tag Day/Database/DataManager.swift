@@ -318,6 +318,25 @@ extension DataManager {
         return result
     }
     
+    func fetchAllDayRecords(bookID: Int64, day: Int64) throws -> [DayRecord] {
+        var result: [DayRecord] = []
+        try AppDatabase.shared.reader?.read { db in
+            do {
+                let bookIDColumn = DayRecord.Columns.bookID
+                let dayColumn = DayRecord.Columns.day
+                result = try DayRecord
+                    .filter(bookIDColumn == bookID)
+                    .filter(dayColumn == day)
+                    .fetchAll(db)
+            }
+            catch {
+                print(error)
+            }
+        }
+        
+        return result
+    }
+    
     func fetchAllDayRecords(tagID: Int64) throws -> [DayRecord] {
         var result: [DayRecord] = []
         try AppDatabase.shared.reader?.read { db in
@@ -335,5 +354,17 @@ extension DataManager {
         }
         
         return result
+    }
+    
+    func update(dayRecord: DayRecord) -> Bool {
+        return AppDatabase.shared.update(dayRecord: dayRecord)
+    }
+    
+    func add(dayRecord: DayRecord) -> Bool {
+        return AppDatabase.shared.add(dayRecord: dayRecord)
+    }
+    
+    func delete(dayRecord: DayRecord) -> Bool {
+        return AppDatabase.shared.delete(dayRecord: dayRecord)
     }
 }
