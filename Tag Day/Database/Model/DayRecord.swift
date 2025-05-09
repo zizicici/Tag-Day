@@ -17,7 +17,7 @@ struct DayRecord: Identifiable, Hashable {
     
     var comment: String?
     
-    var currencyType: String?
+    var currencyCode: String?
     var currencyValue: Int64?
     
     var startTime: Int64?
@@ -40,7 +40,7 @@ extension DayRecord: Codable, FetchableRecord, MutablePersistableRecord {
         static let bookID = Column(CodingKeys.bookID)
         static let tagID = Column(CodingKeys.tagID)
         
-        static let currencyCode = Column(CodingKeys.currencyType)
+        static let currencyCode = Column(CodingKeys.currencyCode)
         static let currencyValue = Column(CodingKeys.currencyValue)
         
         static let startTime = Column(CodingKeys.startTime)
@@ -48,7 +48,7 @@ extension DayRecord: Codable, FetchableRecord, MutablePersistableRecord {
     }
     
     enum CodingKeys: String, CodingKey {
-        case id, bookID = "book_id", tagID = "tag_id", day, comment, currencyType = "currency_type", currencyValue = "currency_value", startTime = "start_time", endTime = "end_time", duration
+        case id, bookID = "book_id", tagID = "tag_id", day, comment, currencyCode = "currency_code", currencyValue = "currency_value", startTime = "start_time", endTime = "end_time", duration
     }
     
     mutating func didInsert(_ inserted: InsertionSuccess) {
