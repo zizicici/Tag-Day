@@ -79,10 +79,10 @@ class DataManager {
         } else {
             if let selectedBook = currentBook {
                 // Check in activeBooks
-                if activeBooks.first(where: { $0.id == selectedBook.id }) == nil {
-                    currentBook = activeBooks.first
+                if let matchedBook = activeBooks.first(where: { $0.id == selectedBook.id }) {
+                    currentBook = matchedBook
                 } else {
-                    currentBook = selectedBook
+                    currentBook = activeBooks.first
                 }
             } else {
                 currentBook = activeBooks.first
