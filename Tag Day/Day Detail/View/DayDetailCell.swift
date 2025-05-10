@@ -59,6 +59,8 @@ class DayDetailCell: DayDetailBaseCell {
             
             return outgoing
         })
+        configuration.titleLineBreakMode = .byTruncatingTail
+        configuration.subtitleLineBreakMode = .byTruncatingTail
         configuration.image = UIImage(systemName: "chevron.up.chevron.down", withConfiguration: UIImage.SymbolConfiguration(pointSize: 14, weight: .regular))
         configuration.imagePlacement = .trailing
         configuration.imagePadding = 10.0
@@ -74,7 +76,7 @@ class DayDetailCell: DayDetailBaseCell {
         contentView.addSubview(tagButton)
         tagButton.snp.makeConstraints { make in
             make.top.leading.equalTo(contentView).inset(10)
-            make.trailing.lessThanOrEqualTo(contentView).inset(10)
+            make.trailing.lessThanOrEqualTo(contentView).inset(100)
             make.bottom.equalTo(contentView).inset(80)
         }
     }
@@ -114,8 +116,8 @@ struct DayDetailCellBackgroundConfiguration {
         var background = UIBackgroundConfiguration.clear()
         background.cornerRadius = 10.0
         background.backgroundColor = color
-        background.strokeColor = strokeColor
-        background.strokeWidth = 1.5
+//        background.strokeColor = strokeColor
+//        background.strokeWidth = 1.5
         
         if state.isHighlighted || state.isSelected {
 

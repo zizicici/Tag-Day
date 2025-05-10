@@ -51,6 +51,7 @@ class MainViewController: NavigationController {
             
             return outgoing
         })
+        configuration.titleLineBreakMode = .byTruncatingTail
         configuration.cornerStyle = .capsule
         let button = UIButton(configuration: configuration)
         button.tintColor = AppColor.action
@@ -80,7 +81,7 @@ class MainViewController: NavigationController {
         buttonContainer.snp.makeConstraints { make in
             make.bottom.equalTo(view.safeAreaLayoutGuide).inset(20)
             make.width.greaterThanOrEqualTo(160)
-            make.width.lessThanOrEqualTo(280)
+            make.width.lessThanOrEqualTo(300)
             make.height.equalTo(56)
             make.centerX.equalTo(view)
         }
