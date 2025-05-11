@@ -40,6 +40,7 @@
 		14BBA3782DCB101100AD7BAC /* TextInputCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BBA3772DCB101100AD7BAC /* TextInputCell.swift */; };
 		14BBA37A2DCB142900AD7BAC /* ColorPickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BBA3792DCB142900AD7BAC /* ColorPickerCell.swift */; };
 		14BBA37C2DCB2EE900AD7BAC /* TagPreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BBA37B2DCB2EE900AD7BAC /* TagPreviewCell.swift */; };
+		14CC8A462DCF04970062F8BA /* FastEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CC8A452DCF04970062F8BA /* FastEditorViewController.swift */; };
 		14D272702DC0709300267572 /* CalendarBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D2726F2DC0709300267572 /* CalendarBaseViewController.swift */; };
 		14D272722DC0712A00267572 /* AppColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D272712DC0712A00267572 /* AppColor.swift */; };
 		14D272792DC0716E00267572 /* CalendarViewController+CellRegistration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D272732DC0716E00267572 /* CalendarViewController+CellRegistration.swift */; };
@@ -102,6 +103,7 @@
 		14BBA3772DCB101100AD7BAC /* TextInputCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputCell.swift; sourceTree = "<group>"; };
 		14BBA3792DCB142900AD7BAC /* ColorPickerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerCell.swift; sourceTree = "<group>"; };
 		14BBA37B2DCB2EE900AD7BAC /* TagPreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPreviewCell.swift; sourceTree = "<group>"; };
+		14CC8A452DCF04970062F8BA /* FastEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastEditorViewController.swift; sourceTree = "<group>"; };
 		14CD76AD2DBE6BA10035DF1F /* Tag Day.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Tag Day.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		14D2726F2DC0709300267572 /* CalendarBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarBaseViewController.swift; sourceTree = "<group>"; };
 		14D272712DC0712A00267572 /* AppColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColor.swift; sourceTree = "<group>"; };
@@ -228,6 +230,7 @@
 				14ACBE552DBFAD2E0056B1FD /* BaseViewController */,
 				14B239C32DBF75F70007152C /* Calendar */,
 				14AA3E092DCDB32A00E1F4F8 /* Day Detail */,
+				14CC8A472DCF14240062F8BA /* Fast Editor */,
 				14AD287C2DC5B6E70018DAF3 /* Book */,
 				14AD287F2DC5B7090018DAF3 /* Tag */,
 				14D272BC2DC0884E00267572 /* More */,
@@ -256,6 +259,14 @@
 				14D272922DC071B000267572 /* View */,
 			);
 			path = Calendar;
+			sourceTree = "<group>";
+		};
+		14CC8A472DCF14240062F8BA /* Fast Editor */ = {
+			isa = PBXGroup;
+			children = (
+				14CC8A452DCF04970062F8BA /* FastEditorViewController.swift */,
+			);
+			path = "Fast Editor";
 			sourceTree = "<group>";
 		};
 		14CD76A42DBE6BA10035DF1F = {
@@ -505,6 +516,7 @@
 				14D272B02DC073EB00267572 /* TimestampedRecord.swift in Sources */,
 				14D272BD2DC0884E00267572 /* SpecificationsViewController.swift in Sources */,
 				14D272BE2DC0884E00267572 /* SettingOptionsViewController.swift in Sources */,
+				14CC8A462DCF04970062F8BA /* FastEditorViewController.swift in Sources */,
 				14D272BF2DC0884E00267572 /* MoreViewController.swift in Sources */,
 				14AD28812DC5BCC50018DAF3 /* BookCell.swift in Sources */,
 				14D272B12DC073EB00267572 /* Date+Extension.swift in Sources */,

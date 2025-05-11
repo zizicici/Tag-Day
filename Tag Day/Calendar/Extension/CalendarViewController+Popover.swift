@@ -8,10 +8,15 @@
 import UIKit
 
 extension CalendarViewController {
-    func showPopoverView(at sourceView: UIView, contentViewController: UIViewController, width: CGFloat = 280.0) {
+    func showPopoverView(at sourceView: UIView, contentViewController: UIViewController, width: CGFloat = 280.0, height: CGFloat? = nil) {
         let nav = contentViewController
-        let size = contentViewController.view.systemLayoutSizeFitting(CGSize(width: width, height: 1000), withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
-        nav.preferredContentSize = size
+        if let height = height {
+            nav.preferredContentSize = CGSize(width: width, height: height)
+        } else {
+            let size = contentViewController.view.systemLayoutSizeFitting(CGSize(width: width, height: 1000), withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
+            nav.preferredContentSize = size
+        }
+
         nav.modalPresentationStyle = .popover
 
         if let pres = nav.presentationController {

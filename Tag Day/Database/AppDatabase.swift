@@ -342,6 +342,22 @@ extension AppDatabase {
         NotificationCenter.default.post(Notification(name: Notification.Name.DatabaseUpdated))
         return true
     }
+    
+    func resetDayRecord(bookID: Int64, day: Int64) -> Bool {
+        do {
+            _ = try dbWriter?.write{ db in
+                let bookIDColumn = DayRecord.Columns.bookID
+                let dayColumn = DayRecord.Columns.day
+                try DayRecord.filter(bookIDColumn == bookID && dayColumn == day).deleteAll(db)
+            }
+        }
+        catch {
+            print(error)
+            return false
+        }
+        NotificationCenter.default.post(Notification(name: Notification.Name.DatabaseUpdated))
+        return true
+    }
 }
 
 extension AppDatabase {

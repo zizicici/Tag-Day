@@ -11,6 +11,38 @@ import Toast
 import ZCCalendar
 
 class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate {
+    enum EditMode {
+        case normal
+        case overwrite
+        
+        var image: String {
+            switch self {
+            case .normal:
+                return "pencil"
+            case .overwrite:
+                return "bolt"
+            }
+        }
+        
+        var title: String {
+            switch self {
+            case .normal:
+                return String(localized: "editMode.normal")
+            case .overwrite:
+                return String(localized: "editMode.overwrite")
+            }
+        }
+        
+        var subtitle: String? {
+            switch self {
+            case .normal:
+                return String(localized: "editMode.normal.hint")
+            case .overwrite:
+                return String(localized: "editMode.overwrite.hint")
+            }
+        }
+    }
+    
     static let monthTagElementKind: String = "monthTagElementKind"
     
     // UI
@@ -39,6 +71,16 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     // Data
     
     internal var dataSource: UICollectionViewDiffableDataSource<Section, Item>! = nil
+    private var book: Book? {
+        didSet {
+            if oldValue?.id != book?.id {
+                // Book Changed
+                switchEditMode(to: .normal)
+            }
+        }
+    }
+    private var tags: [Tag] = []
+    private var records: [DayRecord] = []
     
     // Handler
     
@@ -54,6 +96,8 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
             }
         }
     }
+    
+    private var editMode: EditMode = .normal
     
     // Debounce
     private var reloadDataDebounce: Debounce<Int>!
@@ -97,9 +141,9 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         
         addGestures()
         
-        moreButton = UIBarButtonItem(image: UIImage(systemName: "ellipsis", withConfiguration: UIImage.SymbolConfiguration(weight: .thin)), style: .plain, target: self, action: #selector(moreAction))
-//        updateMoreMenu()
-        navigationItem.rightBarButtonItem = moreButton
+        moreButton = UIBarButtonItem(image: UIImage(systemName: "ellipsis", withConfiguration: UIImage.SymbolConfiguration(weight: .medium)), style: .plain, target: nil, action: nil)
+        moreButton?.menu = getMoreMenu()
+        navigationItem.rightBarButtonItems = [moreButton].compactMap{ $0 }
         
         yearPickerButton.configurationUpdateHandler = { [weak self] button in
             guard let self = self else { return }
@@ -176,10 +220,18 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     }
     
     private func tap(in targetView: UIView, for blockItem: BlockItem) {
-        guard let current = DataManager.shared.currentBook else { return }
-        let detailViewController = DayDetailViewController(day: blockItem.day, book: current)
-        let nav = NavigationController(rootViewController: detailViewController)
-        showPopoverView(at: targetView, contentViewController: nav, width: view.frame.width - 50.0)
+        guard let current = self.book else { return }
+        switch editMode {
+        case .normal:
+            let detailViewController = DayDetailViewController(day: blockItem.day, book: current)
+            let nav = NavigationController(rootViewController: detailViewController)
+            showPopoverView(at: targetView, contentViewController: nav, width: view.frame.width - 50.0)
+        case .overwrite:
+            let detailViewController = FastEditorViewController(day: blockItem.day, book: current)
+            detailViewController.delegate = self
+            let nav = NavigationController(rootViewController: detailViewController)
+            showPopoverView(at: targetView, contentViewController: nav, width: 200.0, height: 300.0)
+        }
     }
     
     private func createLayout() -> UICollectionViewLayout {
@@ -255,8 +307,9 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     }
     
     private func applyData() {
-        let tags = DataManager.shared.activeTags
-        let records = DataManager.shared.dayRecords
+        book = DataManager.shared.currentBook
+        tags = DataManager.shared.activeTags
+        records = DataManager.shared.dayRecords
         if let snapshot = displayHandler.getSnapshot(tags: tags, records: records) {
             dataSource.apply(snapshot, animatingDifferences: true) { [weak self] in
                 guard let self = self, !self.didScrollToday else { return }
@@ -290,6 +343,28 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         moreButton?.menu = UIMenu(title: "", options: .displayInline, children: children)
     }
     
+    func getMoreMenu() -> UIMenu {
+        var children: [UIMenuElement] = []
+        
+        let editActions: [UIAction] = [EditMode.normal, EditMode.overwrite].map { mode in
+            return UIAction(title: mode.title, subtitle: mode.subtitle, image: UIImage(systemName: mode.image), state: editMode == mode ? .on : .off) { [weak self] _ in
+                self?.switchEditMode(to: mode)
+            }
+        }
+        
+        let editModeDivider = UIMenu(title: String(localized: "editMode.title"), subtitle: editMode.title, options: [], children: editActions)
+        children.append(editModeDivider)
+        
+        let moreAction = UIAction(title: String(localized: "controller.more.title"), image: UIImage(systemName: "ellipsis.circle")) { [weak self] _ in
+            self?.moreAction()
+        }
+        let moreDivider = UIMenu(title: "", options: .displayInline, children: [moreAction])
+
+        children.append(moreDivider)
+        
+        return UIMenu(children: children)
+    }
+    
     @objc
     func moreAction() {
         navigationController?.present(NavigationController(rootViewController: MoreViewController()), animated: true)
@@ -301,5 +376,41 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
             self?.displayHandler.updateSelectedYear(to: selectYear)
         }
         showPopoverView(at: sender, contentViewController: picker, width: 140)
+    }
+    
+    func switchEditMode(to editMode: EditMode) {
+        self.editMode = editMode
+        moreButton?.menu = getMoreMenu()
+    }
+}
+
+extension CalendarViewController: FastEditorNavigator {
+    func reset(day: GregorianDay, tag: Tag?) {
+        guard let bookID = book?.id else { return }
+        let result = DataManager.shared.resetDayRecord(bookID: bookID, day: Int64(day.julianDay))
+        if result, let tag = tag, let tagID = tag.id {
+            _ = DataManager.shared.add(dayRecord: DayRecord(bookID: bookID, tagID: tagID, day: Int64(day.julianDay)))
+        }
+        
+        // Dismiss
+        presentedViewController?.dismiss(animated: true)
+        
+        // Find next
+        let nextItem = self.dataSource.snapshot().itemIdentifiers.first { item in
+            switch item {
+            case .month(_):
+                return false
+            case .block(let blockItem):
+                return blockItem.day == day + 1
+            case .invisible(_):
+                return false
+            }
+        }
+        if let item = nextItem {
+            if let index = self.dataSource.indexPath(for: item) {
+                collectionView.scrollToItem(at: index, at: .centeredVertically, animated: true)
+                tap(in: index)
+            }
+        }
     }
 }

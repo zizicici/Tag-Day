@@ -10,7 +10,7 @@ import SnapKit
 import ZCCalendar
 
 fileprivate extension UIConfigurationStateCustomKey {
-    static let detailItem = UIConfigurationStateCustomKey("com.zizicici.tagday.detail.cell.item")
+    static let dayDetailItem = UIConfigurationStateCustomKey("com.zizicici.tagday.detail.cell.item")
 }
 
 struct DayDetailItem: Hashable {
@@ -21,8 +21,8 @@ struct DayDetailItem: Hashable {
 
 private extension UICellConfigurationState {
     var detailItem: DayDetailItem? {
-        set { self[.detailItem] = newValue }
-        get { return self[.detailItem] as? DayDetailItem }
+        set { self[.dayDetailItem] = newValue }
+        get { return self[.dayDetailItem] as? DayDetailItem }
     }
 }
 
