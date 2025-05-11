@@ -227,10 +227,10 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
             let nav = NavigationController(rootViewController: detailViewController)
             showPopoverView(at: targetView, contentViewController: nav, width: view.frame.width - 50.0)
         case .overwrite:
-            let detailViewController = FastEditorViewController(day: blockItem.day, book: current)
+            let detailViewController = FastEditorViewController(day: blockItem.day, book: current, editMode: .overwrite)
             detailViewController.delegate = self
             let nav = NavigationController(rootViewController: detailViewController)
-            showPopoverView(at: targetView, contentViewController: nav, width: 200.0, height: 300.0)
+            showPopoverView(at: targetView, contentViewController: nav, width: 240.0, height: 300.0)
         }
     }
     
@@ -385,6 +385,10 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
 }
 
 extension CalendarViewController: FastEditorNavigator {
+    func add(day: GregorianDay, tag: Tag) {
+        //
+    }
+    
     func reset(day: GregorianDay, tag: Tag?) {
         guard let bookID = book?.id else { return }
         let result = DataManager.shared.resetDayRecord(bookID: bookID, day: Int64(day.julianDay))

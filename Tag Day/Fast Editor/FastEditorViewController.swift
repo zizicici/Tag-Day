@@ -11,28 +11,31 @@ import ZCCalendar
 
 protocol FastEditorNavigator: NSObjectProtocol {
     func reset(day: GregorianDay, tag: Tag?)
+    func add(day: GregorianDay, tag: Tag)
 }
 
 class FastEditorViewController: UIViewController {
-    var day: GregorianDay!
-    var book: Book!
-    var tags: [Tag] = []
-    var records: [DayRecord] = []
+    private var day: GregorianDay!
+    private var book: Book!
+    private var tags: [Tag] = []
+    
+    enum EditMode {
+        case normal
+        case overwrite
+    }
+    
+    private var editMode: EditMode!
     
     enum Section: Hashable {
         case tag
-        case delete
-        case cancel
     }
     
     enum Item: Hashable {
         case tag(Tag)
-        case delete
-        case cancel
     }
     
-    var dataSource: UICollectionViewDiffableDataSource<Section, Item>! = nil
-    var collectionView: UICollectionView! = nil
+    private var dataSource: UICollectionViewDiffableDataSource<Section, Item>! = nil
+    private var collectionView: UICollectionView! = nil
     
     weak var delegate: FastEditorNavigator?
     
@@ -44,11 +47,12 @@ class FastEditorViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    convenience init(day: GregorianDay, book: Book) {
+    convenience init(day: GregorianDay, book: Book, editMode: EditMode) {
         self.init(nibName: nil, bundle: nil)
         
         self.day = day
         self.book = book
+        self.editMode = editMode
     }
     
     override func viewDidLoad() {
@@ -56,11 +60,32 @@ class FastEditorViewController: UIViewController {
         
         view.backgroundColor = AppColor.background
         
-        self.title = day.formatString()
+        if editMode == .overwrite {
+            self.title = day.formatString()
+        } else {
+            self.title = String(localized: "dayDetail.new")
+        }
         
         configureCollectionView()
         configureDataSource()
         reloadData()
+        
+        var items: [UIBarButtonItem] = []
+
+        if editMode == .overwrite {
+            let resetItem = UIBarButtonItem(title: String(localized: "fastEditor.reset"), style: .plain, target: self, action: #selector(resetAction))
+            resetItem.tintColor = .systemRed
+            items.append(resetItem)
+        }
+        
+        items.append(.flexibleSpace())
+        
+        let cancelItem = UIBarButtonItem(title: String(localized: "button.cancel"), style: .done, target: self, action: #selector(dismissAction))
+        cancelItem.tintColor = AppColor.main
+        items.append(cancelItem)
+
+        toolbarItems = items
+        navigationController?.setToolbarHidden(false, animated: false)
     }
     
     private func configureCollectionView() {
@@ -79,7 +104,7 @@ class FastEditorViewController: UIViewController {
             switch item {
             case .tag(let tag):
                 cell.didSelectClosure = {
-                    self.delegate?.reset(day: self.day, tag: tag)
+                    self.tap(tag: tag)
                 }
                 cell.update(with: tag)
             default:
@@ -87,34 +112,8 @@ class FastEditorViewController: UIViewController {
             }
         }
         
-        let actionCellRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, Item> { (cell, indexPath, item) in
-            switch item {
-            case .tag:
-                return
-            case .cancel:
-                var content = UIListContentConfiguration.valueCell()
-                content.text = String(localized: "button.cancel")
-                content.textProperties.alignment = .center
-                content.textProperties.color = AppColor.main
-                cell.contentConfiguration = content
-                cell.backgroundConfiguration?.cornerRadius = 10.0
-            case .delete:
-                var content = UIListContentConfiguration.valueCell()
-                content.text = String(localized: "fastEditor.reset")
-                content.textProperties.alignment = .center
-                content.textProperties.color = UIColor.systemRed
-                cell.contentConfiguration = content
-                cell.backgroundConfiguration?.cornerRadius = 10.0
-            }
-        }
-        
         dataSource = UICollectionViewDiffableDataSource<Section, Item>(collectionView: collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
-            switch itemIdentifier {
-            case .tag:
-                return collectionView.dequeueConfiguredReusableCell(using: tagCellRegistration, for: indexPath, item: itemIdentifier)
-            case .cancel, .delete:
-                return collectionView.dequeueConfiguredReusableCell(using: actionCellRegistration, for: indexPath, item: itemIdentifier)
-            }
+            return collectionView.dequeueConfiguredReusableCell(using: tagCellRegistration, for: indexPath, item: itemIdentifier)
         })
     }
     
@@ -122,25 +121,33 @@ class FastEditorViewController: UIViewController {
     private func reloadData() {
         guard let bookID = book.id else { return }
         self.tags = (try? DataManager.shared.fetchAllTags(bookID: bookID)) ?? []
-        self.records = (try? DataManager.shared.fetchAllDayRecords(bookID: bookID, day: Int64(self.day.julianDay))) ?? []
         
         var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
         snapshot.appendSections([.tag])
         snapshot.appendItems(tags.map{ .tag($0) }, toSection: .tag)
-        snapshot.appendSections([.delete])
-        snapshot.appendItems([.delete], toSection: .delete)
-        snapshot.appendSections([.cancel])
-        snapshot.appendItems([.cancel], toSection: .cancel)
 
         dataSource.apply(snapshot, animatingDifferences: true)
     }
     
+    @objc
     func dismissAction() {
         self.dismiss(animated: true)
     }
     
+    @objc
     func resetAction() {
         delegate?.reset(day: day, tag: nil)
+    }
+    
+    func tap(tag: Tag) {
+        switch editMode {
+        case .normal:
+            delegate?.add(day: day, tag: tag)
+        case .overwrite:
+            delegate?.reset(day: day, tag: tag)
+        case .none:
+            break
+        }
     }
 }
 
@@ -148,36 +155,21 @@ extension FastEditorViewController {
     func createLayout() -> UICollectionViewLayout {
         let config = UICollectionViewCompositionalLayoutConfiguration()
         config.scrollDirection = .vertical
-        let layout = UICollectionViewCompositionalLayout(sectionProvider: { [weak self] index, environment in
-            guard let self = self else { return nil }
-            let sectionType = self.dataSource.sectionIdentifier(for: index)
-            switch sectionType {
-            case .tag:
-                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                     heightDimension: .estimated(40))
-                let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        let layout = UICollectionViewCompositionalLayout(sectionProvider: { index, environment in
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                 heightDimension: .estimated(40))
+            let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                      heightDimension: .estimated(40))
-                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
-                                                                 subitems: [item])
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                  heightDimension: .estimated(40))
+            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
+                                                             subitems: [item])
 
-                let section = NSCollectionLayoutSection(group: group)
-                section.interGroupSpacing = 10.0
-                section.contentInsets = NSDirectionalEdgeInsets(top: 8.0, leading: 10.0, bottom: 8.0, trailing: 10.0)
-                
-                return section
-            case .delete, .cancel:
-                var configuration = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
-                configuration.separatorConfiguration = UIListSeparatorConfiguration(listAppearance: .insetGrouped)
-                configuration.backgroundColor = AppColor.background
-                configuration.headerTopPadding = 0.0
-                let section = NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: environment)
-                section.contentInsets = NSDirectionalEdgeInsets(top: 8.0, leading: 10.0, bottom: 8.0, trailing: 10.0)
-                return section
-            case nil:
-                return nil
-            }
+            let section = NSCollectionLayoutSection(group: group)
+            section.interGroupSpacing = 10.0
+            section.contentInsets = NSDirectionalEdgeInsets(top: 8.0, leading: 10.0, bottom: 8.0, trailing: 10.0)
+            
+            return section
 
         }, configuration: config)
         
@@ -192,10 +184,6 @@ extension FastEditorViewController: UICollectionViewDelegate {
         switch item {
         case .tag:
             break
-        case .delete:
-            resetAction()
-        case .cancel:
-            dismissAction()
         case nil:
             break
         }

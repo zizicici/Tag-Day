@@ -34,8 +34,9 @@ class DayDetailViewController: UIViewController {
             return outgoing
         })
         configuration.baseForegroundColor = AppColor.main
+        configuration.title = String(localized: "dayDetail.new")
+        configuration.contentInsets.leading = 0.0
         let button = UIButton(configuration: configuration)
-        button.showsMenuAsPrimaryAction = true
         return button
     }()
     
@@ -68,12 +69,17 @@ class DayDetailViewController: UIViewController {
         configureDataSource()
         reloadData()
         
-        let newBarItem = UIBarButtonItem(systemItem: .add, menu: getMenu())
-        newBarItem.tintColor = AppColor.main
-        toolbarItems = [newBarItem]
+        let newBarItem = UIBarButtonItem(customView: newButton)
+        newButton.addTarget(self, action: #selector(newAction), for: .touchUpInside)
+        toolbarItems = [newBarItem, .flexibleSpace()]
         navigationController?.setToolbarHidden(false, animated: false)
         
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .DatabaseUpdated, object: nil)
+        
+        // Auto Display Fast Editor
+        if records.count == 0 {
+            newAction()
+        }
     }
     
     private func configureCollectionView() {
@@ -117,6 +123,14 @@ class DayDetailViewController: UIViewController {
         snapshot.appendItems(items, toSection: .main)
 
         dataSource.apply(snapshot, animatingDifferences: true)
+    }
+    
+    @objc
+    private func newAction() {
+        let detailViewController = FastEditorViewController(day: day, book: book, editMode: .normal)
+        detailViewController.delegate = self
+        let nav = NavigationController(rootViewController: detailViewController)
+        showPopoverView(at: newButton, contentViewController: nav, width: 240.0, height: 300.0)
     }
 }
 
@@ -190,19 +204,54 @@ extension DayDetailViewController {
         alertController.addAction(cancelAction)
         present(alertController, animated: true)
     }
+}
+
+extension DayDetailViewController: FastEditorNavigator {
+    func reset(day: GregorianDay, tag: Tag?) {
+        //
+    }
     
-    func getMenu() -> UIMenu {
-        let recordDay = day.julianDay
-        var children: [UIMenuElement] = []
-        children = tags.reversed().map({ tag in
-            return UIAction(title: tag.title, subtitle: tag.subtitle, image: UIImage(systemName: "square.fill")?.withTintColor(UIColor(string: tag.color) ?? .white, renderingMode: .alwaysOriginal)) { [weak self] _ in
-                guard let bookID = self?.book.id,let tagID = tag.id else {
-                    return
-                }
-                let newRecord = DayRecord(bookID: bookID, tagID: tagID, day: Int64(recordDay))
-                _ = DataManager.shared.add(dayRecord: newRecord)
-            }
-        })
-        return UIMenu(title: "", children: children)
+    func add(day: GregorianDay, tag: Tag) {
+        guard let bookID = book.id, let tagID = tag.id else {
+            return
+        }
+        let newRecord = DayRecord(bookID: bookID, tagID: tagID, day: Int64(day.julianDay))
+        _ = DataManager.shared.add(dayRecord: newRecord)
+        // Dismiss
+        presentedViewController?.dismiss(animated: true)
+    }
+}
+
+extension DayDetailViewController {
+    func showPopoverView(at sourceView: UIView, contentViewController: UIViewController, width: CGFloat = 280.0, height: CGFloat? = nil) {
+        let nav = contentViewController
+        if let height = height {
+            nav.preferredContentSize = CGSize(width: width, height: height)
+        } else {
+            let size = contentViewController.view.systemLayoutSizeFitting(CGSize(width: width, height: 1000), withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
+            nav.preferredContentSize = size
+        }
+        
+        nav.modalPresentationStyle = .popover
+        
+        if let pres = nav.presentationController {
+            pres.delegate = self
+        }
+        present(nav, animated: true, completion: nil)
+        
+        if let popover = nav.popoverPresentationController {
+            popover.sourceView = sourceView
+            popover.permittedArrowDirections = [.up, .down]
+        }
+    }
+}
+
+extension DayDetailViewController: UIPopoverPresentationControllerDelegate {
+    func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
+        return .none
+    }
+    
+    func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
+        return true
     }
 }
