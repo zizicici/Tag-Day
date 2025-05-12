@@ -1,5 +1,5 @@
 //
-//  DayDetailViewController.swift
+//  DayRecordListViewController.swift
 //  Tag Day
 //
 //  Created by Ci Zi on 2025/5/9.
@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import ZCCalendar
 
-class DayDetailViewController: UIViewController {
+class DayRecordListViewController: UIViewController {
     var day: GregorianDay!
     var book: Book!
     var tags: [Tag] = []
@@ -94,7 +94,7 @@ class DayDetailViewController: UIViewController {
     }
     
     private func configureDataSource() {
-        let cellRegistration = UICollectionView.CellRegistration<DayDetailCell, Item> { [weak self] (cell, indexPath, item) in
+        let cellRegistration = UICollectionView.CellRegistration<DayRecordListCell, Item> { [weak self] (cell, indexPath, item) in
             guard let self = self else { return }
             cell.delegate = self
             cell.update(with: .init(day: self.day, tags: self.tags, record: item.record))
@@ -135,7 +135,7 @@ class DayDetailViewController: UIViewController {
     }
 }
 
-extension DayDetailViewController {
+extension DayRecordListViewController {
     func createLayout() -> UICollectionViewLayout {
         let config = UICollectionViewCompositionalLayoutConfiguration()
         config.scrollDirection = .vertical
@@ -160,13 +160,13 @@ extension DayDetailViewController {
     }
 }
 
-extension DayDetailViewController: UICollectionViewDelegate {
+extension DayRecordListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
     }
 }
 
-extension DayDetailViewController: DayDetailCellDelegate {
+extension DayRecordListViewController: DayRecordListCellDelegate {
     func handle(tag: Tag, in button: UIButton, for record: DayRecord) {
         let detailViewController = FastEditorViewController(day: day, book: book, editMode: .replace(tag, record))
         detailViewController.delegate = self
@@ -188,7 +188,7 @@ extension DayDetailViewController: DayDetailCellDelegate {
     }
 }
 
-extension DayDetailViewController {
+extension DayRecordListViewController {
     func showDeleteAlert(for record: DayRecord) {
         guard record.id != nil else { return }
         
@@ -206,7 +206,7 @@ extension DayDetailViewController {
     }
 }
 
-extension DayDetailViewController: FastEditorNavigator {
+extension DayRecordListViewController: FastEditorNavigator {
     func reset(day: GregorianDay, tag: Tag?) {
         //
     }
@@ -235,7 +235,7 @@ extension DayDetailViewController: FastEditorNavigator {
     }
 }
 
-extension DayDetailViewController {
+extension DayRecordListViewController {
     func showPopoverView(at sourceView: UIView, contentViewController: UIViewController, width: CGFloat = 280.0, height: CGFloat? = nil) {
         let nav = contentViewController
         if let height = height {
@@ -259,7 +259,7 @@ extension DayDetailViewController {
     }
 }
 
-extension DayDetailViewController: UIPopoverPresentationControllerDelegate {
+extension DayRecordListViewController: UIPopoverPresentationControllerDelegate {
     func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
         return .none
     }

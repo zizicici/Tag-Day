@@ -229,7 +229,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
                 let nav = NavigationController(rootViewController: detailViewController)
                 showPopoverView(at: targetView, contentViewController: nav, width: 240.0, height: 300.0)
             } else {
-                let detailViewController = DayDetailViewController(day: blockItem.day, book: current)
+                let detailViewController = DayRecordListViewController(day: blockItem.day, book: current)
                 let nav = NavigationController(rootViewController: detailViewController)
                 showPopoverView(at: targetView, contentViewController: nav, width: 280.0, height: 400.0)
             }

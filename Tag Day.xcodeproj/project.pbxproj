@@ -14,8 +14,8 @@
 		14833D372DC50420001B61D5 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D362DC50420001B61D5 /* Tag.swift */; };
 		14833D392DC504B9001B61D5 /* DayRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D382DC504B9001B61D5 /* DayRecord.swift */; };
 		14833D3B2DC5179F001B61D5 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D3A2DC5179F001B61D5 /* UIColor+Extension.swift */; };
-		14AA3E072DCDB31300E1F4F8 /* DayDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AA3E062DCDB31300E1F4F8 /* DayDetailViewController.swift */; };
-		14AA3E0B2DCDF3BE00E1F4F8 /* DayDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AA3E0A2DCDF3BE00E1F4F8 /* DayDetailCell.swift */; };
+		14AA3E072DCDB31300E1F4F8 /* DayRecordListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AA3E062DCDB31300E1F4F8 /* DayRecordListViewController.swift */; };
+		14AA3E0B2DCDF3BE00E1F4F8 /* DayRecordListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AA3E0A2DCDF3BE00E1F4F8 /* DayRecordListCell.swift */; };
 		14ACBE562DBFAD2E0056B1FD /* TabbarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14ACBE542DBFAD2E0056B1FD /* TabbarController.swift */; };
 		14ACBE572DBFAD2E0056B1FD /* NavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14ACBE532DBFAD2E0056B1FD /* NavigationViewController.swift */; };
 		14AD287B2DC5B6DD0018DAF3 /* BookListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AD287A2DC5B6DD0018DAF3 /* BookListViewController.swift */; };
@@ -81,8 +81,8 @@
 		14833D362DC50420001B61D5 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
 		14833D382DC504B9001B61D5 /* DayRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRecord.swift; sourceTree = "<group>"; };
 		14833D3A2DC5179F001B61D5 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
-		14AA3E062DCDB31300E1F4F8 /* DayDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayDetailViewController.swift; sourceTree = "<group>"; };
-		14AA3E0A2DCDF3BE00E1F4F8 /* DayDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayDetailCell.swift; sourceTree = "<group>"; };
+		14AA3E062DCDB31300E1F4F8 /* DayRecordListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRecordListViewController.swift; sourceTree = "<group>"; };
+		14AA3E0A2DCDF3BE00E1F4F8 /* DayRecordListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRecordListCell.swift; sourceTree = "<group>"; };
 		14ACBE532DBFAD2E0056B1FD /* NavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationViewController.swift; sourceTree = "<group>"; };
 		14ACBE542DBFAD2E0056B1FD /* TabbarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbarController.swift; sourceTree = "<group>"; };
 		14AD287A2DC5B6DD0018DAF3 /* BookListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookListViewController.swift; sourceTree = "<group>"; };
@@ -157,7 +157,7 @@
 		14AA3E092DCDB32A00E1F4F8 /* DayRecord */ = {
 			isa = PBXGroup;
 			children = (
-				14AA3E062DCDB31300E1F4F8 /* DayDetailViewController.swift */,
+				14AA3E062DCDB31300E1F4F8 /* DayRecordListViewController.swift */,
 				14AA3E0C2DCE3B5200E1F4F8 /* View */,
 			);
 			path = DayRecord;
@@ -166,7 +166,7 @@
 		14AA3E0C2DCE3B5200E1F4F8 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				14AA3E0A2DCDF3BE00E1F4F8 /* DayDetailCell.swift */,
+				14AA3E0A2DCDF3BE00E1F4F8 /* DayRecordListCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -489,7 +489,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				14BBA3762DCB0B0700AD7BAC /* TagDetailViewController.swift in Sources */,
-				14AA3E072DCDB31300E1F4F8 /* DayDetailViewController.swift in Sources */,
+				14AA3E072DCDB31300E1F4F8 /* DayRecordListViewController.swift in Sources */,
 				14D272A12DC0736A00267572 /* UIViewController+Extension.swift in Sources */,
 				14AD288D2DC5E2DE0018DAF3 /* MainViewController.swift in Sources */,
 				14833D372DC50420001B61D5 /* Tag.swift in Sources */,
@@ -540,7 +540,7 @@
 				14B239B72DBF13F30007152C /* CalendarViewController.swift in Sources */,
 				14AD28842DC5C0D20018DAF3 /* HeaderReuseView.swift in Sources */,
 				14833D3B2DC5179F001B61D5 /* UIColor+Extension.swift in Sources */,
-				14AA3E0B2DCDF3BE00E1F4F8 /* DayDetailCell.swift in Sources */,
+				14AA3E0B2DCDF3BE00E1F4F8 /* DayRecordListCell.swift in Sources */,
 				14B239B82DBF13F30007152C /* AppDelegate.swift in Sources */,
 				14D272702DC0709300267572 /* CalendarBaseViewController.swift in Sources */,
 			);
