@@ -154,13 +154,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		14AA3E092DCDB32A00E1F4F8 /* Day Detail */ = {
+		14AA3E092DCDB32A00E1F4F8 /* DayRecord */ = {
 			isa = PBXGroup;
 			children = (
 				14AA3E062DCDB31300E1F4F8 /* DayDetailViewController.swift */,
 				14AA3E0C2DCE3B5200E1F4F8 /* View */,
 			);
-			path = "Day Detail";
+			path = DayRecord;
 			sourceTree = "<group>";
 		};
 		14AA3E0C2DCE3B5200E1F4F8 /* View */ = {
@@ -229,10 +229,10 @@
 				14AD288C2DC5E2DE0018DAF3 /* MainViewController.swift */,
 				14ACBE552DBFAD2E0056B1FD /* BaseViewController */,
 				14B239C32DBF75F70007152C /* Calendar */,
-				14AA3E092DCDB32A00E1F4F8 /* Day Detail */,
 				14CC8A472DCF14240062F8BA /* Fast Editor */,
 				14AD287C2DC5B6E70018DAF3 /* Book */,
 				14AD287F2DC5B7090018DAF3 /* Tag */,
+				14AA3E092DCDB32A00E1F4F8 /* DayRecord */,
 				14D272BC2DC0884E00267572 /* More */,
 				14D272AD2DC073EB00267572 /* Database */,
 				14D2729E2DC072D700267572 /* Settings */,
