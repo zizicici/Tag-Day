@@ -40,6 +40,12 @@
 		14BBA3782DCB101100AD7BAC /* TextInputCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BBA3772DCB101100AD7BAC /* TextInputCell.swift */; };
 		14BBA37A2DCB142900AD7BAC /* ColorPickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BBA3792DCB142900AD7BAC /* ColorPickerCell.swift */; };
 		14BBA37C2DCB2EE900AD7BAC /* TagPreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BBA37B2DCB2EE900AD7BAC /* TagPreviewCell.swift */; };
+		14C7134B2DD21DF8007527C5 /* GetRecordsIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C7134A2DD21DF8007527C5 /* GetRecordsIntent.swift */; };
+		14C7134E2DD22F86007527C5 /* RecordEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C7134D2DD22F86007527C5 /* RecordEntity.swift */; };
+		14C713502DD22F9B007527C5 /* BookEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C7134F2DD22F9B007527C5 /* BookEntity.swift */; };
+		14C713532DD22FDC007527C5 /* FetchError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C713522DD22FDC007527C5 /* FetchError.swift */; };
+		14C713552DD23064007527C5 /* CheckRecordIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C713542DD23064007527C5 /* CheckRecordIntent.swift */; };
+		14C713572DD2310C007527C5 /* TagEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C713562DD2310C007527C5 /* TagEntity.swift */; };
 		14CC8A462DCF04970062F8BA /* FastEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CC8A452DCF04970062F8BA /* FastEditorViewController.swift */; };
 		14D272702DC0709300267572 /* CalendarBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D2726F2DC0709300267572 /* CalendarBaseViewController.swift */; };
 		14D272722DC0712A00267572 /* AppColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D272712DC0712A00267572 /* AppColor.swift */; };
@@ -103,6 +109,12 @@
 		14BBA3772DCB101100AD7BAC /* TextInputCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputCell.swift; sourceTree = "<group>"; };
 		14BBA3792DCB142900AD7BAC /* ColorPickerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerCell.swift; sourceTree = "<group>"; };
 		14BBA37B2DCB2EE900AD7BAC /* TagPreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPreviewCell.swift; sourceTree = "<group>"; };
+		14C7134A2DD21DF8007527C5 /* GetRecordsIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetRecordsIntent.swift; sourceTree = "<group>"; };
+		14C7134D2DD22F86007527C5 /* RecordEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordEntity.swift; sourceTree = "<group>"; };
+		14C7134F2DD22F9B007527C5 /* BookEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookEntity.swift; sourceTree = "<group>"; };
+		14C713522DD22FDC007527C5 /* FetchError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchError.swift; sourceTree = "<group>"; };
+		14C713542DD23064007527C5 /* CheckRecordIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckRecordIntent.swift; sourceTree = "<group>"; };
+		14C713562DD2310C007527C5 /* TagEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagEntity.swift; sourceTree = "<group>"; };
 		14CC8A452DCF04970062F8BA /* FastEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastEditorViewController.swift; sourceTree = "<group>"; };
 		14CD76AD2DBE6BA10035DF1F /* Tag Day.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Tag Day.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		14D2726F2DC0709300267572 /* CalendarBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarBaseViewController.swift; sourceTree = "<group>"; };
@@ -236,6 +248,7 @@
 				14D272BC2DC0884E00267572 /* More */,
 				14D272AD2DC073EB00267572 /* Database */,
 				14D2729E2DC072D700267572 /* Settings */,
+				14C7134C2DD21E31007527C5 /* Intent */,
 				14D2729C2DC0721000267572 /* Extension */,
 				14B239AF2DBF13F30007152C /* Assets.xcassets */,
 				14B239B02DBF13F30007152C /* Info.plist */,
@@ -259,6 +272,27 @@
 				14D272922DC071B000267572 /* View */,
 			);
 			path = Calendar;
+			sourceTree = "<group>";
+		};
+		14C7134C2DD21E31007527C5 /* Intent */ = {
+			isa = PBXGroup;
+			children = (
+				14C7134A2DD21DF8007527C5 /* GetRecordsIntent.swift */,
+				14C713542DD23064007527C5 /* CheckRecordIntent.swift */,
+				14C713522DD22FDC007527C5 /* FetchError.swift */,
+				14C713512DD22FA2007527C5 /* Entity */,
+			);
+			path = Intent;
+			sourceTree = "<group>";
+		};
+		14C713512DD22FA2007527C5 /* Entity */ = {
+			isa = PBXGroup;
+			children = (
+				14C7134D2DD22F86007527C5 /* RecordEntity.swift */,
+				14C7134F2DD22F9B007527C5 /* BookEntity.swift */,
+				14C713562DD2310C007527C5 /* TagEntity.swift */,
+			);
+			path = Entity;
 			sourceTree = "<group>";
 		};
 		14CC8A472DCF14240062F8BA /* Fast Editor */ = {
@@ -499,10 +533,13 @@
 				14D2729F2DC072D700267572 /* Settings.swift in Sources */,
 				14ACBE572DBFAD2E0056B1FD /* NavigationViewController.swift in Sources */,
 				14D272862DC0719400267572 /* LayoutGenerator.swift in Sources */,
+				14C7134E2DD22F86007527C5 /* RecordEntity.swift in Sources */,
 				14D272872DC0719400267572 /* DayGrid.swift in Sources */,
 				14D272B82DC074B300267572 /* Toast+Stryle.swift in Sources */,
 				14D272792DC0716E00267572 /* CalendarViewController+CellRegistration.swift in Sources */,
+				14C713502DD22F9B007527C5 /* BookEntity.swift in Sources */,
 				14D2727A2DC0716E00267572 /* CalendarViewController+Layout.swift in Sources */,
+				14C713552DD23064007527C5 /* CheckRecordIntent.swift in Sources */,
 				14D272942DC071B000267572 /* MonthTitleCell.swift in Sources */,
 				14D272952DC071B000267572 /* ImpactGenerator.swift in Sources */,
 				14D272962DC071B000267572 /* WeekdayOrderView.swift in Sources */,
@@ -522,7 +559,9 @@
 				14D272B12DC073EB00267572 /* Date+Extension.swift in Sources */,
 				14D272B22DC073EB00267572 /* AppDatabase.swift in Sources */,
 				14AD28862DC5C21E0018DAF3 /* DataManager.swift in Sources */,
+				14C713532DD22FDC007527C5 /* FetchError.swift in Sources */,
 				14D272812DC0718D00267572 /* DayByDayHandler.swift in Sources */,
+				14C7134B2DD21DF8007527C5 /* GetRecordsIntent.swift in Sources */,
 				14D272822DC0718D00267572 /* DisplayHandler.swift in Sources */,
 				14BBA37C2DCB2EE900AD7BAC /* TagPreviewCell.swift in Sources */,
 				14AD287E2DC5B7010018DAF3 /* TagListViewController.swift in Sources */,
@@ -531,6 +570,7 @@
 				14BBA3782DCB101100AD7BAC /* TextInputCell.swift in Sources */,
 				14AD287B2DC5B6DD0018DAF3 /* BookListViewController.swift in Sources */,
 				14D2727C2DC0716E00267572 /* CalendarViewController+Menu.swift in Sources */,
+				14C713572DD2310C007527C5 /* TagEntity.swift in Sources */,
 				14D2729B2DC0720600267572 /* UIFont+Extension.swift in Sources */,
 				14337F822DCC70DA0043447A /* BookDetailViewController.swift in Sources */,
 				14D2727D2DC0716E00267572 /* CalendarViewController+Enum.swift in Sources */,

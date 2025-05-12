@@ -144,6 +144,34 @@ class DataManager {
 
 // Book
 extension DataManager {
+    func fetchBook(id: Int64) throws -> Book? {
+        var result: Book?
+        try AppDatabase.shared.reader?.read{ db in
+            do {
+                result = try Book.fetchOne(db, id: id)
+            }
+            catch {
+                print(error)
+            }
+        }
+        
+        return result
+    }
+    
+    func fetchBooks(ids: [Int64]) throws -> [Book] {
+        var result: [Book] = []
+        try AppDatabase.shared.reader?.read{ db in
+            do {
+                result = try Book.fetchAll(db, ids: ids)
+            }
+            catch {
+                print(error)
+            }
+        }
+        
+        return result
+    }
+    
     func fetchAllBooks() throws -> [Book] {
         var result: [Book] = []
         try AppDatabase.shared.reader?.read{ db in
@@ -261,6 +289,48 @@ extension DataManager {
 
 // Tag
 extension DataManager {
+    func fetchTag(id: Int64) throws -> Tag? {
+        var result: Tag?
+        try AppDatabase.shared.reader?.read{ db in
+            do {
+                result = try Tag.fetchOne(db, id: id)
+            }
+            catch {
+                print(error)
+            }
+        }
+        
+        return result
+    }
+    
+    func fetchAllTags() throws -> [Tag] {
+        var result: [Tag] = []
+        try AppDatabase.shared.reader?.read{ db in
+            do {
+                result = try Tag.fetchAll(db)
+            }
+            catch {
+                print(error)
+            }
+        }
+        
+        return result
+    }
+    
+    func fetchTags(ids: [Int64]) throws -> [Tag] {
+        var result: [Tag] = []
+        try AppDatabase.shared.reader?.read{ db in
+            do {
+                result = try Tag.fetchAll(db, ids: ids)
+            }
+            catch {
+                print(error)
+            }
+        }
+        
+        return result
+    }
+    
     func fetchAllTags(bookID: Int64) throws -> [Tag] {
         var result: [Tag] = []
         try AppDatabase.shared.reader?.read { db in
@@ -328,6 +398,20 @@ extension DataManager {
                     .filter(bookIDColumn == bookID)
                     .filter(dayColumn == day)
                     .fetchAll(db)
+            }
+            catch {
+                print(error)
+            }
+        }
+        
+        return result
+    }
+    
+    func fetchAllDayRecords(recordIDs: [Int64]) throws -> [DayRecord] {
+        var result: [DayRecord] = []
+        try AppDatabase.shared.reader?.read { db in
+            do {
+                result = try DayRecord.fetchAll(db, ids: recordIDs)
             }
             catch {
                 print(error)
