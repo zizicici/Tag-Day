@@ -28,6 +28,7 @@ private extension UICellConfigurationState {
 
 protocol DayDetailCellDelegate: NSObjectProtocol {
     func getButtonMenu(for record: DayRecord) -> UIMenu
+    func handle(tag: Tag, in button: UIButton, for record: DayRecord)
 }
 
 class DayDetailBaseCell: UICollectionViewCell {
@@ -52,7 +53,8 @@ class DayDetailCell: DayDetailBaseCell {
     private var tagButton: UIButton = {
         var configuration = UIButton.Configuration.filled()
         configuration.titleAlignment = .leading
-        configuration.cornerStyle = .small
+        configuration.cornerStyle = .fixed
+        configuration.background.cornerRadius = 10.0
         configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer({ incoming in
             var outgoing = incoming
             outgoing.font = UIFont.preferredMonospacedFont(for: .body, weight: .medium)
@@ -61,12 +63,17 @@ class DayDetailCell: DayDetailBaseCell {
         })
         configuration.titleLineBreakMode = .byTruncatingTail
         configuration.subtitleLineBreakMode = .byTruncatingTail
-        configuration.image = UIImage(systemName: "chevron.up.chevron.down", withConfiguration: UIImage.SymbolConfiguration(pointSize: 14, weight: .regular))
-        configuration.imagePlacement = .trailing
-        configuration.imagePadding = 10.0
-        configuration.contentInsets.trailing = 6.0
         let button = UIButton(configuration: configuration)
+        return button
+    }()
+    
+    private var moreButton: UIButton = {
+        var configuration = UIButton.Configuration.plain()
+        configuration.image = UIImage(systemName: "ellipsis")
+        let button = UIButton(configuration: configuration)
+        button.tintColor = AppColor.main
         button.showsMenuAsPrimaryAction = true
+
         return button
     }()
     
@@ -75,9 +82,19 @@ class DayDetailCell: DayDetailBaseCell {
         
         contentView.addSubview(tagButton)
         tagButton.snp.makeConstraints { make in
-            make.top.leading.equalTo(contentView).inset(10)
-            make.trailing.lessThanOrEqualTo(contentView).inset(100)
-            make.bottom.equalTo(contentView).inset(80)
+            make.top.leading.equalTo(contentView)//.inset(10)
+            make.trailing.equalTo(contentView).inset(44)
+            make.height.equalTo(44.0)
+            make.bottom.equalTo(contentView)//.inset(80)
+        }
+        tagButton.addTarget(self, action: #selector(tagButtonAction), for: .touchUpInside)
+        
+        contentView.addSubview(moreButton)
+        moreButton.snp.makeConstraints { make in
+            make.width.equalTo(34.0)
+            make.height.equalTo(44.0)
+            make.top.equalTo(tagButton)
+            make.trailing.equalTo(contentView)
         }
     }
     
@@ -87,20 +104,21 @@ class DayDetailCell: DayDetailBaseCell {
         
         if let detailItem = state.detailItem, let tag = detailItem.tags.first(where: { $0.id == detailItem.record.tagID }) {
             let title = tag.title
-            let subtitle = tag.subtitle
+//            let subtitle = tag.subtitle
             let tagColor = UIColor(string: tag.color)
             tagButton.configurationUpdateHandler = { button in
                 var config = button.configuration
                 
                 config?.title = title
-                config?.subtitle = subtitle
+//                config?.subtitle = subtitle
                 config?.baseForegroundColor = tagColor?.isLight == true ? .black.withAlphaComponent(0.8) : .white.withAlphaComponent(0.95)
                 button.configuration = config
             }
             tagButton.tintColor = tagColor
-            tagButton.menu = delegate?.getButtonMenu(for: detailItem.record)
             
-            backgroundConfiguration = DayDetailCellBackgroundConfiguration.configuration(for: state, color: AppColor.paper, strokeColor: tagColor)
+            moreButton.menu = delegate?.getButtonMenu(for: detailItem.record)
+            
+//            backgroundConfiguration = DayDetailCellBackgroundConfiguration.configuration(for: state, color: AppColor.paper, strokeColor: tagColor)
         }
     }
     
@@ -108,6 +126,14 @@ class DayDetailCell: DayDetailBaseCell {
         super.prepareForReuse()
         
         tagButton.removeFromSuperview()
+    }
+    
+    @objc
+    func tagButtonAction() {
+        let state = configurationState
+        if let detailItem = state.detailItem, let tag = detailItem.tags.first(where: { $0.id == detailItem.record.tagID }), detailItem.tags.count > 1 {
+            delegate?.handle(tag: tag, in: tagButton, for: detailItem.record)
+        }
     }
 }
 

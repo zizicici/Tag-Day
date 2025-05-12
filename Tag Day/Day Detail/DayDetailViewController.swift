@@ -149,7 +149,7 @@ extension DayDetailViewController {
                                                              subitems: [item])
 
             let section = NSCollectionLayoutSection(group: group)
-            section.interGroupSpacing = 40.0
+            section.interGroupSpacing = 10.0
             section.contentInsets = NSDirectionalEdgeInsets(top: 10.0, leading: 20.0, bottom: 10.0, trailing: 20.0)
             
             return section
@@ -166,24 +166,21 @@ extension DayDetailViewController: UICollectionViewDelegate {
 }
 
 extension DayDetailViewController: DayDetailCellDelegate {
+    func handle(tag: Tag, in button: UIButton, for record: DayRecord) {
+        let detailViewController = FastEditorViewController(day: day, book: book, editMode: .replace(tag, record))
+        detailViewController.delegate = self
+        let nav = NavigationController(rootViewController: detailViewController)
+        showPopoverView(at: button, contentViewController: nav, width: 240.0, height: 300.0)
+    }
+    
     func getButtonMenu(for record: DayRecord) -> UIMenu {
         var children: [UIMenuElement] = []
-        children = tags.map({ tag in
-            return UIAction(title: tag.title, subtitle: tag.subtitle, image: UIImage(systemName: "square.fill")?.withTintColor(UIColor(string: tag.color) ?? .white, renderingMode: .alwaysOriginal), state: record.tagID == tag.id ? .on : .off) { _ in
-                guard let tagID = tag.id, record.tagID != tagID else {
-                    return
-                }
-                var newRecord = record
-                newRecord.tagID = tagID
-                _ = DataManager.shared.update(dayRecord: newRecord)
-            }
-        })
+
         let deleteAction = UIAction(title: String(localized: "button.delete"), subtitle: "", image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] _ in
             self?.showDeleteAlert(for: record)
         }
-        let currentPageDivider = UIMenu(title: "", options: .displayInline, children: [deleteAction])
 
-        children.append(currentPageDivider)
+        children.append(deleteAction)
         return UIMenu(title: String(localized: "dayDetail.tagMenu.title"), children: children)
     }
 }
@@ -217,6 +214,19 @@ extension DayDetailViewController: FastEditorNavigator {
         }
         let newRecord = DayRecord(bookID: bookID, tagID: tagID, day: Int64(day.julianDay))
         _ = DataManager.shared.add(dayRecord: newRecord)
+        
+        // Dismiss
+        presentedViewController?.dismiss(animated: true)
+    }
+    
+    func replace(day: GregorianDay, tag: Tag, for record: DayRecord) {
+        guard let tagID = tag.id, record.tagID != tagID else {
+            return
+        }
+        var newRecord = record
+        newRecord.tagID = tagID
+        _ = DataManager.shared.update(dayRecord: newRecord)
+        
         // Dismiss
         presentedViewController?.dismiss(animated: true)
     }

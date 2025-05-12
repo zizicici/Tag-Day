@@ -12,6 +12,7 @@ import ZCCalendar
 protocol FastEditorNavigator: NSObjectProtocol {
     func reset(day: GregorianDay, tag: Tag?)
     func add(day: GregorianDay, tag: Tag)
+    func replace(day: GregorianDay, tag: Tag, for record: DayRecord)
 }
 
 class FastEditorViewController: UIViewController {
@@ -21,7 +22,30 @@ class FastEditorViewController: UIViewController {
     
     enum EditMode {
         case normal
+        case replace(Tag, DayRecord)
         case overwrite
+        
+        var tag: Tag? {
+            switch self {
+            case .normal:
+                return nil
+            case .replace(let tag, _):
+                return tag
+            case .overwrite:
+                return nil
+            }
+        }
+        
+        var dayRecord: DayRecord? {
+            switch self {
+            case .normal:
+                return nil
+            case .replace(_, let record):
+                return record
+            case .overwrite:
+                return nil
+            }
+        }
     }
     
     private var editMode: EditMode!
@@ -60,10 +84,15 @@ class FastEditorViewController: UIViewController {
         
         view.backgroundColor = AppColor.background
         
-        if editMode == .overwrite {
-            self.title = day.formatString()
-        } else {
+        switch editMode {
+        case .normal:
             self.title = String(localized: "dayDetail.new")
+        case .replace:
+            self.title = String(localized: "dayDetail.replace")
+        case .overwrite:
+            self.title = day.formatString()
+        case .none:
+            break
         }
         
         configureCollectionView()
@@ -72,10 +101,17 @@ class FastEditorViewController: UIViewController {
         
         var items: [UIBarButtonItem] = []
 
-        if editMode == .overwrite {
+        switch editMode {
+        case .normal:
+            break
+        case .replace:
+            break
+        case .overwrite:
             let resetItem = UIBarButtonItem(title: String(localized: "fastEditor.reset"), style: .plain, target: self, action: #selector(resetAction))
             resetItem.tintColor = .systemRed
             items.append(resetItem)
+        case .none:
+            break
         }
         
         items.append(.flexibleSpace())
@@ -107,8 +143,6 @@ class FastEditorViewController: UIViewController {
                     self.tap(tag: tag)
                 }
                 cell.update(with: tag)
-            default:
-                return
             }
         }
         
@@ -120,7 +154,9 @@ class FastEditorViewController: UIViewController {
     @objc
     private func reloadData() {
         guard let bookID = book.id else { return }
-        self.tags = (try? DataManager.shared.fetchAllTags(bookID: bookID)) ?? []
+        self.tags = ((try? DataManager.shared.fetchAllTags(bookID: bookID)) ?? []).filter({ tag in
+            return tag != self.editMode.tag
+        })
         
         var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
         snapshot.appendSections([.tag])
@@ -145,6 +181,9 @@ class FastEditorViewController: UIViewController {
             delegate?.add(day: day, tag: tag)
         case .overwrite:
             delegate?.reset(day: day, tag: tag)
+        case .replace:
+            guard let record = editMode.dayRecord else { return }
+            delegate?.replace(day: day, tag: tag, for: record)
         case .none:
             break
         }

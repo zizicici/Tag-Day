@@ -385,6 +385,10 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
 }
 
 extension CalendarViewController: FastEditorNavigator {
+    func replace(day: GregorianDay, tag: Tag, for record: DayRecord) {
+        //
+    }
+    
     func add(day: GregorianDay, tag: Tag) {
         //
     }
