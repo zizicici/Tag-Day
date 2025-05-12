@@ -82,7 +82,8 @@ class DayDetailCell: DayDetailBaseCell {
         
         contentView.addSubview(tagButton)
         tagButton.snp.makeConstraints { make in
-            make.top.leading.equalTo(contentView)//.inset(10)
+            make.top.equalTo(contentView)//.inset(10)
+            make.leading.equalTo(contentView).inset(14)
             make.trailing.equalTo(contentView).inset(44)
             make.height.equalTo(44.0)
             make.bottom.equalTo(contentView)//.inset(80)

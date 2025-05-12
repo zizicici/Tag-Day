@@ -223,9 +223,16 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         guard let current = self.book else { return }
         switch editMode {
         case .normal:
-            let detailViewController = DayDetailViewController(day: blockItem.day, book: current)
-            let nav = NavigationController(rootViewController: detailViewController)
-            showPopoverView(at: targetView, contentViewController: nav, width: view.frame.width - 50.0)
+            if blockItem.records.count == 0 {
+                let detailViewController = FastEditorViewController(day: blockItem.day, book: current, editMode: .add)
+                detailViewController.delegate = self
+                let nav = NavigationController(rootViewController: detailViewController)
+                showPopoverView(at: targetView, contentViewController: nav, width: 240.0, height: 300.0)
+            } else {
+                let detailViewController = DayDetailViewController(day: blockItem.day, book: current)
+                let nav = NavigationController(rootViewController: detailViewController)
+                showPopoverView(at: targetView, contentViewController: nav, width: view.frame.width - 50.0)
+            }
         case .overwrite:
             let detailViewController = FastEditorViewController(day: blockItem.day, book: current, editMode: .overwrite)
             detailViewController.delegate = self
@@ -390,7 +397,14 @@ extension CalendarViewController: FastEditorNavigator {
     }
     
     func add(day: GregorianDay, tag: Tag) {
-        //
+        guard let bookID = book?.id, let tagID = tag.id else {
+            return
+        }
+        let newRecord = DayRecord(bookID: bookID, tagID: tagID, day: Int64(day.julianDay))
+        _ = DataManager.shared.add(dayRecord: newRecord)
+        
+        // Dismiss
+        presentedViewController?.dismiss(animated: true)
     }
     
     func reset(day: GregorianDay, tag: Tag?) {

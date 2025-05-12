@@ -1181,30 +1181,30 @@
         }
       }
     },
-    "dayDetail.tagMenu.title" : {
+    "dayDetail.tagMenu.more" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Update Tag"
+            "value" : "More Action"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "更新标签"
+            "value" : "更多操作"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "更新標籤"
+            "value" : "更多操作"
           }
         },
         "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "更新標籤"
+            "value" : "更多操作"
           }
         }
       }

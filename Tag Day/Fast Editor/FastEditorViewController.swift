@@ -21,13 +21,13 @@ class FastEditorViewController: UIViewController {
     private var tags: [Tag] = []
     
     enum EditMode {
-        case normal
+        case add
         case replace(Tag, DayRecord)
         case overwrite
         
         var tag: Tag? {
             switch self {
-            case .normal:
+            case .add:
                 return nil
             case .replace(let tag, _):
                 return tag
@@ -38,7 +38,7 @@ class FastEditorViewController: UIViewController {
         
         var dayRecord: DayRecord? {
             switch self {
-            case .normal:
+            case .add:
                 return nil
             case .replace(_, let record):
                 return record
@@ -85,7 +85,7 @@ class FastEditorViewController: UIViewController {
         view.backgroundColor = AppColor.background
         
         switch editMode {
-        case .normal:
+        case .add:
             self.title = String(localized: "dayDetail.new")
         case .replace:
             self.title = String(localized: "dayDetail.replace")
@@ -102,7 +102,7 @@ class FastEditorViewController: UIViewController {
         var items: [UIBarButtonItem] = []
 
         switch editMode {
-        case .normal:
+        case .add:
             break
         case .replace:
             break
@@ -177,7 +177,7 @@ class FastEditorViewController: UIViewController {
     
     func tap(tag: Tag) {
         switch editMode {
-        case .normal:
+        case .add:
             delegate?.add(day: day, tag: tag)
         case .overwrite:
             delegate?.reset(day: day, tag: tag)

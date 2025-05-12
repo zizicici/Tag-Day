@@ -127,7 +127,7 @@ class DayDetailViewController: UIViewController {
     
     @objc
     private func newAction() {
-        let detailViewController = FastEditorViewController(day: day, book: book, editMode: .normal)
+        let detailViewController = FastEditorViewController(day: day, book: book, editMode: .add)
         detailViewController.delegate = self
         let nav = NavigationController(rootViewController: detailViewController)
         showPopoverView(at: newButton, contentViewController: nav, width: 240.0, height: 300.0)
@@ -179,9 +179,11 @@ extension DayDetailViewController: DayDetailCellDelegate {
         let deleteAction = UIAction(title: String(localized: "button.delete"), subtitle: "", image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] _ in
             self?.showDeleteAlert(for: record)
         }
-
-        children.append(deleteAction)
-        return UIMenu(title: String(localized: "dayDetail.tagMenu.title"), children: children)
+        
+        let actionDivider = UIMenu(title: String(localized: "dayDetail.tagMenu.more"), children: [deleteAction])
+        children.append(actionDivider)
+        
+        return UIMenu(title: "", children: children)
     }
 }
 
