@@ -206,7 +206,7 @@ extension FastEditorViewController {
 
             let section = NSCollectionLayoutSection(group: group)
             section.interGroupSpacing = 10.0
-            section.contentInsets = NSDirectionalEdgeInsets(top: 8.0, leading: 10.0, bottom: 8.0, trailing: 10.0)
+            section.contentInsets = NSDirectionalEdgeInsets(top: 8.0, leading: 20.0, bottom: 8.0, trailing: 20.0)
             
             return section
 

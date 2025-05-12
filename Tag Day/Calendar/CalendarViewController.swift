@@ -231,7 +231,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
             } else {
                 let detailViewController = DayDetailViewController(day: blockItem.day, book: current)
                 let nav = NavigationController(rootViewController: detailViewController)
-                showPopoverView(at: targetView, contentViewController: nav, width: view.frame.width - 50.0)
+                showPopoverView(at: targetView, contentViewController: nav, width: 280.0, height: 400.0)
             }
         case .overwrite:
             let detailViewController = FastEditorViewController(day: blockItem.day, book: current, editMode: .overwrite)

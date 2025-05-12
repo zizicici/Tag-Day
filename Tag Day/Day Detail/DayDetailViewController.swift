@@ -35,7 +35,8 @@ class DayDetailViewController: UIViewController {
         })
         configuration.baseForegroundColor = AppColor.main
         configuration.title = String(localized: "dayDetail.new")
-        configuration.contentInsets.leading = 0.0
+        configuration.contentInsets.leading = 4.0
+        configuration.contentInsets.bottom = 16.0
         let button = UIButton(configuration: configuration)
         return button
     }()
@@ -150,7 +151,7 @@ extension DayDetailViewController {
 
             let section = NSCollectionLayoutSection(group: group)
             section.interGroupSpacing = 10.0
-            section.contentInsets = NSDirectionalEdgeInsets(top: 10.0, leading: 20.0, bottom: 10.0, trailing: 20.0)
+            section.contentInsets = NSDirectionalEdgeInsets(top: 8.0, leading: 10.0, bottom: 8.0, trailing: 10.0)
             
             return section
         }, configuration: config)
