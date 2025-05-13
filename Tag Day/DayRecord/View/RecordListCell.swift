@@ -29,6 +29,7 @@ private extension UICellConfigurationState {
 protocol RecordListCellDelegate: NSObjectProtocol {
     func getButtonMenu(for record: DayRecord) -> UIMenu
     func handle(tag: Tag, in button: UIButton, for record: DayRecord)
+    func commentButton(for record: DayRecord)
 }
 
 class RecordListBaseCell: UICollectionViewCell {
@@ -77,6 +78,21 @@ class RecordListCell: RecordListBaseCell {
         return button
     }()
     
+    private var commentButton: UIButton = {
+        var configuration = UIButton.Configuration.plain()
+        configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer({ incoming in
+            var outgoing = incoming
+            outgoing.font = UIFont.preferredMonospacedFont(for: .footnote, weight: .regular)
+            
+            return outgoing
+        })
+        configuration.titleLineBreakMode = .byTruncatingTail
+        let button = UIButton(configuration: configuration)
+        button.tintColor = AppColor.text
+
+        return button
+    }()
+    
     private func setupViewsIfNeeded() {
         guard tagButton.superview == nil else { return }
         
@@ -86,7 +102,7 @@ class RecordListCell: RecordListBaseCell {
             make.leading.equalTo(contentView).inset(10)
             make.trailing.equalTo(contentView).inset(44)
             make.height.equalTo(44.0)
-            make.bottom.equalTo(contentView)//.inset(80)
+//            make.bottom.equalTo(contentView)//.inset(80)
         }
         tagButton.addTarget(self, action: #selector(tagButtonAction), for: .touchUpInside)
         
@@ -97,6 +113,15 @@ class RecordListCell: RecordListBaseCell {
             make.top.equalTo(tagButton)
             make.trailing.equalTo(contentView)
         }
+        
+        contentView.addSubview(commentButton)
+        commentButton.snp.makeConstraints { make in
+            make.leading.equalTo(contentView).inset(6)
+            make.trailing.lessThanOrEqualTo(tagButton)
+            make.top.equalTo(tagButton.snp.bottom)
+            make.bottom.equalTo(contentView)
+        }
+        commentButton.addTarget(self, action: #selector(commentButtonAction), for: .touchUpInside)
     }
     
     override func updateConfiguration(using state: UICellConfigurationState) {
@@ -119,7 +144,12 @@ class RecordListCell: RecordListBaseCell {
             
             moreButton.menu = delegate?.getButtonMenu(for: detailItem.record)
             
-//            backgroundConfiguration = DayDetailCellBackgroundConfiguration.configuration(for: state, color: AppColor.paper, strokeColor: tagColor)
+            commentButton.configurationUpdateHandler = { button in
+                var config = button.configuration
+                
+                config?.title = detailItem.record.comment
+                button.configuration = config
+            }
         }
     }
     
@@ -127,6 +157,8 @@ class RecordListCell: RecordListBaseCell {
         super.prepareForReuse()
         
         tagButton.removeFromSuperview()
+        moreButton.removeFromSuperview()
+        commentButton.removeFromSuperview()
     }
     
     @objc
@@ -134,6 +166,14 @@ class RecordListCell: RecordListBaseCell {
         let state = configurationState
         if let detailItem = state.detailItem, let tag = detailItem.tags.first(where: { $0.id == detailItem.record.tagID }), detailItem.tags.count > 1 {
             delegate?.handle(tag: tag, in: tagButton, for: detailItem.record)
+        }
+    }
+    
+    @objc
+    func commentButtonAction() {
+        let state = configurationState
+        if let detailItem = state.detailItem {
+            delegate?.commentButton(for: detailItem.record)            
         }
     }
 }

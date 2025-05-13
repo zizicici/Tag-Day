@@ -45,6 +45,14 @@ class TextViewCell: UITableViewCell {
         textView.text = text
         textView.placeholder = placeholder
     }
+    
+    override var isFirstResponder: Bool {
+        return textView.isFirstResponder
+    }
+    
+    override func resignFirstResponder() -> Bool {
+        return textView.resignFirstResponder() && super.resignFirstResponder()
+    }
 }
 
 extension TextViewCell: UITextViewDelegate {

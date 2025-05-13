@@ -79,6 +79,8 @@ class RecordDetailViewController: UIViewController {
         }
     }
     
+    weak var commentCell: TextViewCell?
+    
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
@@ -154,6 +156,7 @@ class RecordDetailViewController: UIViewController {
                     cell.textDidChanged = { [weak self] text in
                         self?.comment = text
                     }
+                    self.commentCell = cell
                 }
                 return cell
             }
@@ -180,7 +183,15 @@ class RecordDetailViewController: UIViewController {
     
     @objc
     func dismissViewController() {
-        dismiss(animated: true)
+        if commentCell?.isFirstResponder == true {
+            _ = commentCell?.resignFirstResponder()
+            navigationItem.rightBarButtonItem?.isEnabled = false
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.7) {
+                self.dismiss(animated: true)
+            }
+        } else {
+            dismiss(animated: true)
+        }
     }
     
     func updateSaveButtonStatus() {

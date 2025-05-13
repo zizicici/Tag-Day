@@ -201,6 +201,10 @@ extension RecordListViewController: RecordListCellDelegate {
         
         return UIMenu(title: "", children: children)
     }
+    
+    func commentButton(for record: DayRecord) {
+        self.showRecordEditor(for: record)
+    }
 }
 
 extension RecordListViewController {
