@@ -404,7 +404,9 @@ extension CalendarViewController: FastEditorNavigator {
         _ = DataManager.shared.add(dayRecord: newRecord)
         
         // Dismiss
-        presentedViewController?.dismiss(animated: true)
+        presentedViewController?.dismiss(animated: true) {
+            self.tap(day: day)
+        }
     }
     
     func reset(day: GregorianDay, tag: Tag?) {
@@ -415,23 +417,30 @@ extension CalendarViewController: FastEditorNavigator {
         }
         
         // Dismiss
-        presentedViewController?.dismiss(animated: true)
-        
-        // Find next
-        let nextItem = self.dataSource.snapshot().itemIdentifiers.first { item in
+        presentedViewController?.dismiss(animated: true) {
+            self.tap(day: day + 1)
+        }
+    }
+}
+
+extension CalendarViewController {
+    func tap(day: GregorianDay) {
+        let targetItem = dataSource.snapshot().itemIdentifiers.first { item in
             switch item {
             case .month(_):
                 return false
             case .block(let blockItem):
-                return blockItem.day == day + 1
+                return blockItem.day == day
             case .invisible(_):
                 return false
             }
         }
-        if let item = nextItem {
-            if let index = self.dataSource.indexPath(for: item) {
-                collectionView.scrollToItem(at: index, at: .centeredVertically, animated: true)
-                tap(in: index)
+        if let item = targetItem {
+            if let indexPath = dataSource.indexPath(for: item) {
+                collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.25) {
+                    self.tap(in: indexPath)
+                }
             }
         }
     }
