@@ -22,7 +22,7 @@ class BookDetailViewController: UIViewController {
             if book.title != newValue {
                 book.title = newValue
                 isEdited = true
-                updateAddButtonStatus()
+                updateSaveButtonStatus()
             }
         }
     }
@@ -35,6 +35,7 @@ class BookDetailViewController: UIViewController {
             if book.comment != newValue {
                 book.comment = newValue
                 isEdited = true
+                updateSaveButtonStatus()
             }
         }
     }
@@ -51,9 +52,9 @@ class BookDetailViewController: UIViewController {
         var header: String? {
             switch self {
             case .title:
-                return nil
+                return String(localized: "books.detail.title")
             case .comment:
-                return nil
+                return String(localized: "books.detail.comment")
             case .tag:
                 return nil
             case .delete:
@@ -64,7 +65,7 @@ class BookDetailViewController: UIViewController {
         var footer: String? {
             switch self {
             case .title:
-                return String(localized: "books.detail.title.hint")
+                return nil
             case .comment:
                 return nil
             case .tag:
@@ -143,6 +144,7 @@ class BookDetailViewController: UIViewController {
         tableView.backgroundColor = AppColor.background
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: NSStringFromClass(UITableViewCell.self))
         tableView.register(TextInputCell.self, forCellReuseIdentifier: NSStringFromClass(TextInputCell.self))
+        tableView.register(TextViewCell.self, forCellReuseIdentifier: NSStringFromClass(TextViewCell.self))
         tableView.register(BookTagCell.self, forCellReuseIdentifier: NSStringFromClass(BookTagCell.self))
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 50.0
@@ -163,7 +165,7 @@ class BookDetailViewController: UIViewController {
                 let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(TextInputCell.self), for: indexPath)
                 if let cell = cell as? TextInputCell {
                     self.titleCell = cell
-                    cell.update(text: title, placeholder: String(localized: "books.detail.placeholder.title"))
+                    cell.update(text: title, placeholder: String(localized: "books.detail.title.hint"))
                     cell.textDidChanged = { [weak self] text in
                         self?.bookTitle = text
                     }
@@ -171,9 +173,9 @@ class BookDetailViewController: UIViewController {
                 }
                 return cell
             case .comment(let comment):
-                let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(TextInputCell.self), for: indexPath)
-                if let cell = cell as? TextInputCell {
-                    cell.update(text: comment, placeholder: String(localized: "books.detail.placeholder.comment"))
+                let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(TextViewCell.self), for: indexPath)
+                if let cell = cell as? TextViewCell {
+                    cell.update(text: comment, placeholder: String(localized: "books.detail.comment.hint"))
                     cell.textDidChanged = { [weak self] text in
                         self?.comment = text
                     }
@@ -223,7 +225,7 @@ class BookDetailViewController: UIViewController {
     
     @objc
     func reloadData() {
-        updateAddButtonStatus()
+        updateSaveButtonStatus()
         
         var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
         snapshot.appendSections([.title])
@@ -258,13 +260,15 @@ class BookDetailViewController: UIViewController {
         }
     }
     
-    func updateAddButtonStatus() {
+    func updateSaveButtonStatus() {
         navigationItem.rightBarButtonItem?.isEnabled = allowSave()
     }
     
     func allowSave() -> Bool {
-        let titleFlag = bookTitle.isValidTagTitle()
-        return titleFlag
+        let titleFlag = bookTitle.isValidBookTitle()
+        let commentFlag = comment?.isValidBookComment() ?? true
+        
+        return titleFlag && commentFlag
     }
     
     @objc
@@ -344,6 +348,10 @@ extension BookDetailViewController: UITableViewDelegate {
 extension String {
     func isValidBookTitle() -> Bool{
         return count > 0 && count <= 60
+    }
+    
+    func isValidBookComment() -> Bool{
+        return count <= 200
     }
 }
 

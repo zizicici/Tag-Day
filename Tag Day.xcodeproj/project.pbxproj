@@ -14,8 +14,8 @@
 		14833D372DC50420001B61D5 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D362DC50420001B61D5 /* Tag.swift */; };
 		14833D392DC504B9001B61D5 /* DayRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D382DC504B9001B61D5 /* DayRecord.swift */; };
 		14833D3B2DC5179F001B61D5 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D3A2DC5179F001B61D5 /* UIColor+Extension.swift */; };
-		14AA3E072DCDB31300E1F4F8 /* DayRecordListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AA3E062DCDB31300E1F4F8 /* DayRecordListViewController.swift */; };
-		14AA3E0B2DCDF3BE00E1F4F8 /* DayRecordListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AA3E0A2DCDF3BE00E1F4F8 /* DayRecordListCell.swift */; };
+		14AA3E072DCDB31300E1F4F8 /* RecordListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AA3E062DCDB31300E1F4F8 /* RecordListViewController.swift */; };
+		14AA3E0B2DCDF3BE00E1F4F8 /* RecordListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AA3E0A2DCDF3BE00E1F4F8 /* RecordListCell.swift */; };
 		14ACBE562DBFAD2E0056B1FD /* TabbarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14ACBE542DBFAD2E0056B1FD /* TabbarController.swift */; };
 		14ACBE572DBFAD2E0056B1FD /* NavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14ACBE532DBFAD2E0056B1FD /* NavigationViewController.swift */; };
 		14AD287B2DC5B6DD0018DAF3 /* BookListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AD287A2DC5B6DD0018DAF3 /* BookListViewController.swift */; };
@@ -47,6 +47,8 @@
 		14C713552DD23064007527C5 /* CheckRecordIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C713542DD23064007527C5 /* CheckRecordIntent.swift */; };
 		14C713572DD2310C007527C5 /* TagEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C713562DD2310C007527C5 /* TagEntity.swift */; };
 		14CC8A462DCF04970062F8BA /* FastEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CC8A452DCF04970062F8BA /* FastEditorViewController.swift */; };
+		14D07CC32DD2ED4900F6843C /* RecordDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D07CC22DD2ED4900F6843C /* RecordDetailViewController.swift */; };
+		14D07CC52DD2F09900F6843C /* TextViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D07CC42DD2F09900F6843C /* TextViewCell.swift */; };
 		14D272702DC0709300267572 /* CalendarBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D2726F2DC0709300267572 /* CalendarBaseViewController.swift */; };
 		14D272722DC0712A00267572 /* AppColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D272712DC0712A00267572 /* AppColor.swift */; };
 		14D272792DC0716E00267572 /* CalendarViewController+CellRegistration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D272732DC0716E00267572 /* CalendarViewController+CellRegistration.swift */; };
@@ -87,8 +89,8 @@
 		14833D362DC50420001B61D5 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
 		14833D382DC504B9001B61D5 /* DayRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRecord.swift; sourceTree = "<group>"; };
 		14833D3A2DC5179F001B61D5 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
-		14AA3E062DCDB31300E1F4F8 /* DayRecordListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRecordListViewController.swift; sourceTree = "<group>"; };
-		14AA3E0A2DCDF3BE00E1F4F8 /* DayRecordListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRecordListCell.swift; sourceTree = "<group>"; };
+		14AA3E062DCDB31300E1F4F8 /* RecordListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListViewController.swift; sourceTree = "<group>"; };
+		14AA3E0A2DCDF3BE00E1F4F8 /* RecordListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListCell.swift; sourceTree = "<group>"; };
 		14ACBE532DBFAD2E0056B1FD /* NavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationViewController.swift; sourceTree = "<group>"; };
 		14ACBE542DBFAD2E0056B1FD /* TabbarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbarController.swift; sourceTree = "<group>"; };
 		14AD287A2DC5B6DD0018DAF3 /* BookListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookListViewController.swift; sourceTree = "<group>"; };
@@ -117,6 +119,8 @@
 		14C713562DD2310C007527C5 /* TagEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagEntity.swift; sourceTree = "<group>"; };
 		14CC8A452DCF04970062F8BA /* FastEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastEditorViewController.swift; sourceTree = "<group>"; };
 		14CD76AD2DBE6BA10035DF1F /* Tag Day.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Tag Day.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		14D07CC22DD2ED4900F6843C /* RecordDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetailViewController.swift; sourceTree = "<group>"; };
+		14D07CC42DD2F09900F6843C /* TextViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewCell.swift; sourceTree = "<group>"; };
 		14D2726F2DC0709300267572 /* CalendarBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarBaseViewController.swift; sourceTree = "<group>"; };
 		14D272712DC0712A00267572 /* AppColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColor.swift; sourceTree = "<group>"; };
 		14D272732DC0716E00267572 /* CalendarViewController+CellRegistration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CalendarViewController+CellRegistration.swift"; sourceTree = "<group>"; };
@@ -169,7 +173,8 @@
 		14AA3E092DCDB32A00E1F4F8 /* DayRecord */ = {
 			isa = PBXGroup;
 			children = (
-				14AA3E062DCDB31300E1F4F8 /* DayRecordListViewController.swift */,
+				14AA3E062DCDB31300E1F4F8 /* RecordListViewController.swift */,
+				14D07CC22DD2ED4900F6843C /* RecordDetailViewController.swift */,
 				14AA3E0C2DCE3B5200E1F4F8 /* View */,
 			);
 			path = DayRecord;
@@ -178,7 +183,8 @@
 		14AA3E0C2DCE3B5200E1F4F8 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				14AA3E0A2DCDF3BE00E1F4F8 /* DayRecordListCell.swift */,
+				14AA3E0A2DCDF3BE00E1F4F8 /* RecordListCell.swift */,
+				14D07CC42DD2F09900F6843C /* TextViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -523,7 +529,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				14BBA3762DCB0B0700AD7BAC /* TagDetailViewController.swift in Sources */,
-				14AA3E072DCDB31300E1F4F8 /* DayRecordListViewController.swift in Sources */,
+				14AA3E072DCDB31300E1F4F8 /* RecordListViewController.swift in Sources */,
 				14D272A12DC0736A00267572 /* UIViewController+Extension.swift in Sources */,
 				14AD288D2DC5E2DE0018DAF3 /* MainViewController.swift in Sources */,
 				14833D372DC50420001B61D5 /* Tag.swift in Sources */,
@@ -549,8 +555,10 @@
 				14D272992DC071B000267572 /* HoverGestureRecognizer.swift in Sources */,
 				14D2727B2DC0716E00267572 /* CalendarViewController+Popover.swift in Sources */,
 				14337F802DCC6CE50043447A /* Debounce.swift in Sources */,
+				14D07CC52DD2F09900F6843C /* TextViewCell.swift in Sources */,
 				14D272AF2DC073EB00267572 /* Persistence.swift in Sources */,
 				14D272B02DC073EB00267572 /* TimestampedRecord.swift in Sources */,
+				14D07CC32DD2ED4900F6843C /* RecordDetailViewController.swift in Sources */,
 				14D272BD2DC0884E00267572 /* SpecificationsViewController.swift in Sources */,
 				14D272BE2DC0884E00267572 /* SettingOptionsViewController.swift in Sources */,
 				14CC8A462DCF04970062F8BA /* FastEditorViewController.swift in Sources */,
@@ -580,7 +588,7 @@
 				14B239B72DBF13F30007152C /* CalendarViewController.swift in Sources */,
 				14AD28842DC5C0D20018DAF3 /* HeaderReuseView.swift in Sources */,
 				14833D3B2DC5179F001B61D5 /* UIColor+Extension.swift in Sources */,
-				14AA3E0B2DCDF3BE00E1F4F8 /* DayRecordListCell.swift in Sources */,
+				14AA3E0B2DCDF3BE00E1F4F8 /* RecordListCell.swift in Sources */,
 				14B239B82DBF13F30007152C /* AppDelegate.swift in Sources */,
 				14D272702DC0709300267572 /* CalendarBaseViewController.swift in Sources */,
 			);

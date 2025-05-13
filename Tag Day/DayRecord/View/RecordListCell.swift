@@ -1,5 +1,5 @@
 //
-//  DayRecordListCell.swift
+//  RecordListCell.swift
 //  Tag Day
 //
 //  Created by Ci Zi on 2025/5/9.
@@ -26,15 +26,15 @@ private extension UICellConfigurationState {
     }
 }
 
-protocol DayRecordListCellDelegate: NSObjectProtocol {
+protocol RecordListCellDelegate: NSObjectProtocol {
     func getButtonMenu(for record: DayRecord) -> UIMenu
     func handle(tag: Tag, in button: UIButton, for record: DayRecord)
 }
 
-class DayRecordListBaseCell: UICollectionViewCell {
+class RecordListBaseCell: UICollectionViewCell {
     private var detailItem: DayDetailItem? = nil
     
-    weak var delegate: DayRecordListCellDelegate?
+    weak var delegate: RecordListCellDelegate?
     
     func update(with newDetail: DayDetailItem) {
         guard detailItem != newDetail else { return }
@@ -49,7 +49,7 @@ class DayRecordListBaseCell: UICollectionViewCell {
     }
 }
 
-class DayRecordListCell: DayRecordListBaseCell {
+class RecordListCell: RecordListBaseCell {
     private var tagButton: UIButton = {
         var configuration = UIButton.Configuration.filled()
         configuration.titleAlignment = .leading

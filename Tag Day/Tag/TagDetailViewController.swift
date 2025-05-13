@@ -24,7 +24,7 @@ class TagDetailViewController: UIViewController {
             if tag.title != newValue {
                 tag.title = newValue
                 isEdited = true
-                updateAddButtonStatus()
+                updateSaveButtonStatus()
             }
             updatePreview()
         }
@@ -38,6 +38,7 @@ class TagDetailViewController: UIViewController {
             if tag.subtitle != newValue {
                 tag.subtitle = newValue
                 isEdited = true
+                updateSaveButtonStatus()
             }
         }
     }
@@ -105,9 +106,9 @@ class TagDetailViewController: UIViewController {
             case .preview:
                 return nil
             case .title:
-                return nil
+                return String(localized: "tags.detail.title")
             case .subtitle:
-                return nil
+                return String(localized: "tags.detail.subtitle")
             case .lightColor:
                 return String(localized: "tags.detail.color.light")
             case .darkColor:
@@ -122,7 +123,7 @@ class TagDetailViewController: UIViewController {
             case .preview:
                 return nil
             case .title:
-                return String(localized: "tags.detail.title.hint")
+                return nil
             case .subtitle:
                 return nil
             case .lightColor:
@@ -233,7 +234,7 @@ class TagDetailViewController: UIViewController {
                 let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(TextInputCell.self), for: indexPath)
                 if let cell = cell as? TextInputCell {
                     self.titleCell = cell
-                    cell.update(text: title, placeholder: String(localized: "tags.detail.placeholder.title"))
+                    cell.update(text: title, placeholder: String(localized: "tags.detail.title.hint"))
                     cell.textDidChanged = { [weak self] text in
                         self?.tagTitle = text
                     }
@@ -243,7 +244,7 @@ class TagDetailViewController: UIViewController {
             case .subtitle(let subtitle):
                 let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(TextInputCell.self), for: indexPath)
                 if let cell = cell as? TextInputCell {
-                    cell.update(text: subtitle, placeholder: String(localized: "tags.detail.placeholder.subtitle"))
+                    cell.update(text: subtitle, placeholder: String(localized: "tags.detail.title.hint"))
                     cell.textDidChanged = { [weak self] text in
                         self?.subtitle = text
                     }
@@ -292,7 +293,7 @@ class TagDetailViewController: UIViewController {
     }
     
     func reloadData() {
-        updateAddButtonStatus()
+        updateSaveButtonStatus()
         
         var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
         snapshot.appendSections([.preview])
@@ -347,13 +348,14 @@ class TagDetailViewController: UIViewController {
         }
     }
     
-    func updateAddButtonStatus() {
+    func updateSaveButtonStatus() {
         navigationItem.rightBarButtonItem?.isEnabled = allowSave()
     }
     
     func allowSave() -> Bool {
         let titleFlag = tagTitle.isValidTagTitle()
-        return titleFlag
+        let subtitleFlag = subtitle?.isValidTagTitle() ?? true
+        return titleFlag && subtitleFlag
     }
     
     @objc
@@ -484,6 +486,10 @@ extension TagDetailViewController: UIColorPickerViewControllerDelegate {
 extension String {
     func isValidTagTitle() -> Bool{
         return count > 0 && count <= 60
+    }
+    
+    func isValidTagSubtitle() -> Bool{
+        return count <= 60
     }
 }
 
