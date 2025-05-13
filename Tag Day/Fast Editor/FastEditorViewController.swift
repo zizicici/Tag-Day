@@ -266,7 +266,7 @@ class FastEditorTagCell: FastEditorBaseCell {
         configuration.background.cornerRadius = 10.0
         configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer({ incoming in
             var outgoing = incoming
-            outgoing.font = UIFont.preferredMonospacedFont(for: .body, weight: .medium)
+            outgoing.font = UIFont.preferredSystemFont(for: .body, weight: .medium)
             
             return outgoing
         })

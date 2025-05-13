@@ -178,15 +178,15 @@ extension RecordListViewController: RecordListCellDelegate {
         var children: [UIMenuElement] = []
         
         let timeAction = UIAction(title: String(localized: "dayDetail.tagMenu.time"), subtitle: "", image: UIImage(systemName: "clock")) { [weak self] _ in
-            self?.showRecordEditor(for: record)
+            self?.showRecordEditor(for: record, editMode: .time)
         }
         
         let walletAction = UIAction(title: String(localized: "dayDetail.tagMenu.wallet"), subtitle: "", image: UIImage(systemName: "arrow.left.arrow.right")) { [weak self] _ in
-            self?.showRecordEditor(for: record)
+            self?.showRecordEditor(for: record, editMode: .comment)
         }
         
         let commentAction = UIAction(title: String(localized: "dayDetail.tagMenu.comment"), subtitle: "", image: UIImage(systemName: "text.bubble")) { [weak self] _ in
-            self?.showRecordEditor(for: record)
+            self?.showRecordEditor(for: record, editMode: .comment)
         }
         
         let updateDivider = UIMenu(title: String(localized: "dayDetail.tagMenu.update"), options: .displayInline, children: [timeAction, walletAction, commentAction])
@@ -203,13 +203,13 @@ extension RecordListViewController: RecordListCellDelegate {
     }
     
     func commentButton(for record: DayRecord) {
-        self.showRecordEditor(for: record)
+        self.showRecordEditor(for: record, editMode: .comment)
     }
 }
 
 extension RecordListViewController {
-    func showRecordEditor(for record: DayRecord) {
-        let recordEditor = RecordDetailViewController(dayRecord: record)
+    func showRecordEditor(for record: DayRecord, editMode: RecordDetailViewController.EditMode) {
+        let recordEditor = RecordDetailViewController(dayRecord: record, editMode: editMode)
         let nav = NavigationController(rootViewController: recordEditor)
         
         present(nav, animated: true)

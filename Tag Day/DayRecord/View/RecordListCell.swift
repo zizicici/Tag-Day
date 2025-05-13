@@ -58,7 +58,7 @@ class RecordListCell: RecordListBaseCell {
         configuration.background.cornerRadius = 10.0
         configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer({ incoming in
             var outgoing = incoming
-            outgoing.font = UIFont.preferredMonospacedFont(for: .body, weight: .medium)
+            outgoing.font = UIFont.preferredSystemFont(for: .body, weight: .medium)
             
             return outgoing
         })
@@ -72,9 +72,25 @@ class RecordListCell: RecordListBaseCell {
         var configuration = UIButton.Configuration.plain()
         configuration.image = UIImage(systemName: "ellipsis")
         let button = UIButton(configuration: configuration)
-        button.tintColor = AppColor.main
+        button.tintColor = AppColor.text
         button.showsMenuAsPrimaryAction = true
 
+        return button
+    }()
+    
+    private var timeButton: UIButton = {
+        var configuration = UIButton.Configuration.plain()
+        configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer({ incoming in
+            var outgoing = incoming
+            outgoing.font = UIFont.preferredMonospacedFont(for: .footnote, weight: .semibold)
+            
+            return outgoing
+        })
+        configuration.titleLineBreakMode = .byTruncatingTail
+        configuration.contentInsets.bottom = 3.0
+        let button = UIButton(configuration: configuration)
+        button.tintColor = AppColor.text
+        
         return button
     }()
     
@@ -82,13 +98,13 @@ class RecordListCell: RecordListBaseCell {
         var configuration = UIButton.Configuration.plain()
         configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer({ incoming in
             var outgoing = incoming
-            outgoing.font = UIFont.preferredMonospacedFont(for: .footnote, weight: .regular)
+            outgoing.font = UIFont.preferredSystemFont(for: .footnote, weight: .regular)
             
             return outgoing
         })
         configuration.titleLineBreakMode = .byTruncatingTail
         let button = UIButton(configuration: configuration)
-        button.tintColor = AppColor.text
+        button.tintColor = AppColor.text.withAlphaComponent(0.8)
 
         return button
     }()
@@ -96,13 +112,19 @@ class RecordListCell: RecordListBaseCell {
     private func setupViewsIfNeeded() {
         guard tagButton.superview == nil else { return }
         
+        contentView.addSubview(timeButton)
+        timeButton.snp.makeConstraints { make in
+            make.leading.equalTo(contentView).inset(6)
+            make.trailing.lessThanOrEqualTo(contentView).inset(44)
+            make.top.equalTo(contentView)
+        }
+        
         contentView.addSubview(tagButton)
         tagButton.snp.makeConstraints { make in
-            make.top.equalTo(contentView)//.inset(10)
+            make.top.equalTo(timeButton.snp.bottom)
             make.leading.equalTo(contentView).inset(10)
             make.trailing.equalTo(contentView).inset(44)
             make.height.equalTo(44.0)
-//            make.bottom.equalTo(contentView)//.inset(80)
         }
         tagButton.addTarget(self, action: #selector(tagButtonAction), for: .touchUpInside)
         
@@ -130,14 +152,19 @@ class RecordListCell: RecordListBaseCell {
         
         if let detailItem = state.detailItem, let tag = detailItem.tags.first(where: { $0.id == detailItem.record.tagID }) {
             let title = tag.title
-//            let subtitle = tag.subtitle
             let tagColor = UIColor(string: tag.color)
+            timeButton.configurationUpdateHandler = { button in
+                var config = button.configuration
+                config?.title = detailItem.record.getTime()
+                
+                button.configuration = config
+            }
+            
             tagButton.configurationUpdateHandler = { button in
                 var config = button.configuration
-                
                 config?.title = title
-//                config?.subtitle = subtitle
                 config?.baseForegroundColor = tagColor?.isLight == true ? .black.withAlphaComponent(0.8) : .white.withAlphaComponent(0.95)
+                
                 button.configuration = config
             }
             tagButton.tintColor = tagColor
@@ -146,8 +173,8 @@ class RecordListCell: RecordListBaseCell {
             
             commentButton.configurationUpdateHandler = { button in
                 var config = button.configuration
-                
                 config?.title = detailItem.record.comment
+                
                 button.configuration = config
             }
         }
@@ -173,7 +200,7 @@ class RecordListCell: RecordListBaseCell {
     func commentButtonAction() {
         let state = configurationState
         if let detailItem = state.detailItem {
-            delegate?.commentButton(for: detailItem.record)            
+            delegate?.commentButton(for: detailItem.record)
         }
     }
 }

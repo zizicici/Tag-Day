@@ -55,3 +55,25 @@ extension DayRecord: Codable, FetchableRecord, MutablePersistableRecord {
         id = inserted.rowID
     }
 }
+
+extension DayRecord {
+    func getTime() -> String? {
+        if let startTime = startTime {
+            if let endTime = endTime {
+                // Start And End
+                return Date(nanoSecondSince1970: startTime).formatted(date: .omitted, time: .shortened) + "~" + Date(nanoSecondSince1970: endTime).formatted(date: .omitted, time: .shortened)
+            } else {
+                // Start Only
+                return Date(nanoSecondSince1970: startTime).formatted(date: .omitted, time: .shortened)
+            }
+        } else {
+            if let endTime = endTime {
+                // End Only
+                return "~" + Date(nanoSecondSince1970: endTime).formatted(date: .omitted, time: .shortened)
+            } else {
+                // None
+                return nil
+            }
+        }
+    }
+}

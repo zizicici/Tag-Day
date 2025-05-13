@@ -22,7 +22,7 @@ class RecordDetailViewController: UIViewController {
         var header: String? {
             switch self {
             case .time:
-                return nil
+                return String(localized: "dayRecord.time")
             case .wallet:
                 return nil
             case .comment:
@@ -43,8 +43,9 @@ class RecordDetailViewController: UIViewController {
     }
     
     enum Item: Hashable {
-//        case startTime(Int64)
-//        case endTime(Int64)
+        case timeOption(TimeOption?)
+        case startTime(Int64?)
+        case endTime(Int64?)
 //        case duration(Int64)
 //        case incomeAndExpenses
 //        case currencyCode(String)
@@ -64,6 +65,13 @@ class RecordDetailViewController: UIViewController {
         }
     }
     
+    enum EditMode {
+        case comment
+        case time
+    }
+    
+    private var editMode: EditMode = .comment
+    
     private var isEdited: Bool = false
     
     private var comment: String? {
@@ -81,6 +89,57 @@ class RecordDetailViewController: UIViewController {
     
     weak var commentCell: TextViewCell?
     
+    private var timeOption: TimeOption? {
+        didSet {
+            switch timeOption {
+            case .startAndEnd:
+                if startTime == nil {
+                    startTime = Date().nanoSecondSince1970
+                }
+                if endTime == nil {
+                    endTime = Date().nanoSecondSince1970
+                }
+            case .startOnly:
+                if startTime == nil {
+                    startTime = Date().nanoSecondSince1970
+                }
+            case .endOnly:
+                if endTime == nil {
+                    endTime = Date().nanoSecondSince1970
+                }
+            case nil:
+                break
+            }
+            reloadData()
+        }
+    }
+    
+    private var startTime: Int64? {
+        get {
+            return record.startTime
+        }
+        set {
+            if record.startTime != newValue {
+                record.startTime = newValue
+                isEdited = true
+                updateSaveButtonStatus()
+            }
+        }
+    }
+    
+    private var endTime: Int64? {
+        get {
+            return record.endTime
+        }
+        set {
+            if record.endTime != newValue {
+                record.endTime = newValue
+                isEdited = true
+                updateSaveButtonStatus()
+            }
+        }
+    }
+    
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
@@ -89,9 +148,27 @@ class RecordDetailViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    convenience init(dayRecord: DayRecord) {
+    convenience init(dayRecord: DayRecord, editMode: EditMode) {
         self.init()
         self.record = dayRecord
+        self.editMode = editMode
+        
+        switch editMode {
+        case .comment:
+            break
+        case .time:
+            if startTime != nil && endTime != nil {
+                timeOption = .startAndEnd
+            } else {
+                if startTime != nil {
+                    timeOption = .startOnly
+                } else if endTime != nil {
+                    timeOption = .endOnly
+                } else {
+                    timeOption = nil
+                }
+            }
+        }
     }
     
     deinit {
@@ -121,6 +198,8 @@ class RecordDetailViewController: UIViewController {
         tableView.backgroundColor = AppColor.background
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: NSStringFromClass(UITableViewCell.self))
         tableView.register(TextViewCell.self, forCellReuseIdentifier: NSStringFromClass(TextViewCell.self))
+        tableView.register(DateCell.self, forCellReuseIdentifier: NSStringFromClass(DateCell.self))
+        tableView.register(OptionCell.self, forCellReuseIdentifier: NSStringFromClass(OptionCell.self))
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 50.0
         tableView.delegate = self
@@ -136,10 +215,46 @@ class RecordDetailViewController: UIViewController {
             guard let self = self else { return nil }
             guard let identifier = dataSource.itemIdentifier(for: indexPath) else { return nil }
             switch identifier {
-//            case .startTime(_):
-//                <#code#>
-//            case .endTime(_):
-//                <#code#>
+            case .timeOption(let timeOption):
+                let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(OptionCell.self), for: indexPath)
+                if let cell = cell as? OptionCell {
+                    cell.update(with: timeOption)
+                    let noneAction = UIAction(title: TimeOption.none, state: timeOption == nil ? .on : .off) { [weak self] _ in
+                        self?.timeOption = nil
+                    }
+                    let actions = [TimeOption.startAndEnd, TimeOption.startOnly, TimeOption.endOnly].map { target in
+                        let action = UIAction(title: target.title, subtitle: target.subtitle, state: timeOption == target ? .on : .off) { [weak self] _ in
+                            self?.timeOption = target
+                        }
+                        return action
+                    }
+                    let divider = UIMenu(title: "", options: . displayInline, children: actions)
+                    let menu = UIMenu(children: [noneAction, divider])
+                    cell.tapButton.menu = menu
+                }
+                return cell
+            case .startTime(let startTime):
+                let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(DateCell.self), for: indexPath)
+                if let cell = cell as? DateCell {
+                    cell.update(with: DateCellItem(title: String(localized: "dayRecord.time.start"), nanoSecondsFrom1970: startTime))
+                    cell.selectDateAction = { [weak self] nanoSeconds in
+                        guard let self = self else { return }
+                        self.startTime = nanoSeconds
+                        self.updateSaveButtonStatus()
+                    }
+                }
+                return cell
+            case .endTime(let endTime):
+                let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(DateCell.self), for: indexPath)
+                if let cell = cell as? DateCell {
+                    cell.update(with: DateCellItem(title: String(localized: "dayRecord.time.end"), nanoSecondsFrom1970: endTime))
+                    cell.selectDateAction = { [weak self] nanoSeconds in
+                        guard let self = self else { return }
+                        self.endTime = nanoSeconds
+                        self.updateSaveButtonStatus()
+                    }
+                }
+                return cell
 //            case .duration(_):
 //                <#code#>
 //            case .incomeAndExpenses:
@@ -167,14 +282,49 @@ class RecordDetailViewController: UIViewController {
         updateSaveButtonStatus()
         
         var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
-        snapshot.appendSections([.comment])
-        snapshot.appendItems([.comment(comment)], toSection: .comment)
+        switch editMode {
+        case .comment:
+            snapshot.appendSections([.comment])
+            snapshot.appendItems([.comment(comment)], toSection: .comment)
+        case .time:
+            snapshot.appendSections([.time])
+            snapshot.appendItems([.timeOption(timeOption)], toSection: .time)
+
+            if let timeOption = timeOption {
+                switch timeOption {
+                case .startAndEnd:
+                    snapshot.appendItems([.startTime(startTime), .endTime(endTime)], toSection: .time)
+                case .startOnly:
+                    snapshot.appendItems([.startTime(startTime)], toSection: .time)
+                case .endOnly:
+                    snapshot.appendItems([.endTime(endTime)], toSection: .time)
+                }
+            }
+        }
         
         dataSource.apply(snapshot, animatingDifferences: false)
     }
     
     @objc
     func save() {
+        // Handle Time For Save
+        switch editMode {
+        case .comment:
+            break
+        case .time:
+            switch timeOption {
+            case .startAndEnd:
+                break
+            case .startOnly:
+                endTime = nil
+            case .endOnly:
+                startTime = nil
+            case nil:
+                startTime = nil
+                endTime = nil
+            }
+        }
+        
         let result = DataManager.shared.update(dayRecord: record)
         if result {
             dismissViewController()
@@ -199,8 +349,31 @@ class RecordDetailViewController: UIViewController {
     }
     
     func allowSave() -> Bool {
-        let commentFlag = comment?.isValidRecordComment() ?? true
-        return commentFlag
+        switch editMode {
+        case .comment:
+            let commentFlag = comment?.isValidRecordComment() ?? true
+            
+            return commentFlag
+        case .time:
+            let timeFlag: Bool
+            
+            switch timeOption {
+            case .startAndEnd:
+                if let startTime = startTime, let endTime = endTime {
+                    timeFlag = startTime <= endTime
+                } else {
+                    timeFlag = true
+                }
+            case .startOnly:
+                timeFlag = true
+            case .endOnly:
+                timeFlag = true
+            case nil:
+                timeFlag = true
+            }
+            
+            return timeFlag
+        }
     }
 }
 

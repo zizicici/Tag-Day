@@ -49,6 +49,8 @@
 		14CC8A462DCF04970062F8BA /* FastEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CC8A452DCF04970062F8BA /* FastEditorViewController.swift */; };
 		14D07CC32DD2ED4900F6843C /* RecordDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D07CC22DD2ED4900F6843C /* RecordDetailViewController.swift */; };
 		14D07CC52DD2F09900F6843C /* TextViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D07CC42DD2F09900F6843C /* TextViewCell.swift */; };
+		14D07CC92DD332DF00F6843C /* DateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D07CC82DD332DF00F6843C /* DateCell.swift */; };
+		14D07CCB2DD3445F00F6843C /* OptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D07CCA2DD3445F00F6843C /* OptionCell.swift */; };
 		14D272702DC0709300267572 /* CalendarBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D2726F2DC0709300267572 /* CalendarBaseViewController.swift */; };
 		14D272722DC0712A00267572 /* AppColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D272712DC0712A00267572 /* AppColor.swift */; };
 		14D272792DC0716E00267572 /* CalendarViewController+CellRegistration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D272732DC0716E00267572 /* CalendarViewController+CellRegistration.swift */; };
@@ -121,6 +123,8 @@
 		14CD76AD2DBE6BA10035DF1F /* Tag Day.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Tag Day.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		14D07CC22DD2ED4900F6843C /* RecordDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetailViewController.swift; sourceTree = "<group>"; };
 		14D07CC42DD2F09900F6843C /* TextViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewCell.swift; sourceTree = "<group>"; };
+		14D07CC82DD332DF00F6843C /* DateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateCell.swift; sourceTree = "<group>"; };
+		14D07CCA2DD3445F00F6843C /* OptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionCell.swift; sourceTree = "<group>"; };
 		14D2726F2DC0709300267572 /* CalendarBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarBaseViewController.swift; sourceTree = "<group>"; };
 		14D272712DC0712A00267572 /* AppColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColor.swift; sourceTree = "<group>"; };
 		14D272732DC0716E00267572 /* CalendarViewController+CellRegistration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CalendarViewController+CellRegistration.swift"; sourceTree = "<group>"; };
@@ -185,6 +189,8 @@
 			children = (
 				14AA3E0A2DCDF3BE00E1F4F8 /* RecordListCell.swift */,
 				14D07CC42DD2F09900F6843C /* TextViewCell.swift */,
+				14D07CC82DD332DF00F6843C /* DateCell.swift */,
+				14D07CCA2DD3445F00F6843C /* OptionCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -549,6 +555,7 @@
 				14D272942DC071B000267572 /* MonthTitleCell.swift in Sources */,
 				14D272952DC071B000267572 /* ImpactGenerator.swift in Sources */,
 				14D272962DC071B000267572 /* WeekdayOrderView.swift in Sources */,
+				14D07CCB2DD3445F00F6843C /* OptionCell.swift in Sources */,
 				14D272972DC071B000267572 /* BlockCell.swift in Sources */,
 				14833D392DC504B9001B61D5 /* DayRecord.swift in Sources */,
 				14D272982DC071B000267572 /* UIDraggableCollectionView.swift in Sources */,
@@ -567,6 +574,7 @@
 				14D272B12DC073EB00267572 /* Date+Extension.swift in Sources */,
 				14D272B22DC073EB00267572 /* AppDatabase.swift in Sources */,
 				14AD28862DC5C21E0018DAF3 /* DataManager.swift in Sources */,
+				14D07CC92DD332DF00F6843C /* DateCell.swift in Sources */,
 				14C713532DD22FDC007527C5 /* FetchError.swift in Sources */,
 				14D272812DC0718D00267572 /* DayByDayHandler.swift in Sources */,
 				14C7134B2DD21DF8007527C5 /* GetRecordsIntent.swift in Sources */,
