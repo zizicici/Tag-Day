@@ -72,7 +72,7 @@ class RecordListCell: RecordListBaseCell {
         var configuration = UIButton.Configuration.plain()
         configuration.image = UIImage(systemName: "ellipsis")
         let button = UIButton(configuration: configuration)
-        button.tintColor = AppColor.text
+        button.tintColor = AppColor.text.withAlphaComponent(0.8)
         button.showsMenuAsPrimaryAction = true
 
         return button
