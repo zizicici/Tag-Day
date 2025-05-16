@@ -16,15 +16,12 @@ class RecordDetailViewController: UIViewController {
     
     enum Section: Int, Hashable {
         case time
-        case wallet
         case comment
         
         var header: String? {
             switch self {
             case .time:
                 return String(localized: "dayRecord.time")
-            case .wallet:
-                return nil
             case .comment:
                 return String(localized: "dayRecord.comment")
             }
@@ -33,8 +30,6 @@ class RecordDetailViewController: UIViewController {
         var footer: String? {
             switch self {
             case .time:
-                return nil
-            case .wallet:
                 return nil
             case .comment:
                 return nil
@@ -47,9 +42,6 @@ class RecordDetailViewController: UIViewController {
         case startTime(Int64?)
         case endTime(Int64?)
 //        case duration(Int64)
-//        case incomeAndExpenses
-//        case currencyCode(String)
-//        case currencyValue(Int64)
         case comment(String?)
     }
     
@@ -256,12 +248,6 @@ class RecordDetailViewController: UIViewController {
                 }
                 return cell
 //            case .duration(_):
-//                <#code#>
-//            case .incomeAndExpenses:
-//                <#code#>
-//            case .currencyCode(_):
-//                <#code#>
-//            case .currencyValue(_):
 //                <#code#>
             case .comment(let comment):
                 let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(TextViewCell.self), for: indexPath)

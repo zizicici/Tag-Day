@@ -181,15 +181,11 @@ extension RecordListViewController: RecordListCellDelegate {
             self?.showRecordEditor(for: record, editMode: .time)
         }
         
-        let walletAction = UIAction(title: String(localized: "dayDetail.tagMenu.wallet"), subtitle: "", image: UIImage(systemName: "arrow.left.arrow.right")) { [weak self] _ in
-            self?.showRecordEditor(for: record, editMode: .comment)
-        }
-        
         let commentAction = UIAction(title: String(localized: "dayDetail.tagMenu.comment"), subtitle: "", image: UIImage(systemName: "text.bubble")) { [weak self] _ in
             self?.showRecordEditor(for: record, editMode: .comment)
         }
         
-        let updateDivider = UIMenu(title: String(localized: "dayDetail.tagMenu.update"), options: .displayInline, children: [timeAction, walletAction, commentAction])
+        let updateDivider = UIMenu(title: String(localized: "dayDetail.tagMenu.update"), options: .displayInline, children: [timeAction, commentAction])
         children.append(updateDivider)
 
         let deleteAction = UIAction(title: String(localized: "button.delete"), subtitle: "", image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] _ in

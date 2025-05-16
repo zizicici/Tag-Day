@@ -1377,34 +1377,6 @@
         }
       }
     },
-    "dayDetail.tagMenu.wallet" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Income/Expenses"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "收支"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "收支"
-          }
-        },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "收支"
-          }
-        }
-      }
-    },
     "dayDetail.timeOption.endOnly.title" : {
       "localizations" : {
         "en" : {
