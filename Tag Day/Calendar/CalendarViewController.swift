@@ -400,7 +400,8 @@ extension CalendarViewController: FastEditorNavigator {
         guard let bookID = book?.id, let tagID = tag.id else {
             return
         }
-        let newRecord = DayRecord(bookID: bookID, tagID: tagID, day: Int64(day.julianDay))
+        let lastOrder = DataManager.shared.fetchLastRecordOrder(bookID: bookID, day: Int64(day.julianDay))
+        let newRecord = DayRecord(bookID: bookID, tagID: tagID, day: Int64(day.julianDay), order: lastOrder + 1)
         _ = DataManager.shared.add(dayRecord: newRecord)
         
         // Dismiss
@@ -413,7 +414,7 @@ extension CalendarViewController: FastEditorNavigator {
         guard let bookID = book?.id else { return }
         let result = DataManager.shared.resetDayRecord(bookID: bookID, day: Int64(day.julianDay))
         if result, let tag = tag, let tagID = tag.id {
-            _ = DataManager.shared.add(dayRecord: DayRecord(bookID: bookID, tagID: tagID, day: Int64(day.julianDay)))
+            _ = DataManager.shared.add(dayRecord: DayRecord(bookID: bookID, tagID: tagID, day: Int64(day.julianDay), order: 0))
         }
         
         // Dismiss

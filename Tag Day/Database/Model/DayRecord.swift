@@ -17,12 +17,10 @@ struct DayRecord: Identifiable, Hashable {
     
     var comment: String?
     
-    var currencyCode: String?
-    var currencyValue: Int64?
-    
     var startTime: Int64?
     var endTime: Int64?
     var duration: Int64?
+    var order: Int64
 }
 
 extension DayRecord: TableRecord {
@@ -36,19 +34,17 @@ extension DayRecord: Codable, FetchableRecord, MutablePersistableRecord {
         
         case comment
         case duration
+        case order
         
         static let bookID = Column(CodingKeys.bookID)
         static let tagID = Column(CodingKeys.tagID)
-        
-        static let currencyCode = Column(CodingKeys.currencyCode)
-        static let currencyValue = Column(CodingKeys.currencyValue)
         
         static let startTime = Column(CodingKeys.startTime)
         static let endTime = Column(CodingKeys.endTime)
     }
     
     enum CodingKeys: String, CodingKey {
-        case id, bookID = "book_id", tagID = "tag_id", day, comment, currencyCode = "currency_code", currencyValue = "currency_value", startTime = "start_time", endTime = "end_time", duration
+        case id, bookID = "book_id", tagID = "tag_id", day, comment, startTime = "start_time", endTime = "end_time", duration, order
     }
     
     mutating func didInsert(_ inserted: InsertionSuccess) {

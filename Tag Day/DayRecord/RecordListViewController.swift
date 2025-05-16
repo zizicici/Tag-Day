@@ -241,7 +241,8 @@ extension RecordListViewController: FastEditorNavigator {
         guard let bookID = book.id, let tagID = tag.id else {
             return
         }
-        let newRecord = DayRecord(bookID: bookID, tagID: tagID, day: Int64(day.julianDay))
+        let lastOrder = DataManager.shared.fetchLastRecordOrder(bookID: bookID, day: Int64(day.julianDay))
+        let newRecord = DayRecord(bookID: bookID, tagID: tagID, day: Int64(day.julianDay), order: lastOrder)
         _ = DataManager.shared.add(dayRecord: newRecord)
         
         // Dismiss

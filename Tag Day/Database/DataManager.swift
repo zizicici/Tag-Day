@@ -369,15 +369,23 @@ extension DataManager {
 
 // Day Records
 extension DataManager {
+    func fetchLastRecordOrder(bookID: Int64, day: Int64) -> Int64 {
+        let lastOrder = (try? fetchAllDayRecords(bookID: bookID, day: day).first?.order) ?? 0
+        
+        return lastOrder
+    }
+    
     func fetchAllDayRecords(bookID: Int64) throws -> [DayRecord] {
         var result: [DayRecord] = []
         try AppDatabase.shared.reader?.read { db in
             do {
                 let bookIDColumn = DayRecord.Columns.bookID
                 let dayColumn = DayRecord.Columns.day
+                let orderColumn = DayRecord.Columns.order
                 result = try DayRecord
                     .filter(bookIDColumn == bookID)
                     .order(dayColumn.asc)
+                    .order(orderColumn.desc)
                     .fetchAll(db)
             }
             catch {
@@ -394,9 +402,11 @@ extension DataManager {
             do {
                 let bookIDColumn = DayRecord.Columns.bookID
                 let dayColumn = DayRecord.Columns.day
+                let orderColumn = DayRecord.Columns.order
                 result = try DayRecord
                     .filter(bookIDColumn == bookID)
                     .filter(dayColumn == day)
+                    .order(orderColumn.desc)
                     .fetchAll(db)
             }
             catch {
