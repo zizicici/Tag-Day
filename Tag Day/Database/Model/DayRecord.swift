@@ -54,22 +54,41 @@ extension DayRecord: Codable, FetchableRecord, MutablePersistableRecord {
 
 extension DayRecord {
     func getTime() -> String? {
+        var result: String?
         if let startTime = startTime {
             if let endTime = endTime {
                 // Start And End
-                return Date(nanoSecondSince1970: startTime).formatted(date: .omitted, time: .shortened) + "~" + Date(nanoSecondSince1970: endTime).formatted(date: .omitted, time: .shortened)
+                result = Date(nanoSecondSince1970: startTime).formatted(date: .omitted, time: .shortened) + "~" + Date(nanoSecondSince1970: endTime).formatted(date: .omitted, time: .shortened)
             } else {
                 // Start Only
-                return Date(nanoSecondSince1970: startTime).formatted(date: .omitted, time: .shortened)
+                result = Date(nanoSecondSince1970: startTime).formatted(date: .omitted, time: .shortened)
             }
         } else {
             if let endTime = endTime {
                 // End Only
-                return "~" + Date(nanoSecondSince1970: endTime).formatted(date: .omitted, time: .shortened)
+                result = "~" + Date(nanoSecondSince1970: endTime).formatted(date: .omitted, time: .shortened)
             } else {
                 // None
-                return nil
+                result = nil
             }
         }
+        
+        if let duration = duration {
+            let durationText = humanReadableTime(Double(duration) / 1000)
+            if let startEnd = result {
+                result = startEnd + "   (" + durationText + ")"
+            } else {
+                result = durationText
+            }
+        }
+        
+        return result
+    }
+    
+    func humanReadableTime(_ interval: TimeInterval) -> String {
+        let formatter = DateComponentsFormatter()
+        formatter.unitsStyle = .short
+        formatter.maximumUnitCount = 2  // 只显示最大的两个单位
+        return formatter.string(from: interval)?.replacingOccurrences(of: " ", with: "") ?? ""
     }
 }

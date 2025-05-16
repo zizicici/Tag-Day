@@ -1,5 +1,5 @@
 {
-  "originHash" : "dd9bec4ed49c4ccc38ba5cd644ce2196eab83a42c400d5633dab5026f5d08c3c",
+  "originHash" : "770ba491091507608294e9f1141923607032f3f27de3fbd3cab048d30dec830d",
   "pins" : [
     {
       "identity" : "appinfo",
@@ -8,6 +8,15 @@
       "state" : {
         "revision" : "e415d5acde9173529a05839dc56031448808eb25",
         "version" : "1.1.0"
+      }
+    },
+    {
+      "identity" : "durationpicker",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mac-gallagher/DurationPicker",
+      "state" : {
+        "revision" : "798a9f9b6c162eb6f00deb29d10175c00d1caa25",
+        "version" : "1.0.2"
       }
     },
     {

@@ -80,6 +80,8 @@
 		14D272BD2DC0884E00267572 /* SpecificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D272BB2DC0884E00267572 /* SpecificationsViewController.swift */; };
 		14D272BE2DC0884E00267572 /* SettingOptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D272BA2DC0884E00267572 /* SettingOptionsViewController.swift */; };
 		14D272BF2DC0884E00267572 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D272B92DC0884E00267572 /* MoreViewController.swift */; };
+		14EBE0862DD7679700F7609A /* DurationPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 14EBE0852DD7679700F7609A /* DurationPicker */; };
+		14EBE0882DD76B0B00F7609A /* DurationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14EBE0872DD76B0B00F7609A /* DurationCell.swift */; };
 		14ED63D12DC702F000384068 /* CalendarYearPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14ED63D02DC702F000384068 /* CalendarYearPickerViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -154,6 +156,7 @@
 		14D272B92DC0884E00267572 /* MoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
 		14D272BA2DC0884E00267572 /* SettingOptionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingOptionsViewController.swift; sourceTree = "<group>"; };
 		14D272BB2DC0884E00267572 /* SpecificationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpecificationsViewController.swift; sourceTree = "<group>"; };
+		14EBE0872DD76B0B00F7609A /* DurationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DurationCell.swift; sourceTree = "<group>"; };
 		14ED63D02DC702F000384068 /* CalendarYearPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarYearPickerViewController.swift; sourceTree = "<group>"; };
 		14ED63D22DC72FF100384068 /* Tag Day.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Tag Day.entitlements"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -165,6 +168,7 @@
 			files = (
 				14B239D22DBF78F10007152C /* AppInfo in Frameworks */,
 				14B239D52DBF790A0007152C /* ZCCalendar in Frameworks */,
+				14EBE0862DD7679700F7609A /* DurationPicker in Frameworks */,
 				14B239CC2DBF77B10007152C /* SnapKit in Frameworks */,
 				14B239D82DBF791E0007152C /* Toast in Frameworks */,
 				14B239CF2DBF78CD0007152C /* GRDB in Frameworks */,
@@ -191,6 +195,7 @@
 				14D07CC42DD2F09900F6843C /* TextViewCell.swift */,
 				14D07CC82DD332DF00F6843C /* DateCell.swift */,
 				14D07CCA2DD3445F00F6843C /* OptionCell.swift */,
+				14EBE0872DD76B0B00F7609A /* DurationCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -466,6 +471,7 @@
 				14B239D12DBF78F10007152C /* AppInfo */,
 				14B239D42DBF790A0007152C /* ZCCalendar */,
 				14B239D72DBF791E0007152C /* Toast */,
+				14EBE0852DD7679700F7609A /* DurationPicker */,
 			);
 			productName = "Tag Day";
 			productReference = 14CD76AD2DBE6BA10035DF1F /* Tag Day.app */;
@@ -504,6 +510,7 @@
 				14B239D02DBF78F10007152C /* XCRemoteSwiftPackageReference "AppInfo" */,
 				14B239D32DBF790A0007152C /* XCRemoteSwiftPackageReference "ZCCalendar" */,
 				14B239D62DBF791E0007152C /* XCRemoteSwiftPackageReference "Toast-Swift" */,
+				14EBE0842DD7679700F7609A /* XCRemoteSwiftPackageReference "DurationPicker" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 14CD76AE2DBE6BA10035DF1F /* Products */;
@@ -543,6 +550,7 @@
 				14BBA37A2DCB142900AD7BAC /* ColorPickerCell.swift in Sources */,
 				14ACBE562DBFAD2E0056B1FD /* TabbarController.swift in Sources */,
 				14D2729F2DC072D700267572 /* Settings.swift in Sources */,
+				14EBE0882DD76B0B00F7609A /* DurationCell.swift in Sources */,
 				14ACBE572DBFAD2E0056B1FD /* NavigationViewController.swift in Sources */,
 				14D272862DC0719400267572 /* LayoutGenerator.swift in Sources */,
 				14C7134E2DD22F86007527C5 /* RecordEntity.swift in Sources */,
@@ -865,6 +873,14 @@
 				minimumVersion = 5.1.1;
 			};
 		};
+		14EBE0842DD7679700F7609A /* XCRemoteSwiftPackageReference "DurationPicker" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mac-gallagher/DurationPicker";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -892,6 +908,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 14B239D62DBF791E0007152C /* XCRemoteSwiftPackageReference "Toast-Swift" */;
 			productName = Toast;
+		};
+		14EBE0852DD7679700F7609A /* DurationPicker */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 14EBE0842DD7679700F7609A /* XCRemoteSwiftPackageReference "DurationPicker" */;
+			productName = DurationPicker;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

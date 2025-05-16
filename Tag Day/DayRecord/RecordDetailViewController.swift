@@ -47,6 +47,7 @@ class RecordDetailViewController: UIViewController {
         case startTime(Int64?)
         case endTime(Int64?)
         case durationOption(DurationOption?)
+        case duration(DurationConfiguration)
         case comment(String?)
     }
     
@@ -91,18 +92,18 @@ class RecordDetailViewController: UIViewController {
             switch timeOption {
             case .startAndEnd:
                 if startTime == nil {
-                    startTime = Date().nanoSecondSince1970
+                    startTime = Int64(Date().timeIntervalSince1970) / 60 * 60 * 1000
                 }
                 if endTime == nil {
-                    endTime = Date().nanoSecondSince1970
+                    endTime = Int64(Date().timeIntervalSince1970) / 60 * 60 * 1000
                 }
             case .startOnly:
                 if startTime == nil {
-                    startTime = Date().nanoSecondSince1970
+                    startTime = Int64(Date().timeIntervalSince1970) / 60 * 60 * 1000
                 }
             case .endOnly:
                 if endTime == nil {
-                    endTime = Date().nanoSecondSince1970
+                    endTime = Int64(Date().timeIntervalSince1970) / 60 * 60 * 1000
                 }
             case nil:
                 break
@@ -120,6 +121,7 @@ class RecordDetailViewController: UIViewController {
                 record.startTime = newValue
                 isEdited = true
                 updateSaveButtonStatus()
+                updateDuration()
             }
         }
     }
@@ -133,6 +135,7 @@ class RecordDetailViewController: UIViewController {
                 record.endTime = newValue
                 isEdited = true
                 updateSaveButtonStatus()
+                updateDuration()
             }
         }
     }
@@ -140,15 +143,20 @@ class RecordDetailViewController: UIViewController {
     
     private var durationOption: DurationOption? {
         didSet {
-            switch durationOption {
-            case .custom:
-                break
-            case .automatic:
-                break
-            case nil:
-                break
-            }
             reloadData()
+        }
+    }
+    
+    private var durationTimeInterval: Int64? {
+        get {
+            return record.duration
+        }
+        set {
+            if record.duration != newValue {
+                record.duration = newValue
+                isEdited = true
+                updateSaveButtonStatus()
+            }
         }
     }
     
@@ -178,6 +186,24 @@ class RecordDetailViewController: UIViewController {
                     timeOption = .endOnly
                 } else {
                     timeOption = nil
+                }
+            }
+            switch timeOption {
+            case .startAndEnd:
+                if let durationTimeInterval = durationTimeInterval {
+                    if durationTimeInterval == (endTime ?? 0) - (startTime ?? 0) {
+                        durationOption = .automatic
+                    } else {
+                        durationOption = .custom
+                    }
+                } else {
+                    durationOption = nil
+                }
+            case .startOnly, .endOnly, nil:
+                if durationTimeInterval != nil {
+                    durationOption = .custom
+                } else {
+                    durationOption = nil
                 }
             }
         }
@@ -213,6 +239,7 @@ class RecordDetailViewController: UIViewController {
         tableView.register(DateCell.self, forCellReuseIdentifier: NSStringFromClass(DateCell.self))
         tableView.register(OptionCell<TimeOption>.self, forCellReuseIdentifier: NSStringFromClass(OptionCell<TimeOption>.self))
         tableView.register(OptionCell<DurationOption>.self, forCellReuseIdentifier: NSStringFromClass(OptionCell<DurationOption>.self))
+        tableView.register(DurationCell.self, forCellReuseIdentifier: NSStringFromClass(DurationCell.self))
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 50.0
         tableView.delegate = self
@@ -286,6 +313,15 @@ class RecordDetailViewController: UIViewController {
                     cell.tapButton.menu = menu
                 }
                 return cell
+            case .duration(let config):
+                let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(DurationCell.self), for: indexPath)
+                if let cell = cell as? DurationCell {
+                    cell.update(with: config)
+                    cell.valueChangedAction = { [weak self] timeInterval in
+                        self?.durationTimeInterval = Int64(timeInterval * 1000)
+                    }
+                }
+                return cell
             case .comment(let comment):
                 let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(TextViewCell.self), for: indexPath)
                 if let cell = cell as? TextViewCell {
@@ -303,6 +339,7 @@ class RecordDetailViewController: UIViewController {
     
     func reloadData() {
         updateSaveButtonStatus()
+        updateDuration()
         
         var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
         switch editMode {
@@ -326,6 +363,15 @@ class RecordDetailViewController: UIViewController {
             
             snapshot.appendSections([.duration])
             snapshot.appendItems([.durationOption(durationOption)], toSection: .duration)
+            
+            if let durationOption = durationOption {
+                switch durationOption {
+                case .custom:
+                    snapshot.appendItems([.duration(DurationConfiguration(duration: TimeInterval((durationTimeInterval ?? 0) / 1000)))], toSection: .duration)
+                case .automatic:
+                    break
+                }
+            }
         }
         
         dataSource.apply(snapshot, animatingDifferences: false)
@@ -350,6 +396,7 @@ class RecordDetailViewController: UIViewController {
                 endTime = nil
             }
         }
+        updateDuration()
         
         let result = DataManager.shared.update(dayRecord: record)
         if result {
@@ -399,6 +446,25 @@ class RecordDetailViewController: UIViewController {
             }
             
             return timeFlag
+        }
+    }
+    
+    func updateDuration() {
+        switch durationOption {
+        case .custom:
+            break
+        case .automatic:
+            if let startTime = startTime, let endTime = endTime {
+                if endTime >= startTime {
+                    durationTimeInterval = endTime - startTime
+                } else {
+                    durationTimeInterval = nil
+                }
+            } else {
+                durationTimeInterval = nil
+            }
+        case nil:
+            durationTimeInterval = nil
         }
     }
 }
