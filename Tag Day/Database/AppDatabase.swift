@@ -305,6 +305,26 @@ extension AppDatabase {
         return true
     }
     
+    func update(dayRecords: [DayRecord]) -> Bool {
+        guard !dayRecords.contains(where: { $0.id == nil }) else {
+            // No ID
+            return false
+        }
+        do {
+            _ = try dbWriter?.write{ db in
+                for dayRecord in dayRecords {
+                    try dayRecord.update(db)
+                }
+            }
+        }
+        catch {
+            print(error)
+            return false
+        }
+        NotificationCenter.default.post(Notification(name: Notification.Name.DatabaseUpdated))
+        return true
+    }
+    
     func add(dayRecord: DayRecord) -> Bool {
         guard dayRecord.id == nil else {
             // Should no ID

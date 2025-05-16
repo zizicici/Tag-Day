@@ -91,6 +91,9 @@ class RecordListViewController: UIViewController {
         collectionView.snp.makeConstraints { make in
             make.edges.equalTo(view)
         }
+        collectionView.dragDelegate = self
+        collectionView.dropDelegate = self
+        collectionView.dragInteractionEnabled = true
     }
     
     private func configureDataSource() {
@@ -166,6 +169,103 @@ extension RecordListViewController: UICollectionViewDelegate {
     }
 }
 
+extension RecordListViewController: UICollectionViewDragDelegate {
+    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        if let item = dataSource.itemIdentifier(for: indexPath) {
+            let tag = item.tag
+            let itemProvider = NSItemProvider(object: tag.title as NSString)
+            let dragItem = UIDragItem(itemProvider: itemProvider)
+            dragItem.localObject = item
+            return [dragItem]
+        } else {
+            return []
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, dragPreviewParametersForItemAt indexPath: IndexPath) -> UIDragPreviewParameters? {
+        guard let cell = collectionView.cellForItem(at: indexPath) else {
+            return nil
+        }
+        let previewParameters = UIDragPreviewParameters()
+        previewParameters.visiblePath = UIBezierPath(rect: cell.bounds)
+        previewParameters.backgroundColor = .clear
+        previewParameters.shadowPath = UIBezierPath(rect: .zero)
+        return previewParameters
+    }
+}
+
+extension RecordListViewController: UICollectionViewDropDelegate {
+    func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
+        guard let destinationIndexPath = coordinator.destinationIndexPath else {
+            return
+        }
+        switch coordinator.proposal.operation {
+        case .cancel:
+            break
+        case .forbidden:
+            break
+        case .copy:
+            break
+        case .move:
+            if let item = coordinator.items.first {
+                if let cellItem = item.dragItem.localObject as? Item {
+                    let sourceRecord = cellItem.record
+                    if let destination = dataSource.itemIdentifier(for: destinationIndexPath) {
+                        let destinationRecord = destination.record
+                        var snapshot = dataSource.snapshot()
+                        if let sourceIndexPath = item.sourceIndexPath, sourceIndexPath != destinationIndexPath {
+                            snapshot.deleteItems([cellItem])
+                            dataSource.apply(snapshot)
+                            if sourceIndexPath.item < destinationIndexPath.item {
+                                snapshot.insertItems([cellItem], afterItem: destination)
+                            } else {
+                                snapshot.insertItems([cellItem], beforeItem: destination)
+                            }
+                            dataSource.apply(snapshot)
+                            updateRecordOrdering(from: sourceRecord, to: destinationRecord)
+                        } else {
+                            dataSource.apply(snapshot)
+                        }
+                    }
+                }
+            }
+        @unknown default:
+            fatalError()
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+        if session.localDragSession != nil {
+            if collectionView.hasActiveDrag {
+                return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+            } else {
+                return UICollectionViewDropProposal(operation: .cancel)
+            }
+        } else {
+            return UICollectionViewDropProposal(operation: .forbidden)
+        }
+    }
+}
+
+extension RecordListViewController {
+    private func updateRecordOrdering(from source: DayRecord, to destination: DayRecord) {
+        guard let sourceIndex = records.firstIndex(where: { $0.id == source.id}), let destinationIndex = records.firstIndex(where: { $0.id == destination.id }), sourceIndex != destinationIndex else {
+            return
+        }
+        var newOrderRecords = records
+        let record = newOrderRecords.remove(at: sourceIndex)
+        newOrderRecords.insert(record, at: destinationIndex)
+        
+        var saveRecords: [DayRecord] = []
+        for (index, element) in newOrderRecords.reversed().enumerated() {
+            var newOrderRecord = element
+            newOrderRecord.order = Int64(index)
+            saveRecords.append(newOrderRecord)
+        }
+        _ = DataManager.shared.update(dayRecords: saveRecords)
+    }
+}
+
 extension RecordListViewController: RecordListCellDelegate {
     func handle(tag: Tag, in button: UIButton, for record: DayRecord) {
         let detailViewController = FastEditorViewController(day: day, book: book, editMode: .replace(tag, record))
@@ -199,7 +299,11 @@ extension RecordListViewController: RecordListCellDelegate {
     }
     
     func commentButton(for record: DayRecord) {
-        self.showRecordEditor(for: record, editMode: .comment)
+        showRecordEditor(for: record, editMode: .comment)
+    }
+    
+    func timeButton(for record: DayRecord) {
+        showRecordEditor(for: record, editMode: .time)
     }
 }
 

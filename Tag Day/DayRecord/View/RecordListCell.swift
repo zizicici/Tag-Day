@@ -30,6 +30,7 @@ protocol RecordListCellDelegate: NSObjectProtocol {
     func getButtonMenu(for record: DayRecord) -> UIMenu
     func handle(tag: Tag, in button: UIButton, for record: DayRecord)
     func commentButton(for record: DayRecord)
+    func timeButton(for record: DayRecord)
 }
 
 class RecordListBaseCell: UICollectionViewCell {
@@ -118,6 +119,7 @@ class RecordListCell: RecordListBaseCell {
             make.trailing.lessThanOrEqualTo(contentView).inset(44)
             make.top.equalTo(contentView)
         }
+        timeButton.addTarget(self, action: #selector(timeButtonAction), for: .touchUpInside)
         
         contentView.addSubview(tagButton)
         tagButton.snp.makeConstraints { make in
@@ -186,6 +188,7 @@ class RecordListCell: RecordListBaseCell {
         tagButton.removeFromSuperview()
         moreButton.removeFromSuperview()
         commentButton.removeFromSuperview()
+        timeButton.removeFromSuperview()
     }
     
     @objc
@@ -201,6 +204,14 @@ class RecordListCell: RecordListBaseCell {
         let state = configurationState
         if let detailItem = state.detailItem {
             delegate?.commentButton(for: detailItem.record)
+        }
+    }
+    
+    @objc
+    func timeButtonAction() {
+        let state = configurationState
+        if let detailItem = state.detailItem {
+            delegate?.timeButton(for: detailItem.record)
         }
     }
 }
