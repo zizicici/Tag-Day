@@ -1209,6 +1209,86 @@
         }
       }
     },
+    "dayDetail.durationOption.automatic.subtitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Depends on Start Time and End Time."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "需要设置开始时间和结束时间"
+          }
+        }
+      }
+    },
+    "dayDetail.durationOption.automatic.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatic"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自动计算"
+          }
+        }
+      }
+    },
+    "dayDetail.durationOption.custom.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Custom"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自定义"
+          }
+        }
+      }
+    },
+    "dayDetail.durationOption.none" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "None"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无"
+          }
+        }
+      }
+    },
+    "dayDetail.durationOption.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duration"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "时长"
+          }
+        }
+      }
+    },
     "dayDetail.new" : {
       "localizations" : {
         "en" : {
@@ -1438,7 +1518,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The end time should exceed the start time."
+            "value" : "The End Time should exceed the Start Time."
           }
         },
         "zh-Hans" : {
@@ -1449,13 +1529,13 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "開始時間必須比結束時間早"
           }
         },
         "zh-HK" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "開始時間必須比結束時間早"
           }
         }

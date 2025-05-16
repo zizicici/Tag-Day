@@ -16,12 +16,15 @@ class RecordDetailViewController: UIViewController {
     
     enum Section: Int, Hashable {
         case time
+        case duration
         case comment
         
         var header: String? {
             switch self {
             case .time:
                 return String(localized: "dayRecord.time")
+            case .duration:
+                return nil
             case .comment:
                 return String(localized: "dayRecord.comment")
             }
@@ -30,6 +33,8 @@ class RecordDetailViewController: UIViewController {
         var footer: String? {
             switch self {
             case .time:
+                return nil
+            case .duration:
                 return nil
             case .comment:
                 return nil
@@ -41,7 +46,7 @@ class RecordDetailViewController: UIViewController {
         case timeOption(TimeOption?)
         case startTime(Int64?)
         case endTime(Int64?)
-//        case duration(Int64)
+        case durationOption(DurationOption?)
         case comment(String?)
     }
     
@@ -132,6 +137,21 @@ class RecordDetailViewController: UIViewController {
         }
     }
     
+    
+    private var durationOption: DurationOption? {
+        didSet {
+            switch durationOption {
+            case .custom:
+                break
+            case .automatic:
+                break
+            case nil:
+                break
+            }
+            reloadData()
+        }
+    }
+    
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
@@ -191,7 +211,8 @@ class RecordDetailViewController: UIViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: NSStringFromClass(UITableViewCell.self))
         tableView.register(TextViewCell.self, forCellReuseIdentifier: NSStringFromClass(TextViewCell.self))
         tableView.register(DateCell.self, forCellReuseIdentifier: NSStringFromClass(DateCell.self))
-        tableView.register(OptionCell.self, forCellReuseIdentifier: NSStringFromClass(OptionCell.self))
+        tableView.register(OptionCell<TimeOption>.self, forCellReuseIdentifier: NSStringFromClass(OptionCell<TimeOption>.self))
+        tableView.register(OptionCell<DurationOption>.self, forCellReuseIdentifier: NSStringFromClass(OptionCell<DurationOption>.self))
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 50.0
         tableView.delegate = self
@@ -208,10 +229,10 @@ class RecordDetailViewController: UIViewController {
             guard let identifier = dataSource.itemIdentifier(for: indexPath) else { return nil }
             switch identifier {
             case .timeOption(let timeOption):
-                let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(OptionCell.self), for: indexPath)
-                if let cell = cell as? OptionCell {
+                let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(OptionCell<TimeOption>.self), for: indexPath)
+                if let cell = cell as? OptionCell<TimeOption> {
                     cell.update(with: timeOption)
-                    let noneAction = UIAction(title: TimeOption.none, state: timeOption == nil ? .on : .off) { [weak self] _ in
+                    let noneAction = UIAction(title: TimeOption.noneTitle, state: timeOption == nil ? .on : .off) { [weak self] _ in
                         self?.timeOption = nil
                     }
                     let actions = [TimeOption.startAndEnd, TimeOption.startOnly, TimeOption.endOnly].map { target in
@@ -247,8 +268,24 @@ class RecordDetailViewController: UIViewController {
                     }
                 }
                 return cell
-//            case .duration(_):
-//                <#code#>
+            case .durationOption(let durationOption):
+                let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(OptionCell<DurationOption>.self), for: indexPath)
+                if let cell = cell as? OptionCell<DurationOption> {
+                    cell.update(with: durationOption)
+                    let noneAction = UIAction(title: DurationOption.noneTitle, state: durationOption == nil ? .on : .off) { [weak self] _ in
+                        self?.durationOption = nil
+                    }
+                    let actions = [DurationOption.automatic, DurationOption.custom].map { target in
+                        let action = UIAction(title: target.title, subtitle: target.subtitle, state: durationOption == target ? .on : .off) { [weak self] _ in
+                            self?.durationOption = target
+                        }
+                        return action
+                    }
+                    let divider = UIMenu(title: "", options: . displayInline, children: actions)
+                    let menu = UIMenu(children: [noneAction, divider])
+                    cell.tapButton.menu = menu
+                }
+                return cell
             case .comment(let comment):
                 let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(TextViewCell.self), for: indexPath)
                 if let cell = cell as? TextViewCell {
@@ -286,6 +323,9 @@ class RecordDetailViewController: UIViewController {
                     snapshot.appendItems([.endTime(endTime)], toSection: .time)
                 }
             }
+            
+            snapshot.appendSections([.duration])
+            snapshot.appendItems([.durationOption(durationOption)], toSection: .duration)
         }
         
         dataSource.apply(snapshot, animatingDifferences: false)

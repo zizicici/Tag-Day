@@ -8,13 +8,21 @@
 import UIKit
 import SnapKit
 
-enum TimeOption {
+protocol OptionItem: Hashable, Equatable {
+    static var noneTitle: String { get }
+    static var sectionTitle: String { get }
+    
+    var title: String { get }
+    var subtitle: String? { get }
+}
+
+enum TimeOption: OptionItem {
     case startAndEnd
     case startOnly
     case endOnly
     
-    static var none = String(localized: "dayDetail.timeOption.none")
-    static var title = String(localized: "dayDetail.timeOption.title")
+    static var noneTitle = String(localized: "dayDetail.timeOption.none")
+    static var sectionTitle = String(localized: "dayDetail.timeOption.title")
     
     var title: String {
         switch self {
@@ -39,21 +47,47 @@ enum TimeOption {
     }
 }
 
+enum DurationOption: OptionItem {
+    case custom
+    case automatic
+    
+    static var noneTitle = String(localized: "dayDetail.durationOption.none")
+    static var sectionTitle = String(localized: "dayDetail.durationOption.title")
+    
+    var title: String {
+        switch self {
+        case .custom:
+            String(localized: "dayDetail.durationOption.custom.title")
+        case .automatic:
+            String(localized: "dayDetail.durationOption.automatic.title")
+        }
+    }
+    
+    var subtitle: String? {
+        switch self {
+        case .custom:
+            return nil
+        case .automatic:
+            return String(localized: "dayDetail.durationOption.automatic.subtitle")
+        }
+    }
+}
+
 fileprivate extension UIConfigurationStateCustomKey {
     static let optionItem = UIConfigurationStateCustomKey("com.zizicici.tagday.cell.option.item")
 }
 
 private extension UICellConfigurationState {
-    var optionItem: TimeOption? {
-        set { self[.optionItem] = newValue }
-        get { return self[.optionItem] as? TimeOption}
+    var optionItem: (any OptionItem)? {
+        set { self[.optionItem] = newValue as? AnyHashable }
+        get { return self[.optionItem] as? (any OptionItem) }
     }
 }
 
-class OptionBaseCell: UITableViewCell {
-    private var optionItem: TimeOption? = nil
+class OptionBaseCell<T: OptionItem>: UITableViewCell {
+    private var optionItem: T? = nil
     
-    func update(with newOption: TimeOption?) {
+    func update(with newOption: T?) {
         guard optionItem != newOption else { return }
         optionItem = newOption
         setNeedsUpdateConfiguration()
@@ -66,15 +100,13 @@ class OptionBaseCell: UITableViewCell {
     }
 }
 
-class OptionCell: OptionBaseCell {
+class OptionCell<T: OptionItem>: OptionBaseCell<T> {
     private func defaultListContentConfiguration() -> UIListContentConfiguration { return .valueCell() }
     private lazy var listContentView = UIListContentView(configuration: defaultListContentConfiguration())
     
     var tapButton: UIButton = {
         var configuration = UIButton.Configuration.plain()
-        
         let button = UIButton(configuration: configuration)
-
         return button
     }()
     
@@ -90,14 +122,15 @@ class OptionCell: OptionBaseCell {
         
         let button = UIButton(configuration: configuration)
         button.isAccessibilityElement = false
-
         return button
     }()
     
+    // 添加类型特定的默认值
+    var defaultSectionTitle: String { T.sectionTitle }
+    var defaultNoneTitle: String { T.noneTitle }
+    
     func setupViewsIfNeeded() {
-        guard tapButton.superview == nil else {
-            return
-        }
+        guard tapButton.superview == nil else { return }
         
         contentView.addSubview(listContentView)
         listContentView.snp.makeConstraints { make in
@@ -120,9 +153,14 @@ class OptionCell: OptionBaseCell {
     override func updateConfiguration(using state: UICellConfigurationState) {
         setupViewsIfNeeded()
         var content = defaultListContentConfiguration().updated(for: state)
-        content.text = TimeOption.title
+        content.text = defaultSectionTitle  // 使用泛型类型的 sectionTitle
         listContentView.configuration = content
-        valueButton.setTitle(state.optionItem?.title ?? TimeOption.none, for: .normal)
+        
+        if let optionItem = state.optionItem as? T {  // 使用泛型类型 T
+            valueButton.setTitle(optionItem.title, for: .normal)
+        } else {
+            valueButton.setTitle(defaultNoneTitle, for: .normal)  // 使用泛型类型的 noneTitle
+        }
         
         isAccessibilityElement = true
         accessibilityTraits = .button
