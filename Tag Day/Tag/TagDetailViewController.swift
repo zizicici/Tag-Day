@@ -354,7 +354,7 @@ class TagDetailViewController: UIViewController {
     
     func allowSave() -> Bool {
         let titleFlag = tagTitle.isValidTagTitle()
-        let subtitleFlag = subtitle?.isValidTagTitle() ?? true
+        let subtitleFlag = subtitle?.isValidTagSubtitle() ?? true
         return titleFlag && subtitleFlag
     }
     
