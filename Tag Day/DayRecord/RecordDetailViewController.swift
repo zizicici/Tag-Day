@@ -450,21 +450,26 @@ class RecordDetailViewController: UIViewController {
     }
     
     func updateDuration() {
-        switch durationOption {
-        case .custom:
+        switch editMode {
+        case .comment:
             break
-        case .automatic:
-            if let startTime = startTime, let endTime = endTime {
-                if endTime >= startTime {
-                    durationTimeInterval = endTime - startTime
+        case .time:
+            switch durationOption {
+            case .custom:
+                break
+            case .automatic:
+                if let startTime = startTime, let endTime = endTime {
+                    if endTime >= startTime {
+                        durationTimeInterval = endTime - startTime
+                    } else {
+                        durationTimeInterval = nil
+                    }
                 } else {
                     durationTimeInterval = nil
                 }
-            } else {
+            case nil:
                 durationTimeInterval = nil
             }
-        case nil:
-            durationTimeInterval = nil
         }
     }
 }
