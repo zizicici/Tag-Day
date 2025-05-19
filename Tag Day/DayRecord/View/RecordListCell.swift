@@ -110,54 +110,77 @@ class RecordListCell: RecordListBaseCell {
         return button
     }()
     
-    private func setupViewsIfNeeded() {
+    private func setupViewsIfNeeded(using state: UICellConfigurationState) {
         guard tagButton.superview == nil else { return }
         
-        contentView.addSubview(timeButton)
-        timeButton.snp.makeConstraints { make in
-            make.leading.equalTo(contentView).inset(6)
-            make.trailing.lessThanOrEqualTo(contentView).inset(44)
-            make.top.equalTo(contentView)
+        if let detailItem = state.detailItem {
+            contentView.addSubview(tagButton)
+            tagButton.snp.makeConstraints { make in
+                make.leading.equalTo(contentView).inset(10)
+                make.trailing.equalTo(contentView).inset(44)
+                make.height.equalTo(44.0)
+            }
+            
+            contentView.addSubview(moreButton)
+            moreButton.snp.makeConstraints { make in
+                make.width.equalTo(34.0)
+                make.height.equalTo(44.0)
+                make.top.equalTo(tagButton)
+                make.trailing.equalTo(contentView)
+            }
+            
+            if detailItem.record.getTime() != nil {
+                contentView.addSubview(timeButton)
+                timeButton.snp.makeConstraints { make in
+                    make.leading.equalTo(contentView).inset(6)
+                    make.trailing.lessThanOrEqualTo(contentView).inset(44)
+                    make.top.equalTo(contentView)
+                }
+                tagButton.snp.makeConstraints { make in
+                    make.top.equalTo(timeButton.snp.bottom)
+                }
+            } else {
+                tagButton.snp.makeConstraints { make in
+                    make.top.equalTo(contentView)
+                }
+            }
+            
+            if detailItem.record.comment != nil {
+                contentView.addSubview(commentButton)
+                commentButton.snp.makeConstraints { make in
+                    make.leading.equalTo(contentView).inset(6)
+                    make.trailing.lessThanOrEqualTo(tagButton)
+                    make.top.equalTo(tagButton.snp.bottom)
+                    make.bottom.equalTo(contentView)
+                }
+            } else {
+                tagButton.snp.makeConstraints { make in
+                    make.bottom.equalTo(contentView)
+                }
+            }
         }
+
         timeButton.addTarget(self, action: #selector(timeButtonAction), for: .touchUpInside)
-        
-        contentView.addSubview(tagButton)
-        tagButton.snp.makeConstraints { make in
-            make.top.equalTo(timeButton.snp.bottom)
-            make.leading.equalTo(contentView).inset(10)
-            make.trailing.equalTo(contentView).inset(44)
-            make.height.equalTo(44.0)
-        }
         tagButton.addTarget(self, action: #selector(tagButtonAction), for: .touchUpInside)
-        
-        contentView.addSubview(moreButton)
-        moreButton.snp.makeConstraints { make in
-            make.width.equalTo(34.0)
-            make.height.equalTo(44.0)
-            make.top.equalTo(tagButton)
-            make.trailing.equalTo(contentView)
-        }
-        
-        contentView.addSubview(commentButton)
-        commentButton.snp.makeConstraints { make in
-            make.leading.equalTo(contentView).inset(6)
-            make.trailing.lessThanOrEqualTo(tagButton)
-            make.top.equalTo(tagButton.snp.bottom)
-            make.bottom.equalTo(contentView)
-        }
         commentButton.addTarget(self, action: #selector(commentButtonAction), for: .touchUpInside)
     }
     
     override func updateConfiguration(using state: UICellConfigurationState) {
         super.updateConfiguration(using: state)
-        setupViewsIfNeeded()
+        setupViewsIfNeeded(using: state)
         
         if let detailItem = state.detailItem, let tag = detailItem.tags.first(where: { $0.id == detailItem.record.tagID }) {
             let title = tag.title
             let tagColor = UIColor(string: tag.color)
             timeButton.configurationUpdateHandler = { button in
                 var config = button.configuration
-                config?.title = detailItem.record.getTime()
+                if let timeText = detailItem.record.getTime() {
+                    config?.title = timeText
+                    config?.baseForegroundColor = AppColor.text
+                } else {
+                    config?.title = String(localized: "dayRecord.time")
+                    config?.baseForegroundColor = AppColor.text.withAlphaComponent(0.5)
+                }
                 
                 button.configuration = config
             }
@@ -175,7 +198,13 @@ class RecordListCell: RecordListBaseCell {
             
             commentButton.configurationUpdateHandler = { button in
                 var config = button.configuration
-                config?.title = detailItem.record.comment
+                if let commetnText = detailItem.record.comment {
+                    config?.title = commetnText
+                    config?.baseForegroundColor = AppColor.text.withAlphaComponent(0.8)
+                } else {
+                    config?.title = String(localized: "dayRecord.comment")
+                    config?.baseForegroundColor = AppColor.text.withAlphaComponent(0.4)
+                }
                 
                 button.configuration = config
             }
