@@ -153,7 +153,7 @@ extension RecordListViewController {
                                                              subitems: [item])
 
             let section = NSCollectionLayoutSection(group: group)
-            section.interGroupSpacing = 10.0
+            section.interGroupSpacing = 16.0
             section.contentInsets = NSDirectionalEdgeInsets(top: 8.0, leading: 10.0, bottom: 8.0, trailing: 10.0)
             
             return section
