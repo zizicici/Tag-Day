@@ -12,6 +12,7 @@ import ZCCalendar
 struct DateCellItem: Hashable {
     var title: String
     var nanoSecondsFrom1970: Int64?
+    var day: GregorianDay
 }
 
 extension UIConfigurationStateCustomKey {
@@ -64,7 +65,7 @@ class DateCell: DateBaseCell {
                 self?.selectDateAction?(date.nanoSecondSince1970)
             }
         }))
-        datePicker.datePickerMode = .time
+        datePicker.datePickerMode = .dateAndTime
         datePicker.tintColor = AppColor.main
         contentView.addSubview(datePicker)
         datePicker.snp.makeConstraints { make in
@@ -84,7 +85,7 @@ class DateCell: DateBaseCell {
             if let nanoSecondsFrom1970 = dateItem.nanoSecondsFrom1970 {
                 datePicker?.date = Date(nanoSecondSince1970: nanoSecondsFrom1970)
             } else {
-                datePicker?.date = Date()
+                datePicker?.date = Date().combine(with: dateItem.day)
             }
             
             datePicker?.isHidden = false
@@ -97,3 +98,19 @@ class DateCell: DateBaseCell {
     }
 }
 
+extension Date {
+    func combine(with day: GregorianDay) -> Self {
+        let calendar = Calendar.current
+        
+        // 获取时间组件
+        let hour = calendar.component(.hour, from: self)
+        let minute = calendar.component(.minute, from: self)
+        let second = calendar.component(.second, from: self)
+        
+        let targetDay = day.generateDate(secondsFromGMT: calendar.timeZone.secondsFromGMT())!
+        // 设置时间到目标日期
+        let result = calendar.date(bySettingHour: hour, minute: minute, second: second, of: targetDay) ?? Date()
+        
+        return result
+    }
+}

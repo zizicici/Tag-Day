@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import ZCCalendar
 
 class RecordDetailViewController: UIViewController {
     private var record: DayRecord!
@@ -92,18 +93,18 @@ class RecordDetailViewController: UIViewController {
             switch timeOption {
             case .startAndEnd:
                 if startTime == nil {
-                    startTime = Int64(Date().timeIntervalSince1970) / 60 * 60 * 1000
+                    startTime = Int64(Date().combine(with: day).timeIntervalSince1970) / 60 * 60 * 1000
                 }
                 if endTime == nil {
-                    endTime = Int64(Date().timeIntervalSince1970) / 60 * 60 * 1000
+                    endTime = Int64(Date().combine(with: day).timeIntervalSince1970) / 60 * 60 * 1000
                 }
             case .startOnly:
                 if startTime == nil {
-                    startTime = Int64(Date().timeIntervalSince1970) / 60 * 60 * 1000
+                    startTime = Int64(Date().combine(with: day).timeIntervalSince1970) / 60 * 60 * 1000
                 }
             case .endOnly:
                 if endTime == nil {
-                    endTime = Int64(Date().timeIntervalSince1970) / 60 * 60 * 1000
+                    endTime = Int64(Date().combine(with: day).timeIntervalSince1970) / 60 * 60 * 1000
                 }
             case nil:
                 break
@@ -158,6 +159,10 @@ class RecordDetailViewController: UIViewController {
                 updateSaveButtonStatus()
             }
         }
+    }
+    
+    private var day: GregorianDay {
+        return GregorianDay(JDN: Int(record.day))
     }
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -253,7 +258,7 @@ class RecordDetailViewController: UIViewController {
     func configureDataSource() {
         dataSource = DataSource(tableView: tableView) { [weak self] (tableView, indexPath, item) -> UITableViewCell? in
             guard let self = self else { return nil }
-            guard let identifier = dataSource.itemIdentifier(for: indexPath) else { return nil }
+            guard let identifier = self.dataSource.itemIdentifier(for: indexPath) else { return nil }
             switch identifier {
             case .timeOption(let timeOption):
                 let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(OptionCell<TimeOption>.self), for: indexPath)
@@ -276,7 +281,7 @@ class RecordDetailViewController: UIViewController {
             case .startTime(let startTime):
                 let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(DateCell.self), for: indexPath)
                 if let cell = cell as? DateCell {
-                    cell.update(with: DateCellItem(title: String(localized: "dayRecord.time.start"), nanoSecondsFrom1970: startTime))
+                    cell.update(with: DateCellItem(title: String(localized: "dayRecord.time.start"), nanoSecondsFrom1970: startTime, day: self.day))
                     cell.selectDateAction = { [weak self] nanoSeconds in
                         guard let self = self else { return }
                         self.startTime = nanoSeconds
@@ -287,7 +292,7 @@ class RecordDetailViewController: UIViewController {
             case .endTime(let endTime):
                 let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(DateCell.self), for: indexPath)
                 if let cell = cell as? DateCell {
-                    cell.update(with: DateCellItem(title: String(localized: "dayRecord.time.end"), nanoSecondsFrom1970: endTime))
+                    cell.update(with: DateCellItem(title: String(localized: "dayRecord.time.end"), nanoSecondsFrom1970: endTime, day: self.day))
                     cell.selectDateAction = { [weak self] nanoSeconds in
                         guard let self = self else { return }
                         self.endTime = nanoSeconds
