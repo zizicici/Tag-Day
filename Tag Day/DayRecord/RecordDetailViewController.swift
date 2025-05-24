@@ -141,7 +141,6 @@ class RecordDetailViewController: UIViewController {
         }
     }
     
-    
     private var durationOption: DurationOption? {
         didSet {
             reloadData()
