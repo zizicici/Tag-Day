@@ -403,11 +403,11 @@ extension CalendarViewController: FastEditorNavigator {
         }
         let lastOrder = DataManager.shared.fetchLastRecordOrder(bookID: bookID, day: Int64(day.julianDay))
         let newRecord = DayRecord(bookID: bookID, tagID: tagID, day: Int64(day.julianDay), order: lastOrder + 1)
-        _ = DataManager.shared.add(dayRecord: newRecord)
-        
-        // Dismiss
-        presentedViewController?.dismiss(animated: true) {
-            self.tap(day: day)
+        if let savedRecord = DataManager.shared.add(dayRecord: newRecord) {
+            // Dismiss
+            presentedViewController?.dismiss(animated: true) { [weak self] in
+                self?.showRecordAlert(for: savedRecord)
+            }
         }
     }
     

@@ -458,7 +458,7 @@ extension DataManager {
         return AppDatabase.shared.update(dayRecords: dayRecords)
     }
     
-    func add(dayRecord: DayRecord) -> Bool {
+    func add(dayRecord: DayRecord) -> DayRecord? {
         return AppDatabase.shared.add(dayRecord: dayRecord)
     }
     

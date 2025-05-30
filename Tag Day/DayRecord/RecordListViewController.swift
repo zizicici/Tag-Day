@@ -342,13 +342,6 @@ extension RecordListViewController: RecordListCellDelegate {
 }
 
 extension RecordListViewController {
-    func showRecordEditor(for record: DayRecord, editMode: RecordDetailViewController.EditMode) {
-        let recordEditor = RecordDetailViewController(dayRecord: record, editMode: editMode)
-        let nav = NavigationController(rootViewController: recordEditor)
-        
-        present(nav, animated: true)
-    }
-    
     func showDeleteAlert(for record: DayRecord) {
         guard record.id != nil else { return }
         
@@ -427,6 +420,33 @@ extension RecordListViewController: UIPopoverPresentationControllerDelegate {
     
     func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
         return true
+    }
+}
+
+extension UIViewController {
+    func showRecordAlert(for record: DayRecord) {
+        let timeAction = UIAlertAction(title: String(localized: "dayDetail.tagMenu.time"), style: .default) { [weak self] _ in
+            self?.showRecordEditor(for: record, editMode: .time)
+        }
+        
+        let commentAction = UIAlertAction(title: String(localized: "dayDetail.tagMenu.comment"), style: .default) { [weak self] _ in
+            self?.showRecordEditor(for: record, editMode: .comment)
+        }
+        let cancelAction = UIAlertAction(title: String(localized: "button.cancel"), style: .cancel)
+        
+        let alertController = UIAlertController(title: String(localized: "dayDetail.tagMenu.alert.title"), message: nil, preferredStyle: .alert)
+        alertController.addAction(timeAction)
+        alertController.addAction(commentAction)
+        alertController.addAction(cancelAction)
+        
+        present(alertController, animated: true)
+    }
+    
+    func showRecordEditor(for record: DayRecord, editMode: RecordDetailViewController.EditMode) {
+        let recordEditor = RecordDetailViewController(dayRecord: record, editMode: editMode)
+        let nav = NavigationController(rootViewController: recordEditor)
+        
+        present(nav, animated: true)
     }
 }
 

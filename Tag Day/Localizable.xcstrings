@@ -1345,6 +1345,22 @@
         }
       }
     },
+    "dayDetail.tagMenu.alert.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit more details…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "编辑更多信息…"
+          }
+        }
+      }
+    },
     "dayDetail.tagMenu.comment" : {
       "localizations" : {
         "en" : {

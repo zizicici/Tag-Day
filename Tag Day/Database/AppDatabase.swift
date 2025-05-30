@@ -325,10 +325,10 @@ extension AppDatabase {
         return true
     }
     
-    func add(dayRecord: DayRecord) -> Bool {
+    func add(dayRecord: DayRecord) -> DayRecord? {
         guard dayRecord.id == nil else {
             // Should no ID
-            return false
+            return nil
         }
         var saveRecord: DayRecord = dayRecord
         do {
@@ -338,10 +338,10 @@ extension AppDatabase {
         }
         catch {
             print(error)
-            return false
+            return nil
         }
         NotificationCenter.default.post(Notification(name: Notification.Name.DatabaseUpdated))
-        return true
+        return saveRecord
     }
     
     func delete(dayRecord: DayRecord) -> Bool {
