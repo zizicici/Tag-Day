@@ -9,11 +9,17 @@ import UIKit
 import SnapKit
 import ZCCalendar
 
+protocol DayPresenter: AnyObject {
+    func show(day: GregorianDay)
+}
+
 class RecordListViewController: UIViewController {
     var day: GregorianDay!
     var book: Book!
     var tags: [Tag] = []
     var records: [DayRecord] = []
+    
+    weak var dayPresenter: DayPresenter?
     
     enum Section: Hashable {
         case main
@@ -64,7 +70,15 @@ class RecordListViewController: UIViewController {
         
         view.backgroundColor = AppColor.background
         
-        self.title = day.formatString()
+        updateTitle()
+        
+        let nextDayItem = UIBarButtonItem(image: UIImage(systemName: "chevron.forward", withConfiguration: UIImage.SymbolConfiguration(pointSize: 10.0, weight: .bold)), style: .plain, target: self, action: #selector(nextDayAction))
+        nextDayItem.tintColor = AppColor.text.withAlphaComponent(0.75)
+        navigationItem.rightBarButtonItems = [nextDayItem]
+        
+        let preiviousDayItem = UIBarButtonItem(image: UIImage(systemName: "chevron.backward", withConfiguration: UIImage.SymbolConfiguration(pointSize: 10.0, weight: .bold)), style: .plain, target: self, action: #selector(previousDayAction))
+        preiviousDayItem.tintColor = AppColor.text.withAlphaComponent(0.75)
+        navigationItem.leftBarButtonItem = preiviousDayItem
         
         configureCollectionView()
         configureDataSource()
@@ -81,6 +95,10 @@ class RecordListViewController: UIViewController {
         if records.count == 0 {
             newAction()
         }
+    }
+    
+    private func updateTitle() {
+        self.title = day.formatString()
     }
     
     private func configureCollectionView() {
@@ -135,6 +153,22 @@ class RecordListViewController: UIViewController {
         detailViewController.delegate = self
         let nav = NavigationController(rootViewController: detailViewController)
         showPopoverView(at: newButton, contentViewController: nav, width: 240.0, height: 300.0)
+    }
+    
+    @objc
+    private func nextDayAction() {
+        dayPresenter?.show(day: day + 1)
+        day = day + 1
+        updateTitle()
+        reloadData()
+    }
+    
+    @objc
+    private func previousDayAction() {
+        dayPresenter?.show(day: day - 1)
+        day = day - 1
+        updateTitle()
+        reloadData()
     }
 }
 
@@ -393,5 +427,11 @@ extension RecordListViewController: UIPopoverPresentationControllerDelegate {
     
     func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
         return true
+    }
+}
+
+extension GregorianDay {
+    public static func - (left: GregorianDay, right: Int) -> GregorianDay {
+        return GregorianDay(JDN: left.julianDay - right)
     }
 }

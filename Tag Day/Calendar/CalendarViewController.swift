@@ -230,6 +230,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
                 showPopoverView(at: targetView, contentViewController: nav, width: 240.0, height: 300.0)
             } else {
                 let detailViewController = RecordListViewController(day: blockItem.day, book: current)
+                detailViewController.dayPresenter = self
                 let nav = NavigationController(rootViewController: detailViewController)
                 showPopoverView(at: targetView, contentViewController: nav, width: 280.0, height: 400.0)
             }
@@ -444,5 +445,26 @@ extension CalendarViewController {
                 }
             }
         }
+    }
+}
+
+extension CalendarViewController: DayPresenter {
+    func show(day: GregorianDay) {
+        guard let popover = presentedViewController?.popoverPresentationController else { return }
+        guard let targetItem = dataSource.snapshot().itemIdentifiers.first (where: { item in
+            switch item {
+            case .month(_):
+                return false
+            case .block(let blockItem):
+                return blockItem.day == day
+            case .invisible(_):
+                return false
+            }
+        }) else { return }
+        guard let indexPath = dataSource.indexPath(for: targetItem) else { return }
+        guard let cell = collectionView.cellForItem(at: indexPath) else { return }
+        collectionView.scrollRectToVisible(cell.frame, animated: true)
+        
+        popover.sourceView = cell
     }
 }
