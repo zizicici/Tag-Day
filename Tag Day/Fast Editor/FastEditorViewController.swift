@@ -103,7 +103,9 @@ class FastEditorViewController: UIViewController {
 
         switch editMode {
         case .add:
-            break
+            let newTagItem = UIBarButtonItem(title: String(localized: "tags.new"), style: .plain, target: self, action: #selector(newTagAction))
+            newTagItem.tintColor = AppColor.main
+            items.append(newTagItem)
         case .replace:
             break
         case .overwrite:
@@ -122,6 +124,8 @@ class FastEditorViewController: UIViewController {
 
         toolbarItems = items
         navigationController?.setToolbarHidden(false, animated: false)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .TagsUpdated, object: nil)
     }
     
     private func configureCollectionView() {
@@ -173,6 +177,21 @@ class FastEditorViewController: UIViewController {
     @objc
     func resetAction() {
         delegate?.reset(day: day, tag: nil)
+    }
+    
+    @objc
+    func newTagAction() {
+        guard let bookID = DataManager.shared.currentBook?.id else {
+            return
+        }
+        var tagIndex = 0
+        if let lastestTag = DataManager.shared.tags.last {
+            tagIndex = lastestTag.order + 1
+        }
+        let newTag = Tag(bookID: bookID, title: "", color: "", order: tagIndex)
+        let nav = NavigationController(rootViewController: TagDetailViewController(tag: newTag))
+        
+        present(nav, animated: true)
     }
     
     func tap(tag: Tag) {
