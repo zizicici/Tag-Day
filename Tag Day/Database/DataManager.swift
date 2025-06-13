@@ -133,6 +133,11 @@ class DataManager {
         }
     }
     
+    public func toggleActive(only tag: Tag) {
+        guard tags.contains(tag) else { return }
+        activeTags = [tag]
+    }
+    
     public func resetActiveToggle(blank: Bool) {
         if blank {
             activeTags = []

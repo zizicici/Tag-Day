@@ -1222,6 +1222,18 @@
             "state" : "translated",
             "value" : "需要设置开始时间和结束时间"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "需要設置開始時間和結束時間"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "需要設置開始時間和結束時間"
+          }
         }
       }
     },
@@ -1237,6 +1249,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "自动计算"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自動計算"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自動計算"
           }
         }
       }
@@ -1254,6 +1278,18 @@
             "state" : "translated",
             "value" : "自定义"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自定義"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自定義"
+          }
         }
       }
     },
@@ -1270,6 +1306,18 @@
             "state" : "translated",
             "value" : "无"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無"
+          }
         }
       }
     },
@@ -1285,6 +1333,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "时长"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "時長"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "時長"
           }
         }
       }
@@ -1357,6 +1417,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "编辑更多信息…"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "編輯更多信息…"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "編輯更多信息…"
           }
         }
       }
@@ -1545,13 +1617,13 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "開始時間必須比結束時間早"
           }
         },
         "zh-HK" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "開始時間必須比結束時間早"
           }
         }
@@ -3691,6 +3763,34 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "選中所有標籤"
+          }
+        }
+      }
+    },
+    "tags.singleSelection" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select Single Tag"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "单选标签"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "單選標籤"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "單選標籤"
           }
         }
       }

@@ -198,10 +198,19 @@ class MainViewController: NavigationController {
             let deselectAllAction = UIAction(title: String(localized: "tags.deselect.all"), image: UIImage(systemName: "xmark.square"), state: activeTags.count == 0 ? .on : .off) { _ in
                 DataManager.shared.resetActiveToggle(blank: true)
             }
+            
+            let tagElements: [UIMenuElement] = tags.reversed().map({ tag in
+                return UIAction(title: tag.title, subtitle: tag.subtitle, image: UIImage(systemName: "square.fill")?.withTintColor(UIColor(string: tag.color) ?? .white, renderingMode: .alwaysOriginal)) { _ in
+                    DataManager.shared.toggleActive(only: tag)
+                }
+            })
+            let singleSelectionMenu = UIMenu(title: String(localized: "tags.singleSelection"), options: .singleSelection, children: tagElements)
+            
             let selectAllAction = UIAction(title: String(localized: "tags.select.all"), image: UIImage(systemName: "checkmark.square"), state: tags.count == activeTags.count ? .on : .off) { _ in
                 DataManager.shared.resetActiveToggle(blank: false)
             }
-            let currentPageDivider = UIMenu(title: "", options: .displayInline, children: [deselectAllAction, selectAllAction])
+            
+            let currentPageDivider = UIMenu(title: "", options: .displayInline, children: [deselectAllAction, singleSelectionMenu, selectAllAction])
             elements.append(currentPageDivider)
         }
         
