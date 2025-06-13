@@ -235,6 +235,11 @@ class RecordDetailViewController: UIViewController {
         reloadData()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        commentCell?.becomeFirstResponder()
+    }
+    
     func configureHierarchy() {
         tableView = UIDraggableTableView(frame: .zero, style: .insetGrouped)
         tableView.backgroundColor = AppColor.background
