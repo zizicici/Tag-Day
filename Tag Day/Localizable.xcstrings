@@ -3778,19 +3778,19 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "单选标签"
+            "value" : "选中单个标签"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "單選標籤"
+            "value" : "選中單個標籤"
           }
         },
         "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "單選標籤"
+            "value" : "選中單個標籤"
           }
         }
       }
