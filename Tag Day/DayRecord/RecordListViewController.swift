@@ -291,7 +291,7 @@ extension RecordListViewController {
         newOrderRecords.insert(record, at: destinationIndex)
         
         var saveRecords: [DayRecord] = []
-        for (index, element) in newOrderRecords.reversed().enumerated() {
+        for (index, element) in newOrderRecords.enumerated() {
             var newOrderRecord = element
             newOrderRecord.order = Int64(index)
             saveRecords.append(newOrderRecord)
@@ -369,7 +369,7 @@ extension RecordListViewController: FastEditorNavigator {
             return
         }
         let lastOrder = DataManager.shared.fetchLastRecordOrder(bookID: bookID, day: Int64(day.julianDay))
-        let newRecord = DayRecord(bookID: bookID, tagID: tagID, day: Int64(day.julianDay), order: lastOrder)
+        let newRecord = DayRecord(bookID: bookID, tagID: tagID, day: Int64(day.julianDay), order: lastOrder + 1)
         _ = DataManager.shared.add(dayRecord: newRecord)
         
         // Dismiss

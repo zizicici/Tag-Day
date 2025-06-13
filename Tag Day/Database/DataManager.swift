@@ -385,7 +385,7 @@ extension DataManager {
                 result = try DayRecord
                     .filter(bookIDColumn == bookID)
                     .order(dayColumn.asc)
-                    .order(orderColumn.desc)
+                    .order(orderColumn.asc)
                     .fetchAll(db)
             }
             catch {
@@ -406,7 +406,7 @@ extension DataManager {
                 result = try DayRecord
                     .filter(bookIDColumn == bookID)
                     .filter(dayColumn == day)
-                    .order(orderColumn.desc)
+                    .order(orderColumn.asc)
                     .fetchAll(db)
             }
             catch {
