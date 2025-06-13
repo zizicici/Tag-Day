@@ -375,7 +375,7 @@ extension DataManager {
 // Day Records
 extension DataManager {
     func fetchLastRecordOrder(bookID: Int64, day: Int64) -> Int64 {
-        let lastOrder = (try? fetchAllDayRecords(bookID: bookID, day: day).first?.order) ?? 0
+        let lastOrder = (try? fetchAllDayRecords(bookID: bookID, day: day).last?.order) ?? 0
         
         return lastOrder
     }
