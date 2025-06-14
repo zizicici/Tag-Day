@@ -29,7 +29,7 @@ extension CalendarViewController {
         section.interGroupSpacing = interSpacing
         
         let inset = (containerWidth - CGFloat(count)*itemWidth - CGFloat(count - 1) * interSpacing) / 2.0
-        section.contentInsets = NSDirectionalEdgeInsets(top: interSpacing / 2.0, leading: inset, bottom: interSpacing / 2.0 + 10.0, trailing: inset)
+        section.contentInsets = NSDirectionalEdgeInsets(top: interSpacing / 2.0, leading: inset, bottom: interSpacing / 2.0 + 100.0, trailing: inset)
         
         return section
     }
@@ -66,7 +66,17 @@ extension CalendarViewController {
         if let section = dataSource.sectionIdentifier(for: index) {
             switch section {
             case .row:
-                return dayRowSectionProvider(environment)
+                let section = dayRowSectionProvider(environment)
+                
+                let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                             heightDimension: .estimated(60))
+                let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
+                    layoutSize: headerSize,
+                    elementKind: Self.sectionHeaderElementKind, alignment: .top)
+                
+                section.boundarySupplementaryItems = [sectionHeader]
+                
+                return section
             case .month:
                 return monthSectionProvider(environment)
             }

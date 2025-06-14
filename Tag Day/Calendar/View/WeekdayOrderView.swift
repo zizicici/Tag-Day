@@ -29,9 +29,7 @@ class WeekdayOrderView: UIView {
         }
     }
     
-    private var itemWidth: CGFloat = 50.0
     private var interSpacing: CGFloat = 5.0
-    private var itemCount: Int = 7
     
     var startWeekdayOrder: WeekdayOrder = WeekdayOrder.sun {
         didSet {
@@ -46,7 +44,7 @@ class WeekdayOrderView: UIView {
         
         self.addSubview(stackView)
         stackView.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(self).inset(12)
+            make.leading.trailing.equalTo(self)//.inset(12)
             make.top.greaterThanOrEqualTo(self)
             make.bottom.equalTo(self).inset(6)
         }
@@ -58,21 +56,10 @@ class WeekdayOrderView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    convenience init(itemCount: Int, itemWidth: CGFloat, interSpacing: CGFloat) {
+    convenience init(itemCount: Int, interSpacing: CGFloat) {
         self.init(frame: .zero)
-        self.itemCount = itemCount
-        self.itemWidth = itemWidth
         self.interSpacing = interSpacing
         self.stackView.spacing = interSpacing
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        let inset = (frame.width - itemWidth * CGFloat(itemCount) - interSpacing * CGFloat(itemCount - 1)) / 2.0
-        stackView.snp.updateConstraints { make in
-            make.leading.trailing.equalTo(self).inset(inset)
-        }
     }
     
     func updateLabels() {
@@ -88,11 +75,20 @@ class WeekdayOrderView: UIView {
         for weekdayOrder in weekdayOrders {
             let label = UILabel()
             label.textAlignment = .center
-            label.font = UIFont.systemFont(ofSize: 12, weight: .bold)
-            label.textColor = .white
+            label.font = UIFont.systemFont(ofSize: 10, weight: .bold)
+            label.textColor = color(for: weekdayOrder)
             label.text = weekdayOrder.getVeryShortSymbol()
             label.accessibilityLabel = weekdayOrder.getSymbol()
             stackView.addArrangedSubview(label)
+        }
+    }
+    
+    func color(for weekdayOrder: WeekdayOrder) -> UIColor {
+        switch weekdayOrder {
+        case .sat, .sun:
+            return AppColor.text.withAlphaComponent(0.5)
+        default:
+            return AppColor.text.withAlphaComponent(0.8)
         }
     }
 }

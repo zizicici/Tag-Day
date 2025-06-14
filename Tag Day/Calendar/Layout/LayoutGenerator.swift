@@ -19,14 +19,6 @@ struct LayoutGenerater {
             let firstOffset = (firstWeekOrder.rawValue - (firstDayOfWeek.rawValue % 7) + 7) % 7
 
             let gregorianMonth = GregorianMonth(year: year, month: month)
-            snapshot.appendSections([.month(gregorianMonth)])
-            if firstOffset >= 1 {
-                snapshot.appendItems(Array(1...firstOffset).map({ index in
-                    let uuid = UUID().uuidString
-                    return Item.invisible(uuid)
-                }))
-            }
-            snapshot.appendItems([.month(MonthItem(text: gregorianMonth.month.name, color: AppColor.tintedText))])
             
             snapshot.appendSections([.row(gregorianMonth)])
             if firstOffset >= 1 {

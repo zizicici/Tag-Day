@@ -11,6 +11,8 @@ import Toast
 import ZCCalendar
 
 class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate {
+    static let sectionHeaderElementKind = "sectionHeaderElementKind"
+    
     enum EditMode {
         case normal
         case overwrite
@@ -45,15 +47,11 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     
     static let monthTagElementKind: String = "monthTagElementKind"
     
-    // UI
-    
-    private var weekdayOrderView: WeekdayOrderView!
-    
     // UIBarButtonItem
         
     private var moreButton: UIBarButtonItem?
     private var yearPickerButton: UIButton = {
-        var configuration = UIButton.Configuration.filled()
+        var configuration = UIButton.Configuration.plain()
         configuration.titleAlignment = .center
         configuration.cornerStyle = .capsule
         configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer({ incoming in
@@ -64,7 +62,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         })
         let button = UIButton(configuration: configuration)
         button.showsMenuAsPrimaryAction = false
-        button.tintColor = AppColor.action
+        button.tintColor = .white
         return button
     }()
 
@@ -122,20 +120,10 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         super.viewDidLoad()
         
         view.backgroundColor = AppColor.background
-        updateNavigationBarStyle(hideShadow: true)
-        weekdayOrderView = WeekdayOrderView(itemCount: 7, itemWidth: DayGrid.itemWidth(in: view.frame.width), interSpacing: DayGrid.interSpacing)
-        weekdayOrderView.backgroundColor = AppColor.navigationBar
-        view.addSubview(weekdayOrderView)
-        weekdayOrderView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(-5.0)
-            make.leading.trailing.equalTo(view)
-            make.height.equalTo(35.0)
-        }
+        updateNavigationBarStyle(hideShadow: false)
         
         configureHierarchy()
         configureDataSource()
-        
-        view.bringSubviewToFront(weekdayOrderView)
         
         addGestures()
         
@@ -258,6 +246,13 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         let invisibleCellRegistration = UICollectionView.CellRegistration<UICollectionViewCell, Item> { (cell, indexPath, identifier) in
         }
         
+        let headerRegistration = UICollectionView.SupplementaryRegistration
+        <MonthTitleSupplementaryView>(elementKind: Self.sectionHeaderElementKind) { (supplementaryView, string, indexPath) in
+            let month = Month(rawValue: indexPath.section + 1) ?? .jan
+            let startWeekdayOrder = WeekdayOrder(rawValue: WeekStartType.current.rawValue) ?? WeekdayOrder.firstDayOfWeek
+            supplementaryView.update(text: month.name, startWeekOrder: startWeekdayOrder)
+        }
+        
         dataSource = UICollectionViewDiffableDataSource<Section, Item>(collectionView: collectionView) { [weak self]
             (collectionView: UICollectionView, indexPath: IndexPath, identifier: Item) -> UICollectionViewCell? in
             // Return the cell.
@@ -284,6 +279,9 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
                 }
             }
         }
+        dataSource.supplementaryViewProvider = { (view, kind, index) in
+            return self.collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: index)
+        }
     }
     
     private func configureHierarchy() {
@@ -299,13 +297,11 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
             make.leading.trailing.bottom.equalTo(view)
         }
         collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 28.0, left: 0.0, bottom: 10.0, right: 0.0)
-        collectionView.contentInset = .init(top: 30.0, left: 0.0, bottom: 100.0, right: 0.0)
+        collectionView.contentInset = .init(top: 0.0, left: 0.0, bottom: 100.0, right: 0.0)
     }
 
     @objc
     internal func reloadData() {
-        let startWeekdayOrder = WeekdayOrder(rawValue: WeekStartType.current.rawValue) ?? WeekdayOrder.firstDayOfWeek
-        weekdayOrderView.startWeekdayOrder = startWeekdayOrder
         yearPickerButton.setNeedsUpdateConfiguration()
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: yearPickerButton)
 
