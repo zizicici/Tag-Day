@@ -15,17 +15,15 @@ class MainViewController: NavigationController {
     var tagButton: UIButton = {
         var configuration = UIButton.Configuration.borderedProminent()
         configuration.cornerStyle = .large
-        configuration.image = UIImage(systemName: "tag")?.withConfiguration( UIImage.SymbolConfiguration(textStyle: .body, scale: .default))
+        configuration.image = UIImage(systemName: "tag")?.withConfiguration(UIImage.SymbolConfiguration(textStyle: .body, scale: .default))
         let button = UIButton(configuration: configuration)
         button.showsMenuAsPrimaryAction = true
         button.tintColor = AppColor.action
-        button.showsMenuAsPrimaryAction = true
-        
         return button
     }()
     
     var bookPickerButton: UIButton = {
-        var configuration = UIButton.Configuration.filled()
+        var configuration = UIButton.Configuration.borderedProminent()
         configuration.titleAlignment = .center
         configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer({ incoming in
             var outgoing = incoming
@@ -82,6 +80,7 @@ class MainViewController: NavigationController {
         view.addSubview(bookPickerButton)
         bookPickerButton.snp.makeConstraints { make in
             make.leading.equalTo(view).inset(20)
+            make.trailing.lessThanOrEqualTo(tagButton.snp.leading).offset(-20)
             make.bottom.equalTo(view.safeAreaLayoutGuide).inset(20)
             make.height.equalTo(44)
         }
