@@ -147,7 +147,7 @@ class BlockCell: BlockBaseCell {
                 accessibilityLabel = item.day.completeFormatString()
             }
             
-            backgroundConfiguration = BlockCellBackgroundConfiguration.configuration(for: state, backgroundColor: backgroundColor, cornerRadius: 6.0, showStroke: item.isToday, strokeColor: AppColor.today, strokeWidth: 3.0, strokeOutset: 0.0)
+            backgroundConfiguration = BlockCellBackgroundConfiguration.configuration(for: state, backgroundColor: backgroundColor, cornerRadius: 6.0, showStroke: item.isToday, strokeColor: UIColor.systemYellow, strokeWidth: 1.5, strokeOutset: 1.0)
         }
     }
     
