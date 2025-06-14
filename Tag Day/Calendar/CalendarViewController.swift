@@ -127,11 +127,20 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
             await self?.commit()
         })
         
-        NotificationCenter.default.addObserver(self, selector: #selector(needReload), name: .CurrentBookChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(currentBookNeedReload), name: .CurrentBookChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(needReload), name: .ActiveTagsUpdated, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(needReload), name: .DayRecordsUpdated, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(needReload), name: .TodayUpdated, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(needReload), name: .SettingsUpdate, object: nil)
+    }
+    
+    @objc
+    func currentBookNeedReload() {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.25) { [weak self] in
+            guard let self = self else { return }
+            self.scrollToToday()
+        }
+        needReload()
     }
     
     @objc
@@ -291,7 +300,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         }
     }
     
-    func scrollToToday() {
+    func scrollToToday(animated: Bool = true) {
         let item = dataSource.snapshot().itemIdentifiers.first { item in
             switch item {
             case .invisible:
@@ -305,7 +314,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
             }
         }
         if let item = item, let indexPath = dataSource.indexPath(for: item) {
-            collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
+            collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: animated)
         }
     }
     
