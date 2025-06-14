@@ -45,22 +45,6 @@ class BlockCell: BlockBaseCell {
         }
     }
     
-    var paperView: UIView = {
-        let view = UIView()
-        view.layer.cornerCurve = .continuous
-        view.layer.cornerRadius = 6.0
-        
-        return view
-    }()
-    
-    var highlightView: UIView = {
-        let view = UIView()
-        view.layer.cornerCurve = .continuous
-        view.layer.cornerRadius = 6.0
-        
-        return view
-    }()
-    
     var label: UILabel = {
         let label = UILabel()
         label.textColor = .label
@@ -80,7 +64,6 @@ class BlockCell: BlockBaseCell {
         return view
     }()
     
-    var defaultBackgroundColor: UIColor = AppColor.paper
     var highlightColor: UIColor = .gray.withAlphaComponent(0.25)
     
     override func prepareForReuse() {
@@ -89,7 +72,6 @@ class BlockCell: BlockBaseCell {
         isHover = false
         label.text = nil
         label.backgroundColor = .clear
-        paperView.backgroundColor = defaultBackgroundColor
         tagContainerView.subviews.forEach { subview in
             subview.removeFromSuperview()
         }
@@ -97,42 +79,23 @@ class BlockCell: BlockBaseCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        paperView.layer.shadowPath = UIBezierPath(roundedRect: CGRect(origin: CGPoint.init(x: 0, y: 0), size: CGSize(width: frame.width, height: frame.height)), cornerRadius: 6.0).cgPath
     }
     
     private func setupViewsIfNeeded() {
-        guard paperView.superview == nil else { return }
+        guard label.superview == nil else { return }
         
-        contentView.addSubview(paperView)
-        paperView.snp.makeConstraints { make in
-            make.edges.equalTo(contentView)
-        }
-        
-        paperView.layer.shadowColor = UIColor.gray.cgColor
-        paperView.layer.shadowOpacity = 0.1
-        paperView.layer.shadowOffset = CGSize(width: 0, height: 2)
-        paperView.layer.cornerCurve = .continuous
-        paperView.backgroundColor = defaultBackgroundColor
-        
-        paperView.addSubview(highlightView)
-        highlightView.snp.makeConstraints { make in
-            make.edges.equalTo(paperView)
-        }
-        
-        paperView.addSubview(label)
+        contentView.addSubview(label)
         label.snp.makeConstraints { make in
-            make.top.equalTo(paperView).inset(8)
-            make.leading.trailing.equalTo(paperView).inset(6)
+            make.top.equalTo(contentView).inset(8)
+            make.leading.trailing.equalTo(contentView).inset(6)
             make.height.equalTo(18)
         }
-        label.layer.cornerRadius = 6.0
-        label.clipsToBounds = true
         
-        paperView.addSubview(tagContainerView)
+        contentView.addSubview(tagContainerView)
         tagContainerView.snp.makeConstraints { make in
             make.top.equalTo(label.snp.bottom).offset(6)
-            make.leading.trailing.equalTo(paperView)//.inset(3)
-            make.bottom.equalTo(paperView).inset(4)
+            make.leading.trailing.equalTo(contentView)//.inset(3)
+            make.bottom.equalTo(contentView).inset(4)
         }
         
         isAccessibilityElement = true
@@ -144,12 +107,10 @@ class BlockCell: BlockBaseCell {
         setupViewsIfNeeded()
         
         if let item = state.blockItem {
-            paperView.backgroundColor = item.backgroundColor
+            var backgroundColor = item.backgroundColor
 
             if isHover || isHighlighted {
-                highlightView.backgroundColor = highlightColor
-            } else {
-                highlightView.backgroundColor = .clear
+                backgroundColor = highlightColor.overlay(on: backgroundColor)
             }
             
             label.textColor = item.foregroundColor
@@ -181,11 +142,12 @@ class BlockCell: BlockBaseCell {
             }
             
             if item.isToday {
-                label.backgroundColor = AppColor.today
                 accessibilityLabel = String(localized: "weekCalendar.today") + (item.day.completeFormatString() ?? "")
             } else {
                 accessibilityLabel = item.day.completeFormatString()
             }
+            
+            backgroundConfiguration = BlockCellBackgroundConfiguration.configuration(for: state, backgroundColor: backgroundColor, cornerRadius: 6.0, showStroke: item.isToday, strokeColor: AppColor.today, strokeWidth: 3.0, strokeOutset: 0.0)
         }
     }
     
@@ -197,6 +159,29 @@ class BlockCell: BlockBaseCell {
         didSet {
             setNeedsUpdateConfiguration()
         }
+    }
+}
+
+struct BlockCellBackgroundConfiguration {
+    static func configuration(for state: UICellConfigurationState, backgroundColor: UIColor = .clear, cornerRadius: CGFloat = 6.0, showStroke: Bool, strokeColor: UIColor, strokeWidth: CGFloat = 1.0, strokeOutset: CGFloat = -1.0) -> UIBackgroundConfiguration {
+        var background = UIBackgroundConfiguration.clear()
+        background.backgroundColor = backgroundColor
+        background.cornerRadius = cornerRadius
+        background.strokeWidth = strokeWidth
+        background.strokeOutset = strokeOutset
+        if showStroke {
+            background.strokeColor = strokeColor
+        } else {
+            background.strokeColor = .clear
+        }
+        if #available(iOS 18.0, *) {
+            background.shadowProperties.color = .systemGray
+            background.shadowProperties.opacity = 0.1
+            background.shadowProperties.radius = 6.0
+            background.shadowProperties.offset = CGSize(width: 0.0, height: 2.0)
+        }
+
+        return background
     }
 }
 
