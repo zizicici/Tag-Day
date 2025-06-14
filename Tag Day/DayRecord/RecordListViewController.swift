@@ -30,23 +30,6 @@ class RecordListViewController: UIViewController {
         var record: DayRecord
     }
     
-    private var newButton: UIButton = {
-        var configuration = UIButton.Configuration.plain()
-        configuration.titleAlignment = .center
-        configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer({ incoming in
-            var outgoing = incoming
-            outgoing.font = UIFont.preferredMonospacedFont(for: .body, weight: .medium)
-            
-            return outgoing
-        })
-        configuration.baseForegroundColor = AppColor.main
-        configuration.title = String(localized: "dayDetail.new")
-        configuration.contentInsets.leading = 4.0
-        configuration.contentInsets.bottom = 16.0
-        let button = UIButton(configuration: configuration)
-        return button
-    }()
-    
     var dataSource: UICollectionViewDiffableDataSource<Section, Item>! = nil
     var collectionView: UICollectionView! = nil
     
@@ -84,8 +67,8 @@ class RecordListViewController: UIViewController {
         configureDataSource()
         reloadData()
         
-        let newBarItem = UIBarButtonItem(customView: newButton)
-        newButton.addTarget(self, action: #selector(newAction), for: .touchUpInside)
+        let newBarItem = UIBarButtonItem(title: String(localized: "dayDetail.new"), style: .plain, target: self, action: #selector(newAction))
+        newBarItem.tintColor = AppColor.main
         toolbarItems = [newBarItem, .flexibleSpace()]
         navigationController?.setToolbarHidden(false, animated: false)
         
@@ -152,7 +135,7 @@ class RecordListViewController: UIViewController {
         let detailViewController = FastEditorViewController(day: day, book: book, editMode: .add)
         detailViewController.delegate = self
         let nav = NavigationController(rootViewController: detailViewController)
-        showPopoverView(at: newButton, contentViewController: nav, width: 240.0, height: 300.0)
+        showPopoverView(at: navigationController?.toolbar.subviews.last?.subviews.first?.subviews.first ?? view, contentViewController: nav, width: 240.0, height: 300.0)
     }
     
     @objc
