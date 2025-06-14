@@ -183,7 +183,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
             return
         }
         switch item {
-        case .invisible, .month:
+        case .invisible:
             break
         case .block(let blockItem):
             impactFeedbackGeneratorCoourred()
@@ -197,7 +197,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
             return
         }
         switch blockItem {
-        case .invisible, .month:
+        case .invisible:
             break
         case .block(let blockItem):
             let style = ToastStyle.getStyle(messageColor: blockItem.foregroundColor, backgroundColor: blockItem.backgroundColor)
@@ -241,7 +241,6 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     }
     
     private func configureDataSource() {
-        let monthCellRegistration = getMonthSectionCellRegistration()
         let blockCellRegistration = getBlockCellRegistration()
         let invisibleCellRegistration = UICollectionView.CellRegistration<UICollectionViewCell, Item> { (cell, indexPath, identifier) in
         }
@@ -259,19 +258,8 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
             guard let self = self else { return nil }
             guard let section = self.dataSource.sectionIdentifier(for: indexPath.section) else { fatalError("Unknown section") }
             switch section {
-            case .month:
-                switch identifier {
-                case .block:
-                    fatalError("Wrong Identifier")
-                case .month:
-                    return collectionView.dequeueConfiguredReusableCell(using: monthCellRegistration, for: indexPath, item: identifier)
-                case .invisible:
-                    return collectionView.dequeueConfiguredReusableCell(using: invisibleCellRegistration, for: indexPath, item: identifier)
-                }
             case .row:
                 switch identifier {
-                case .month:
-                    fatalError("Wrong Identifier")
                 case .block:
                     return collectionView.dequeueConfiguredReusableCell(using: blockCellRegistration, for: indexPath, item: identifier)
                 case .invisible:
@@ -324,7 +312,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     func scrollToToday() {
         let item = dataSource.snapshot().itemIdentifiers.first { item in
             switch item {
-            case .month, .invisible:
+            case .invisible:
                 return false
             case .block(let blockItem):
                 if blockItem.day == ZCCalendar.manager.today {
@@ -423,8 +411,6 @@ extension CalendarViewController {
     func tap(day: GregorianDay) {
         let targetItem = dataSource.snapshot().itemIdentifiers.first { item in
             switch item {
-            case .month(_):
-                return false
             case .block(let blockItem):
                 return blockItem.day == day
             case .invisible(_):
@@ -447,8 +433,6 @@ extension CalendarViewController: DayPresenter {
         guard let popover = presentedViewController?.popoverPresentationController else { return }
         guard let targetItem = dataSource.snapshot().itemIdentifiers.first (where: { item in
             switch item {
-            case .month(_):
-                return false
             case .block(let blockItem):
                 return blockItem.day == day
             case .invisible(_):

@@ -9,12 +9,10 @@ import Foundation
 import ZCCalendar
 
 enum Section: Hashable {
-    case month(GregorianMonth)
     case row(GregorianMonth)
 }
 
 enum Item: Hashable {
-    case month(MonthItem)
     case block(BlockItem)
     case invisible(String)
 }
