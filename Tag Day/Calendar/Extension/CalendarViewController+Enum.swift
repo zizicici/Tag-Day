@@ -15,4 +15,13 @@ enum Section: Hashable {
 enum Item: Hashable {
     case block(BlockItem)
     case invisible(String)
+    
+    var records: [DayRecord] {
+        switch self {
+        case .block(let blockItem):
+            return blockItem.records
+        case .invisible(let string):
+            return []
+        }
+    }
 }

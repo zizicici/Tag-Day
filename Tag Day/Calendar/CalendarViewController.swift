@@ -70,6 +70,8 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     
     private var displayHandler: DisplayHandler!
     
+    private var sectionRecordMaxCount: [Int: Int] = [:]
+    
     private var didScrollToday: Bool = false {
         willSet {
             if didScrollToday == false, newValue == true {
@@ -210,7 +212,12 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
             guard let self = self else {
                 return nil
             }
-            return self.sectionProvider(index: index, environment: environment)
+            var cellHeight: CGFloat = DayGrid.itemHeight(in: environment.container.contentSize.width)
+            if let count = self.sectionRecordMaxCount[index], count > 1 {
+                cellHeight = 39.0 + 20.0 * CGFloat(count) + 3.0 * (CGFloat(count) - 1.0)
+            }
+            
+            return self.sectionProvider(index: index, environment: environment, cellHeight: cellHeight)
         }, configuration: config)
         return layout
     }
@@ -275,6 +282,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         tags = DataManager.shared.activeTags
         records = DataManager.shared.dayRecords
         if let snapshot = displayHandler.getSnapshot(tags: tags, records: records) {
+            sectionRecordMaxCount = getMaxRecordsPerSection(from: snapshot)
             dataSource.apply(snapshot, animatingDifferences: true) { [weak self] in
                 guard let self = self, !self.didScrollToday else { return }
                 self.didScrollToday = true
@@ -421,5 +429,21 @@ extension CalendarViewController: DayPresenter {
         collectionView.scrollRectToVisible(cell.frame, animated: true)
         
         popover.sourceView = cell
+    }
+}
+
+extension CalendarViewController {
+    func getMaxRecordsPerSection(from snapshot: NSDiffableDataSourceSnapshot<Section, Item>) -> [Int: Int] {
+        var result = [Int: Int]()
+        
+        for section in snapshot.sectionIdentifiers {
+            let itemsInSection = snapshot.itemIdentifiers(inSection: section)
+            let maxRecords = itemsInSection.max(by: { $0.records.count < $1.records.count })?.records.count ?? 0
+            if let index = snapshot.indexOfSection(section) {
+                result[index] = maxRecords
+            }
+        }
+        
+        return result
     }
 }

@@ -8,11 +8,11 @@
 import UIKit
 
 extension CalendarViewController {
-    func getDayRowSection(environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
+    func getDayRowSection(environment: NSCollectionLayoutEnvironment, cellHeight: CGFloat) -> NSCollectionLayoutSection {
         let containerWidth = environment.container.contentSize.width
 
         let itemWidth = DayGrid.itemWidth(in: containerWidth)
-        let itemHeight = DayGrid.itemHeight(in: containerWidth)
+        let itemHeight = cellHeight
         let interSpacing = DayGrid.interSpacing
         let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(itemWidth),
                                              heightDimension: .fractionalHeight(1.0))
@@ -34,13 +34,11 @@ extension CalendarViewController {
         return section
     }
     
-    func sectionProvider(index: Int, environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {
-        let dayRowSectionProvider: (NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection = getDayRowSection(environment:)
-        
+    func sectionProvider(index: Int, environment: NSCollectionLayoutEnvironment, cellHeight: CGFloat) -> NSCollectionLayoutSection? {
         if let section = dataSource.sectionIdentifier(for: index) {
             switch section {
             case .row:
-                let section = dayRowSectionProvider(environment)
+                let section = getDayRowSection(environment: environment, cellHeight: cellHeight)
                 
                 let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                              heightDimension: .estimated(60))

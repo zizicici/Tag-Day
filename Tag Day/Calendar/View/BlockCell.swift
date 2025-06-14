@@ -116,29 +116,30 @@ class BlockCell: BlockBaseCell {
             label.textColor = item.foregroundColor
             label.text = item.day.dayString()
             
-            var lastRecordView: UIView? = nil
-            for (_, record) in item.records.enumerated() {
-//                let isLast = item.records.count == index + 1
-                if let tag = item.tags.filter({ $0.id == record.tagID }).first {
-                    let recordView = TagView()
-                    recordView.update(tag: tag, record: record)
-                    tagContainerView.addSubview(recordView)
-                    if let lastView = lastRecordView {
-                        recordView.snp.makeConstraints { make in
-                            make.leading.trailing.equalTo(tagContainerView).inset(2)
-                            make.height.equalTo(20)
-                            make.top.equalTo(lastView.snp.bottom).offset(3)
-                        }
-                    } else {
-                        recordView.snp.makeConstraints { make in
-                            make.leading.trailing.equalTo(tagContainerView).inset(2)
-                            make.height.equalTo(20)
-                            make.top.equalTo(tagContainerView)
-                        }
-                    }
-
-                    lastRecordView = recordView
+            var tagViews: [UIView] = []
+            for record in item.records {
+                if let recordTagView = generateTagView(record: record, tags: item.tags) {
+                    tagViews.append(recordTagView)
                 }
+            }
+            
+            var lastTagView: UIView? = nil
+            for tagView in tagViews {
+                tagContainerView.addSubview(tagView)
+                if let lastView = lastTagView {
+                    tagView.snp.makeConstraints { make in
+                        make.leading.trailing.equalTo(tagContainerView).inset(2)
+                        make.height.equalTo(20)
+                        make.top.equalTo(lastView.snp.bottom).offset(3)
+                    }
+                } else {
+                    tagView.snp.makeConstraints { make in
+                        make.leading.trailing.equalTo(tagContainerView).inset(2)
+                        make.height.equalTo(20)
+                        make.top.equalTo(tagContainerView)
+                    }
+                }
+                lastTagView = tagView
             }
             
             if item.isToday {
@@ -158,6 +159,16 @@ class BlockCell: BlockBaseCell {
     override var isHighlighted: Bool {
         didSet {
             setNeedsUpdateConfiguration()
+        }
+    }
+    
+    func generateTagView(record: DayRecord, tags: [Tag]) -> TagView? {
+        if let tag = tags.filter({ $0.id == record.tagID }).first {
+            let recordView = TagView()
+            recordView.update(tag: tag, record: record)
+            return recordView
+        } else {
+            return nil
         }
     }
 }
