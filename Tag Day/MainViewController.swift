@@ -12,34 +12,16 @@ import SnapKit
 class MainViewController: NavigationController {
     var calendarVC: CalendarViewController?
     
-    var buttonContainer: UIView = {
-        var container = UIView()
-        container.backgroundColor = AppColor.toolbar
-        container.layer.cornerCurve = .continuous
-        container.layer.cornerRadius = 25.0
-        container.clipsToBounds = true
-        
-        return container
-    }()
-    
     var tagButton: UIButton = {
-        var configuration = UIButton.Configuration.filled()
-        configuration.image = UIImage.tag
+        var configuration = UIButton.Configuration.borderedProminent()
+        configuration.cornerStyle = .large
+        configuration.image = UIImage(systemName: "tag")?.withConfiguration( UIImage.SymbolConfiguration(textStyle: .body, scale: .default))
         let button = UIButton(configuration: configuration)
         button.showsMenuAsPrimaryAction = true
         button.tintColor = AppColor.action
-        button.layer.cornerCurve = .continuous
-        button.layer.cornerRadius = 20.0
-        button.clipsToBounds = true
+        button.showsMenuAsPrimaryAction = true
         
         return button
-    }()
-    
-    var separator: UIView = {
-        var view = UIView()
-        view.backgroundColor = .white
-        
-        return view
     }()
     
     var bookPickerButton: UIButton = {
@@ -47,12 +29,14 @@ class MainViewController: NavigationController {
         configuration.titleAlignment = .center
         configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer({ incoming in
             var outgoing = incoming
-            outgoing.font = UIFont.preferredFont(forTextStyle: .headline)
+            outgoing.font = UIFont.preferredFont(forTextStyle: .body)
             
             return outgoing
         })
         configuration.titleLineBreakMode = .byTruncatingTail
-        configuration.cornerStyle = .capsule
+        configuration.cornerStyle = .large
+        configuration.image = UIImage(systemName: "book.closed")?.withConfiguration( UIImage.SymbolConfiguration(textStyle: .body, scale: .default))
+        configuration.imagePadding = 10.0
         let button = UIButton(configuration: configuration)
         button.tintColor = AppColor.action
         button.showsMenuAsPrimaryAction = true
@@ -77,19 +61,10 @@ class MainViewController: NavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.addSubview(buttonContainer)
-        buttonContainer.snp.makeConstraints { make in
-            make.bottom.equalTo(view.safeAreaLayoutGuide).inset(20)
-            make.width.greaterThanOrEqualTo(160)
-            make.width.lessThanOrEqualTo(300)
-            make.height.equalTo(56)
-            make.centerX.equalTo(view)
-        }
-        
         view.addSubview(tagButton)
         tagButton.snp.makeConstraints { make in
-            make.trailing.equalTo(buttonContainer).inset(6)
-            make.centerY.equalTo(buttonContainer)
+            make.trailing.equalTo(view).inset(20)
+            make.bottom.equalTo(view.safeAreaLayoutGuide).inset(20)
             make.height.width.equalTo(44)
         }
         
@@ -104,20 +79,11 @@ class MainViewController: NavigationController {
             }
         }
         
-        view.addSubview(separator)
-        separator.snp.makeConstraints { make in
-            make.trailing.equalTo(tagButton.snp.leading).offset(-7)
-            make.width.equalTo(1.5)
-            make.height.equalTo(20.0)
-            make.centerY.equalTo(tagButton)
-        }
-        
         view.addSubview(bookPickerButton)
         bookPickerButton.snp.makeConstraints { make in
-            make.leading.equalTo(buttonContainer).inset(6)
-            make.trailing.equalTo(separator.snp.leading).offset(-7)
+            make.leading.equalTo(view).inset(20)
+            make.bottom.equalTo(view.safeAreaLayoutGuide).inset(20)
             make.height.equalTo(44)
-            make.centerY.equalTo(tagButton)
         }
         
         bookPickerButton.configurationUpdateHandler = { [weak self] button in
