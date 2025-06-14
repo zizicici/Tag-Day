@@ -50,21 +50,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     // UIBarButtonItem
         
     private var moreButton: UIBarButtonItem?
-    private var yearPickerButton: UIButton = {
-        var configuration = UIButton.Configuration.plain()
-        configuration.titleAlignment = .center
-        configuration.cornerStyle = .capsule
-        configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer({ incoming in
-            var outgoing = incoming
-            outgoing.font = UIFont.preferredMonospacedFont(for: .body, weight: .medium)
-            
-            return outgoing
-        })
-        let button = UIButton(configuration: configuration)
-        button.showsMenuAsPrimaryAction = false
-        button.tintColor = AppColor.main
-        return button
-    }()
+    private var yearButton: UIBarButtonItem?
 
     // Data
     
@@ -131,20 +117,9 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         moreButton?.tintColor = AppColor.main
         navigationItem.rightBarButtonItems = [moreButton].compactMap{ $0 }
         
-        yearPickerButton.configurationUpdateHandler = { [weak self] button in
-            guard let self = self else { return }
-            var config = button.configuration
-            
-            config?.title = self.displayHandler.getTitle()
-            
-            button.configuration = config
-        }
-        yearPickerButton.addTarget(self, action: #selector(showYearPicker(_ :)), for: .touchUpInside)
-        
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: yearPickerButton)
-        yearPickerButton.snp.makeConstraints { make in
-            make.height.greaterThanOrEqualTo(40)
-        }
+        yearButton = UIBarButtonItem(title: displayHandler.getTitle(), style: .plain, target: self, action: #selector(showYearPicker))
+        yearButton?.tintColor = AppColor.main
+        navigationItem.leftBarButtonItems = [yearButton].compactMap{ $0 }
         
         reloadDataDebounce = Debounce(duration: 0.02, block: { [weak self] value in
             await self?.commit()
@@ -290,8 +265,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
 
     @objc
     internal func reloadData() {
-        yearPickerButton.setNeedsUpdateConfiguration()
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: yearPickerButton)
+        yearButton?.title = displayHandler.getTitle()
 
         applyData()
     }
@@ -361,11 +335,14 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     }
     
     @objc
-    func showYearPicker(_ sender: UIView) {
+    func showYearPicker() {
         let picker = CalendarYearPickerViewController(currentYear: self.displayHandler.getSelectedYear()) { [weak self] selectYear in
             self?.displayHandler.updateSelectedYear(to: selectYear)
         }
-        showPopoverView(at: sender, contentViewController: picker, width: 140)
+        
+        let buttonView = navigationItem.leftBarButtonItem?.value(forKey: "view") as? UIView
+        
+        showPopoverView(at: buttonView ?? view, contentViewController: picker, width: 140)
     }
     
     func switchEditMode(to editMode: EditMode) {

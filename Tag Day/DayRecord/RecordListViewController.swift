@@ -135,7 +135,10 @@ class RecordListViewController: UIViewController {
         let detailViewController = FastEditorViewController(day: day, book: book, editMode: .add)
         detailViewController.delegate = self
         let nav = NavigationController(rootViewController: detailViewController)
-        showPopoverView(at: navigationController?.toolbar.subviews.last?.subviews.first?.subviews.first ?? view, contentViewController: nav, width: 240.0, height: 300.0)
+        
+        let buttonView = toolbarItems?.first?.value(forKey: "view") as? UIView
+        
+        showPopoverView(at: buttonView ?? view, contentViewController: nav, width: 240.0, height: 300.0)
     }
     
     @objc
