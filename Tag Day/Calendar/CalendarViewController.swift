@@ -62,7 +62,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         })
         let button = UIButton(configuration: configuration)
         button.showsMenuAsPrimaryAction = false
-        button.tintColor = .white
+        button.tintColor = AppColor.main
         return button
     }()
 
@@ -120,7 +120,6 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         super.viewDidLoad()
         
         view.backgroundColor = AppColor.background
-        updateNavigationBarStyle(hideShadow: false)
         
         configureHierarchy()
         configureDataSource()
@@ -129,6 +128,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         
         moreButton = UIBarButtonItem(image: UIImage(systemName: "ellipsis", withConfiguration: UIImage.SymbolConfiguration(weight: .medium)), style: .plain, target: nil, action: nil)
         moreButton?.menu = getMoreMenu()
+        moreButton?.tintColor = AppColor.main
         navigationItem.rightBarButtonItems = [moreButton].compactMap{ $0 }
         
         yearPickerButton.configurationUpdateHandler = { [weak self] button in
