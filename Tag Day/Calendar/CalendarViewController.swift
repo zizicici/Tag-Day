@@ -136,7 +136,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     
     @objc
     func currentBookNeedReload() {
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.25) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) { [weak self] in
             guard let self = self else { return }
             self.scrollToToday()
         }
