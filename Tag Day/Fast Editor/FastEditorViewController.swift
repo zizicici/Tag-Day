@@ -215,11 +215,11 @@ extension FastEditorViewController {
         config.scrollDirection = .vertical
         let layout = UICollectionViewCompositionalLayout(sectionProvider: { index, environment in
             let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                 heightDimension: .estimated(40))
+                                                 heightDimension: .estimated(44))
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
             let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                  heightDimension: .estimated(40))
+                                                  heightDimension: .estimated(44))
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
                                                              subitems: [item])
 
@@ -304,7 +304,7 @@ class FastEditorTagCell: FastEditorBaseCell {
             make.top.leading.equalTo(contentView)
             make.trailing.equalTo(contentView)
             make.bottom.equalTo(contentView)
-            make.height.greaterThanOrEqualTo(44.0)
+            make.height.equalTo(44.0)
         }
         
         tagButton.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
