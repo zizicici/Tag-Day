@@ -70,11 +70,6 @@ class BlockCell: BlockBaseCell {
         super.prepareForReuse()
         
         isHover = false
-        label.text = nil
-        label.backgroundColor = .clear
-        tagContainerView.subviews.forEach { subview in
-            subview.removeFromSuperview()
-        }
     }
     
     override func layoutSubviews() {
@@ -123,6 +118,7 @@ class BlockCell: BlockBaseCell {
                 }
             }
             
+            clearTagSubviews()
             var lastTagView: UIView? = nil
             for tagView in tagViews {
                 tagContainerView.addSubview(tagView)
@@ -154,6 +150,10 @@ class BlockCell: BlockBaseCell {
     
     func update(isHover: Bool) {
         self.isHover = isHover
+    }
+    
+    func clearTagSubviews() {
+        tagContainerView.subviews.forEach{ $0.removeFromSuperview() }
     }
     
     override var isHighlighted: Bool {
