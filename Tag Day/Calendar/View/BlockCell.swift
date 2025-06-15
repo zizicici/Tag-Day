@@ -166,6 +166,7 @@ class BlockCell: BlockBaseCell {
         if let tag = tags.filter({ $0.id == record.tagID }).first {
             let recordView = TagView()
             recordView.update(tag: tag)
+            recordView.isUserInteractionEnabled = false
             return recordView
         } else {
             return nil
