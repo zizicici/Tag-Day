@@ -237,7 +237,7 @@ class RecordDetailViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        commentCell?.becomeFirstResponder()
+        _ = commentCell?.becomeFirstResponder()
     }
     
     func configureHierarchy() {

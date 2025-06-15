@@ -16,6 +16,7 @@
 		14833D3B2DC5179F001B61D5 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D3A2DC5179F001B61D5 /* UIColor+Extension.swift */; };
 		14AA3E072DCDB31300E1F4F8 /* RecordListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AA3E062DCDB31300E1F4F8 /* RecordListViewController.swift */; };
 		14AA3E0B2DCDF3BE00E1F4F8 /* RecordListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AA3E0A2DCDF3BE00E1F4F8 /* RecordListCell.swift */; };
+		14AA90542DFE7EDE00EA331A /* InfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AA90532DFE7EDE00EA331A /* InfoCell.swift */; };
 		14ACBE562DBFAD2E0056B1FD /* TabbarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14ACBE542DBFAD2E0056B1FD /* TabbarController.swift */; };
 		14ACBE572DBFAD2E0056B1FD /* NavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14ACBE532DBFAD2E0056B1FD /* NavigationViewController.swift */; };
 		14AD287B2DC5B6DD0018DAF3 /* BookListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AD287A2DC5B6DD0018DAF3 /* BookListViewController.swift */; };
@@ -95,6 +96,7 @@
 		14833D3A2DC5179F001B61D5 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		14AA3E062DCDB31300E1F4F8 /* RecordListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListViewController.swift; sourceTree = "<group>"; };
 		14AA3E0A2DCDF3BE00E1F4F8 /* RecordListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListCell.swift; sourceTree = "<group>"; };
+		14AA90532DFE7EDE00EA331A /* InfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoCell.swift; sourceTree = "<group>"; };
 		14ACBE532DBFAD2E0056B1FD /* NavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationViewController.swift; sourceTree = "<group>"; };
 		14ACBE542DBFAD2E0056B1FD /* TabbarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbarController.swift; sourceTree = "<group>"; };
 		14AD287A2DC5B6DD0018DAF3 /* BookListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookListViewController.swift; sourceTree = "<group>"; };
@@ -378,6 +380,7 @@
 			isa = PBXGroup;
 			children = (
 				14D2728B2DC071B000267572 /* BlockCell.swift */,
+				14AA90532DFE7EDE00EA331A /* InfoCell.swift */,
 				14D2728D2DC071B000267572 /* MonthTitleSupplementaryView.swift */,
 				14D2728E2DC071B000267572 /* WeekdayOrderView.swift */,
 				14D2728F2DC071B000267572 /* HoverGestureRecognizer.swift */,
@@ -549,6 +552,7 @@
 				14B239B62DBF13F30007152C /* SceneDelegate.swift in Sources */,
 				14BBA37A2DCB142900AD7BAC /* ColorPickerCell.swift in Sources */,
 				14ACBE562DBFAD2E0056B1FD /* TabbarController.swift in Sources */,
+				14AA90542DFE7EDE00EA331A /* InfoCell.swift in Sources */,
 				14D2729F2DC072D700267572 /* Settings.swift in Sources */,
 				14EBE0882DD76B0B00F7609A /* DurationCell.swift in Sources */,
 				14ACBE572DBFAD2E0056B1FD /* NavigationViewController.swift in Sources */,

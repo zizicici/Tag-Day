@@ -36,7 +36,7 @@ class MonthTitleSupplementaryView: UICollectionReusableView {
         
         addSubview(label)
         label.snp.makeConstraints { make in
-            make.top.equalTo(self).inset(inset)
+            make.top.equalTo(self).inset(30.0)
             make.leading.equalTo(self)
             make.width.equalTo(self).multipliedBy(1/7.0)
         }

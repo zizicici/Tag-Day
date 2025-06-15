@@ -12,10 +12,22 @@ extension CalendarViewController {
     func getBlockCellRegistration() -> UICollectionView.CellRegistration<BlockCell, Item> {
         let cellRegistration = UICollectionView.CellRegistration<BlockCell, Item> { (cell, indexPath, identifier) in
             switch identifier {
-            case .invisible:
+            case .invisible, .info:
                 break
             case .block(let blockItem):
                 cell.update(with: blockItem)
+            }
+        }
+        return cellRegistration
+    }
+    
+    func getInfoCellRegistration() -> UICollectionView.CellRegistration<InfoCell, Item> {
+        let cellRegistration = UICollectionView.CellRegistration<InfoCell, Item> { (cell, indexPath, identifier) in
+            switch identifier {
+            case .invisible, .block:
+                break
+            case .info(let infoItem):
+                cell.update(with: infoItem)
             }
         }
         return cellRegistration

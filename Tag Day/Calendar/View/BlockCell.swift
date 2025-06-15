@@ -10,7 +10,7 @@ import SnapKit
 import ZCCalendar
 
 fileprivate extension UIConfigurationStateCustomKey {
-    static let blockItem = UIConfigurationStateCustomKey("com.zizicici.offday.cell.block.item")
+    static let blockItem = UIConfigurationStateCustomKey("com.zizicici.tagday.cell.block.item")
 }
 
 private extension UICellConfigurationState {
@@ -89,7 +89,7 @@ class BlockCell: BlockBaseCell {
         contentView.addSubview(tagContainerView)
         tagContainerView.snp.makeConstraints { make in
             make.top.equalTo(label.snp.bottom).offset(6)
-            make.leading.trailing.equalTo(contentView)//.inset(3)
+            make.leading.trailing.equalTo(contentView).inset(3)
             make.bottom.equalTo(contentView).inset(4)
         }
         
@@ -124,13 +124,13 @@ class BlockCell: BlockBaseCell {
                 tagContainerView.addSubview(tagView)
                 if let lastView = lastTagView {
                     tagView.snp.makeConstraints { make in
-                        make.leading.trailing.equalTo(tagContainerView).inset(2)
+                        make.leading.trailing.equalTo(tagContainerView)
                         make.height.equalTo(20)
                         make.top.equalTo(lastView.snp.bottom).offset(3)
                     }
                 } else {
                     tagView.snp.makeConstraints { make in
-                        make.leading.trailing.equalTo(tagContainerView).inset(2)
+                        make.leading.trailing.equalTo(tagContainerView)
                         make.height.equalTo(20)
                         make.top.equalTo(tagContainerView)
                     }
@@ -165,7 +165,7 @@ class BlockCell: BlockBaseCell {
     func generateTagView(record: DayRecord, tags: [Tag]) -> TagView? {
         if let tag = tags.filter({ $0.id == record.tagID }).first {
             let recordView = TagView()
-            recordView.update(tag: tag, record: record)
+            recordView.update(tag: tag)
             return recordView
         } else {
             return nil
@@ -212,7 +212,7 @@ class TagView: UIView {
         
         addSubview(label)
         label.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(self).inset(3)
+            make.leading.trailing.equalTo(self)
             make.top.bottom.equalTo(self)
         }
         
@@ -234,7 +234,7 @@ class TagView: UIView {
         backgroundColor = color
     }
     
-    func update(tag: Tag, record: DayRecord) {
+    func update(tag: Tag) {
         label.text = tag.title
         if let tagColor = UIColor(string: tag.color) {
             if tagColor.isLight {

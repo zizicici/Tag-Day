@@ -29,3 +29,9 @@ extension BlockItem {
         return (day.completeFormatString() ?? "")
     }
 }
+
+struct InfoItem: Hashable {
+    var month: GregorianMonth
+    var tag: Tag
+    var count: Int
+}

@@ -174,6 +174,8 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         case .block(let blockItem):
             impactFeedbackGeneratorCoourred()
             tap(in: cell, for: blockItem)
+        case .info:
+            break
         }
     }
     
@@ -188,6 +190,8 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         case .block(let blockItem):
             let style = ToastStyle.getStyle(messageColor: blockItem.foregroundColor, backgroundColor: blockItem.backgroundColor)
             view.makeToast(blockItem.calendarString, position: .top, style: style)
+        case .info:
+            break
         }
     }
     
@@ -233,14 +237,21 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     
     private func configureDataSource() {
         let blockCellRegistration = getBlockCellRegistration()
-        let invisibleCellRegistration = UICollectionView.CellRegistration<UICollectionViewCell, Item> { (cell, indexPath, identifier) in
-        }
+        let invisibleCellRegistration = UICollectionView.CellRegistration<UICollectionViewCell, Item> { (cell, indexPath, identifier) in }
+        let infoCellRegistration = getInfoCellRegistration()
         
         let headerRegistration = UICollectionView.SupplementaryRegistration
-        <MonthTitleSupplementaryView>(elementKind: Self.sectionHeaderElementKind) { (supplementaryView, string, indexPath) in
-            let month = Month(rawValue: indexPath.section + 1) ?? .jan
-            let startWeekdayOrder = WeekdayOrder(rawValue: WeekStartType.current.rawValue) ?? WeekdayOrder.firstDayOfWeek
-            supplementaryView.update(text: month.name, startWeekOrder: startWeekdayOrder)
+        <MonthTitleSupplementaryView>(elementKind: Self.sectionHeaderElementKind) { [weak self] (supplementaryView, string, indexPath) in
+            guard let self = self else { return }
+            guard let section = self.dataSource.sectionIdentifier(for: indexPath.section) else { return }
+            switch section {
+            case .row(let gregorianMonth):
+                let month = gregorianMonth.month
+                let startWeekdayOrder = WeekdayOrder(rawValue: WeekStartType.current.rawValue) ?? WeekdayOrder.firstDayOfWeek
+                supplementaryView.update(text: month.name, startWeekOrder: startWeekdayOrder)
+            case .info:
+                break
+            }
         }
         
         dataSource = UICollectionViewDiffableDataSource<Section, Item>(collectionView: collectionView) { [weak self]
@@ -255,6 +266,15 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
                     return collectionView.dequeueConfiguredReusableCell(using: blockCellRegistration, for: indexPath, item: identifier)
                 case .invisible:
                     return collectionView.dequeueConfiguredReusableCell(using: invisibleCellRegistration, for: indexPath, item: identifier)
+                case .info:
+                    return nil
+                }
+            case .info:
+                switch identifier {
+                case .block, .invisible:
+                    return nil
+                case .info:
+                    return collectionView.dequeueConfiguredReusableCell(using: infoCellRegistration, for: indexPath, item: identifier)
                 }
             }
         }
@@ -303,7 +323,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     func scrollToToday(animated: Bool = true) {
         let item = dataSource.snapshot().itemIdentifiers.first { item in
             switch item {
-            case .invisible:
+            case .invisible, .info:
                 return false
             case .block(let blockItem):
                 if blockItem.day == ZCCalendar.manager.today {
@@ -407,7 +427,7 @@ extension CalendarViewController {
             switch item {
             case .block(let blockItem):
                 return blockItem.day == day
-            case .invisible(_):
+            case .invisible, .info:
                 return false
             }
         }
@@ -429,7 +449,7 @@ extension CalendarViewController: DayPresenter {
             switch item {
             case .block(let blockItem):
                 return blockItem.day == day
-            case .invisible(_):
+            case .invisible, .info:
                 return false
             }
         }) else { return }

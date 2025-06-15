@@ -10,17 +10,21 @@ import ZCCalendar
 
 enum Section: Hashable {
     case row(GregorianMonth)
+    case info(GregorianMonth)
 }
 
 enum Item: Hashable {
     case block(BlockItem)
     case invisible(String)
+    case info(InfoItem)
     
     var records: [DayRecord] {
         switch self {
         case .block(let blockItem):
             return blockItem.records
-        case .invisible(let string):
+        case .invisible:
+            return []
+        case .info:
             return []
         }
     }
