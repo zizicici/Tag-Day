@@ -40,7 +40,7 @@ extension CalendarViewController {
         let count: Int = DayGrid.countInRow
         let interSpacing = DayGrid.interSpacing
 
-        let itemSize = NSCollectionLayoutSize(widthDimension: .estimated(100.0), heightDimension: .estimated(40.0))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .estimated(90.0), heightDimension: .estimated(40.0))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(40))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])

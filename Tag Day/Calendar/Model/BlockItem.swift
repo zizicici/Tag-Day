@@ -34,4 +34,6 @@ struct InfoItem: Hashable {
     var month: GregorianMonth
     var tag: Tag
     var count: Int
+    var duration: Int64?
+    var durationRecordCount: Int
 }

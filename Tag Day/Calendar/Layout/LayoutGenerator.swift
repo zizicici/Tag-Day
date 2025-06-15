@@ -42,9 +42,9 @@ struct LayoutGenerater {
             
             snapshot.appendSections([.info(gregorianMonth)])
             
-            let tagCountsDict = getSortedTagCounts(in: items, matching: tags)
+            let tagStatics = getTagStatistics(in: items, matching: tags)
             
-            snapshot.appendItems(tagCountsDict.map{ Item.info(InfoItem(month: gregorianMonth, tag: $0.tag, count: $0.count)) }, toSection: .info(gregorianMonth))
+            snapshot.appendItems(tagStatics.map{ Item.info(InfoItem(month: gregorianMonth, tag: $0.tag, count: $0.totalCount, duration: $0.totalDuration, durationRecordCount: $0.durationRecordCount)) }, toSection: .info(gregorianMonth))
         }
     }
     
@@ -73,6 +73,65 @@ struct LayoutGenerater {
                 return $0.1 > $1.1
             }
             return $0.0.id! < $1.0.id!
+        }
+        
+        return sortedResults
+    }
+    
+    struct TagStatistics {
+        let tag: Tag
+        let totalCount: Int          // 出现的总次数
+        let totalDuration: Int64?    // duration总长度
+        let durationRecordCount: Int // 有duration信息的总次数
+    }
+
+    static func getTagStatistics(in blockItems: [BlockItem], matching tags: [Tag]) -> [TagStatistics] {
+        // 1. 统计所有tagID的数据
+        var tagIDStats = [Int64: (totalCount: Int, totalDuration: Int64?, durationRecordCount: Int)]()
+        
+        for blockItem in blockItems {
+            for record in blockItem.records {
+                let currentStats = tagIDStats[record.tagID] ?? (0, 0, 0)
+                
+                var newTotalDuration = currentStats.totalDuration
+                var newDurationRecordCount = currentStats.durationRecordCount
+                
+                if let recordDuration = record.duration {
+                    newTotalDuration = (newTotalDuration ?? 0) + recordDuration
+                    newDurationRecordCount += 1
+                }
+                
+                tagIDStats[record.tagID] = (
+                    totalCount: currentStats.totalCount + 1,
+                    totalDuration: newTotalDuration,
+                    durationRecordCount: newDurationRecordCount
+                )
+            }
+        }
+        
+        // 2. 创建tagID到Tag对象的映射
+        let tagDictionary = Dictionary(uniqueKeysWithValues: tags.map { ($0.id, $0) })
+        
+        // 3. 过滤并匹配结果，转换为TagStatistics
+        let matchedResults = tagIDStats.compactMap { (tagID, stats) -> TagStatistics? in
+            guard let matchingTag = tagDictionary[tagID] else { return nil }
+            return TagStatistics(
+                tag: matchingTag,
+                totalCount: stats.totalCount,
+                totalDuration: stats.totalDuration,
+                durationRecordCount: stats.durationRecordCount
+            )
+        }
+        
+        // 4. 按totalCount降序排序，相同则按durationRecordCount降序
+        let sortedResults = matchedResults.sorted {
+            if $0.totalCount != $1.totalCount {
+                return $0.totalCount > $1.totalCount
+            }
+            if $0.durationRecordCount != $1.durationRecordCount {
+                return $0.durationRecordCount > $1.durationRecordCount
+            }
+            return $0.tag.id! < $1.tag.id!
         }
         
         return sortedResults
