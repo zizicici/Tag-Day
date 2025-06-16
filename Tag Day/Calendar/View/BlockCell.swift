@@ -112,14 +112,15 @@ class BlockCell: BlockBaseCell {
             label.textColor = item.foregroundColor
             label.text = item.day.dayString()
             
-            let orderedDict = OrderedDictionary<Int64, DayRecord>(
-                item.records.map { ($0.tagID, $0) },
-                uniquingKeysWith: { first, _ in first }
-            )
+            var orderedCounts = OrderedDictionary<Int64, Int>()
+            for record in item.records {
+                orderedCounts[record.tagID, default: 0] += 1
+            }
             
             var tagViews: [UIView] = []
-            for record in orderedDict {
-                if let recordTagView = generateTagView(record: record.value, tags: item.tags) {
+            for orderedCount in orderedCounts {
+                if let tag = item.tags.first(where: { $0.id == orderedCount.key }) {
+                    let recordTagView = generateTagView(tag: tag, count: orderedCount.value)
                     tagViews.append(recordTagView)
                 }
             }
@@ -168,15 +169,11 @@ class BlockCell: BlockBaseCell {
         }
     }
     
-    func generateTagView(record: DayRecord, tags: [Tag]) -> TagView? {
-        if let tag = tags.filter({ $0.id == record.tagID }).first {
-            let recordView = TagView()
-            recordView.update(tag: tag)
-            recordView.isUserInteractionEnabled = false
-            return recordView
-        } else {
-            return nil
-        }
+    func generateTagView(tag: Tag, count: Int) -> TagView {
+        let recordView = TagView()
+        recordView.update(tag: tag, count: count)
+        recordView.isUserInteractionEnabled = false
+        return recordView
     }
 }
 
@@ -214,17 +211,35 @@ class TagView: UIView {
         return label
     }()
     
+    var countLabel: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 10, weight: .regular)
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.5
+        
+        return label
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         addSubview(label)
         label.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(self)
+            make.leading.equalTo(self).inset(2.0)
+            make.trailing.equalTo(self).inset(2.0)
             make.top.bottom.equalTo(self)
         }
         
-        self.layer.cornerRadius = 2.0
-        self.layer.masksToBounds = true
+        addSubview(countLabel)
+        countLabel.snp.makeConstraints { make in
+            make.trailing.equalTo(self).inset(1.0)
+            make.width.equalTo(14.0)
+            make.top.equalTo(self).inset(0.0)
+            make.height.greaterThanOrEqualTo(8.0)
+        }
+        
+        layer.cornerRadius = 3.0
     }
     
     required init?(coder: NSCoder) {
@@ -241,14 +256,27 @@ class TagView: UIView {
         backgroundColor = color
     }
     
-    func update(tag: Tag) {
+    func update(tag: Tag, count: Int = 1) {
         label.text = tag.title
+        if count > 1 {
+            countLabel.isHidden = false
+            countLabel.text = "×\(count)"
+            label.snp.updateConstraints { make in
+                make.trailing.equalTo(self).inset(14.0)
+            }
+        } else {
+            countLabel.isHidden = true
+            label.snp.updateConstraints { make in
+                make.trailing.equalTo(self).inset(2.0)
+            }
+        }
         if let tagColor = UIColor(string: tag.color) {
             if tagColor.isLight {
                 label.textColor = .black.withAlphaComponent(0.8)
             } else {
                 label.textColor = .white.withAlphaComponent(0.95)
             }
+            countLabel.textColor = label.textColor
             backgroundColor = tagColor
         }
     }
