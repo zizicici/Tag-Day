@@ -43,14 +43,33 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
                 return String(localized: "editMode.overwrite.hint")
             }
         }
+        
+        var attributes: UIMenuElement.Attributes {
+            switch self {
+            case .normal:
+                return []
+            case .overwrite:
+                return [.destructive]
+            }
+        }
+        
+        var options: UIMenu.Options {
+            switch self {
+            case .normal:
+                return []
+            case .overwrite:
+                return [.destructive]
+            }
+        }
     }
     
     static let monthTagElementKind: String = "monthTagElementKind"
     
     // UIBarButtonItem
         
-    private var moreButton: UIBarButtonItem?
     private var yearButton: UIBarButtonItem?
+    private var settingsButton: UIBarButtonItem?
+    private var moreButton: UIBarButtonItem?
 
     // Data
     
@@ -114,10 +133,13 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         
         addGestures()
         
-        moreButton = UIBarButtonItem(image: UIImage(systemName: "ellipsis", withConfiguration: UIImage.SymbolConfiguration(weight: .medium)), style: .plain, target: nil, action: nil)
-        moreButton?.menu = getMoreMenu()
+        settingsButton = UIBarButtonItem(image: UIImage(systemName: "slider.horizontal.2.square", withConfiguration: UIImage.SymbolConfiguration(weight: .medium)), style: .plain, target: nil, action: nil)
+        settingsButton?.tintColor = AppColor.main
+        
+        moreButton = UIBarButtonItem(image: UIImage(systemName: "ellipsis.circle", withConfiguration: UIImage.SymbolConfiguration(weight: .medium)), style: .plain, target: nil, action: nil)
         moreButton?.tintColor = AppColor.main
-        navigationItem.rightBarButtonItems = [moreButton].compactMap{ $0 }
+        
+        navigationItem.rightBarButtonItems = [moreButton, settingsButton].compactMap{ $0 }
         
         yearButton = UIBarButtonItem(title: displayHandler.getTitle(), style: .plain, target: self, action: #selector(showYearPicker))
         yearButton?.tintColor = AppColor.main
@@ -302,6 +324,9 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     @objc
     internal func reloadData() {
         yearButton?.title = displayHandler.getTitle()
+        
+        updateMoreMenu()
+        updateSettingsMenu()
 
         applyData()
     }
@@ -338,30 +363,41 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         }
     }
     
-    private func updateMoreMenu() {
-        let children: [UIMenuElement] = [getWeekStartTypeMenu()]
+    private func updateSettingsMenu() {
+        settingsButton?.menu = getSettingsMenu()
+    }
+    
+    func getSettingsMenu() -> UIMenu {
+        var children: [UIMenuElement] = []
         
-        moreButton?.menu = UIMenu(title: "", options: .displayInline, children: children)
+        let weekStartMenu = getWeekStartTypeMenu()
+        
+        children.append(weekStartMenu)
+
+        let editActions: [UIAction] = [EditMode.normal, EditMode.overwrite].map { mode in
+            return UIAction(title: mode.title, subtitle: mode.subtitle, image: UIImage(systemName: mode.image), attributes: mode.attributes, state: editMode == mode ? .on : .off) { [weak self] _ in
+                self?.switchEditMode(to: mode)
+            }
+        }
+        
+        let editModeDivider = UIMenu(title: String(localized: "editMode.title"), subtitle: editMode.title, image: UIImage(systemName: editMode.image), options: editMode.options, children: editActions)
+        children.append(editModeDivider)
+        
+        return UIMenu(children: children)
+    }
+    
+    private func updateMoreMenu() {        
+        moreButton?.menu = getMoreMenu()
     }
     
     func getMoreMenu() -> UIMenu {
         var children: [UIMenuElement] = []
         
-        let editActions: [UIAction] = [EditMode.normal, EditMode.overwrite].map { mode in
-            return UIAction(title: mode.title, subtitle: mode.subtitle, image: UIImage(systemName: mode.image), state: editMode == mode ? .on : .off) { [weak self] _ in
-                self?.switchEditMode(to: mode)
-            }
-        }
-        
-        let editModeDivider = UIMenu(title: String(localized: "editMode.title"), subtitle: editMode.title, options: [], children: editActions)
-        children.append(editModeDivider)
-        
         let moreAction = UIAction(title: String(localized: "controller.more.title"), image: UIImage(systemName: "ellipsis.circle")) { [weak self] _ in
             self?.moreAction()
         }
-        let moreDivider = UIMenu(title: "", options: .displayInline, children: [moreAction])
 
-        children.append(moreDivider)
+        children.append(moreAction)
         
         return UIMenu(children: children)
     }
@@ -384,7 +420,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     
     func switchEditMode(to editMode: EditMode) {
         self.editMode = editMode
-        moreButton?.menu = getMoreMenu()
+        updateSettingsMenu()
     }
 }
 
