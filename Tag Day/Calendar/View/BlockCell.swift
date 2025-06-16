@@ -112,20 +112,32 @@ class BlockCell: BlockBaseCell {
             label.textColor = item.foregroundColor
             label.text = item.day.dayString()
             
-            var orderedCounts = OrderedDictionary<Int64, Int>()
-            for record in item.records {
-                orderedCounts[record.tagID, default: 0] += 1
-            }
-            
+            clearTagSubviews()
+
             var tagViews: [UIView] = []
-            for orderedCount in orderedCounts {
-                if let tag = item.tags.first(where: { $0.id == orderedCount.key }) {
-                    let recordTagView = generateTagView(tag: tag, count: orderedCount.value)
-                    tagViews.append(recordTagView)
+            
+            switch item.tagDisplayType {
+            case .normal:
+                for record in item.records {
+                    if let tag = item.tags.first(where: { $0.id == record.tagID }) {
+                        let recordTagView = generateTagView(tag: tag, count: 1)
+                        tagViews.append(recordTagView)
+                    }
+                }
+            case .aggregation:
+                var orderedCounts = OrderedDictionary<Int64, Int>()
+                for record in item.records {
+                    orderedCounts[record.tagID, default: 0] += 1
+                }
+                
+                for orderedCount in orderedCounts {
+                    if let tag = item.tags.first(where: { $0.id == orderedCount.key }) {
+                        let recordTagView = generateTagView(tag: tag, count: orderedCount.value)
+                        tagViews.append(recordTagView)
+                    }
                 }
             }
             
-            clearTagSubviews()
             var lastTagView: UIView? = nil
             for tagView in tagViews {
                 tagContainerView.addSubview(tagView)

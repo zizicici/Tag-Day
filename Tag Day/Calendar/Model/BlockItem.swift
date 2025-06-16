@@ -16,6 +16,7 @@ struct BlockItem: Hashable {
     var isToday: Bool
     var tags: [Tag]
     var records: [DayRecord]
+    var tagDisplayType: TagDisplayType
 }
 
 extension BlockItem {

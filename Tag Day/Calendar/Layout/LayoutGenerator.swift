@@ -35,7 +35,7 @@ struct LayoutGenerater {
                 let backgroundColor: UIColor = AppColor.paper
                 let foregroundColor: UIColor = AppColor.text
                 
-                return BlockItem(index: julianDay, backgroundColor: backgroundColor, foregroundColor: foregroundColor, isToday: ZCCalendar.manager.isToday(gregorianDay: gregorianDay), tags: tags, records: records.filter{ $0.day == gregorianDay.julianDay })
+                return BlockItem(index: julianDay, backgroundColor: backgroundColor, foregroundColor: foregroundColor, isToday: ZCCalendar.manager.isToday(gregorianDay: gregorianDay), tags: tags, records: records.filter{ $0.day == gregorianDay.julianDay }, tagDisplayType: TagDisplayType.getValue())
             })
             
             snapshot.appendItems(items.map{ Item.block($0) }, toSection: .row(gregorianMonth))
