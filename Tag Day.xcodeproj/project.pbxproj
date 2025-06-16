@@ -37,6 +37,7 @@
 		14B239D22DBF78F10007152C /* AppInfo in Frameworks */ = {isa = PBXBuildFile; productRef = 14B239D12DBF78F10007152C /* AppInfo */; };
 		14B239D52DBF790A0007152C /* ZCCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 14B239D42DBF790A0007152C /* ZCCalendar */; };
 		14B239D82DBF791E0007152C /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 14B239D72DBF791E0007152C /* Toast */; };
+		14B468F02DFFE5B500415529 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 14B468EF2DFFE5B500415529 /* Collections */; };
 		14BBA3762DCB0B0700AD7BAC /* TagDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BBA3752DCB0B0700AD7BAC /* TagDetailViewController.swift */; };
 		14BBA3782DCB101100AD7BAC /* TextInputCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BBA3772DCB101100AD7BAC /* TextInputCell.swift */; };
 		14BBA37A2DCB142900AD7BAC /* ColorPickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BBA3792DCB142900AD7BAC /* ColorPickerCell.swift */; };
@@ -168,6 +169,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				14B468F02DFFE5B500415529 /* Collections in Frameworks */,
 				14B239D22DBF78F10007152C /* AppInfo in Frameworks */,
 				14B239D52DBF790A0007152C /* ZCCalendar in Frameworks */,
 				14EBE0862DD7679700F7609A /* DurationPicker in Frameworks */,
@@ -475,6 +477,7 @@
 				14B239D42DBF790A0007152C /* ZCCalendar */,
 				14B239D72DBF791E0007152C /* Toast */,
 				14EBE0852DD7679700F7609A /* DurationPicker */,
+				14B468EF2DFFE5B500415529 /* Collections */,
 			);
 			productName = "Tag Day";
 			productReference = 14CD76AD2DBE6BA10035DF1F /* Tag Day.app */;
@@ -514,6 +517,7 @@
 				14B239D32DBF790A0007152C /* XCRemoteSwiftPackageReference "ZCCalendar" */,
 				14B239D62DBF791E0007152C /* XCRemoteSwiftPackageReference "Toast-Swift" */,
 				14EBE0842DD7679700F7609A /* XCRemoteSwiftPackageReference "DurationPicker" */,
+				14B468EE2DFFE5B500415529 /* XCRemoteSwiftPackageReference "swift-collections" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 14CD76AE2DBE6BA10035DF1F /* Products */;
@@ -877,6 +881,14 @@
 				minimumVersion = 5.1.1;
 			};
 		};
+		14B468EE2DFFE5B500415529 /* XCRemoteSwiftPackageReference "swift-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-collections.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.0;
+			};
+		};
 		14EBE0842DD7679700F7609A /* XCRemoteSwiftPackageReference "DurationPicker" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mac-gallagher/DurationPicker";
@@ -912,6 +924,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 14B239D62DBF791E0007152C /* XCRemoteSwiftPackageReference "Toast-Swift" */;
 			productName = Toast;
+		};
+		14B468EF2DFFE5B500415529 /* Collections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 14B468EE2DFFE5B500415529 /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = Collections;
 		};
 		14EBE0852DD7679700F7609A /* DurationPicker */ = {
 			isa = XCSwiftPackageProductDependency;

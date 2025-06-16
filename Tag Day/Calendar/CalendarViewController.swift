@@ -336,7 +336,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         tags = DataManager.shared.activeTags
         records = DataManager.shared.dayRecords
         if let snapshot = displayHandler.getSnapshot(tags: tags, records: records) {
-            sectionRecordMaxCount = getMaxRecordsPerSection(from: snapshot)
+            sectionRecordMaxCount = getMaxRecordsPerSection(from: snapshot, shouldDeduplicate: getTagDisplayType() == .aggregation)
             dataSource.apply(snapshot, animatingDifferences: true) { [weak self] in
                 guard let self = self, !self.didScrollToday else { return }
                 self.didScrollToday = true
@@ -501,12 +501,28 @@ extension CalendarViewController: DayPresenter {
 }
 
 extension CalendarViewController {
-    func getMaxRecordsPerSection(from snapshot: NSDiffableDataSourceSnapshot<Section, Item>) -> [Int: Int] {
+    func getMaxRecordsPerSection(from snapshot: NSDiffableDataSourceSnapshot<Section, Item>, shouldDeduplicate: Bool) -> [Int: Int] {
         var result = [Int: Int]()
         
         for section in snapshot.sectionIdentifiers {
             let itemsInSection = snapshot.itemIdentifiers(inSection: section)
-            let maxRecords = itemsInSection.max(by: { $0.records.count < $1.records.count })?.records.count ?? 0
+            
+            // 计算每个item的records数量（考虑去重）
+            let recordsCounts = itemsInSection.map { item -> Int in
+                if shouldDeduplicate {
+                    // 去重逻辑：基于tagID属性去重
+                    let uniqueRecords = item.records.reduce(into: [Int64: DayRecord]()) { result, record in
+                        result[record.tagID] = record
+                    }
+                    return uniqueRecords.count
+                } else {
+                    return item.records.count
+                }
+            }
+            
+            // 找出当前section中的最大records数量
+            let maxRecords = recordsCounts.max() ?? 0
+            
             if let index = snapshot.indexOfSection(section) {
                 result[index] = maxRecords
             }

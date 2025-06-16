@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import ZCCalendar
+import Collections
 
 fileprivate extension UIConfigurationStateCustomKey {
     static let blockItem = UIConfigurationStateCustomKey("com.zizicici.tagday.cell.block.item")
@@ -111,9 +112,14 @@ class BlockCell: BlockBaseCell {
             label.textColor = item.foregroundColor
             label.text = item.day.dayString()
             
+            let orderedDict = OrderedDictionary<Int64, DayRecord>(
+                item.records.map { ($0.tagID, $0) },
+                uniquingKeysWith: { first, _ in first }
+            )
+            
             var tagViews: [UIView] = []
-            for record in item.records {
-                if let recordTagView = generateTagView(record: record, tags: item.tags) {
+            for record in orderedDict {
+                if let recordTagView = generateTagView(record: record.value, tags: item.tags) {
                     tagViews.append(recordTagView)
                 }
             }
