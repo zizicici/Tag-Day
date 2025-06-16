@@ -37,7 +37,7 @@ class BlockBaseCell: UICollectionViewCell {
     }
 }
 
-class BlockCell: BlockBaseCell {
+class BlockCell: BlockBaseCell, HoverableCell {
     var isHover: Bool = false {
         didSet {
             if oldValue != isHover {

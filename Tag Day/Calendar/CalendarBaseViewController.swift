@@ -8,6 +8,12 @@
 import UIKit
 import Toast
 
+protocol HoverableCell {
+    var isHover: Bool { get }
+    
+    func update(isHover: Bool)
+}
+
 class CalendarBaseViewController: UIViewController {
     var collectionView: UICollectionView! = nil
     var hoverGesture: HoverGestureRecognizer?
@@ -16,12 +22,12 @@ class CalendarBaseViewController: UIViewController {
         didSet {
             view.hideAllToasts()
             if let previousIndexPath = oldValue {
-                if let cell = collectionView?.cellForItem(at: previousIndexPath) as? BlockCell {
+                if let cell = collectionView?.cellForItem(at: previousIndexPath) as? HoverableCell {
                     cell.update(isHover: false)
                 }
             }
             if let currentIndexPath = lastIndexPath {
-                if let cell = collectionView?.cellForItem(at: currentIndexPath) as? BlockCell {
+                if let cell = collectionView?.cellForItem(at: currentIndexPath) as? HoverableCell {
                     cell.update(isHover: true)
                     hover(in: currentIndexPath)
                 }
@@ -37,7 +43,7 @@ class CalendarBaseViewController: UIViewController {
         self.hoverGesture = swipeGesture
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapGestureAction(_:)))
-        collectionView?.addGestureRecognizer(tapGesture)
+//        collectionView?.addGestureRecognizer(tapGesture)
 //        swipeGesture.require(toFail: tapGesture)
     }
     
@@ -56,6 +62,7 @@ class CalendarBaseViewController: UIViewController {
     
     @objc func panGestureAction(_ recognizer: UIPanGestureRecognizer) {
         let point = recognizer.location(in: collectionView)
+        print(recognizer.state.rawValue)
         switch recognizer.state {
         case .possible:
             print("possible")
@@ -116,7 +123,10 @@ class CalendarBaseViewController: UIViewController {
 }
 
 extension CalendarBaseViewController: UICollectionViewDelegate {
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        tap(in: indexPath)
+    }
 }
 
 extension CalendarBaseViewController: UIScrollViewDelegate {

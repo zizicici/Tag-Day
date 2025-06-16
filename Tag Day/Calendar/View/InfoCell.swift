@@ -35,7 +35,7 @@ class InfoBaseCell: UICollectionViewCell {
     }
 }
 
-class InfoCell: InfoBaseCell {
+class InfoCell: InfoBaseCell, HoverableCell {
     let tagView: TagView = TagView()
     
     let label: UILabel = {
@@ -48,6 +48,18 @@ class InfoCell: InfoBaseCell {
         return label
     }()
     
+    var isHover: Bool = false {
+        didSet {
+            if oldValue != isHover {
+                setNeedsUpdateConfiguration()
+            }
+        }
+    }
+    
+    func update(isHover: Bool) {
+        self.isHover = isHover
+    }
+    
     private func setupViewsIfNeeded() {
         guard tagView.superview == nil else { return }
         
@@ -58,7 +70,7 @@ class InfoCell: InfoBaseCell {
             make.leading.equalTo(contentView).inset(3.0)
             make.centerY.equalTo(contentView)
             make.height.equalTo(20.0)
-            make.top.greaterThanOrEqualTo(contentView)
+            make.top.greaterThanOrEqualTo(contentView).inset(3.0)
             make.width.equalTo(width - 6.0)
         }
         
@@ -79,5 +91,39 @@ class InfoCell: InfoBaseCell {
             
             label.text = String(format: "× %i", item.count)
         }
+        
+        if isHover {
+            backgroundConfiguration = InfoCellBackgroundConfiguration.configuration()
+        } else {
+            backgroundConfiguration = InfoCellBackgroundConfiguration.configuration(for: state)
+        }
+    }
+}
+
+struct InfoCellBackgroundConfiguration {
+    static func configuration(for state: UICellConfigurationState) -> UIBackgroundConfiguration {
+        var background = UIBackgroundConfiguration.clear()
+        background.cornerRadius = 5.0
+        if state.isHighlighted || state.isSelected {
+            background.backgroundColor = .gray
+            
+            if state.isHighlighted {
+                background.backgroundColorTransformer = .init { $0.withAlphaComponent(0.3) }
+            } else {
+                background.backgroundColorTransformer = .init { $0.withAlphaComponent(0.5) }
+            }
+        } else {
+            background.backgroundColor = .clear
+        }
+        return background
+    }
+    
+    static func configuration() -> UIBackgroundConfiguration {
+        var background = UIBackgroundConfiguration.clear()
+        background.cornerRadius = 5.0
+        background.backgroundColor = .gray
+        background.backgroundColorTransformer = .init { $0.withAlphaComponent(0.3) }
+
+        return background
     }
 }

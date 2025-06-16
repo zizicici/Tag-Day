@@ -44,9 +44,9 @@ extension CalendarViewController {
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(40.0))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-        group.interItemSpacing = .flexible(0.0)
+        group.interItemSpacing = .flexible(4.0)
         let section = NSCollectionLayoutSection(group: group)
-        section.interGroupSpacing = 10
+        section.interGroupSpacing = 6.0
         
         let inset = (containerWidth - CGFloat(count)*itemWidth - CGFloat(count - 1) * interSpacing) / 2.0
         section.contentInsets = NSDirectionalEdgeInsets(top: interSpacing / 2.0 + 10.0, leading: inset, bottom: interSpacing / 2.0 + 20.0, trailing: inset)
