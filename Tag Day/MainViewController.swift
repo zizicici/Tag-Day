@@ -13,21 +13,22 @@ class MainViewController: NavigationController {
     var calendarVC: CalendarViewController?
     
     var tagButton: UIButton = {
-        var configuration = UIButton.Configuration.borderedProminent()
+        var configuration = UIButton.Configuration.filled()
         configuration.cornerStyle = .large
         configuration.image = UIImage(systemName: "tag")?.withConfiguration(UIImage.SymbolConfiguration(textStyle: .body, scale: .default))
+        configuration.baseForegroundColor = .white
+        configuration.background.backgroundColor = AppColor.main.withAlphaComponent(0.85)
         let button = UIButton(configuration: configuration)
         button.showsMenuAsPrimaryAction = true
-        button.tintColor = AppColor.action
         return button
     }()
     
     var bookPickerButton: UIButton = {
-        var configuration = UIButton.Configuration.borderedProminent()
+        var configuration = UIButton.Configuration.filled()
         configuration.titleAlignment = .center
         configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer({ incoming in
             var outgoing = incoming
-            outgoing.font = UIFont.preferredFont(forTextStyle: .body)
+            outgoing.font = UIFont.preferredSystemFont(for: .body, weight: .semibold)
             
             return outgoing
         })
@@ -35,8 +36,9 @@ class MainViewController: NavigationController {
         configuration.cornerStyle = .large
         configuration.image = UIImage(systemName: "book.closed")?.withConfiguration( UIImage.SymbolConfiguration(textStyle: .body, scale: .default))
         configuration.imagePadding = 10.0
+        configuration.baseForegroundColor = .white
+        configuration.background.backgroundColor = AppColor.main.withAlphaComponent(0.85)
         let button = UIButton(configuration: configuration)
-        button.tintColor = AppColor.action
         button.showsMenuAsPrimaryAction = true
         return button
     }()
