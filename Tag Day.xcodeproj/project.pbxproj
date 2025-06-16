@@ -38,6 +38,7 @@
 		14B239D52DBF790A0007152C /* ZCCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 14B239D42DBF790A0007152C /* ZCCalendar */; };
 		14B239D82DBF791E0007152C /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 14B239D72DBF791E0007152C /* Toast */; };
 		14B468F02DFFE5B500415529 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 14B468EF2DFFE5B500415529 /* Collections */; };
+		14B468F22DFFF4FA00415529 /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B468F12DFFF4FA00415529 /* TagView.swift */; };
 		14BBA3762DCB0B0700AD7BAC /* TagDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BBA3752DCB0B0700AD7BAC /* TagDetailViewController.swift */; };
 		14BBA3782DCB101100AD7BAC /* TextInputCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BBA3772DCB101100AD7BAC /* TextInputCell.swift */; };
 		14BBA37A2DCB142900AD7BAC /* ColorPickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BBA3792DCB142900AD7BAC /* ColorPickerCell.swift */; };
@@ -114,6 +115,7 @@
 		14B239B32DBF13F30007152C /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		14B239B42DBF13F30007152C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		14B239C62DBF765B0007152C /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		14B468F12DFFF4FA00415529 /* TagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagView.swift; sourceTree = "<group>"; };
 		14BBA3752DCB0B0700AD7BAC /* TagDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagDetailViewController.swift; sourceTree = "<group>"; };
 		14BBA3772DCB101100AD7BAC /* TextInputCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputCell.swift; sourceTree = "<group>"; };
 		14BBA3792DCB142900AD7BAC /* ColorPickerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerCell.swift; sourceTree = "<group>"; };
@@ -246,6 +248,7 @@
 			isa = PBXGroup;
 			children = (
 				14AD28872DC5C8EC0018DAF3 /* TagCell.swift */,
+				14B468F12DFFF4FA00415529 /* TagView.swift */,
 				14BBA37B2DCB2EE900AD7BAC /* TagPreviewCell.swift */,
 				14BBA3772DCB101100AD7BAC /* TextInputCell.swift */,
 				14BBA3792DCB142900AD7BAC /* ColorPickerCell.swift */,
@@ -599,6 +602,7 @@
 				14AD287E2DC5B7010018DAF3 /* TagListViewController.swift in Sources */,
 				14AD28882DC5C8EC0018DAF3 /* TagCell.swift in Sources */,
 				14ED63D12DC702F000384068 /* CalendarYearPickerViewController.swift in Sources */,
+				14B468F22DFFF4FA00415529 /* TagView.swift in Sources */,
 				14BBA3782DCB101100AD7BAC /* TextInputCell.swift in Sources */,
 				14AD287B2DC5B6DD0018DAF3 /* BookListViewController.swift in Sources */,
 				14D2727C2DC0716E00267572 /* CalendarViewController+Menu.swift in Sources */,
