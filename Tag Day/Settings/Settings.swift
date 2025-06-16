@@ -11,6 +11,7 @@ import ZCCalendar
 extension UserDefaults {
     enum Settings: String {
         case WeekStartType = "com.zizicici.tagday.settings.WeekStartType"
+        case TagDisplayType = "com.zizicici.tagday.settings.TagDisplayType"
     }
 }
 
@@ -87,6 +88,42 @@ extension UserDefaults {
         } else {
             return integer(forKey: key)
         }
+    }
+}
+
+enum TagDisplayType: Int, CaseIterable, Codable {
+    case normal
+    case aggregation
+}
+
+extension TagDisplayType: UserDefaultSettable {
+    static func getKey() -> UserDefaults.Settings {
+        return .TagDisplayType
+    }
+    
+    static var defaultOption: TagDisplayType {
+        return .normal
+    }
+    
+    func getName() -> String {
+        switch self {
+        case .normal:
+            return String(localized: "settings.tagDisplayType.normal")
+        case .aggregation:
+            return String(localized: "settings.tagDisplayType.aggregation")
+        }
+    }
+    
+    static func getTitle() -> String {
+        return String(localized: "settings.tagDisplayType.title")
+    }
+    
+    static func getHeader() -> String? {
+        return nil
+    }
+    
+    static func getFooter() -> String? {
+        return nil
     }
 }
 

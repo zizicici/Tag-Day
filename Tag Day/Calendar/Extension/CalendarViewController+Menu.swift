@@ -24,4 +24,21 @@ extension CalendarViewController {
     
         return weekStartTypeMenu
     }
+    
+    func getTagDisplayType() -> TagDisplayType {
+        return TagDisplayType.getValue()
+    }
+    
+    func getTagDisplayTypeMenu() -> UIMenu {
+        let tagDisplayTypes: [TagDisplayType] = TagDisplayType.allCases
+        let tagDisplayActions = tagDisplayTypes.map { type in
+            let action = UIAction(title: type.getName(), state: type == getTagDisplayType() ? .on : .off) { _ in
+                TagDisplayType.setValue(type)
+            }
+            return action
+        }
+        let tagDisplayTypeMenu = UIMenu(title: TagDisplayType.getTitle(), subtitle: getTagDisplayType().getName(), image: UIImage(systemName: "tag"), children: tagDisplayActions)
+    
+        return tagDisplayTypeMenu
+    }
 }

@@ -2805,34 +2805,6 @@
         }
       }
     },
-    "more.item.help" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "User Manual"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "使用说明"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "使用說明"
-          }
-        },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "使用說明"
-          }
-        }
-      }
-    },
     "more.item.settings.language" : {
       "localizations" : {
         "en" : {
@@ -3029,30 +3001,86 @@
         }
       }
     },
-    "more.section.help" : {
+    "settings.tagDisplayType.aggregation" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Help Center"
+            "value" : "Tag with Count"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "帮助中心"
+            "value" : "聚合相同标签"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "幫助中心"
+            "value" : "聚合相同標籤"
           }
         },
         "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "幫助中心"
+            "value" : "聚合相同標籤"
+          }
+        }
+      }
+    },
+    "settings.tagDisplayType.normal" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tag without Count"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不聚合相同标签"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不聚合相同標籤"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不聚合相同標籤"
+          }
+        }
+      }
+    },
+    "settings.tagDisplayType.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tag Display Style"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "标签展示样式"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "標籤展示樣式"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "標籤展示樣式"
           }
         }
       }
@@ -3850,9 +3878,6 @@
           }
         }
       }
-    },
-    "url.help.center" : {
-
     },
     "weekCalendar.today" : {
       "localizations" : {

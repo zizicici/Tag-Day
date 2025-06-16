@@ -370,9 +370,12 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     func getSettingsMenu() -> UIMenu {
         var children: [UIMenuElement] = []
         
+        let tagDisplayMenu = getTagDisplayTypeMenu()
         let weekStartMenu = getWeekStartTypeMenu()
         
-        children.append(weekStartMenu)
+        let displayDivider = UIMenu(title: "", options: [.displayInline], children: [tagDisplayMenu, weekStartMenu])
+        
+        children.append(displayDivider)
 
         let editActions: [UIAction] = [EditMode.normal, EditMode.overwrite].map { mode in
             return UIAction(title: mode.title, subtitle: mode.subtitle, image: UIImage(systemName: mode.image), attributes: mode.attributes, state: editMode == mode ? .on : .off) { [weak self] _ in
