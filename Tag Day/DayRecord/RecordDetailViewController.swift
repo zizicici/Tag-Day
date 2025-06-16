@@ -34,7 +34,7 @@ class RecordDetailViewController: UIViewController {
         var footer: String? {
             switch self {
             case .time:
-                return nil
+                return String(localized: "dayDetail.timeOption.startAndEnd.subtitle")
             case .duration:
                 return nil
             case .comment:
@@ -44,8 +44,9 @@ class RecordDetailViewController: UIViewController {
     }
     
     enum Item: Hashable {
-        case timeOption(TimeOption?)
+        case startTimeToggle(Bool)
         case startTime(Int64?)
+        case endTimeToggle(Bool)
         case endTime(Int64?)
         case durationOption(DurationOption?)
         case duration(DurationConfiguration)
@@ -264,28 +265,22 @@ class RecordDetailViewController: UIViewController {
             guard let self = self else { return nil }
             guard let identifier = self.dataSource.itemIdentifier(for: indexPath) else { return nil }
             switch identifier {
-            case .timeOption(let timeOption):
-                let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(OptionCell<TimeOption>.self), for: indexPath)
-                if let cell = cell as? OptionCell<TimeOption> {
-                    cell.update(with: timeOption)
-                    let noneAction = UIAction(title: TimeOption.noneTitle, state: timeOption == nil ? .on : .off) { [weak self] _ in
-                        self?.timeOption = nil
-                    }
-                    let actions = [TimeOption.startAndEnd, TimeOption.startOnly, TimeOption.endOnly].map { target in
-                        let action = UIAction(title: target.title, subtitle: target.subtitle, state: timeOption == target ? .on : .off) { [weak self] _ in
-                            self?.timeOption = target
-                        }
-                        return action
-                    }
-                    let divider = UIMenu(title: "", options: . displayInline, children: actions)
-                    let menu = UIMenu(children: [noneAction, divider])
-                    cell.tapButton.menu = menu
-                }
+            case .startTimeToggle(let isOn):
+                let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(UITableViewCell.self), for: indexPath)
+                let itemSwitch = UISwitch()
+                itemSwitch.isOn = isOn
+                itemSwitch.onTintColor = AppColor.main
+                itemSwitch.addTarget(self, action: #selector(self.startTimeToggle(_:)), for: .touchUpInside)
+                cell.accessoryView = itemSwitch
+                
+                var content = cell.defaultContentConfiguration()
+                content.text = String(localized: "dayRecord.time.start")
+                cell.contentConfiguration = content
                 return cell
             case .startTime(let startTime):
                 let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(DateCell.self), for: indexPath)
                 if let cell = cell as? DateCell {
-                    cell.update(with: DateCellItem(title: String(localized: "dayRecord.time.start"), nanoSecondsFrom1970: startTime, day: self.day))
+                    cell.update(with: DateCellItem(title: "", nanoSecondsFrom1970: startTime, day: self.day))
                     cell.selectDateAction = { [weak self] nanoSeconds in
                         guard let self = self else { return }
                         self.startTime = nanoSeconds
@@ -293,10 +288,22 @@ class RecordDetailViewController: UIViewController {
                     }
                 }
                 return cell
+            case .endTimeToggle(let isOn):
+                let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(UITableViewCell.self), for: indexPath)
+                let itemSwitch = UISwitch()
+                itemSwitch.isOn = isOn
+                itemSwitch.onTintColor = AppColor.main
+                itemSwitch.addTarget(self, action: #selector(self.endTimeToggle(_:)), for: .touchUpInside)
+                cell.accessoryView = itemSwitch
+                
+                var content = cell.defaultContentConfiguration()
+                content.text = String(localized: "dayRecord.time.end")
+                cell.contentConfiguration = content
+                return cell
             case .endTime(let endTime):
                 let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(DateCell.self), for: indexPath)
                 if let cell = cell as? DateCell {
-                    cell.update(with: DateCellItem(title: String(localized: "dayRecord.time.end"), nanoSecondsFrom1970: endTime, day: self.day))
+                    cell.update(with: DateCellItem(title: "", nanoSecondsFrom1970: endTime, day: self.day))
                     cell.selectDateAction = { [weak self] nanoSeconds in
                         guard let self = self else { return }
                         self.endTime = nanoSeconds
@@ -357,17 +364,16 @@ class RecordDetailViewController: UIViewController {
             snapshot.appendItems([.comment(comment)], toSection: .comment)
         case .time:
             snapshot.appendSections([.time])
-            snapshot.appendItems([.timeOption(timeOption)], toSection: .time)
-
-            if let timeOption = timeOption {
-                switch timeOption {
-                case .startAndEnd:
-                    snapshot.appendItems([.startTime(startTime), .endTime(endTime)], toSection: .time)
-                case .startOnly:
-                    snapshot.appendItems([.startTime(startTime)], toSection: .time)
-                case .endOnly:
-                    snapshot.appendItems([.endTime(endTime)], toSection: .time)
-                }
+            
+            switch timeOption {
+            case .startAndEnd:
+                snapshot.appendItems([.startTimeToggle(true), .startTime(startTime), .endTimeToggle(true), .endTime(endTime)], toSection: .time)
+            case .startOnly:
+                snapshot.appendItems([.startTimeToggle(true), .startTime(startTime), .endTimeToggle(false)], toSection: .time)
+            case .endOnly:
+                snapshot.appendItems([.startTimeToggle(false), .endTimeToggle(true), .endTime(endTime)], toSection: .time)
+            case nil:
+                snapshot.appendItems([.startTimeToggle(false), .endTimeToggle(false)], toSection: .time)
             }
             
             snapshot.appendSections([.duration])
@@ -384,6 +390,50 @@ class RecordDetailViewController: UIViewController {
         }
         
         dataSource.apply(snapshot, animatingDifferences: false)
+    }
+    
+    @objc
+    func startTimeToggle(_ toggle: UISwitch) {
+        switch timeOption {
+        case .startAndEnd:
+            if !toggle.isOn {
+                timeOption = .endOnly
+            }
+        case .startOnly:
+            if !toggle.isOn {
+                timeOption = nil
+            }
+        case .endOnly:
+            if toggle.isOn {
+                timeOption = .startAndEnd
+            }
+        case nil:
+            if toggle.isOn {
+                timeOption = .startOnly
+            }
+        }
+    }
+    
+    @objc
+    func endTimeToggle(_ toggle: UISwitch) {
+        switch timeOption {
+        case .startAndEnd:
+            if !toggle.isOn {
+                timeOption = .startOnly
+            }
+        case .startOnly:
+            if toggle.isOn {
+                timeOption = .startAndEnd
+            }
+        case .endOnly:
+            if !toggle.isOn {
+                timeOption = nil
+            }
+        case nil:
+            if toggle.isOn {
+                timeOption = .endOnly
+            }
+        }
     }
     
     @objc
