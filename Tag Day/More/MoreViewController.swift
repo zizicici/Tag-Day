@@ -21,7 +21,6 @@ class MoreViewController: UIViewController {
         case general
         case dataSource
         case contact
-        case help
         case appjun
         case about
         
@@ -33,8 +32,6 @@ class MoreViewController: UIViewController {
                 return String(localized: "more.section.dataSource")
             case .contact:
                 return String(localized: "more.section.contact")
-            case .help:
-                return String(localized: "more.section.help")
             case .appjun:
                 return String(localized: "more.section.appjun")
             case .about:
@@ -160,7 +157,6 @@ class MoreViewController: UIViewController {
         
         case settings(GeneralItem)
         case contact(ContactItem)
-        case help
         case appjun(AppJunItem)
         case about(AboutItem)
         
@@ -170,8 +166,6 @@ class MoreViewController: UIViewController {
                 return item.title
             case .contact(let item):
                 return item.title
-            case .help:
-                return String(localized: "more.item.help")
             case .appjun(let item):
                 return item.title
             case .about(let item):
@@ -258,14 +252,6 @@ class MoreViewController: UIViewController {
                 content.secondaryText = item.value
                 cell.contentConfiguration = content
                 return cell
-            case .help:
-                let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-                cell.accessoryType = .disclosureIndicator
-                var content = UIListContentConfiguration.valueCell()
-                content.text = identifier.title
-                content.textProperties.color = .label
-                cell.contentConfiguration = content
-                return cell
             case .contact(let item):
                 let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
                 cell.accessoryType = .disclosureIndicator
@@ -337,8 +323,6 @@ extension MoreViewController: UITableViewDelegate {
                 }
             case .contact(let item):
                 handle(contactItem: item)
-            case .help:
-                enterHelpCenter()
             case .appjun(let item):
                 switch item {
                 case .otherApps(let app):
@@ -377,12 +361,6 @@ extension MoreViewController {
         settingsOptionViewController.hidesBottomBarWhenPushed = true
         
         navigationController?.pushViewController(settingsOptionViewController, animated: true)
-    }
-    
-    func enterHelpCenter() {
-        if let url = URL(string: String(localized: "url.help.center")) {
-            openSF(with: url)
-        }
     }
     
     func enterSpecifications() {
