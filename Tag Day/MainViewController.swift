@@ -180,7 +180,7 @@ class MainViewController: NavigationController {
         }
         
         let tagElements: [UIMenuElement] = tags.reversed().map({ tag in
-            return UIAction(title: tag.title, subtitle: tag.subtitle, image: UIImage(systemName: "square.fill")?.withTintColor(UIColor(string: tag.color) ?? .white, renderingMode: .alwaysOriginal), state: activeTags.contains(tag) ? .on : .off) { _ in
+            return UIAction(title: tag.title, subtitle: tag.subtitle, image: UIImage(systemName: "square.fill")?.withTintColor(UIColor(string: tag.color) ?? .white, renderingMode: .alwaysOriginal), attributes: [.keepsMenuPresented], state: activeTags.contains(tag) ? .on : .off) { _ in
                 DataManager.shared.toggleActiveState(to: tag)
             }
         })
