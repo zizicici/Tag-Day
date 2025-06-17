@@ -310,7 +310,8 @@ class MoreViewController: UIViewController {
         snapshot.appendItems(appItems, toSection: .appjun)
         
         snapshot.appendSections([.about])
-        snapshot.appendItems([.about(.specifications), .about(.eula), .about(.share), .about(.review), .about(.privacyPolicy)], toSection: .about)
+//        snapshot.appendItems([.about(.specifications), .about(.eula), .about(.share), .about(.review), .about(.privacyPolicy)], toSection: .about)
+        snapshot.appendItems([.about(.specifications), .about(.eula), .about(.privacyPolicy)], toSection: .about)
 
         dataSource.apply(snapshot, animatingDifferences: false)
     }
@@ -384,7 +385,7 @@ extension MoreViewController {
     }
     
     func openPrivacyPolicy() {
-        if let url = URL(string: "https://zizicici.medium.com/privacy-policy-for-off-day-app-6f7f26f68c7c") {
+        if let url = URL(string: "https://zizicici.medium.com/privacy-policy-for-tag-day-app-e284ee9f654c") {
             openSF(with: url)
         }
     }
