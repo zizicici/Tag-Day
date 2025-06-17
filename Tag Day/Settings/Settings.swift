@@ -12,6 +12,7 @@ extension UserDefaults {
     enum Settings: String {
         case WeekStartType = "com.zizicici.tagday.settings.WeekStartType"
         case TagDisplayType = "com.zizicici.tagday.settings.TagDisplayType"
+        case MonthlyStatsType = "com.zizicici.tagday.settings.MonthlyStatsType"
     }
 }
 
@@ -116,6 +117,45 @@ extension TagDisplayType: UserDefaultSettable {
     
     static func getTitle() -> String {
         return String(localized: "settings.tagDisplayType.title")
+    }
+    
+    static func getHeader() -> String? {
+        return nil
+    }
+    
+    static func getFooter() -> String? {
+        return nil
+    }
+}
+
+enum MonthlyStatsType: Int, CaseIterable, Codable {
+    case hidden
+    case loggedCount
+    case dayCount
+}
+
+extension MonthlyStatsType: UserDefaultSettable {
+    static func getKey() -> UserDefaults.Settings {
+        return .MonthlyStatsType
+    }
+    
+    static var defaultOption: MonthlyStatsType {
+        return .loggedCount
+    }
+    
+    func getName() -> String {
+        switch self {
+        case .hidden:
+            return String(localized: "settings.monthlyStatsType.hidden")
+        case .loggedCount:
+            return String(localized: "settings.monthlyStatsType.loggedCount")
+        case .dayCount:
+            return String(localized: "settings.monthlyStatsType.dayCount")
+        }
+    }
+    
+    static func getTitle() -> String {
+        return String(localized: "settings.monthlyStatsType.title")
     }
     
     static func getHeader() -> String? {

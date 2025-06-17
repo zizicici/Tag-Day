@@ -40,11 +40,13 @@ struct LayoutGenerater {
             
             snapshot.appendItems(items.map{ Item.block($0) }, toSection: .row(gregorianMonth))
             
-            snapshot.appendSections([.info(gregorianMonth)])
-            
-            let tagStatics = getTagStatistics(in: items, matching: tags)
-            
-            snapshot.appendItems(tagStatics.map{ Item.info(InfoItem(month: gregorianMonth, tag: $0.tag, count: $0.totalCount, duration: $0.totalDuration, durationRecordCount: $0.durationRecordCount)) }, toSection: .info(gregorianMonth))
+            if MonthlyStatsType.getValue() != .hidden {
+                snapshot.appendSections([.info(gregorianMonth)])
+                
+                let tagStatics = getTagStatistics(in: items, matching: tags)
+                
+                snapshot.appendItems(tagStatics.map{ Item.info(InfoItem(month: gregorianMonth, tag: $0.tag, count: $0.totalCount, duration: $0.totalDuration, durationRecordCount: $0.durationRecordCount, dayCount: $0.dayCount, monthlyStateType: MonthlyStatsType.getValue())) }, toSection: .info(gregorianMonth))
+            }
         }
     }
     
@@ -83,55 +85,71 @@ struct LayoutGenerater {
         let totalCount: Int          // 出现的总次数
         let totalDuration: Int64?    // duration总长度
         let durationRecordCount: Int // 有duration信息的总次数
+        let dayCount: Int
     }
 
     static func getTagStatistics(in blockItems: [BlockItem], matching tags: [Tag]) -> [TagStatistics] {
-        // 1. 统计所有tagID的数据
-        var tagIDStats = [Int64: (totalCount: Int, totalDuration: Int64?, durationRecordCount: Int)]()
+        // 1. 统计所有 tagID 的数据（包括 blockCount）
+        var tagIDStats = [Int64: (
+            totalCount: Int,          // 该 tagID 在所有 records 中出现的总次数
+            totalDuration: Int64?,    // 该 tagID 在所有 records 中的总 duration
+            durationRecordCount: Int, // 包含 duration 的 records 数量
+            dayIDs: Set<Int>       // 包含该 tagID 的 blockItem 的唯一标识（用于计算 blockCount）
+        )]()
         
         for blockItem in blockItems {
+            // 用于记录当前 blockItem 中已经处理过的 tagID（避免重复计数）
+            var processedTagIDs = Set<Int64>()
+            
             for record in blockItem.records {
-                let currentStats = tagIDStats[record.tagID] ?? (0, 0, 0)
+                let tagID = record.tagID
+                let currentStats = tagIDStats[tagID] ?? (0, 0, 0, Set<Int>())
                 
                 var newTotalDuration = currentStats.totalDuration
                 var newDurationRecordCount = currentStats.durationRecordCount
+                var newBlockIDs = currentStats.dayIDs
                 
                 if let recordDuration = record.duration {
                     newTotalDuration = (newTotalDuration ?? 0) + recordDuration
                     newDurationRecordCount += 1
                 }
                 
-                tagIDStats[record.tagID] = (
+                // 如果是当前 blockItem 中第一次遇到该 tagID，则添加到 blockIDs
+                if !processedTagIDs.contains(tagID) {
+                    newBlockIDs.insert(blockItem.day.julianDay) // 假设 blockItem 有 id 属性
+                    processedTagIDs.insert(tagID)
+                }
+                
+                tagIDStats[tagID] = (
                     totalCount: currentStats.totalCount + 1,
                     totalDuration: newTotalDuration,
-                    durationRecordCount: newDurationRecordCount
+                    durationRecordCount: newDurationRecordCount,
+                    dayIDs: newBlockIDs
                 )
             }
         }
         
-        // 2. 创建tagID到Tag对象的映射
+        // 2. 创建 tagID 到 Tag 对象的映射
         let tagDictionary = Dictionary(uniqueKeysWithValues: tags.map { ($0.id, $0) })
         
-        // 3. 过滤并匹配结果，转换为TagStatistics
+        // 3. 过滤并匹配结果，转换为 TagStatistics（增加 dayCount）
         let matchedResults = tagIDStats.compactMap { (tagID, stats) -> TagStatistics? in
             guard let matchingTag = tagDictionary[tagID] else { return nil }
             return TagStatistics(
                 tag: matchingTag,
                 totalCount: stats.totalCount,
                 totalDuration: stats.totalDuration,
-                durationRecordCount: stats.durationRecordCount
+                durationRecordCount: stats.durationRecordCount,
+                dayCount: stats.dayIDs.count // 新增：包含该 tagID 的 Day 数量
             )
         }
         
-        // 4. 按totalCount降序排序，相同则按durationRecordCount降序
+        // 4. 按 totalCount 降序排序，相同则按 order 升序排序
         let sortedResults = matchedResults.sorted {
             if $0.totalCount != $1.totalCount {
                 return $0.totalCount > $1.totalCount
             }
-            if $0.durationRecordCount != $1.durationRecordCount {
-                return $0.durationRecordCount > $1.durationRecordCount
-            }
-            return $0.tag.id! < $1.tag.id!
+            return $0.tag.order < $1.tag.order
         }
         
         return sortedResults

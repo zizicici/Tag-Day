@@ -89,7 +89,14 @@ class InfoCell: InfoBaseCell, HoverableCell {
         if let item = state.infoItem {
             tagView.update(tag: item.tag)
             
-            label.text = String(format: "× %i", item.count)
+            switch item.monthlyStateType {
+            case .hidden:
+                break
+            case .loggedCount:
+                label.text = String(format: "× %i", item.count)
+            case .dayCount:
+                label.text = String(format: "× %i", item.dayCount)
+            }
         }
         
         if isHover {

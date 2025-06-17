@@ -37,4 +37,6 @@ struct InfoItem: Hashable {
     var count: Int
     var duration: Int64?
     var durationRecordCount: Int
+    var dayCount: Int
+    var monthlyStateType: MonthlyStatsType
 }

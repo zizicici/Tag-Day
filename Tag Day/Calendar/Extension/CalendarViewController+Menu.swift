@@ -41,4 +41,21 @@ extension CalendarViewController {
     
         return tagDisplayTypeMenu
     }
+    
+    func getMonthlyStatsType() -> MonthlyStatsType {
+        return MonthlyStatsType.getValue()
+    }
+    
+    func getMonthlyStatsTypeMenu() -> UIMenu {
+        let monthlyStatsTypes: [MonthlyStatsType] = MonthlyStatsType.allCases
+        let monthlyStatsTypeActions = monthlyStatsTypes.map { type in
+            let action = UIAction(title: type.getName(), state: type == getMonthlyStatsType() ? .on : .off) { _ in
+                MonthlyStatsType.setValue(type)
+            }
+            return action
+        }
+        let monthlyStatsTypeMenu = UIMenu(title: MonthlyStatsType.getTitle(), subtitle: getMonthlyStatsType().getName(), image: UIImage(systemName: "chart.xyaxis.line"), children: monthlyStatsTypeActions)
+    
+        return monthlyStatsTypeMenu
+    }
 }
