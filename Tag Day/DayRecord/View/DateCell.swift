@@ -10,9 +10,15 @@ import SnapKit
 import ZCCalendar
 
 struct DateCellItem: Hashable {
+    enum Mode {
+        case date
+        case dateAndTime
+    }
+    
     var title: String
     var nanoSecondsFrom1970: Int64?
     var day: GregorianDay
+    var mode: Mode = .dateAndTime
 }
 
 extension UIConfigurationStateCustomKey {
@@ -82,13 +88,19 @@ class DateCell: DateBaseCell {
             content.text = dateItem.title
             listContentView.configuration = content
             
-            if let nanoSecondsFrom1970 = dateItem.nanoSecondsFrom1970 {
-                datePicker?.date = Date(nanoSecondSince1970: nanoSecondsFrom1970)
-            } else {
-                datePicker?.date = Date().combine(with: dateItem.day)
+            switch dateItem.mode {
+            case .date:
+                datePicker?.datePickerMode = .date
+                datePicker?.date = dateItem.day.generateDate(secondsFromGMT: Calendar.current.timeZone.secondsFromGMT()) ?? Date()
+            case .dateAndTime:
+                datePicker?.datePickerMode = .dateAndTime
+                if let nanoSecondsFrom1970 = dateItem.nanoSecondsFrom1970 {
+                    datePicker?.date = Date(nanoSecondSince1970: nanoSecondsFrom1970)
+                } else {
+                    datePicker?.date = Date().combine(with: dateItem.day)
+                }
             }
             
-            datePicker?.isHidden = false
             let text: String = datePicker?.date.formatted(date: .omitted, time: .standard) ?? ""
 
             accessibilityLabel = dateItem.title + ":" + text

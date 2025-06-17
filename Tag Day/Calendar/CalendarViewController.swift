@@ -196,8 +196,9 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         case .block(let blockItem):
             impactFeedbackGeneratorCoourred()
             tap(in: cell, for: blockItem)
-        case .info:
-            break
+        case .info(let infoItem):
+            impactFeedbackGeneratorCoourred()
+            tap(in: cell, for: infoItem)
         }
     }
     
@@ -238,6 +239,13 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
             let nav = NavigationController(rootViewController: detailViewController)
             showPopoverView(at: targetView, contentViewController: nav, width: 240.0, height: 300.0)
         }
+    }
+    
+    private func tap(in targetView: UIView, for infoItem: InfoItem) {
+        let statisticViewController = TagStatisticsViewController(tag: infoItem.tag, start: infoItem.month.startDay, end: infoItem.month.endDay)
+        let nav = NavigationController(rootViewController: statisticViewController)
+
+        showPopoverView(at: targetView, contentViewController: nav, width: 280.0, height: 400.0)
     }
     
     private func createLayout() -> UICollectionViewLayout {
@@ -529,5 +537,15 @@ extension CalendarViewController {
         }
         
         return result
+    }
+}
+
+extension GregorianMonth {
+    var startDay: GregorianDay {
+        return ZCCalendar.manager.firstDay(at: month, year: year)
+    }
+    
+    var endDay: GregorianDay {
+        return ZCCalendar.manager.lastDay(at: month, year: year)
     }
 }

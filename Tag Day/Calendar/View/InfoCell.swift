@@ -43,7 +43,7 @@ class InfoCell: InfoBaseCell, HoverableCell {
         label.setContentCompressionResistancePriority(.required, for: .horizontal)
         label.setContentHuggingPriority(.required, for: .horizontal)
         label.font = UIFont.systemFont(ofSize: 12.0, weight: .medium)
-        label.textColor = AppColor.text.withAlphaComponent(0.5)
+        label.textColor = AppColor.text.withAlphaComponent(0.6)
         
         return label
     }()
