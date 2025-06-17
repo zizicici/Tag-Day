@@ -2726,25 +2726,25 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bilibili"
+            "value" : "bilibili"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bilibili"
+            "value" : "哔哩哔哩"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bilibili"
+            "value" : "哔哩哔哩"
           }
         },
         "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bilibili"
+            "value" : "哔哩哔哩"
           }
         }
       }

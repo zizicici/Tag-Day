@@ -296,7 +296,7 @@ class MoreViewController: UIViewController {
         snapshot.appendItems([.settings(.language), .settings(.weekStartType(WeekStartType.getValue()))], toSection: .general)
         
         snapshot.appendSections([.contact])
-        snapshot.appendItems([.contact(.email), .contact(.xiaohongshu), .contact(.reddit), .contact(.bilibili)], toSection: .contact)
+        snapshot.appendItems([.contact(.email), .contact(.xiaohongshu), .contact(.bilibili), .contact(.reddit)], toSection: .contact)
         
 //        snapshot.appendSections([.help])
 //        snapshot.appendItems([.help], toSection: .help)
