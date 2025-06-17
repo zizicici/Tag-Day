@@ -47,11 +47,14 @@ class MoreViewController: UIViewController {
     enum Item: Hashable {
         enum GeneralItem: Hashable {
             case language
+            case weekStartType(WeekStartType)
             
             var title: String {
                 switch self {
                 case .language:
                     return String(localized: "more.item.settings.language")
+                case .weekStartType:
+                    return WeekStartType.getTitle()
                 }
             }
             
@@ -59,6 +62,8 @@ class MoreViewController: UIViewController {
                 switch self {
                 case .language:
                     return String(localized: "more.item.settings.language.value")
+                case .weekStartType(let value):
+                    return value.getName()
                 }
             }
         }
@@ -288,7 +293,7 @@ class MoreViewController: UIViewController {
     func reloadData() {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
         snapshot.appendSections([.general])
-        snapshot.appendItems([.settings(.language)], toSection: .general)
+        snapshot.appendItems([.settings(.language), .settings(.weekStartType(WeekStartType.getValue()))], toSection: .general)
         
         snapshot.appendSections([.contact])
         snapshot.appendItems([.contact(.email), .contact(.xiaohongshu), .contact(.reddit), .contact(.bilibili)], toSection: .contact)
@@ -320,6 +325,8 @@ extension MoreViewController: UITableViewDelegate {
                 switch item {
                 case .language:
                     jumpToSettings()
+                case .weekStartType:
+                    enterSettings(WeekStartType.self)
                 }
             case .contact(let item):
                 handle(contactItem: item)

@@ -379,9 +379,8 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         var children: [UIMenuElement] = []
         
         let tagDisplayMenu = getTagDisplayTypeMenu()
-        let weekStartMenu = getWeekStartTypeMenu()
         
-        let displayDivider = UIMenu(title: "", options: [.displayInline], children: [tagDisplayMenu, weekStartMenu])
+        let displayDivider = UIMenu(title: "", options: [.displayInline], children: [tagDisplayMenu])
         
         children.append(displayDivider)
 
