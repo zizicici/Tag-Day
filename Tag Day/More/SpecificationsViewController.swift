@@ -120,12 +120,12 @@ class SpecificationsViewController: UIViewController {
     
     class DataSource: UITableViewDiffableDataSource<Section, Item> {
         override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-            let sectionKind = Section(rawValue: section)
+            let sectionKind = sectionIdentifier(for: section)
             return sectionKind?.headerTitle()
         }
         
         override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-            let sectionKind = Section(rawValue: section)
+            let sectionKind = sectionIdentifier(for: section)
             return sectionKind?.footerTitle()
         }
     }
