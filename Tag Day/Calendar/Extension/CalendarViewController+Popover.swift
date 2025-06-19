@@ -8,7 +8,7 @@
 import UIKit
 
 extension CalendarViewController {
-    func showPopoverView(at sourceView: UIView, contentViewController: UIViewController, width: CGFloat = 280.0, height: CGFloat? = nil) {
+    func showPopoverView(at sourceView: UIView, contentViewController: UIViewController, width: CGFloat = 280.0, height: CGFloat? = nil, arrowDirections: UIPopoverArrowDirection = [.up, .down]) {
         let nav = contentViewController
         if let height = height {
             nav.preferredContentSize = CGSize(width: width, height: height)
@@ -26,7 +26,7 @@ extension CalendarViewController {
 
         if let popover = nav.popoverPresentationController {
             popover.sourceView = sourceView
-            popover.permittedArrowDirections = [.up, .down]
+            popover.permittedArrowDirections = arrowDirections
         }
     }
 }
