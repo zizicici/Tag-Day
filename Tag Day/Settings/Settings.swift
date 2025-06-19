@@ -10,9 +10,9 @@ import ZCCalendar
 
 extension UserDefaults {
     enum Settings: String {
-        case WeekStartType = "com.zizicici.tagday.settings.WeekStartType"
-        case TagDisplayType = "com.zizicici.tagday.settings.TagDisplayType"
-        case MonthlyStatsType = "com.zizicici.tagday.settings.MonthlyStatsType"
+        case WeekStartType = "com.zizicici.tag.settings.WeekStartType"
+        case TagDisplayType = "com.zizicici.tag.settings.TagDisplayType"
+        case MonthlyStatsType = "com.zizicici.tag.settings.MonthlyStatsType"
     }
 }
 

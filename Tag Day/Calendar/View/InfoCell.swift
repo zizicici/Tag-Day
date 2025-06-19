@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 fileprivate extension UIConfigurationStateCustomKey {
-    static let infoItem = UIConfigurationStateCustomKey("com.zizicici.tagday.cell.info.item")
+    static let infoItem = UIConfigurationStateCustomKey("com.zizicici.tag.cell.info.item")
 }
 
 private extension UICellConfigurationState {

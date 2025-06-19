@@ -74,7 +74,7 @@ enum DurationOption: OptionItem {
 }
 
 fileprivate extension UIConfigurationStateCustomKey {
-    static let optionItem = UIConfigurationStateCustomKey("com.zizicici.tagday.cell.option.item")
+    static let optionItem = UIConfigurationStateCustomKey("com.zizicici.tag.cell.option.item")
 }
 
 private extension UICellConfigurationState {

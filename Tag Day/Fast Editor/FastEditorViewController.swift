@@ -249,7 +249,7 @@ extension FastEditorViewController: UICollectionViewDelegate {
 }
 
 fileprivate extension UIConfigurationStateCustomKey {
-    static let fastEditorItem = UIConfigurationStateCustomKey("com.zizicici.tagday.fastEditor.cell.item")
+    static let fastEditorItem = UIConfigurationStateCustomKey("com.zizicici.tag.fastEditor.cell.item")
 }
 
 private extension UICellConfigurationState {

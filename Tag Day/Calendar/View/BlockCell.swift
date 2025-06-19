@@ -11,7 +11,7 @@ import ZCCalendar
 import Collections
 
 fileprivate extension UIConfigurationStateCustomKey {
-    static let blockItem = UIConfigurationStateCustomKey("com.zizicici.tagday.cell.block.item")
+    static let blockItem = UIConfigurationStateCustomKey("com.zizicici.tag.cell.block.item")
 }
 
 private extension UICellConfigurationState {

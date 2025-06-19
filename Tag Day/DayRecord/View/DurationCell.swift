@@ -14,7 +14,7 @@ struct DurationConfiguration: Hashable {
 }
 
 fileprivate extension UIConfigurationStateCustomKey {
-    static let durationItem = UIConfigurationStateCustomKey("com.zizicici.tagday.cell.duration.item")
+    static let durationItem = UIConfigurationStateCustomKey("com.zizicici.tag.cell.duration.item")
 }
 
 extension UICellConfigurationState {
