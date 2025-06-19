@@ -17,6 +17,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         _ = DataManager.shared
         
+        BackupManager.shared.registerBGTasks()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(scheduleBGTasks), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(cancelBGTasks), name: UIApplication.didBecomeActiveNotification, object: nil)
+        
         return true
     }
 
@@ -33,7 +38,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
-
-
+    
+    @objc
+    func cancelBGTasks() {
+        BackupManager.shared.cancelBGTasks()
+    }
+    
+    @objc
+    func scheduleBGTasks() {
+        BackupManager.shared.scheduleBGTasks()
+    }
 }
-

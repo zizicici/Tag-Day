@@ -20,7 +20,7 @@ final class AppDatabase {
         try migrator.migrate(dbWriter)
     }
     
-    private var dbWriter: (any DatabaseWriter)?
+    private(set) var dbWriter: (any DatabaseWriter)?
 
     private var migrator: DatabaseMigrator {
         var migrator = DatabaseMigrator()

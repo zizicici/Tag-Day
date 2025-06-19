@@ -19,7 +19,7 @@ class MoreViewController: UIViewController {
     
     enum Section: Hashable {
         case general
-        case dataSource
+        case backup
         case contact
         case appjun
         case about
@@ -28,8 +28,8 @@ class MoreViewController: UIViewController {
             switch self {
             case .general:
                 return String(localized: "more.section.general")
-            case .dataSource:
-                return String(localized: "more.section.dataSource")
+            case .backup:
+                return nil
             case .contact:
                 return String(localized: "more.section.contact")
             case .appjun:
@@ -161,6 +161,7 @@ class MoreViewController: UIViewController {
         }
         
         case settings(GeneralItem)
+        case backup
         case contact(ContactItem)
         case appjun(AppJunItem)
         case about(AboutItem)
@@ -169,6 +170,8 @@ class MoreViewController: UIViewController {
             switch self {
             case .settings(let item):
                 return item.title
+            case .backup:
+                return String(localized: "backup.title")
             case .contact(let item):
                 return item.title
             case .appjun(let item):
@@ -257,6 +260,14 @@ class MoreViewController: UIViewController {
                 content.secondaryText = item.value
                 cell.contentConfiguration = content
                 return cell
+            case .backup:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+                cell.accessoryType = .disclosureIndicator
+                var content = UIListContentConfiguration.valueCell()
+                content.text = identifier.title
+                content.textProperties.color = .label
+                cell.contentConfiguration = content
+                return cell
             case .contact(let item):
                 let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
                 cell.accessoryType = .disclosureIndicator
@@ -295,6 +306,9 @@ class MoreViewController: UIViewController {
         snapshot.appendSections([.general])
         snapshot.appendItems([.settings(.language), .settings(.weekStartType(WeekStartType.getValue()))], toSection: .general)
         
+        snapshot.appendSections([.backup])
+        snapshot.appendItems([.backup], toSection: .backup)
+        
         snapshot.appendSections([.contact])
         snapshot.appendItems([.contact(.email), .contact(.xiaohongshu), .contact(.bilibili), .contact(.reddit)], toSection: .contact)
         
@@ -329,6 +343,8 @@ extension MoreViewController: UITableViewDelegate {
                 case .weekStartType:
                     enterSettings(WeekStartType.self)
                 }
+            case .backup:
+                enterBackup()
             case .contact(let item):
                 handle(contactItem: item)
             case .appjun(let item):
@@ -376,6 +392,13 @@ extension MoreViewController {
         specificationViewController.hidesBottomBarWhenPushed = true
         
         navigationController?.pushViewController(specificationViewController, animated: true)
+    }
+    
+    func enterBackup() {
+        let backupViewController = BackupViewController()
+        backupViewController.hidesBottomBarWhenPushed = true
+        
+        navigationController?.pushViewController(backupViewController, animated: true)
     }
     
     func openEULA() {

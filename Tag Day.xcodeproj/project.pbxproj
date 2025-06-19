@@ -87,6 +87,10 @@
 		14EBE0862DD7679700F7609A /* DurationPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 14EBE0852DD7679700F7609A /* DurationPicker */; };
 		14EBE0882DD76B0B00F7609A /* DurationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14EBE0872DD76B0B00F7609A /* DurationCell.swift */; };
 		14ED63D12DC702F000384068 /* CalendarYearPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14ED63D02DC702F000384068 /* CalendarYearPickerViewController.swift */; };
+		14FF82A12E03F77E00D3000B /* BackupManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FF82A02E03F77E00D3000B /* BackupManager.swift */; };
+		14FF82A42E03F94400D3000B /* SQLFileBackup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FF82A32E03F94400D3000B /* SQLFileBackup.swift */; };
+		14FF82A72E03F9B100D3000B /* ZipArchive in Frameworks */ = {isa = PBXBuildFile; productRef = 14FF82A62E03F9B100D3000B /* ZipArchive */; };
+		14FF82A92E03FD4600D3000B /* BackupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FF82A82E03FD4600D3000B /* BackupViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -166,6 +170,9 @@
 		14EBE0872DD76B0B00F7609A /* DurationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DurationCell.swift; sourceTree = "<group>"; };
 		14ED63D02DC702F000384068 /* CalendarYearPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarYearPickerViewController.swift; sourceTree = "<group>"; };
 		14ED63D22DC72FF100384068 /* Tag Day.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Tag Day.entitlements"; sourceTree = "<group>"; };
+		14FF82A02E03F77E00D3000B /* BackupManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupManager.swift; sourceTree = "<group>"; };
+		14FF82A32E03F94400D3000B /* SQLFileBackup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLFileBackup.swift; sourceTree = "<group>"; };
+		14FF82A82E03FD4600D3000B /* BackupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,6 +187,7 @@
 				14B239CC2DBF77B10007152C /* SnapKit in Frameworks */,
 				14B239D82DBF791E0007152C /* Toast in Frameworks */,
 				14B239CF2DBF78CD0007152C /* GRDB in Frameworks */,
+				14FF82A72E03F9B100D3000B /* ZipArchive in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -274,6 +282,7 @@
 				14AA3E092DCDB32A00E1F4F8 /* DayRecord */,
 				14D272BC2DC0884E00267572 /* More */,
 				14D272AD2DC073EB00267572 /* Database */,
+				14FF82A22E03F78500D3000B /* Backup */,
 				14D2729E2DC072D700267572 /* Settings */,
 				14C7134C2DD21E31007527C5 /* Intent */,
 				14D2729C2DC0721000267572 /* Extension */,
@@ -442,6 +451,7 @@
 			children = (
 				14D272A22DC073EB00267572 /* AppDatabase.swift */,
 				14D272A32DC073EB00267572 /* Persistence.swift */,
+				14FF82A32E03F94400D3000B /* SQLFileBackup.swift */,
 				14D272A42DC073EB00267572 /* TimestampedRecord.swift */,
 				14AD28852DC5C21E0018DAF3 /* DataManager.swift */,
 				14D272AA2DC073EB00267572 /* Model */,
@@ -458,6 +468,15 @@
 				14D272BB2DC0884E00267572 /* SpecificationsViewController.swift */,
 			);
 			path = More;
+			sourceTree = "<group>";
+		};
+		14FF82A22E03F78500D3000B /* Backup */ = {
+			isa = PBXGroup;
+			children = (
+				14FF82A02E03F77E00D3000B /* BackupManager.swift */,
+				14FF82A82E03FD4600D3000B /* BackupViewController.swift */,
+			);
+			path = Backup;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -484,6 +503,7 @@
 				14B239D72DBF791E0007152C /* Toast */,
 				14EBE0852DD7679700F7609A /* DurationPicker */,
 				14B468EF2DFFE5B500415529 /* Collections */,
+				14FF82A62E03F9B100D3000B /* ZipArchive */,
 			);
 			productName = "Tag Day";
 			productReference = 14CD76AD2DBE6BA10035DF1F /* Tag Day.app */;
@@ -524,6 +544,7 @@
 				14B239D62DBF791E0007152C /* XCRemoteSwiftPackageReference "Toast-Swift" */,
 				14EBE0842DD7679700F7609A /* XCRemoteSwiftPackageReference "DurationPicker" */,
 				14B468EE2DFFE5B500415529 /* XCRemoteSwiftPackageReference "swift-collections" */,
+				14FF82A52E03F9B100D3000B /* XCRemoteSwiftPackageReference "ZipArchive" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 14CD76AE2DBE6BA10035DF1F /* Products */;
@@ -558,6 +579,7 @@
 				14AA3E072DCDB31300E1F4F8 /* RecordListViewController.swift in Sources */,
 				14D272A12DC0736A00267572 /* UIViewController+Extension.swift in Sources */,
 				14AD288D2DC5E2DE0018DAF3 /* MainViewController.swift in Sources */,
+				14FF82A42E03F94400D3000B /* SQLFileBackup.swift in Sources */,
 				14833D372DC50420001B61D5 /* Tag.swift in Sources */,
 				14B239B62DBF13F30007152C /* SceneDelegate.swift in Sources */,
 				14BBA37A2DCB142900AD7BAC /* ColorPickerCell.swift in Sources */,
@@ -577,7 +599,9 @@
 				14D272942DC071B000267572 /* MonthTitleSupplementaryView.swift in Sources */,
 				14D272952DC071B000267572 /* ImpactGenerator.swift in Sources */,
 				14D272962DC071B000267572 /* WeekdayOrderView.swift in Sources */,
+				14FF82A12E03F77E00D3000B /* BackupManager.swift in Sources */,
 				14D07CCB2DD3445F00F6843C /* OptionCell.swift in Sources */,
+				14FF82A92E03FD4600D3000B /* BackupViewController.swift in Sources */,
 				14D272972DC071B000267572 /* BlockCell.swift in Sources */,
 				14833D392DC504B9001B61D5 /* DayRecord.swift in Sources */,
 				14D272982DC071B000267572 /* UIDraggableCollectionView.swift in Sources */,
@@ -651,6 +675,7 @@
 				DEVELOPMENT_TEAM = KKQQQNKMM6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Tag Day/Info.plist";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -681,6 +706,7 @@
 				DEVELOPMENT_TEAM = KKQQQNKMM6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Tag Day/Info.plist";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -905,6 +931,14 @@
 				minimumVersion = 1.0.2;
 			};
 		};
+		14FF82A52E03F9B100D3000B /* XCRemoteSwiftPackageReference "ZipArchive" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ZipArchive/ZipArchive.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.6.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -942,6 +976,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 14EBE0842DD7679700F7609A /* XCRemoteSwiftPackageReference "DurationPicker" */;
 			productName = DurationPicker;
+		};
+		14FF82A62E03F9B100D3000B /* ZipArchive */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 14FF82A52E03F9B100D3000B /* XCRemoteSwiftPackageReference "ZipArchive" */;
+			productName = ZipArchive;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
