@@ -46,17 +46,7 @@ class BlockCell: BlockBaseCell, HoverableCell {
         }
     }
     
-    var label: UILabel = {
-        let label = UILabel()
-        label.textColor = .label
-        label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 15, weight: .regular)
-        label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.5
-        label.alpha = 0.8
-        
-        return label
-    }()
+    var label: DateView = DateView()
     
     var tagContainerView: UIView = {
         let view = UIView()
@@ -82,14 +72,15 @@ class BlockCell: BlockBaseCell, HoverableCell {
         
         contentView.addSubview(label)
         label.snp.makeConstraints { make in
-            make.top.equalTo(contentView).inset(8)
-            make.leading.trailing.equalTo(contentView).inset(6)
-            make.height.equalTo(18)
+            make.top.equalTo(contentView).inset(4)
+            make.leading.trailing.equalTo(contentView)
+            make.height.equalTo(26)
         }
+        label.setContentCompressionResistancePriority(.required, for: .vertical)
         
         contentView.addSubview(tagContainerView)
         tagContainerView.snp.makeConstraints { make in
-            make.top.equalTo(label.snp.bottom).offset(6)
+            make.top.equalTo(label.snp.bottom).offset(2)
             make.leading.trailing.equalTo(contentView).inset(3)
             make.bottom.equalTo(contentView).inset(4)
         }
@@ -109,8 +100,7 @@ class BlockCell: BlockBaseCell, HoverableCell {
                 backgroundColor = highlightColor.overlay(on: backgroundColor)
             }
             
-            label.textColor = item.foregroundColor
-            label.text = item.day.dayString()
+            label.update(text: item.day.dayString(), secondaryText: item.secondaryCalendar ?? "", textColor: item.foregroundColor)
             
             clearTagSubviews()
 
@@ -209,5 +199,87 @@ struct BlockCellBackgroundConfiguration {
         }
 
         return background
+    }
+}
+
+class DateView: UIView {
+    private var label: UILabel = {
+        let label = UILabel()
+        label.textColor = .label
+        label.textAlignment = .center
+        label.font = UIFont.monospacedSystemFont(ofSize: 17.0, weight: .regular)
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.5
+        
+        return label
+    }()
+    
+    private var secondaryLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .label
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        
+        return label
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        addSubview(label)
+        label.snp.makeConstraints { make in
+            make.top.equalTo(self).inset(3)
+            make.leading.equalTo(self).inset(6)
+            make.trailing.equalTo(self).inset(6.0)
+            make.height.equalTo(20)
+            make.bottom.equalTo(self).inset(3)
+        }
+        
+        addSubview(secondaryLabel)
+        secondaryLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(self)
+            make.trailing.equalTo(self).inset(7)
+        }
+        secondaryLabel.setContentHuggingPriority(.required, for: .vertical)
+        secondaryLabel.setContentHuggingPriority(.required, for: .horizontal)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func update(text: String, secondaryText: String, textColor: UIColor) {
+        label.text = text
+        label.textColor = textColor.withAlphaComponent(0.85)
+        if !secondaryText.isEmpty, !secondaryText.isBlank {
+            secondaryLabel.isHidden = false
+            secondaryLabel.attributedText = createCenteredCharacterByCharacterString(from: secondaryText, textColor: textColor.withAlphaComponent(0.6))
+            label.snp.updateConstraints { make in
+                make.trailing.equalTo(self).inset(14.0)
+            }
+        } else {
+            secondaryLabel.isHidden = true
+            label.snp.updateConstraints { make in
+                make.trailing.equalTo(self).inset(6.0)
+            }
+        }
+    }
+    
+    func createCenteredCharacterByCharacterString(from string: String, textColor: UIColor) -> NSAttributedString {
+        let charactersWithNewlines = string.map { String($0) }.joined(separator: "\n")
+        
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = .center
+        paragraphStyle.lineSpacing = 2 // 较小的行间距
+        paragraphStyle.lineHeightMultiple = 0.8 // 行高倍数，使行间距更紧凑
+        
+        let attributes: [NSAttributedString.Key: Any] = [
+            .paragraphStyle: paragraphStyle,
+            .foregroundColor: textColor,
+            .font: UIFont.systemFont(ofSize: 6.5, weight: .black)
+        ]
+        
+        // 4. 创建并返回 AttributedString
+        return NSAttributedString(string: charactersWithNewlines, attributes: attributes)
     }
 }

@@ -17,6 +17,7 @@ struct BlockItem: Hashable {
     var tags: [Tag]
     var records: [DayRecord]
     var tagDisplayType: TagDisplayType
+    var secondaryCalendar: String?
 }
 
 extension BlockItem {

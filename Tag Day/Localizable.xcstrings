@@ -1365,6 +1365,34 @@
         }
       }
     },
+    "chinese.calendar.leap" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "闰"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "闰"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "閏"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "閏"
+          }
+        }
+      }
+    },
     "controller.books.title" : {
       "localizations" : {
         "en" : {

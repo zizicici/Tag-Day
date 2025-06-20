@@ -91,6 +91,15 @@
 		14FF82A42E03F94400D3000B /* SQLFileBackup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FF82A32E03F94400D3000B /* SQLFileBackup.swift */; };
 		14FF82A72E03F9B100D3000B /* ZipArchive in Frameworks */ = {isa = PBXBuildFile; productRef = 14FF82A62E03F9B100D3000B /* ZipArchive */; };
 		14FF82A92E03FD4600D3000B /* BackupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FF82A82E03FD4600D3000B /* BackupViewController.swift */; };
+		14FF82B72E04511000D3000B /* HKO1901_2099.json in Resources */ = {isa = PBXBuildFile; fileRef = 14FF82B42E04511000D3000B /* HKO1901_2099.json */; };
+		14FF82B82E04511000D3000B /* kyureki.json in Resources */ = {isa = PBXBuildFile; fileRef = 14FF82B32E04511000D3000B /* kyureki.json */; };
+		14FF82B92E04511000D3000B /* YearRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FF82AB2E04511000D3000B /* YearRange.swift */; };
+		14FF82BA2E04511000D3000B /* ChineseDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FF82AD2E04511000D3000B /* ChineseDay.swift */; };
+		14FF82BB2E04511000D3000B /* ChineseCalendarDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FF82B12E04511000D3000B /* ChineseCalendarDataSource.swift */; };
+		14FF82BC2E04511000D3000B /* ChineseMonth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FF82AE2E04511000D3000B /* ChineseMonth.swift */; };
+		14FF82BD2E04511000D3000B /* ChineseCalendarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FF82AA2E04511000D3000B /* ChineseCalendarManager.swift */; };
+		14FF82BE2E04511000D3000B /* ChineseDayInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FF82B02E04511000D3000B /* ChineseDayInfo.swift */; };
+		14FF82BF2E04511000D3000B /* ChineseYear.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FF82AF2E04511000D3000B /* ChineseYear.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -173,6 +182,15 @@
 		14FF82A02E03F77E00D3000B /* BackupManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupManager.swift; sourceTree = "<group>"; };
 		14FF82A32E03F94400D3000B /* SQLFileBackup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLFileBackup.swift; sourceTree = "<group>"; };
 		14FF82A82E03FD4600D3000B /* BackupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupViewController.swift; sourceTree = "<group>"; };
+		14FF82AA2E04511000D3000B /* ChineseCalendarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChineseCalendarManager.swift; sourceTree = "<group>"; };
+		14FF82AB2E04511000D3000B /* YearRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearRange.swift; sourceTree = "<group>"; };
+		14FF82AD2E04511000D3000B /* ChineseDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChineseDay.swift; sourceTree = "<group>"; };
+		14FF82AE2E04511000D3000B /* ChineseMonth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChineseMonth.swift; sourceTree = "<group>"; };
+		14FF82AF2E04511000D3000B /* ChineseYear.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChineseYear.swift; sourceTree = "<group>"; };
+		14FF82B02E04511000D3000B /* ChineseDayInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChineseDayInfo.swift; sourceTree = "<group>"; };
+		14FF82B12E04511000D3000B /* ChineseCalendarDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChineseCalendarDataSource.swift; sourceTree = "<group>"; };
+		14FF82B32E04511000D3000B /* kyureki.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = kyureki.json; sourceTree = "<group>"; };
+		14FF82B42E04511000D3000B /* HKO1901_2099.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = HKO1901_2099.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -276,6 +294,7 @@
 				14AD288C2DC5E2DE0018DAF3 /* MainViewController.swift */,
 				14ACBE552DBFAD2E0056B1FD /* BaseViewController */,
 				14B239C32DBF75F70007152C /* Calendar */,
+				14FF82B62E04511000D3000B /* ChineseCalendar */,
 				14CC8A472DCF14240062F8BA /* Fast Editor */,
 				14AD287C2DC5B6E70018DAF3 /* Book */,
 				14AD287F2DC5B7090018DAF3 /* Tag */,
@@ -479,6 +498,46 @@
 			path = Backup;
 			sourceTree = "<group>";
 		};
+		14FF82AC2E04511000D3000B /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				14FF82AA2E04511000D3000B /* ChineseCalendarManager.swift */,
+				14FF82AB2E04511000D3000B /* YearRange.swift */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
+		14FF82B22E04511000D3000B /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				14FF82AD2E04511000D3000B /* ChineseDay.swift */,
+				14FF82AE2E04511000D3000B /* ChineseMonth.swift */,
+				14FF82AF2E04511000D3000B /* ChineseYear.swift */,
+				14FF82B02E04511000D3000B /* ChineseDayInfo.swift */,
+				14FF82B12E04511000D3000B /* ChineseCalendarDataSource.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		14FF82B52E04511000D3000B /* JSON */ = {
+			isa = PBXGroup;
+			children = (
+				14FF82B32E04511000D3000B /* kyureki.json */,
+				14FF82B42E04511000D3000B /* HKO1901_2099.json */,
+			);
+			path = JSON;
+			sourceTree = "<group>";
+		};
+		14FF82B62E04511000D3000B /* ChineseCalendar */ = {
+			isa = PBXGroup;
+			children = (
+				14FF82AC2E04511000D3000B /* Manager */,
+				14FF82B22E04511000D3000B /* Model */,
+				14FF82B52E04511000D3000B /* JSON */,
+			);
+			path = ChineseCalendar;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -565,6 +624,8 @@
 				14B239BA2DBF13F30007152C /* Assets.xcassets in Resources */,
 				14337F862DCC99220043447A /* InfoPlist.xcstrings in Resources */,
 				14B239C72DBF765B0007152C /* Localizable.xcstrings in Resources */,
+				14FF82B72E04511000D3000B /* HKO1901_2099.json in Resources */,
+				14FF82B82E04511000D3000B /* kyureki.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -576,6 +637,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				14BBA3762DCB0B0700AD7BAC /* TagDetailViewController.swift in Sources */,
+				14FF82B92E04511000D3000B /* YearRange.swift in Sources */,
+				14FF82BA2E04511000D3000B /* ChineseDay.swift in Sources */,
+				14FF82BB2E04511000D3000B /* ChineseCalendarDataSource.swift in Sources */,
+				14FF82BC2E04511000D3000B /* ChineseMonth.swift in Sources */,
+				14FF82BD2E04511000D3000B /* ChineseCalendarManager.swift in Sources */,
+				14FF82BE2E04511000D3000B /* ChineseDayInfo.swift in Sources */,
+				14FF82BF2E04511000D3000B /* ChineseYear.swift in Sources */,
 				14AA3E072DCDB31300E1F4F8 /* RecordListViewController.swift in Sources */,
 				14D272A12DC0736A00267572 /* UIViewController+Extension.swift in Sources */,
 				14AD288D2DC5E2DE0018DAF3 /* MainViewController.swift in Sources */,
