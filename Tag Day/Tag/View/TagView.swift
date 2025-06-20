@@ -54,16 +54,6 @@ class TagView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func update(title: String, color: UIColor) {
-        label.text = title
-        if color.resolvedColor(with: UITraitCollection(userInterfaceStyle: overrideUserInterfaceStyle)).isLight {
-            label.textColor = .black.withAlphaComponent(0.8)
-        } else {
-            label.textColor = .white.withAlphaComponent(0.95)
-        }
-        backgroundColor = color
-    }
-    
     func update(tag: Tag, count: Int = 1) {
         label.text = tag.title
         if count > 1 {

@@ -92,7 +92,7 @@ class TagPreviewView: UIView {
     func update(title: String, color: UIColor) {
         label.text = "14"
         tagView.overrideUserInterfaceStyle = overrideUserInterfaceStyle
-        tagView.update(title: title, color: color)
+        tagView.update(tag: Tag(bookID: -1, title: title, color: color.generateLightDarkString(), order: -1))
     }
 }
 
