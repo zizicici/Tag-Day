@@ -37,7 +37,6 @@ struct LayoutGenerater {
                 
                 let secondaryCalendar: String?
                 switch SecondaryCalendar.getValue() {
-                    
                 case .none:
                     secondaryCalendar = nil
                 case .chineseCalendar:

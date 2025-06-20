@@ -214,14 +214,21 @@ class DateView: UIView {
         return label
     }()
     
-    private var secondaryLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .label
-        label.textAlignment = .center
-        label.numberOfLines = 0
+    private var verticalLabel: VerticalTextLabel = {
+        let label = VerticalTextLabel()
         
         return label
     }()
+    
+    private var currentLabelInset: CGFloat = 6.0 {
+        didSet {
+            if oldValue != currentLabelInset {
+                label.snp.updateConstraints { make in
+                    make.trailing.equalTo(self).inset(currentLabelInset)
+                }
+            }
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -234,14 +241,11 @@ class DateView: UIView {
             make.height.equalTo(20)
             make.bottom.equalTo(self).inset(3)
         }
-        
-        addSubview(secondaryLabel)
-        secondaryLabel.snp.makeConstraints { make in
+        addSubview(verticalLabel)
+        verticalLabel.snp.makeConstraints { make in
             make.centerY.equalTo(self)
             make.trailing.equalTo(self).inset(7)
         }
-        secondaryLabel.setContentHuggingPriority(.required, for: .vertical)
-        secondaryLabel.setContentHuggingPriority(.required, for: .horizontal)
     }
     
     required init?(coder: NSCoder) {
@@ -251,35 +255,124 @@ class DateView: UIView {
     func update(text: String, secondaryText: String, textColor: UIColor) {
         label.text = text
         label.textColor = textColor.withAlphaComponent(0.85)
-        if !secondaryText.isEmpty, !secondaryText.isBlank {
-            secondaryLabel.isHidden = false
-            secondaryLabel.attributedText = createCenteredCharacterByCharacterString(from: secondaryText, textColor: textColor.withAlphaComponent(0.6))
-            label.snp.updateConstraints { make in
-                make.trailing.equalTo(self).inset(14.0)
+        let hasSecondaryText = !secondaryText.isEmpty && !secondaryText.isBlank
+        verticalLabel.isHidden = !hasSecondaryText
+        
+        currentLabelInset = hasSecondaryText ? 14.0 : 6.0
+
+        if hasSecondaryText {
+            verticalLabel.configure(with: secondaryText, textColor: textColor.withAlphaComponent(0.6), font: .systemFont(ofSize: 6.5, weight: .black), spacing: 0.0)
+        }
+    }
+}
+
+final class VerticalTextLabel: UIView {
+    // MARK: - Properties
+    private var textLayers: [CATextLayer] = []
+    private var textColor: UIColor = .black
+    private var font: UIFont = .systemFont(ofSize: 14)
+    private var characterSpacing: CGFloat = 2 // 字符间距
+    
+    // MARK: - Initialization
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        backgroundColor = .clear
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        backgroundColor = .clear
+    }
+    
+    // MARK: - Configuration
+    func configure(with text: String, textColor: UIColor, font: UIFont, spacing: CGFloat = 2) {
+        self.textColor = textColor
+        self.font = font
+        self.characterSpacing = spacing
+        
+        let targetCount = text.count
+        let currentCount = textLayers.count
+        
+        // 调整图层数量
+        if targetCount > currentCount {
+            for _ in 0..<(targetCount - currentCount) {
+                let textLayer = createTextLayer()
+                layer.addSublayer(textLayer)
+                textLayers.append(textLayer)
             }
-        } else {
-            secondaryLabel.isHidden = true
-            label.snp.updateConstraints { make in
-                make.trailing.equalTo(self).inset(6.0)
+        } else if targetCount < currentCount {
+            for index in targetCount..<currentCount {
+                textLayers[index].isHidden = true
             }
+        }
+        
+        // 配置所有图层
+        for (index, textLayer) in textLayers.enumerated() {
+            if index < text.count {
+                let character = String(text[text.index(text.startIndex, offsetBy: index)])
+                textLayer.isHidden = false
+                textLayer.string = character
+                textLayer.foregroundColor = textColor.cgColor
+                textLayer.font = font
+                textLayer.fontSize = font.pointSize
+            } else {
+                textLayer.isHidden = true
+            }
+        }
+        
+        invalidateIntrinsicContentSize()
+        setNeedsLayout()
+    }
+    
+    // MARK: - Auto Layout
+    override var intrinsicContentSize: CGSize {
+        guard !textLayers.isEmpty else { return CGSize(width: UIView.noIntrinsicMetric, height: UIView.noIntrinsicMetric) }
+        
+        // 计算实际需要的尺寸
+        let visibleLayers = textLayers.filter { !$0.isHidden }
+        guard !visibleLayers.isEmpty else { return .zero }
+        
+        // 计算最大字符宽度
+        let maxWidth = visibleLayers.reduce(0) { max($0, $1.preferredFrameSize().width) }
+        
+        // 计算总高度（字符高度总和 + 间距）
+        let charHeight = font.lineHeight
+        let totalHeight = charHeight * CGFloat(visibleLayers.count) +
+                         characterSpacing * CGFloat(visibleLayers.count - 1)
+        
+        return CGSize(width: maxWidth, height: totalHeight)
+    }
+    
+    // MARK: - Layout
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        let visibleLayers = textLayers.filter { !$0.isHidden }
+        guard !visibleLayers.isEmpty else { return }
+        
+        let charHeight = font.lineHeight
+        let maxWidth = bounds.width
+        
+        for (index, textLayer) in visibleLayers.enumerated() {
+            let yPosition = CGFloat(index) * (charHeight + characterSpacing)
+            textLayer.frame = CGRect(
+                x: 0,
+                y: yPosition,
+                width: maxWidth,
+                height: charHeight
+            )
         }
     }
     
-    func createCenteredCharacterByCharacterString(from string: String, textColor: UIColor) -> NSAttributedString {
-        let charactersWithNewlines = string.map { String($0) }.joined(separator: "\n")
-        
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.alignment = .center
-        paragraphStyle.lineSpacing = 2 // 较小的行间距
-        paragraphStyle.lineHeightMultiple = 0.8 // 行高倍数，使行间距更紧凑
-        
-        let attributes: [NSAttributedString.Key: Any] = [
-            .paragraphStyle: paragraphStyle,
-            .foregroundColor: textColor,
-            .font: UIFont.systemFont(ofSize: 6.5, weight: .black)
-        ]
-        
-        // 4. 创建并返回 AttributedString
-        return NSAttributedString(string: charactersWithNewlines, attributes: attributes)
+    // MARK: - Private Methods
+    private func createTextLayer() -> CATextLayer {
+        let textLayer = CATextLayer()
+        textLayer.foregroundColor = textColor.cgColor
+        textLayer.font = font
+        textLayer.fontSize = font.pointSize
+        textLayer.alignmentMode = .center
+        textLayer.contentsScale = UIScreen.main.scale
+        textLayer.truncationMode = .none
+        return textLayer
     }
 }
