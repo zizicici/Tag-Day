@@ -35,9 +35,22 @@ struct LayoutGenerater {
                 let backgroundColor: UIColor = AppColor.paper
                 let foregroundColor: UIColor = AppColor.text
                 
-                let secondaryCalendar: String? = ChineseCalendarManager.shared.findChineseDayInfo(gregorianDay, variant: .chinese)?.shortDisplayString()
+                let secondaryCalendar: String?
+                switch SecondaryCalendar.getValue() {
+                    
+                case .none:
+                    secondaryCalendar = nil
+                case .chineseCalendar:
+                    secondaryCalendar = ChineseCalendarManager.shared.findChineseDayInfo(gregorianDay, variant: .chinese)?.shortDisplayString()
+                case .rokuyo:
+                    if let kyureki = ChineseCalendarManager.shared.findChineseDayInfo(gregorianDay, variant: .kyureki) {
+                        secondaryCalendar = Rokuyo.get(at: kyureki).name
+                    } else {
+                        secondaryCalendar = nil
+                    }
+                }
                 
-                return BlockItem(index: julianDay, backgroundColor: backgroundColor, foregroundColor: foregroundColor, isToday: ZCCalendar.manager.isToday(gregorianDay: gregorianDay), tags: tags, records: records.filter{ $0.day == gregorianDay.julianDay }, tagDisplayType: TagDisplayType.getValue(), secondaryCalendar: nil)
+                return BlockItem(index: julianDay, backgroundColor: backgroundColor, foregroundColor: foregroundColor, isToday: ZCCalendar.manager.isToday(gregorianDay: gregorianDay), tags: tags, records: records.filter{ $0.day == gregorianDay.julianDay }, tagDisplayType: TagDisplayType.getValue(), secondaryCalendar: secondaryCalendar)
             })
             
             snapshot.appendItems(items.map{ Item.block($0) }, toSection: .row(gregorianMonth))

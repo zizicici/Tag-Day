@@ -19,6 +19,7 @@ class MoreViewController: UIViewController {
     
     enum Section: Hashable {
         case general
+        case calendar
         case backup
         case contact
         case appjun
@@ -28,6 +29,8 @@ class MoreViewController: UIViewController {
             switch self {
             case .general:
                 return String(localized: "more.section.general")
+            case .calendar:
+                return String(localized: "more.section.calendar")
             case .backup:
                 return nil
             case .contact:
@@ -47,14 +50,11 @@ class MoreViewController: UIViewController {
     enum Item: Hashable {
         enum GeneralItem: Hashable {
             case language
-            case weekStartType(WeekStartType)
             
             var title: String {
                 switch self {
                 case .language:
                     return String(localized: "more.item.settings.language")
-                case .weekStartType:
-                    return WeekStartType.getTitle()
                 }
             }
             
@@ -62,8 +62,29 @@ class MoreViewController: UIViewController {
                 switch self {
                 case .language:
                     return String(localized: "more.item.settings.language.value")
+                }
+            }
+        }
+        
+        enum CalendarItem: Hashable {
+            case weekStartType(WeekStartType)
+            case secondaryCalendar(SecondaryCalendar)
+            
+            var title: String {
+                switch self {
+                case .weekStartType:
+                    return WeekStartType.getTitle()
+                case .secondaryCalendar:
+                    return SecondaryCalendar.getTitle()
+                }
+            }
+            
+            var value: String? {
+                switch self {
                 case .weekStartType(let value):
                     return value.getName()
+                case .secondaryCalendar(let secondaryCalendar):
+                    return secondaryCalendar.getName()
                 }
             }
         }
@@ -161,6 +182,7 @@ class MoreViewController: UIViewController {
         }
         
         case settings(GeneralItem)
+        case calendar(CalendarItem)
         case backup
         case contact(ContactItem)
         case appjun(AppJunItem)
@@ -169,6 +191,8 @@ class MoreViewController: UIViewController {
         var title: String {
             switch self {
             case .settings(let item):
+                return item.title
+            case .calendar(let item):
                 return item.title
             case .backup:
                 return String(localized: "backup.title")
@@ -260,6 +284,15 @@ class MoreViewController: UIViewController {
                 content.secondaryText = item.value
                 cell.contentConfiguration = content
                 return cell
+            case .calendar(let item):
+                let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+                cell.accessoryType = .disclosureIndicator
+                var content = UIListContentConfiguration.valueCell()
+                content.text = identifier.title
+                content.textProperties.color = .label
+                content.secondaryText = item.value
+                cell.contentConfiguration = content
+                return cell
             case .backup:
                 let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
                 cell.accessoryType = .disclosureIndicator
@@ -304,7 +337,10 @@ class MoreViewController: UIViewController {
     func reloadData() {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
         snapshot.appendSections([.general])
-        snapshot.appendItems([.settings(.language), .settings(.weekStartType(WeekStartType.getValue()))], toSection: .general)
+        snapshot.appendItems([.settings(.language)], toSection: .general)
+        
+        snapshot.appendSections([.calendar])
+        snapshot.appendItems([.calendar(.weekStartType(WeekStartType.getValue())), .calendar(.secondaryCalendar(SecondaryCalendar.getValue()))], toSection: .calendar)
         
         snapshot.appendSections([.backup])
         snapshot.appendItems([.backup], toSection: .backup)
@@ -340,8 +376,13 @@ extension MoreViewController: UITableViewDelegate {
                 switch item {
                 case .language:
                     jumpToSettings()
+                }
+            case .calendar(let item):
+                switch item {
                 case .weekStartType:
                     enterSettings(WeekStartType.self)
+                case .secondaryCalendar:
+                    enterSettings(SecondaryCalendar.self)
                 }
             case .backup:
                 enterBackup()

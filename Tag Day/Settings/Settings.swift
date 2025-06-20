@@ -12,6 +12,7 @@ extension UserDefaults {
     enum Settings: String {
         case AutoBackup = "com.zizicici.tag.settings.AutoBackup"
         case BackupFolder = "com.zizicici.tag.settings.BackupFolder"
+        case SecondaryCalendar = "com.zizicici.tag.settings.SecondaryCalendar"
         case WeekStartType = "com.zizicici.tag.settings.WeekStartType"
         case TagDisplayType = "com.zizicici.tag.settings.TagDisplayType"
         case MonthlyStatsType = "com.zizicici.tag.settings.MonthlyStatsType"
@@ -122,6 +123,37 @@ extension AutoBackup: UserDefaultSettable {
     
     static func getTitle() -> String {
         return ""
+    }
+}
+
+enum SecondaryCalendar: Int, CaseIterable, Codable {
+    case none
+    case chineseCalendar
+    case rokuyo
+}
+
+extension SecondaryCalendar: UserDefaultSettable {
+    static func getKey() -> UserDefaults.Settings {
+        return .SecondaryCalendar
+    }
+    
+    static var defaultOption: SecondaryCalendar {
+        return .none
+    }
+    
+    func getName() -> String {
+        switch self {
+        case .none:
+            return String(localized: "settings.secondaryCalendar.none")
+        case .chineseCalendar:
+            return String(localized: "settings.secondaryCalendar.chineseCalendar")
+        case .rokuyo:
+            return String(localized: "settings.secondaryCalendar.rokuyo")
+        }
+    }
+    
+    static func getTitle() -> String {
+        return String(localized: "settings.secondaryCalendar.title")
     }
 }
 
