@@ -55,16 +55,16 @@ class BlockCell: BlockBaseCell, HoverableCell {
         return view
     }()
     
+    private var cachedTagViews: [TagView] = []
+    
+    private var lastLayoutInfo: (count: Int, firstItemTop: CGFloat, spacing: CGFloat)?
+    
     var highlightColor: UIColor = .gray.withAlphaComponent(0.25)
     
     override func prepareForReuse() {
         super.prepareForReuse()
         
         isHover = false
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
     }
     
     private func setupViewsIfNeeded() {
@@ -102,49 +102,63 @@ class BlockCell: BlockBaseCell, HoverableCell {
             
             label.update(text: item.day.dayString(), secondaryText: item.secondaryCalendar ?? "", textColor: item.foregroundColor)
             
-            clearTagSubviews()
-
-            var tagViews: [UIView] = []
-            
+            // 获取需要显示的tag数据
+            let tagData: [(tag: Tag, count: Int)]
             switch item.tagDisplayType {
             case .normal:
-                for record in item.records {
-                    if let tag = item.tags.first(where: { $0.id == record.tagID }) {
-                        let recordTagView = generateTagView(tag: tag, count: 1)
-                        tagViews.append(recordTagView)
-                    }
+                tagData = item.records.compactMap { record in
+                    item.tags.first(where: { $0.id == record.tagID }).map { (tag: $0, count: 1) }
                 }
             case .aggregation:
                 var orderedCounts = OrderedDictionary<Int64, Int>()
                 for record in item.records {
                     orderedCounts[record.tagID, default: 0] += 1
                 }
-                
-                for orderedCount in orderedCounts {
-                    if let tag = item.tags.first(where: { $0.id == orderedCount.key }) {
-                        let recordTagView = generateTagView(tag: tag, count: orderedCount.value)
-                        tagViews.append(recordTagView)
-                    }
+                tagData = orderedCounts.compactMap { key, value in
+                    item.tags.first(where: { $0.id == key }).map { (tag: $0, count: value) }
                 }
             }
             
-            var lastTagView: UIView? = nil
-            for tagView in tagViews {
-                tagContainerView.addSubview(tagView)
-                if let lastView = lastTagView {
-                    tagView.snp.makeConstraints { make in
+            // 复用或创建tagViews
+            while cachedTagViews.count > tagData.count {
+                let view = cachedTagViews.removeLast()
+                view.removeFromSuperview()
+            }
+            
+            while cachedTagViews.count < tagData.count {
+                let recordView = TagView()
+                recordView.isUserInteractionEnabled = false
+                tagContainerView.addSubview(recordView)
+                cachedTagViews.append(recordView)
+            }
+            
+            // 计算当前需要的布局信息
+            let currentFirstItemTop: CGFloat = 0
+            let currentSpacing: CGFloat = 3
+            let currentLayoutInfo = (tagData.count, currentFirstItemTop, currentSpacing)
+            
+            // 检查是否需要更新约束
+            let needsUpdateConstraints = lastLayoutInfo == nil || lastLayoutInfo! != currentLayoutInfo
+            
+            // 更新内容和约束
+            for (index, (tag, count)) in tagData.enumerated() {
+                let tagView = cachedTagViews[index]
+                tagView.update(tag: tag, count: count)
+            }
+            
+            if needsUpdateConstraints {
+                for (index, tagView) in cachedTagViews.enumerated() {
+                    tagView.snp.remakeConstraints { make in
                         make.leading.trailing.equalTo(tagContainerView)
                         make.height.equalTo(20)
-                        make.top.equalTo(lastView.snp.bottom).offset(3)
-                    }
-                } else {
-                    tagView.snp.makeConstraints { make in
-                        make.leading.trailing.equalTo(tagContainerView)
-                        make.height.equalTo(20)
-                        make.top.equalTo(tagContainerView)
+                        if index == 0 {
+                            make.top.equalTo(tagContainerView)
+                        } else {
+                            make.top.equalTo(cachedTagViews[index-1].snp.bottom).offset(3)
+                        }
                     }
                 }
-                lastTagView = tagView
+                lastLayoutInfo = currentLayoutInfo
             }
             
             if item.isToday {
@@ -161,21 +175,10 @@ class BlockCell: BlockBaseCell, HoverableCell {
         self.isHover = isHover
     }
     
-    func clearTagSubviews() {
-        tagContainerView.subviews.forEach{ $0.removeFromSuperview() }
-    }
-    
     override var isHighlighted: Bool {
         didSet {
             setNeedsUpdateConfiguration()
         }
-    }
-    
-    func generateTagView(tag: Tag, count: Int) -> TagView {
-        let recordView = TagView()
-        recordView.update(tag: tag, count: count)
-        recordView.isUserInteractionEnabled = false
-        return recordView
     }
 }
 
