@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SnapKit
 
 class TagView: UIView {
     var label: UILabel = {
@@ -15,7 +14,7 @@ class TagView: UIView {
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
-        
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -25,38 +24,17 @@ class TagView: UIView {
         label.font = UIFont.systemFont(ofSize: 10, weight: .semibold)
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
-        
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    private var currentLabelInset: CGFloat = 2.0 {
-        didSet {
-            if oldValue != currentLabelInset {
-                label.snp.updateConstraints { make in
-                    make.trailing.equalTo(self).inset(currentLabelInset)
-                }
-            }
-        }
-    }
+    private var labelTrailingConstraint: NSLayoutConstraint!
+    private let defaultLabelInset: CGFloat = 2.0
+    private let countLabelWidth: CGFloat = 14.0
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        addSubview(label)
-        label.snp.makeConstraints { make in
-            make.leading.equalTo(self).inset(2.0)
-            make.trailing.equalTo(self).inset(2.0)
-            make.top.bottom.equalTo(self)
-        }
-        
-        addSubview(countLabel)
-        countLabel.snp.makeConstraints { make in
-            make.trailing.equalTo(self).inset(1.0)
-            make.width.equalTo(14.0)
-            make.top.equalTo(self).inset(0.0)
-            make.height.greaterThanOrEqualTo(8.0)
-        }
-        
+        setupViews()
         layer.cornerRadius = 3.0
     }
     
@@ -64,21 +42,45 @@ class TagView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    private func setupViews() {
+        addSubview(label)
+        addSubview(countLabel)
+        
+        labelTrailingConstraint = label.trailingAnchor.constraint(
+            equalTo: trailingAnchor,
+            constant: -defaultLabelInset
+        )
+        
+        NSLayoutConstraint.activate([
+            label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: defaultLabelInset),
+            label.topAnchor.constraint(equalTo: topAnchor),
+            label.bottomAnchor.constraint(equalTo: bottomAnchor),
+            labelTrailingConstraint,
+            
+            countLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -1),
+            countLabel.widthAnchor.constraint(equalToConstant: countLabelWidth),
+            countLabel.topAnchor.constraint(equalTo: topAnchor),
+            countLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 8)
+        ])
+    }
+    
     func update(tag: Tag, count: Int = 1) {
         if label.text != tag.title {
             label.text = tag.title
         }
+        
         if count > 1 {
             countLabel.isHidden = false
             let countText = "×\(count)"
             if countLabel.text != countText {
                 countLabel.text = countText
             }
-            currentLabelInset = 14.0
+            labelTrailingConstraint.constant = -countLabelWidth
         } else {
             countLabel.isHidden = true
-            currentLabelInset = 2.0
+            labelTrailingConstraint.constant = -defaultLabelInset
         }
+        
         if let tagColor = UIColor(string: tag.color) {
             if tagColor.isLight {
                 label.textColor = .black.withAlphaComponent(0.8)

@@ -211,8 +211,8 @@ class DateView: UIView {
         label.textColor = .label
         label.textAlignment = .center
         label.font = UIFont.monospacedSystemFont(ofSize: 15.0, weight: .regular)
-        label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.5
+        label.adjustsFontSizeToFitWidth = false
+        label.allowsDefaultTighteningForTruncation = false
         
         return label
     }()
@@ -276,7 +276,6 @@ final class VerticalTextLabel: UIView {
         let text: String
         let font: UIFont
         let spacing: CGFloat
-        let maxWidth: CGFloat
     }
     
     private static var sizeCache: [CacheKey: CGSize] = [:]
@@ -364,7 +363,7 @@ final class VerticalTextLabel: UIView {
         }
         
         let maxWidth = bounds.width > 0 ? bounds.width : .greatestFiniteMagnitude
-        let cacheKey = CacheKey(text: currentText, font: font, spacing: characterSpacing, maxWidth: maxWidth)
+        let cacheKey = CacheKey(text: currentText, font: font, spacing: characterSpacing)
         
         // 尝试从全局缓存读取
         if let cachedSize = Self.cacheQueue.sync(execute: {
