@@ -74,6 +74,7 @@ class WeekdayOrderView: UIView {
         }
         for weekdayOrder in weekdayOrders {
             let label = UILabel()
+            label.backgroundColor = AppColor.background
             label.textAlignment = .center
             label.font = UIFont.systemFont(ofSize: 10, weight: .bold)
             label.textColor = color(for: weekdayOrder)
