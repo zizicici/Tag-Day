@@ -256,7 +256,9 @@ class DateView: UIView {
     }
     
     func update(text: String, secondaryText: String, textColor: UIColor) {
-        label.text = text
+        if label.text != text {
+            label.text = text
+        }
         label.textColor = textColor.withAlphaComponent(0.85)
         let hasSecondaryText = !secondaryText.isEmpty && !secondaryText.isBlank
         verticalLabel.isHidden = !hasSecondaryText
@@ -270,25 +272,48 @@ class DateView: UIView {
 }
 
 final class VerticalTextLabel: UIView {
-    // MARK: - Properties
+    private struct CacheKey: Hashable {
+        let text: String
+        let font: UIFont
+        let spacing: CGFloat
+        let maxWidth: CGFloat
+    }
+    
+    private static var sizeCache: [CacheKey: CGSize] = [:]
+    private static let cacheQueue = DispatchQueue(label: "com.verticalTextLabel.cache", qos: .userInteractive, attributes: .concurrent)
+    
     private var textLayers: [CATextLayer] = []
     private var textColor: UIColor = .black
     private var font: UIFont = .systemFont(ofSize: 14)
-    private var characterSpacing: CGFloat = 2 // 字符间距
+    private var characterSpacing: CGFloat = 2
+    private var currentText: String = ""
+    private var lastLayoutBounds: CGRect = .zero
     
-    // MARK: - Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .clear
+        commonInit()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        backgroundColor = .clear
+        commonInit()
     }
     
-    // MARK: - Configuration
+    private func commonInit() {
+        backgroundColor = .clear
+        isOpaque = false
+    }
+    
     func configure(with text: String, textColor: UIColor, font: UIFont, spacing: CGFloat = 2) {
+        // 检查是否有实际变化
+        let needsUpdate = text != currentText || self.textColor != textColor || self.font != font || self.characterSpacing != spacing
+        guard needsUpdate else { return }
+        
+        // 保存旧尺寸用于比较
+        let oldIntrinsicSize = intrinsicContentSize
+        
+        // 更新属性
+        self.currentText = text
         self.textColor = textColor
         self.font = font
         self.characterSpacing = spacing
@@ -298,84 +323,126 @@ final class VerticalTextLabel: UIView {
         
         // 调整图层数量
         if targetCount > currentCount {
-            for _ in 0..<(targetCount - currentCount) {
-                let textLayer = createTextLayer()
-                layer.addSublayer(textLayer)
-                textLayers.append(textLayer)
-            }
+            let newLayers = (currentCount..<targetCount).map { _ in createTextLayer() }
+            newLayers.forEach { layer.addSublayer($0) }
+            textLayers.append(contentsOf: newLayers)
         } else if targetCount < currentCount {
             for index in targetCount..<currentCount {
-                textLayers[index].isHidden = true
+                textLayers[index].removeFromSuperlayer()
             }
+            textLayers.removeLast(currentCount - targetCount)
         }
         
         // 配置所有图层
         for (index, textLayer) in textLayers.enumerated() {
-            if index < text.count {
-                let character = String(text[text.index(text.startIndex, offsetBy: index)])
-                textLayer.isHidden = false
+            let character = String(text[text.index(text.startIndex, offsetBy: index)])
+            if (textLayer.string as? String) != character {
                 textLayer.string = character
                 textLayer.foregroundColor = textColor.cgColor
                 textLayer.font = font
                 textLayer.fontSize = font.pointSize
-            } else {
-                textLayer.isHidden = true
             }
         }
         
-        invalidateIntrinsicContentSize()
-        setNeedsLayout()
+        // 计算新尺寸
+        let newIntrinsicSize = calculateIntrinsicContentSize()
+        
+        // 只在尺寸变化时通知系统
+        if newIntrinsicSize != oldIntrinsicSize {
+            invalidateIntrinsicContentSize()
+            setNeedsLayout()
+        }
     }
     
-    // MARK: - Auto Layout
     override var intrinsicContentSize: CGSize {
-        guard !textLayers.isEmpty else { return CGSize(width: UIView.noIntrinsicMetric, height: UIView.noIntrinsicMetric) }
-        
-        // 计算实际需要的尺寸
-        let visibleLayers = textLayers.filter { !$0.isHidden }
-        guard !visibleLayers.isEmpty else { return .zero }
-        
-        // 计算最大字符宽度
-        let maxWidth = visibleLayers.reduce(0) { max($0, $1.preferredFrameSize().width) }
-        
-        // 计算总高度（字符高度总和 + 间距）
-        let charHeight = font.lineHeight
-        let totalHeight = charHeight * CGFloat(visibleLayers.count) +
-                         characterSpacing * CGFloat(visibleLayers.count - 1)
-        
-        return CGSize(width: maxWidth, height: totalHeight)
+        return calculateIntrinsicContentSize()
     }
     
-    // MARK: - Layout
+    private func calculateIntrinsicContentSize() -> CGSize {
+        guard !textLayers.isEmpty else {
+            return CGSize(width: UIView.noIntrinsicMetric, height: UIView.noIntrinsicMetric)
+        }
+        
+        let maxWidth = bounds.width > 0 ? bounds.width : .greatestFiniteMagnitude
+        let cacheKey = CacheKey(text: currentText, font: font, spacing: characterSpacing, maxWidth: maxWidth)
+        
+        // 尝试从全局缓存读取
+        if let cachedSize = Self.cacheQueue.sync(execute: {
+            return Self.sizeCache[cacheKey]
+        }) {
+            return cachedSize
+        }
+        
+        // 计算尺寸
+        let charHeight = font.lineHeight
+        let totalHeight = CGFloat(textLayers.count) * (charHeight + characterSpacing) - characterSpacing
+        
+        // 计算最大字符宽度（限制在maxWidth内）
+        var maxCharWidth: CGFloat = 0
+        for layer in textLayers {
+            guard let char = layer.string as? String else { continue }
+            let size = char.size(withAttributes: [.font: font])
+            maxCharWidth = min(max(size.width, maxCharWidth), maxWidth)
+        }
+        
+        let calculatedSize = CGSize(
+            width: maxCharWidth.rounded(.up),
+            height: totalHeight.rounded(.up)
+        )
+        
+        // 写入全局缓存
+        Self.cacheQueue.async(flags: .barrier) {
+            Self.sizeCache[cacheKey] = calculatedSize
+        }
+        
+        return calculatedSize
+    }
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        let visibleLayers = textLayers.filter { !$0.isHidden }
-        guard !visibleLayers.isEmpty else { return }
+        guard !textLayers.isEmpty, bounds != lastLayoutBounds else {
+            return
+        }
+        
+        lastLayoutBounds = bounds
         
         let charHeight = font.lineHeight
-        let maxWidth = bounds.width
         
-        for (index, textLayer) in visibleLayers.enumerated() {
+        for (index, textLayer) in textLayers.enumerated() {
             let yPosition = CGFloat(index) * (charHeight + characterSpacing)
             textLayer.frame = CGRect(
                 x: 0,
                 y: yPosition,
-                width: maxWidth,
+                width: bounds.width,
                 height: charHeight
             )
         }
     }
     
-    // MARK: - Private Methods
+    static func clearCache() {
+        cacheQueue.async(flags: .barrier) {
+            sizeCache.removeAll()
+        }
+    }
+    
     private func createTextLayer() -> CATextLayer {
         let textLayer = CATextLayer()
+        textLayer.drawsAsynchronously = true
         textLayer.foregroundColor = textColor.cgColor
         textLayer.font = font
         textLayer.fontSize = font.pointSize
         textLayer.alignmentMode = .center
         textLayer.contentsScale = UIScreen.main.scale
         textLayer.truncationMode = .none
+        textLayer.isWrapped = false
+        textLayer.allowsFontSubpixelQuantization = true
+        textLayer.masksToBounds = false
         return textLayer
+    }
+    
+    deinit {
+        textLayers.forEach { $0.removeFromSuperlayer() }
+        textLayers.removeAll()
     }
 }
