@@ -29,6 +29,16 @@ class TagView: UIView {
         return label
     }()
     
+    private var currentLabelInset: CGFloat = 2.0 {
+        didSet {
+            if oldValue != currentLabelInset {
+                label.snp.updateConstraints { make in
+                    make.trailing.equalTo(self).inset(currentLabelInset)
+                }
+            }
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -55,18 +65,19 @@ class TagView: UIView {
     }
     
     func update(tag: Tag, count: Int = 1) {
-        label.text = tag.title
+        if label.text != tag.title {
+            label.text = tag.title
+        }
         if count > 1 {
             countLabel.isHidden = false
-            countLabel.text = "×\(count)"
-            label.snp.updateConstraints { make in
-                make.trailing.equalTo(self).inset(14.0)
+            let countText = "×\(count)"
+            if countLabel.text != countText {
+                countLabel.text = countText
             }
+            currentLabelInset = 14.0
         } else {
             countLabel.isHidden = true
-            label.snp.updateConstraints { make in
-                make.trailing.equalTo(self).inset(2.0)
-            }
+            currentLabelInset = 2.0
         }
         if let tagColor = UIColor(string: tag.color) {
             if tagColor.isLight {
