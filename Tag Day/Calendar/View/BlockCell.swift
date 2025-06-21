@@ -162,9 +162,9 @@ class BlockCell: BlockBaseCell, HoverableCell {
             }
             
             if item.isToday {
-                accessibilityLabel = String(localized: "weekCalendar.today") + (item.day.completeFormatString() ?? "")
+                accessibilityLabel = String(localized: "weekCalendar.today") + item.calendarString
             } else {
-                accessibilityLabel = item.day.completeFormatString()
+                accessibilityLabel = item.calendarString
             }
             
             backgroundConfiguration = BlockCellBackgroundConfiguration.configuration(for: state, backgroundColor: backgroundColor, cornerRadius: 6.0, showStroke: item.isToday, strokeColor: UIColor.systemYellow, strokeWidth: 1.5, strokeOutset: 1.0)
