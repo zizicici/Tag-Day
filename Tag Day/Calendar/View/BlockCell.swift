@@ -46,7 +46,7 @@ class BlockCell: BlockBaseCell, HoverableCell {
         }
     }
     
-    var label: DateView = DateView()
+    var dateLayer = DateLayer()
     
     var tagContainerView: UIView = {
         let view = UIView()
@@ -68,25 +68,28 @@ class BlockCell: BlockBaseCell, HoverableCell {
     }
     
     private func setupViewsIfNeeded() {
-        guard label.superview == nil else { return }
+        guard dateLayer.superlayer == nil else { return }
         
-        contentView.addSubview(label)
-        label.snp.makeConstraints { make in
-            make.top.equalTo(contentView).inset(4)
-            make.leading.trailing.equalTo(contentView)
-            make.height.equalTo(26)
-        }
-        label.setContentCompressionResistancePriority(.required, for: .vertical)
+        contentView.layer.addSublayer(dateLayer)
         
         contentView.addSubview(tagContainerView)
         tagContainerView.snp.makeConstraints { make in
-            make.top.equalTo(label.snp.bottom).offset(2)
+            make.top.equalTo(contentView).offset(32)
             make.leading.trailing.equalTo(contentView).inset(3)
             make.bottom.equalTo(contentView).inset(4)
         }
         
         isAccessibilityElement = true
         accessibilityTraits = .button
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        let dateFrame = CGRect(x: 0, y: 4, width: bounds.width, height: 26)
+        if !dateLayer.frame.equalTo(dateFrame) {
+            dateLayer.frame = dateFrame
+        }
     }
     
     override func updateConfiguration(using state: UICellConfigurationState) {
@@ -100,7 +103,7 @@ class BlockCell: BlockBaseCell, HoverableCell {
                 backgroundColor = highlightColor.overlay(on: backgroundColor)
             }
             
-            label.update(text: item.day.dayString(), secondaryText: item.secondaryCalendar ?? "", textColor: item.foregroundColor)
+            dateLayer.update(text: item.day.dayString(), secondaryText: item.secondaryCalendar ?? "", textColor: item.foregroundColor)
             
             // 获取需要显示的tag数据
             let tagData: [(tag: Tag, count: Int)]

@@ -8,6 +8,104 @@
 import UIKit
 import CoreText
 
+class DateLayer: CALayer {
+    private let hotizontalLayer = HorizontalTextLayer()
+    private let verticalLayer = VerticalTextLayer()
+    
+    private var currentLabelInset: CGFloat = 6.0
+    
+    private var mainText: String = ""
+    private var mainTextColor: UIColor = .label
+    
+    override init() {
+        super.init()
+        
+        addSublayer(hotizontalLayer)
+        addSublayer(verticalLayer)
+        
+        verticalLayer.isHidden = true
+        
+        hotizontalLayer.font = UIFont.monospacedSystemFont(ofSize: 15, weight: .regular)
+        hotizontalLayer.textColor = UIColor.label
+        
+        // CALayers need to explicitly set contentsScale for proper retina display
+        contentsScale = UIScreen.main.scale
+        hotizontalLayer.contentsScale = UIScreen.main.scale
+        verticalLayer.contentsScale = UIScreen.main.scale
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override init(layer: Any) {
+        super.init(layer: layer)
+        if let dateLayer = layer as? DateLayer {
+            self.currentLabelInset = dateLayer.currentLabelInset
+            self.mainText = dateLayer.mainText
+            self.mainTextColor = dateLayer.mainTextColor
+        }
+    }
+    
+    func update(text: String, secondaryText: String, textColor: UIColor) {
+        if mainText != text {
+            mainText = text
+            hotizontalLayer.text = text
+        }
+        mainTextColor = textColor
+        hotizontalLayer.textColor = textColor.withAlphaComponent(0.85)
+        
+        let hasSecondaryText = !secondaryText.isEmpty
+        verticalLayer.isHidden = !hasSecondaryText
+        
+        currentLabelInset = hasSecondaryText ? 14.0 : 6.0
+        
+        if hasSecondaryText {
+            verticalLayer.configure(
+                text: secondaryText,
+                font: .systemFont(ofSize: 7.0, weight: .black),
+                textColor: textColor.withAlphaComponent(0.6),
+                lineSpacing: 0.0
+            )
+        }
+        
+        setNeedsLayout()
+    }
+    
+    override func layoutSublayers() {
+        super.layoutSublayers()
+        
+        let labelInsetTrailing = currentLabelInset + (verticalLayer.isHidden ? 0 : 7.0)
+        
+        let labelHeight: CGFloat = 20.0
+        let labelTopInset: CGFloat = 3.0
+        let labelLeadingInset: CGFloat = 6.0
+        
+        let labelWidth = bounds.width - labelLeadingInset - labelInsetTrailing
+        
+        let newFrame = CGRect(
+            x: labelLeadingInset,
+            y: labelTopInset,
+            width: labelWidth,
+            height: labelHeight
+        )
+        if !hotizontalLayer.frame.equalTo(newFrame) {
+            hotizontalLayer.frame = newFrame
+        }
+        
+        let verticalSize = verticalLayer.textSize()
+        
+        if !verticalLayer.isHidden, !verticalLayer.bounds.size.equalTo(verticalSize) {
+            verticalLayer.frame = CGRect(
+                x: bounds.width - verticalSize.width - 7.0,
+                y: bounds.midY - verticalSize.height / 2,
+                width: verticalSize.width,
+                height: verticalSize.height
+            )
+        }
+    }
+}
+
 class DateView: UIView {
     private let hotizontalLayer = HorizontalTextLayer()
     private let verticalLayer = VerticalTextLayer()
