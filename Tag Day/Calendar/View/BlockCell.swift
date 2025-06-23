@@ -108,7 +108,7 @@ class BlockCell: BlockBaseCell, HoverableCell {
         for (index, tagLayer) in cachedTagLayers.enumerated() {
             let tagFrame = CGRect(x: 0, y: Double(index) * (tagHeight + tagSpacing), width: tagContainerView.frame.width, height: 20)
             if !tagLayer.frame.equalTo(tagFrame) {
-                tagLayer.frame = tagFrame                
+                tagLayer.frame = tagFrame
             }
         }
     }
