@@ -344,8 +344,8 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         tags = DataManager.shared.activeTags
         records = DataManager.shared.dayRecords
         if let snapshot = displayHandler.getSnapshot(tags: tags, records: records) {
-            sectionRecordMaxCount = getMaxRecordsPerSection(from: snapshot, shouldDeduplicate: getTagDisplayType() == .aggregation)
-            dataSource.apply(snapshot, animatingDifferences: true) { [weak self] in
+            sectionRecordMaxCount = getMaxRecordsPerSection(from: snapshot, activeTags: tags, shouldDeduplicate: getTagDisplayType() == .aggregation)
+            dataSource.apply(snapshot, animatingDifferences: false) { [weak self] in
                 guard let self = self, !self.didScrollToday else { return }
                 self.didScrollToday = true
             }
@@ -509,7 +509,7 @@ extension CalendarViewController: DayPresenter {
 }
 
 extension CalendarViewController {
-    func getMaxRecordsPerSection(from snapshot: NSDiffableDataSourceSnapshot<Section, Item>, shouldDeduplicate: Bool) -> [Int: Int] {
+    func getMaxRecordsPerSection(from snapshot: NSDiffableDataSourceSnapshot<Section, Item>, activeTags: [Tag], shouldDeduplicate: Bool) -> [Int: Int] {
         var result = [Int: Int]()
         
         for section in snapshot.sectionIdentifiers {
@@ -520,11 +520,13 @@ extension CalendarViewController {
                 if shouldDeduplicate {
                     // 去重逻辑：基于tagID属性去重
                     let uniqueRecords = item.records.reduce(into: [Int64: DayRecord]()) { result, record in
-                        result[record.tagID] = record
+                        if activeTags.first(where: {$0.id == record.tagID}) != nil {
+                            result[record.tagID] = record
+                        }
                     }
                     return uniqueRecords.count
                 } else {
-                    return item.records.count
+                    return item.records.filter({activeTags.map({$0.id}).compactMap({$0}).contains([$0.tagID])} ).count
                 }
             }
             
