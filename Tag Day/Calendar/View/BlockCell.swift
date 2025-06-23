@@ -81,6 +81,16 @@ class BlockCell: BlockBaseCell, HoverableCell {
         
         isAccessibilityElement = true
         accessibilityTraits = .button
+        
+        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { [weak self] (cell: Self, previousTraitCollection: UITraitCollection) in
+            if cell.traitCollection.userInterfaceStyle != previousTraitCollection.userInterfaceStyle {
+                self?.updateColor()
+            }
+        }
+    }
+    
+    private func updateColor() {
+        dateLayer.updateColor()
     }
     
     override func layoutSubviews() {

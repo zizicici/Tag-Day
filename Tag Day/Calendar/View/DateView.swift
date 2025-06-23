@@ -72,6 +72,11 @@ class DateLayer: CALayer {
         setNeedsLayout()
     }
     
+    func updateColor() {
+        horizontalLayer.setNeedsDisplay()
+        verticalLayer.setNeedsDisplay()
+    }
+    
     override func layoutSublayers() {
         super.layoutSublayers()
         
@@ -425,9 +430,7 @@ final class VerticalTextLayer: CALayer {
 
         // 用 fontDescriptor 创建 CTFont 保持字体样式（包括 weight）
         let ctFont = CTFontCreateWithFontDescriptor(font.fontDescriptor, font.pointSize, nil)
-
-        let cgColor = textColor.cgColor
-
+        
         let lineHeight = font.lineHeight
         let desender = font.descender
 
@@ -447,7 +450,7 @@ final class VerticalTextLayer: CALayer {
             } else {
                 let attrs: [NSAttributedString.Key: Any] = [
                     .font: ctFont,
-                    .foregroundColor: cgColor,
+                    .foregroundColor: textColor,
                     .baselineOffset: -desender
                 ]
                 let attrString = NSAttributedString(string: charStr, attributes: attrs)
