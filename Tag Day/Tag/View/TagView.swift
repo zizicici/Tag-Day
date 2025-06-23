@@ -107,7 +107,7 @@ class TagLayer: CALayer {
         }
         
         enum CacheKey: Hashable {
-            case title(String, Bool) // title, count > 1
+            case title(String, Bool, String?) // title, count > 1, color hex string
             case count(Int, String?) // count, color hex string
         }
         
@@ -190,7 +190,7 @@ class TagLayer: CALayer {
         ctx.scaleBy(x: 1.0, y: -1.0)
         
         let count = self.count
-        let titleKey = SharedCache.CacheKey.title(tagTitle, count > 1)
+        let titleKey = SharedCache.CacheKey.title(tagTitle, count > 1, textColor.toHexString())
         
         if let titleRenderInfo = SharedCache.cacheQueue.sync(execute: {
             SharedCache.renderInfos[titleKey]
