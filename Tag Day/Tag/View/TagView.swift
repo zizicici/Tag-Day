@@ -95,10 +95,23 @@ class TagView: UIView {
 
 class TagLayer: CALayer {
     // MARK: - Properties
-    private var tagTitle: String = ""
-    private var count: Int = 1
-    private var tagColor: UIColor = .clear
-    private var textColor: UIColor = .clear
+    struct DisplayInfo: Equatable {
+        var tag: Tag
+        var count: Int
+        var tagColor: UIColor
+        var textColor: UIColor
+    }
+    
+    private(set) var displayInfo: DisplayInfo? {
+        didSet {
+            if oldValue != displayInfo {
+                setNeedsDisplay()
+            } else {
+                print("no changes")
+            }
+        }
+    }
+    private var lastDisplayInfo: DisplayInfo?
     
     private struct SharedCache {
         struct RenderInfo: Hashable {
@@ -148,36 +161,23 @@ class TagLayer: CALayer {
     
     // MARK: - Update Content
     func update(tag: Tag, count: Int = 1) {
-        // 检查是否需要更新
-        let colorChanged: Bool
-        if let newColor = UIColor(string: tag.color) {
-            colorChanged = tagColor != newColor
-            tagColor = newColor
-            textColor = newColor.isLight ? .black.withAlphaComponent(0.8) : .white.withAlphaComponent(0.95)
-        } else {
-            colorChanged = false
-        }
-        
-        let titleChanged = tagTitle != tag.title
-        let countChanged = self.count != count
-        
-        if !titleChanged && !countChanged && !colorChanged {
-            return
-        }
-        
-        // 更新属性
-        tagTitle = tag.title
-        self.count = count
-        
-        setNeedsDisplay()
+        guard let tagColor = UIColor(string: tag.color) else { return }
+        let textColor = tagColor.isLight ? UIColor.black.withAlphaComponent(0.8) : UIColor.white.withAlphaComponent(0.95)
+
+        self.displayInfo = DisplayInfo(tag: tag, count: count, tagColor: tagColor, textColor: textColor)
     }
     
     // MARK: - Drawing
     override func draw(in ctx: CGContext) {
         super.draw(in: ctx)
         
+        guard let displayInfo = displayInfo else { return }
+        guard lastDisplayInfo != displayInfo else {
+            return
+        }
+        
         // 绘制背景
-        ctx.setFillColor(tagColor.cgColor)
+        ctx.setFillColor(displayInfo.tagColor.cgColor)
         ctx.fill(bounds)
         
         // 保存上下文状态
@@ -189,8 +189,8 @@ class TagLayer: CALayer {
         ctx.translateBy(x: 0, y: bounds.height)
         ctx.scaleBy(x: 1.0, y: -1.0)
         
-        let count = self.count
-        let titleKey = SharedCache.CacheKey.title(tagTitle, count > 1, textColor.toHexString())
+        let count = displayInfo.count
+        let titleKey = SharedCache.CacheKey.title(displayInfo.tag.title, count > 1, displayInfo.textColor.toHexString())
         
         if let titleRenderInfo = SharedCache.cacheQueue.sync(execute: {
             SharedCache.renderInfos[titleKey]
@@ -216,7 +216,7 @@ class TagLayer: CALayer {
         }
         
         if count > 1 {
-            let countKey = SharedCache.CacheKey.count(count, textColor.toHexString())
+            let countKey = SharedCache.CacheKey.count(count, displayInfo.textColor.toHexString())
             if let countRenderInfo = SharedCache.cacheQueue.sync(execute: {
                 SharedCache.renderInfos[countKey]
             }) {
@@ -234,6 +234,8 @@ class TagLayer: CALayer {
                 }
             }
         }
+        
+        lastDisplayInfo = displayInfo
     }
     
     private func render(for renderInfo: SharedCache.RenderInfo, context: CGContext) {
@@ -303,12 +305,13 @@ class TagLayer: CALayer {
     
     // MARK: - Text Attributes
     private func getAttributedString() -> NSAttributedString? {
+        guard let displayInfo = displayInfo else { return nil }
         let font = UIFont.systemFont(ofSize: textFontSize, weight: .medium)
-        let text = tagTitle
+        let text = displayInfo.tag.title
         
         let attributes: [NSAttributedString.Key: Any] = [
             .font: font,
-            .foregroundColor: textColor
+            .foregroundColor: displayInfo.textColor
         ]
         
         let string = NSAttributedString(string: text, attributes: attributes)
@@ -317,12 +320,13 @@ class TagLayer: CALayer {
     }
     
     private func getCountAttributedString() -> NSAttributedString? {
+        guard let displayInfo = displayInfo else { return nil }
         let font = UIFont.systemFont(ofSize: countFontSize, weight: .semibold)
-        let countText = "×\(count)"
+        let countText = "×\(displayInfo.count)"
         
         let attributes: [NSAttributedString.Key: Any] = [
             .font: font,
-            .foregroundColor: textColor
+            .foregroundColor: displayInfo.textColor
         ]
         
         let string = NSAttributedString(string: countText, attributes: attributes)
