@@ -274,7 +274,7 @@ final class VerticalTextLayer: CALayer {
     }
     
     private static var sizeCache: [CacheKey: CGSize] = [:]
-    private static let cacheQueue = DispatchQueue(label: "com.VerticalTextLayer.cache", qos: .userInitiated, attributes: .concurrent)
+    private static let cacheQueue = DispatchQueue(label: "com.zizicici.tag.VerticalTextLayer.cache", qos: .userInteractive, attributes: .concurrent)
     
     private static var charCache = NSCache<NSNumber, CTLine>()
     

@@ -55,9 +55,7 @@ class BlockCell: BlockBaseCell, HoverableCell {
         return view
     }()
     
-    private var cachedTagViews: [TagView] = []
-    
-    private var lastLayoutInfo: (count: Int, firstItemTop: CGFloat, spacing: CGFloat)?
+    private var cachedTagLayers: [TagLayer] = []
     
     var highlightColor: UIColor = .gray.withAlphaComponent(0.25)
     
@@ -68,16 +66,11 @@ class BlockCell: BlockBaseCell, HoverableCell {
     }
     
     private func setupViewsIfNeeded() {
-        guard dateLayer.superlayer == nil else { return }
+        guard tagContainerView.superview == nil else { return }
         
         contentView.layer.addSublayer(dateLayer)
         
         contentView.addSubview(tagContainerView)
-        tagContainerView.snp.makeConstraints { make in
-            make.top.equalTo(contentView).offset(32)
-            make.leading.trailing.equalTo(contentView).inset(3)
-            make.bottom.equalTo(contentView).inset(4)
-        }
         
         isAccessibilityElement = true
         accessibilityTraits = .button
@@ -91,6 +84,10 @@ class BlockCell: BlockBaseCell, HoverableCell {
     
     private func updateColor() {
         dateLayer.updateColor()
+        
+        for layer in tagContainerView.layer.sublayers ?? [] {
+            layer.setNeedsDisplay()
+        }
     }
     
     override func layoutSubviews() {
@@ -99,6 +96,20 @@ class BlockCell: BlockBaseCell, HoverableCell {
         let dateFrame = CGRect(x: 0, y: 4, width: bounds.width, height: 26)
         if !dateLayer.frame.equalTo(dateFrame) {
             dateLayer.frame = dateFrame
+        }
+        
+        let tagContainerFrame = CGRect(x: 3.0, y: 32.0, width: bounds.width - 6.0, height: bounds.height - 36.0)
+        if !tagContainerView.frame.equalTo(tagContainerFrame) {
+            tagContainerView.frame = tagContainerFrame
+        }
+        
+        let tagHeight = 20.0
+        let tagSpacing = 3.0
+        for (index, tagLayer) in cachedTagLayers.enumerated() {
+            let tagFrame = CGRect(x: 0, y: Double(index) * (tagHeight + tagSpacing), width: tagContainerView.frame.width, height: 20)
+            if !tagLayer.frame.equalTo(tagFrame) {
+                tagLayer.frame = tagFrame                
+            }
         }
     }
     
@@ -133,45 +144,20 @@ class BlockCell: BlockBaseCell, HoverableCell {
             }
             
             // 复用或创建tagViews
-            while cachedTagViews.count > tagData.count {
-                let view = cachedTagViews.removeLast()
-                view.removeFromSuperview()
+            while cachedTagLayers.count > tagData.count {
+                let view = cachedTagLayers.removeLast()
+                view.removeFromSuperlayer()
             }
             
-            while cachedTagViews.count < tagData.count {
-                let recordView = TagView()
-                recordView.isUserInteractionEnabled = false
-                tagContainerView.addSubview(recordView)
-                cachedTagViews.append(recordView)
+            while cachedTagLayers.count < tagData.count {
+                let tagLayer = TagLayer()
+                tagContainerView.layer.addSublayer(tagLayer)
+                cachedTagLayers.append(tagLayer)
             }
             
-            // 计算当前需要的布局信息
-            let currentFirstItemTop: CGFloat = 0
-            let currentSpacing: CGFloat = 3
-            let currentLayoutInfo = (tagData.count, currentFirstItemTop, currentSpacing)
-            
-            // 检查是否需要更新约束
-            let needsUpdateConstraints = lastLayoutInfo == nil || lastLayoutInfo! != currentLayoutInfo
-            
-            // 更新内容和约束
             for (index, (tag, count)) in tagData.enumerated() {
-                let tagView = cachedTagViews[index]
-                tagView.update(tag: tag, count: count)
-            }
-            
-            if needsUpdateConstraints {
-                for (index, tagView) in cachedTagViews.enumerated() {
-                    tagView.snp.remakeConstraints { make in
-                        make.leading.trailing.equalTo(tagContainerView)
-                        make.height.equalTo(20)
-                        if index == 0 {
-                            make.top.equalTo(tagContainerView)
-                        } else {
-                            make.top.equalTo(cachedTagViews[index-1].snp.bottom).offset(3)
-                        }
-                    }
-                }
-                lastLayoutInfo = currentLayoutInfo
+                let tagLayer = cachedTagLayers[index]
+                tagLayer.update(tag: tag, count: count)
             }
             
             if item.isToday {
