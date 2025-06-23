@@ -149,20 +149,11 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
             await self?.commit()
         })
         
-        NotificationCenter.default.addObserver(self, selector: #selector(currentBookNeedReload), name: .CurrentBookChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(needReload), name: .CurrentBookChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(needReload), name: .ActiveTagsUpdated, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(needReload), name: .DayRecordsUpdated, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(needReload), name: .TodayUpdated, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(needReload), name: .SettingsUpdate, object: nil)
-    }
-    
-    @objc
-    func currentBookNeedReload() {
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) { [weak self] in
-            guard let self = self else { return }
-            self.scrollToToday()
-        }
-        needReload()
     }
     
     @objc
@@ -345,7 +336,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         records = DataManager.shared.dayRecords
         if let snapshot = displayHandler.getSnapshot(tags: tags, records: records) {
             sectionRecordMaxCount = getMaxRecordsPerSection(from: snapshot, activeTags: tags, shouldDeduplicate: getTagDisplayType() == .aggregation)
-            dataSource.apply(snapshot, animatingDifferences: false) { [weak self] in
+            dataSource.apply(snapshot, animatingDifferences: true) { [weak self] in
                 guard let self = self, !self.didScrollToday else { return }
                 self.didScrollToday = true
             }
