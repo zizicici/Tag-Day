@@ -9,7 +9,7 @@ import UIKit
 import CoreText
 
 class DateLayer: CALayer {
-    private let hotizontalLayer = HorizontalTextLayer()
+    private let horizontalLayer = HorizontalTextLayer()
     private let verticalLayer = VerticalTextLayer()
     
     private var currentLabelInset: CGFloat = 6.0
@@ -20,17 +20,17 @@ class DateLayer: CALayer {
     override init() {
         super.init()
         
-        addSublayer(hotizontalLayer)
+        addSublayer(horizontalLayer)
         addSublayer(verticalLayer)
         
         verticalLayer.isHidden = true
         
-        hotizontalLayer.font = UIFont.monospacedSystemFont(ofSize: 15, weight: .regular)
-        hotizontalLayer.textColor = UIColor.label
+        horizontalLayer.font = UIFont.monospacedSystemFont(ofSize: 15, weight: .regular)
+        horizontalLayer.textColor = UIColor.label
         
         // CALayers need to explicitly set contentsScale for proper retina display
         contentsScale = UIScreen.main.scale
-        hotizontalLayer.contentsScale = UIScreen.main.scale
+        horizontalLayer.contentsScale = UIScreen.main.scale
         verticalLayer.contentsScale = UIScreen.main.scale
     }
     
@@ -50,10 +50,10 @@ class DateLayer: CALayer {
     func update(text: String, secondaryText: String, textColor: UIColor) {
         if mainText != text {
             mainText = text
-            hotizontalLayer.text = text
+            horizontalLayer.text = text
         }
         mainTextColor = textColor
-        hotizontalLayer.textColor = textColor.withAlphaComponent(0.85)
+        horizontalLayer.textColor = textColor.withAlphaComponent(0.85)
         
         let hasSecondaryText = !secondaryText.isEmpty
         verticalLayer.isHidden = !hasSecondaryText
@@ -89,8 +89,8 @@ class DateLayer: CALayer {
             width: labelWidth,
             height: labelHeight
         )
-        if !hotizontalLayer.frame.equalTo(newFrame) {
-            hotizontalLayer.frame = newFrame
+        if !horizontalLayer.frame.equalTo(newFrame) {
+            horizontalLayer.frame = newFrame
         }
         
         let verticalSize = verticalLayer.textSize()
@@ -107,7 +107,7 @@ class DateLayer: CALayer {
 }
 
 class DateView: UIView {
-    private let hotizontalLayer = HorizontalTextLayer()
+    private let horizontalLayer = HorizontalTextLayer()
     private let verticalLayer = VerticalTextLayer()
     
     private var currentLabelInset: CGFloat = 6.0
@@ -118,13 +118,13 @@ class DateView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        layer.addSublayer(hotizontalLayer)
+        layer.addSublayer(horizontalLayer)
         layer.addSublayer(verticalLayer)
         
         verticalLayer.isHidden = true
         
-        hotizontalLayer.font = UIFont.monospacedSystemFont(ofSize: 15, weight: .regular)
-        hotizontalLayer.textColor = UIColor.label
+        horizontalLayer.font = UIFont.monospacedSystemFont(ofSize: 15, weight: .regular)
+        horizontalLayer.textColor = UIColor.label
     }
     
     required init?(coder: NSCoder) {
@@ -134,10 +134,10 @@ class DateView: UIView {
     func update(text: String, secondaryText: String, textColor: UIColor) {
         if mainText != text {
             mainText = text
-            hotizontalLayer.text = text
+            horizontalLayer.text = text
         }
         mainTextColor = textColor
-        hotizontalLayer.textColor = textColor.withAlphaComponent(0.85)
+        horizontalLayer.textColor = textColor.withAlphaComponent(0.85)
         
         let hasSecondaryText = !secondaryText.isEmpty
         verticalLayer.isHidden = !hasSecondaryText
@@ -173,8 +173,8 @@ class DateView: UIView {
             width: labelWidth,
             height: labelHeight
         )
-        if !hotizontalLayer.frame.equalTo(newFrame) {
-            hotizontalLayer.frame = newFrame
+        if !horizontalLayer.frame.equalTo(newFrame) {
+            horizontalLayer.frame = newFrame
         }
         
         let verticalSize = verticalLayer.textSize()
