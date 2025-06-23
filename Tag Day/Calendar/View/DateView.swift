@@ -69,7 +69,7 @@ class DateLayer: CALayer {
             )
         }
         
-        setNeedsLayout()
+        setNeedsDisplay()
     }
     
     func updateColor() {
@@ -321,10 +321,6 @@ final class VerticalTextLayer: CALayer {
                 setNeedsDisplay()
             }
         }
-    }
-    
-    override func setNeedsDisplay() {
-        super.setNeedsDisplay()
     }
 
     override init() {
