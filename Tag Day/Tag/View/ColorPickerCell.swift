@@ -160,6 +160,12 @@ class ColorBlockCell: UICollectionViewCell {
         }
         
         colorButton.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
+        
+        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { [weak self] (cell: Self, previousTraitCollection: UITraitCollection) in
+            if cell.traitCollection.userInterfaceStyle != previousTraitCollection.userInterfaceStyle {
+                self?.update()
+            }
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -194,11 +200,6 @@ class ColorBlockCell: UICollectionViewCell {
         } else {
             infoMark.tintColor = UIColor.white
         }
-    }
-    
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        update()
     }
     
     func drawSquareWithDiagonal(size: CGFloat, color1: UIColor, color2: UIColor) -> UIImage? {

@@ -42,7 +42,7 @@ class CalendarBaseViewController: UIViewController {
         collectionView?.addGestureRecognizer(swipeGesture)
         self.hoverGesture = swipeGesture
         
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapGestureAction(_:)))
+//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapGestureAction(_:)))
 //        collectionView?.addGestureRecognizer(tapGesture)
 //        swipeGesture.require(toFail: tapGesture)
     }
