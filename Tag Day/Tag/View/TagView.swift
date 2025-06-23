@@ -98,7 +98,7 @@ class TagLayer: CALayer {
     private var tagTitle: String = ""
     private var count: Int = 1
     private var tagColor: UIColor = .clear
-    private var textColor: UIColor = .black
+    private var textColor: UIColor = .clear
     
     private struct SharedCache {
         static var attributedStrings: [String: NSAttributedString] = [:]
