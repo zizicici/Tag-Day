@@ -101,8 +101,17 @@ class TagLayer: CALayer {
     private var textColor: UIColor = .clear
     
     private struct SharedCache {
-        static var attributedStrings: [String: NSAttributedString] = [:]
-        static var countAttributedStrings: [String: NSAttributedString] = [:]
+        struct RenderInfo: Hashable {
+            var line: CTLine
+            var point: CGPoint
+        }
+        
+        enum CacheKey: Hashable {
+            case title(String, Bool) // title, count > 1
+            case count(Int, String?) // count, color hex string
+        }
+        
+        static var renderInfos: [CacheKey: RenderInfo] = [:]
         static let cacheQueue = DispatchQueue(label: "com.zizicic.tag.TagLayer.cache", qos: .userInteractive, attributes: .concurrent)
     }
     
@@ -180,28 +189,60 @@ class TagLayer: CALayer {
         ctx.translateBy(x: 0, y: bounds.height)
         ctx.scaleBy(x: 1.0, y: -1.0)
         
-        // 绘制主文本
-        if let attributedString = getAttributedString() {
-            let textRect = count > 1 ?
-                CGRect(x: defaultLabelInset, y: 0,
-                      width: bounds.width - countLabelWidth - defaultLabelInset,
-                      height: bounds.height) :
-                CGRect(x: defaultLabelInset, y: 0,
-                      width: bounds.width - 2 * defaultLabelInset,
-                      height: bounds.height)
-            
-            drawScaledText(attributedString: attributedString, in: textRect, context: ctx)
+        let count = self.count
+        let titleKey = SharedCache.CacheKey.title(tagTitle, count > 1)
+        
+        if let titleRenderInfo = SharedCache.cacheQueue.sync(execute: {
+            SharedCache.renderInfos[titleKey]
+        }) {
+            render(for: titleRenderInfo, context: ctx)
+        } else {
+            // 绘制主文本
+            if let attributedString = getAttributedString() {
+                let textRect = count > 1 ?
+                    CGRect(x: defaultLabelInset, y: 0,
+                          width: bounds.width - countLabelWidth - defaultLabelInset,
+                          height: bounds.height) :
+                    CGRect(x: defaultLabelInset, y: 0,
+                          width: bounds.width - 2 * defaultLabelInset,
+                          height: bounds.height)
+                
+                let (resultLine, resultPoint) = drawScaledText(attributedString: attributedString, in: textRect, context: ctx)
+                SharedCache.cacheQueue.async(flags: .barrier) {
+                    let newRenderInfo = SharedCache.RenderInfo(line: resultLine, point: resultPoint)
+                    SharedCache.renderInfos[titleKey] = newRenderInfo
+                }
+            }
         }
         
-        // 绘制计数文本
-        if count > 1, let countString = getCountAttributedString() {
-            let countRect = CGRect(x: bounds.width - countLabelWidth, y: 8,
-                                  width: countLabelWidth, height: 12)
-            drawScaledText(attributedString: countString, in: countRect, context: ctx)
+        if count > 1 {
+            let countKey = SharedCache.CacheKey.count(count, textColor.toHexString())
+            if let countRenderInfo = SharedCache.cacheQueue.sync(execute: {
+                SharedCache.renderInfos[countKey]
+            }) {
+                render(for: countRenderInfo, context: ctx)
+            } else {
+                // 绘制计数文本
+                if let countString = getCountAttributedString() {
+                    let countRect = CGRect(x: bounds.width - countLabelWidth, y: 8,
+                                          width: countLabelWidth, height: 12)
+                    let (resultLine, resultPoint) = drawScaledText(attributedString: countString, in: countRect, context: ctx)
+                    SharedCache.cacheQueue.async(flags: .barrier) {
+                        let newRenderInfo = SharedCache.RenderInfo(line: resultLine, point: resultPoint)
+                        SharedCache.renderInfos[countKey] = newRenderInfo
+                    }
+                }
+            }
         }
     }
     
-    private func drawScaledText(attributedString: NSAttributedString, in rect: CGRect, context: CGContext) {
+    private func render(for renderInfo: SharedCache.RenderInfo, context: CGContext) {
+        let line = renderInfo.line
+        context.textPosition = renderInfo.point
+        CTLineDraw(line, context)
+    }
+    
+    private func drawScaledText(attributedString: NSAttributedString, in rect: CGRect, context: CGContext) -> (CTLine, CGPoint) {
         // 获取原始字体
         let originalFont = attributedString.attribute(.font, at: 0, effectiveRange: nil) as? UIFont ?? UIFont.systemFont(ofSize: 12)
         let originalFontSize = originalFont.pointSize
@@ -218,8 +259,7 @@ class TagLayer: CALayer {
         
         // 如果不需要缩放，直接绘制
         guard scaleFactor < 1.0 else {
-            drawSingleLineCentered(attributedString: attributedString, in: rect, context: context)
-            return
+            return drawSingleLineCentered(attributedString: attributedString, in: rect, context: context)
         }
         
         // 创建缩放后的属性字符串
@@ -228,10 +268,10 @@ class TagLayer: CALayer {
         mutableString.addAttribute(.font, value: scaledFont, range: NSRange(location: 0, length: mutableString.length))
         
         // 绘制缩放后的文本
-        drawSingleLineCentered(attributedString: mutableString, in: rect, context: context)
+        return drawSingleLineCentered(attributedString: mutableString, in: rect, context: context)
     }
     
-    private func drawSingleLineCentered(attributedString: NSAttributedString, in rect: CGRect, context: CGContext) {
+    private func drawSingleLineCentered(attributedString: NSAttributedString, in rect: CGRect, context: CGContext) -> (CTLine, CGPoint) {
         let line = CTLineCreateWithAttributedString(attributedString)
         
         // 计算文本宽度
@@ -251,6 +291,8 @@ class TagLayer: CALayer {
         
         // 绘制文本
         CTLineDraw(line, context)
+        
+        return (line, CGPoint(x: textX, y: textY))
     }
     
     private func cacheKey(for text: String, color: UIColor, font: UIFont) -> String {
@@ -264,24 +306,12 @@ class TagLayer: CALayer {
         let font = UIFont.systemFont(ofSize: textFontSize, weight: .medium)
         let text = tagTitle
         
-        let cacheKey = cacheKey(for: text, color: textColor, font: font)
-        
-        if let cached = SharedCache.cacheQueue.sync(execute: {
-            SharedCache.attributedStrings[cacheKey]
-        }) {
-            return cached
-        }
-        
         let attributes: [NSAttributedString.Key: Any] = [
             .font: font,
             .foregroundColor: textColor
         ]
         
         let string = NSAttributedString(string: text, attributes: attributes)
-        
-        SharedCache.cacheQueue.async(flags: .barrier) {
-            SharedCache.attributedStrings[cacheKey] = string
-        }
         
         return string
     }
@@ -290,24 +320,12 @@ class TagLayer: CALayer {
         let font = UIFont.systemFont(ofSize: countFontSize, weight: .semibold)
         let countText = "×\(count)"
         
-        let cacheKey = cacheKey(for: countText, color: textColor, font: font)
-        
-        if let cached = SharedCache.cacheQueue.sync(execute: {
-            SharedCache.countAttributedStrings[cacheKey]
-        }) {
-            return cached
-        }
-        
         let attributes: [NSAttributedString.Key: Any] = [
             .font: font,
             .foregroundColor: textColor
         ]
         
         let string = NSAttributedString(string: countText, attributes: attributes)
-        
-        SharedCache.cacheQueue.async(flags: .barrier) {
-            SharedCache.countAttributedStrings[cacheKey] = string
-        }
         
         return string
     }
