@@ -10,6 +10,7 @@ import UIKit
 class CalendarPresentationController: UIPresentationController {
     private let detailSize: CGSize
     private var dimmingView: UIView!
+    private var shadowView: UIView!
     
     init(presentedViewController: UIViewController, presenting presentingViewController: UIViewController?, detailSize: CGSize) {
         self.detailSize = detailSize
@@ -19,12 +20,18 @@ class CalendarPresentationController: UIPresentationController {
     
     private func setupDimmingView() {
         dimmingView = UIView()
-        dimmingView.backgroundColor = UIColor(white: 0, alpha: 0.5)
+        dimmingView.backgroundColor = .clear
         dimmingView.alpha = 0
         dimmingView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismiss)))
         dimmingView.isAccessibilityElement = true
-//        dimmingView.accessibilityTraits = .button
-//        dimmingView.accessibilityLabel = "dismiss"
+        shadowView = UIView()
+        shadowView.alpha = 0
+        shadowView.backgroundColor = UIColor.white
+        shadowView.layer.cornerRadius = 12.0
+        shadowView.layer.shadowColor = UIColor.black.cgColor
+        shadowView.layer.shadowOpacity = 0.25
+        shadowView.layer.shadowOffset = .zero
+        shadowView.layer.shadowRadius = 40.0
     }
     
     @objc private func dismiss() {
@@ -47,14 +54,18 @@ class CalendarPresentationController: UIPresentationController {
         
         dimmingView.frame = containerView.bounds
         containerView.insertSubview(dimmingView, at: 0)
+        containerView.insertSubview(shadowView, aboveSubview: dimmingView)
         
         presentedViewController.transitionCoordinator?.animate(alongsideTransition: { _ in
             self.dimmingView.alpha = 1
-        })
+        }) { _ in
+            self.shadowView.alpha = 1
+        }
     }
     
     override func dismissalTransitionWillBegin() {
         presentedViewController.transitionCoordinator?.animate(alongsideTransition: { _ in
+            self.shadowView.alpha = 0
             self.dimmingView.alpha = 0
         })
     }
@@ -62,6 +73,7 @@ class CalendarPresentationController: UIPresentationController {
     override func containerViewWillLayoutSubviews() {
         presentedView?.frame = frameOfPresentedViewInContainerView
         dimmingView.frame = containerView?.bounds ?? .zero
+        shadowView.frame = frameOfPresentedViewInContainerView
     }
 }
 
@@ -149,13 +161,17 @@ class CalendarTransitionAnimator: NSObject, UIViewControllerAnimatedTransitionin
                 y: originFrame.midY
             )
             toView.clipsToBounds = true
-            toView.layer.cornerRadius = 10
+            toView.layer.cornerRadius = 12
             toView.alpha = 0
             
             // 添加一个临时视图作为动画背景
             let backgroundView = UIView(frame: originFrame)
             backgroundView.backgroundColor = cellBackgroundColor
-            backgroundView.layer.cornerRadius = 10
+            backgroundView.layer.cornerRadius = 12.0
+            backgroundView.layer.shadowColor = UIColor.black.cgColor
+            backgroundView.layer.shadowOpacity = 0.25
+            backgroundView.layer.shadowOffset = .zero
+            backgroundView.layer.shadowRadius = 40.0
             containerView.addSubview(backgroundView)
             
             // 添加toView到容器
@@ -167,11 +183,11 @@ class CalendarTransitionAnimator: NSObject, UIViewControllerAnimatedTransitionin
                 toView.transform = .identity
                 toView.frame = finalFrame
                 toView.alpha = 1
-                toView.layer.cornerRadius = 10
+                toView.layer.cornerRadius = 12
                 
                 // 背景视图同步动画
                 backgroundView.frame = finalFrame
-                backgroundView.layer.cornerRadius = 10
+                backgroundView.layer.cornerRadius = 12
             }) { _ in
                 // 移除临时视图
                 backgroundView.removeFromSuperview()
@@ -182,12 +198,12 @@ class CalendarTransitionAnimator: NSObject, UIViewControllerAnimatedTransitionin
             
             let backgroundView = UIView(frame: fromView.frame)
             backgroundView.backgroundColor = cellBackgroundColor
-            backgroundView.layer.cornerRadius = 10
+            backgroundView.layer.cornerRadius = 12
             containerView.insertSubview(backgroundView, belowSubview: fromView)
             
             UIView.animate(withDuration: duration, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: [], animations: {
                 backgroundView.frame = self.originFrame
-                backgroundView.layer.cornerRadius = 10
+                backgroundView.layer.cornerRadius = 12
                 backgroundView.alpha = 0.0
                 fromView.alpha = 0.0
             }) { _ in

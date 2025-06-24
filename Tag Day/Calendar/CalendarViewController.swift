@@ -226,7 +226,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
                 let nav = NavigationController(rootViewController: detailViewController)
                 let cellFrame = targetView.convert(targetView.bounds, to: nil)
                 nav.modalPresentationStyle = .custom
-                calendarTransitionDelegate = CalendarTransitionDelegate(originFrame: cellFrame, cellBackgroundColor: AppColor.paper, detailSize: CGSize(width: min(view.frame.width - 80.0, 300), height: min(view.frame.height * 0.7, 480)))
+                calendarTransitionDelegate = CalendarTransitionDelegate(originFrame: cellFrame, cellBackgroundColor: AppColor.background, detailSize: CGSize(width: min(view.frame.width - 80.0, 300), height: min(view.frame.height * 0.7, 480)))
                 nav.transitioningDelegate = calendarTransitionDelegate
                 present(nav, animated: true)
             }
