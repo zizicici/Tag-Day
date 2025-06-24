@@ -63,22 +63,22 @@ class InfoCell: InfoBaseCell, HoverableCell {
     private func setupViewsIfNeeded() {
         guard tagView.superview == nil else { return }
         
-        let width: CGFloat = DayGrid.itemWidth(in: contentView.window?.windowScene?.screen.bounds.width ?? 375.0 )
-        
         contentView.addSubview(tagView)
-        tagView.snp.makeConstraints { make in
-            make.leading.equalTo(contentView).inset(3.0)
-            make.centerY.equalTo(contentView)
-            make.height.equalTo(20.0)
-            make.top.greaterThanOrEqualTo(contentView).inset(3.0)
-            make.width.equalTo(width - 6.0)
-        }
-        
         contentView.addSubview(label)
-        label.snp.makeConstraints { make in
-            make.top.bottom.equalTo(contentView)
-            make.leading.equalTo(tagView.snp.trailing).offset(4.0)
-            make.trailing.equalTo(contentView).inset(3.0)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        let tagWidth: CGFloat = DayGrid.itemWidth(in: contentView.window?.bounds.width ?? 375.0 )
+        
+        let tagFrame = CGRect(x: 3.0, y: (bounds.height - 20.0) / 2.0, width: tagWidth - 6.0, height: 20.0)
+        if !tagView.frame.equalTo(tagFrame) {
+            tagView.frame = tagFrame
+        }
+        let labelFrame = CGRect(x: tagView.frame.maxX + 4.0, y: 0.0, width: bounds.width - tagView.frame.maxX - 7.0, height: bounds.height)
+        if !label.frame.equalTo(labelFrame) {
+            label.frame = labelFrame
         }
     }
     
