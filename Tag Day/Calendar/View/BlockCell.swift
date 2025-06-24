@@ -102,14 +102,7 @@ class BlockCell: BlockBaseCell, HoverableCell {
             tagContainerView.frame = tagContainerFrame
         }
         
-        let tagHeight = 20.0
-        let tagSpacing = 3.0
-        for (index, tagLayer) in cachedTagLayers.enumerated() {
-            let tagFrame = CGRect(x: 0, y: Double(index) * (tagHeight + tagSpacing), width: tagContainerView.frame.width, height: 20)
-            if !tagLayer.frame.equalTo(tagFrame) {
-                tagLayer.frame = tagFrame
-            }
-        }
+        updateTagFramesIfNeeded()
     }
     
     override func updateConfiguration(using state: UICellConfigurationState) {
@@ -159,6 +152,8 @@ class BlockCell: BlockBaseCell, HoverableCell {
                 tagLayer.update(tag: tag, count: count)
             }
             
+            updateTagFramesIfNeeded()
+            
             if item.isToday {
                 accessibilityLabel = String(localized: "weekCalendar.today") + item.calendarString
             } else {
@@ -176,6 +171,17 @@ class BlockCell: BlockBaseCell, HoverableCell {
     override var isHighlighted: Bool {
         didSet {
             setNeedsUpdateConfiguration()
+        }
+    }
+    
+    func updateTagFramesIfNeeded() {
+        let tagHeight = 20.0
+        let tagSpacing = 3.0
+        for (index, tagLayer) in cachedTagLayers.enumerated() {
+            let tagFrame = CGRect(x: 0, y: Double(index) * (tagHeight + tagSpacing), width: tagContainerView.frame.width, height: 20)
+            if !tagLayer.frame.equalTo(tagFrame) {
+                tagLayer.frame = tagFrame
+            }
         }
     }
 }
