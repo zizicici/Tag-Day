@@ -24,6 +24,8 @@ class TagStatisticsViewController: UIViewController {
         }
     }
     
+    private let calendarBarItem = UIBarButtonItem(image: UIImage(systemName: "calendar"), style: .plain, target: nil, action: nil)
+    
     private var tableView: UITableView!
     private var dataSource: DataSource!
     
@@ -93,6 +95,10 @@ class TagStatisticsViewController: UIViewController {
         
         let closeItem = UIBarButtonItem(title: String(localized: "button.close"), style: .plain, target: self, action: #selector(dismissViewController))
         navigationItem.leftBarButtonItem = closeItem
+        
+        calendarBarItem.tintColor = AppColor.main
+        toolbarItems = [.flexibleSpace(), calendarBarItem]
+        navigationController?.setToolbarHidden(false, animated: false)
         
         navigationItem.title = tag.title
         
@@ -176,11 +182,15 @@ class TagStatisticsViewController: UIViewController {
         snapshot.appendItems([.result(String(localized: "statistics.count"), "\(records.count)")])
         snapshot.appendItems([.result(String(localized: "statistics.days"), "\(orderedCounts.keys.count)")])
         
-        snapshot.appendSections([.durationStats])
-        snapshot.appendItems([.result(String(localized: "statistics.duration.count"), "\(durationRecords.count)")])
-        snapshot.appendItems([.result(String(localized: "statistics.duration.total"), totalTime)])
+        if durationRecords.count > 0 {
+            snapshot.appendSections([.durationStats])
+            snapshot.appendItems([.result(String(localized: "statistics.duration.count"), "\(durationRecords.count)")])
+            snapshot.appendItems([.result(String(localized: "statistics.duration.total"), totalTime)])
+        }
         
         dataSource.apply(snapshot, animatingDifferences: false)
+        
+        calendarBarItem.menu = getDatePickerMenu()
     }
     
     @objc
@@ -194,6 +204,162 @@ class TagStatisticsViewController: UIViewController {
         formatter.maximumUnitCount = 2  // 只显示最大的两个单位
         formatter.allowedUnits = [.hour, .minute]
         return formatter.string(from: interval)?.replacingOccurrences(of: " ", with: "") ?? ""
+    }
+
+    enum DatePickerMenuItem {
+        case today
+        case month
+        case year
+        
+        case lastMonth
+        case target(GregorianMonth)
+        
+        case latest(Int)
+        
+        var title: String {
+            switch self {
+            case .today:
+                return String(localized: "datePicker.item.today")
+            case .month:
+                return String(localized: "datePicker.item.month")
+            case .year:
+                return String(localized: "datePicker.item.year")
+            case .lastMonth:
+                return String(localized: "datePicker.item.lastMonth")
+            case .target(let month):
+                return month.title
+            case .latest(let dayCount):
+                return String(format: String(localized: "datePicker.item.latest%i"), dayCount)
+            }
+        }
+        
+        var subtitle: String? {
+            let today = ZCCalendar.manager.today
+            switch self {
+            case .today:
+                return nil
+            case .month:
+                return nil
+            case .year:
+                return nil
+            case .lastMonth:
+                if let lastMonth = ZCCalendar.manager.previousMonth(month: today.month, year: today.year) {
+                    return GregorianMonth(year: lastMonth.year, month: lastMonth.month).title
+                } else {
+                    return nil
+                }
+            case .target:
+                return nil
+            case .latest:
+                return nil
+            }
+        }
+        
+        var start: GregorianDay {
+            let today = ZCCalendar.manager.today
+            switch self {
+            case .today:
+                return today
+            case .month:
+                return ZCCalendar.manager.firstDay(at: today.month, year: today.year)
+            case .year:
+                return ZCCalendar.manager.firstDay(at: .jan, year: today.year)
+            case .lastMonth:
+                if let lastMonth = ZCCalendar.manager.previousMonth(month: today.month, year: today.year) {
+                    return ZCCalendar.manager.firstDay(at: lastMonth.month, year: lastMonth.year)
+                } else {
+                    return today
+                }
+            case .target(let month):
+                return month.startDay
+            case .latest(let dayCount):
+                return today - dayCount + 1
+            }
+        }
+        
+        var end: GregorianDay {
+            let today = ZCCalendar.manager.today
+            switch self {
+            case .today:
+                return today
+            case .month:
+                return ZCCalendar.manager.lastDay(at: today.month, year: today.year)
+            case .year:
+                return ZCCalendar.manager.lastDay(at: .dec, year: today.year)
+            case .lastMonth:
+                if let lastMonth = ZCCalendar.manager.previousMonth(month: today.month, year: today.year) {
+                    return ZCCalendar.manager.lastDay(at: lastMonth.month, year: lastMonth.year)
+                } else {
+                    return today
+                }
+            case .target(let month):
+                return month.endDay
+            case .latest:
+                return today
+            }
+        }
+    }
+    
+    func getDatePickerMenu() -> UIMenu {
+        var elements: [UIMenuElement] = []
+        
+        let firstItems: [DatePickerMenuItem] = [.today, .month, .year].reversed()
+        let firstPageDivider = UIMenu(title: "", options: .displayInline, children: firstItems.map({ action(for: $0) }))
+        elements.append(firstPageDivider)
+        
+        let targetMonthItems: [DatePickerMenuItem] = previousFiveMonthsExcludingLastMonth().map({ .target(GregorianMonth(year: $0.year, month: $0.month)) }).reversed()
+        let targetMonthPageMenu = UIMenu(title: String(localized: "datePicker.menu.more"), children: targetMonthItems.map({ action(for: $0) }))
+        
+        let secondItems = [DatePickerMenuItem.lastMonth]
+        var secondChildren: [UIMenuElement] = secondItems.map({ action(for: $0) })
+        secondChildren.append(targetMonthPageMenu)
+        
+        let secondPageDivider = UIMenu(title: "", options: .displayInline, children: secondChildren.reversed())
+        elements.append(secondPageDivider)
+        
+        let moreDayCounts: [Int] = [2, 3, 4, 5, 10, 15, 20, 45, 60, 90, 120, 180, 360].reversed()
+        let moreDayCountsPageMenu = UIMenu(title: String(localized: "datePicker.menu.more"), children: moreDayCounts.map({ DatePickerMenuItem.latest($0) }).map({ action(for: $0) }))
+        
+        let thirdItems = [DatePickerMenuItem.latest(7), .latest(30), .latest(365)]
+        
+        var thirdChildren: [UIMenuElement] = thirdItems.map({ action(for: $0) })
+        thirdChildren.append(moreDayCountsPageMenu)
+        
+        let thirdPageDivider = UIMenu(title: "", options: .displayInline, children: thirdChildren.reversed())
+        elements.append(thirdPageDivider)
+        
+        return UIMenu(children: elements.reversed())
+    }
+    
+    func action(for item: DatePickerMenuItem) -> UIAction {
+        return UIAction(title: item.title, subtitle: item.subtitle, state: isMatched(for: item) ? .on : .off) { [weak self] _ in
+            self?.start = item.start
+            self?.end = item.end
+        }
+    }
+    
+    func isMatched(for item: DatePickerMenuItem) -> Bool {
+        return item.start == start && item.end == end
+    }
+    
+    func previousFiveMonthsExcludingLastMonth() -> [(month: Month, year: Int)] {
+        let today = ZCCalendar.manager.today
+        guard let lastMonth = ZCCalendar.manager.previousMonth(month: today.month, year: today.year) else {
+            return []
+        }
+        
+        var result: [(month: Month, year: Int)] = []
+        var currentMonth = lastMonth
+        
+        for _ in 0..<5 {
+            guard let prev = ZCCalendar.manager.previousMonth(month: currentMonth.month, year: currentMonth.year) else {
+                break
+            }
+            result.append(prev)
+            currentMonth = prev
+        }
+        
+        return result
     }
 }
 
