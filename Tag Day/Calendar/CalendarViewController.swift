@@ -104,6 +104,8 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     
     private var editMode: EditMode = .normal
     
+    private var calendarTransitionDelegate: CalendarTransitionDelegate?
+
     // Debounce
     private var reloadDataDebounce: Debounce<Int>!
     
@@ -222,7 +224,11 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
                 let detailViewController = RecordListViewController(day: blockItem.day, book: current)
                 detailViewController.dayPresenter = self
                 let nav = NavigationController(rootViewController: detailViewController)
-                showPopoverView(at: targetView, contentViewController: nav, width: 280.0, height: 400.0)
+                let cellFrame = targetView.convert(targetView.bounds, to: nil)
+                nav.modalPresentationStyle = .custom
+                calendarTransitionDelegate = CalendarTransitionDelegate(originFrame: cellFrame, cellBackgroundColor: AppColor.paper, detailSize: CGSize(width: min(view.frame.width - 80.0, 300), height: min(view.frame.height * 0.7, 480)))
+                nav.transitioningDelegate = calendarTransitionDelegate
+                present(nav, animated: true)
             }
         case .overwrite:
             let detailViewController = FastEditorViewController(day: blockItem.day, book: current, editMode: .overwrite)

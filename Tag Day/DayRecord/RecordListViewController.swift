@@ -80,6 +80,11 @@ class RecordListViewController: UIViewController {
         }
     }
     
+    override func accessibilityPerformEscape() -> Bool {
+        dismiss(animated: true)
+        return true
+    }
+    
     private func updateTitle() {
         self.title = day.formatString()
     }

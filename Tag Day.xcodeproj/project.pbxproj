@@ -49,6 +49,7 @@
 		14C713532DD22FDC007527C5 /* FetchError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C713522DD22FDC007527C5 /* FetchError.swift */; };
 		14C713552DD23064007527C5 /* CheckRecordIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C713542DD23064007527C5 /* CheckRecordIntent.swift */; };
 		14C713572DD2310C007527C5 /* TagEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C713562DD2310C007527C5 /* TagEntity.swift */; };
+		14CA128C2E09AF3400B28639 /* CalendarPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CA128B2E09AF3400B28639 /* CalendarPresentationController.swift */; };
 		14CC8A462DCF04970062F8BA /* FastEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CC8A452DCF04970062F8BA /* FastEditorViewController.swift */; };
 		14D035EA2E01156D00E32E91 /* TagStatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D035E92E01156D00E32E91 /* TagStatisticsViewController.swift */; };
 		14D07CC32DD2ED4900F6843C /* RecordDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D07CC22DD2ED4900F6843C /* RecordDetailViewController.swift */; };
@@ -141,6 +142,7 @@
 		14C713522DD22FDC007527C5 /* FetchError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchError.swift; sourceTree = "<group>"; };
 		14C713542DD23064007527C5 /* CheckRecordIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckRecordIntent.swift; sourceTree = "<group>"; };
 		14C713562DD2310C007527C5 /* TagEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagEntity.swift; sourceTree = "<group>"; };
+		14CA128B2E09AF3400B28639 /* CalendarPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarPresentationController.swift; sourceTree = "<group>"; };
 		14CC8A452DCF04970062F8BA /* FastEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastEditorViewController.swift; sourceTree = "<group>"; };
 		14CD76AD2DBE6BA10035DF1F /* Tag Day.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Tag Day.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		14D035E92E01156D00E32E91 /* TagStatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagStatisticsViewController.swift; sourceTree = "<group>"; };
@@ -322,6 +324,7 @@
 				14D2726F2DC0709300267572 /* CalendarBaseViewController.swift */,
 				14B239B32DBF13F30007152C /* CalendarViewController.swift */,
 				14ED63D02DC702F000384068 /* CalendarYearPickerViewController.swift */,
+				14CA128B2E09AF3400B28639 /* CalendarPresentationController.swift */,
 				14D272782DC0716E00267572 /* Extension */,
 				14D272802DC0718D00267572 /* Handler */,
 				14D272852DC0719400267572 /* Layout */,
@@ -691,6 +694,7 @@
 				14D272B12DC073EB00267572 /* Date+Extension.swift in Sources */,
 				14D2B3CC2E07B9280000CE05 /* DateView.swift in Sources */,
 				14D272B22DC073EB00267572 /* AppDatabase.swift in Sources */,
+				14CA128C2E09AF3400B28639 /* CalendarPresentationController.swift in Sources */,
 				14AD28862DC5C21E0018DAF3 /* DataManager.swift in Sources */,
 				14D07CC92DD332DF00F6843C /* DateCell.swift in Sources */,
 				14C713532DD22FDC007527C5 /* FetchError.swift in Sources */,
