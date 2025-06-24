@@ -18,6 +18,7 @@ struct Book: Identifiable, Hashable {
     var id: Int64?
     
     var title: String
+    var color: String
     var comment: String?
     var bookType: BookType = .active
     var order: Int
@@ -32,6 +33,7 @@ extension Book: Codable, FetchableRecord, MutablePersistableRecord {
     enum Columns: String, ColumnExpression {
         case id
         case title
+        case color
         case comment
         case order
         
@@ -39,7 +41,7 @@ extension Book: Codable, FetchableRecord, MutablePersistableRecord {
     }
     
     enum CodingKeys: String, CodingKey {
-        case id, title, comment, bookType = "book_type", order
+        case id, title, color, comment, bookType = "book_type", order
     }
     
     mutating func didInsert(_ inserted: InsertionSuccess) {

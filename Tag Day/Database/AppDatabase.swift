@@ -32,6 +32,7 @@ final class AppDatabase {
                 table.autoIncrementedPrimaryKey("id")
                 
                 table.column("title", .text).notNull()
+                table.column("color", .text).notNull()
                 table.column("comment", .text)
                 table.column("book_type", .integer).notNull()
                 table.column("order", .integer).notNull()
@@ -44,7 +45,8 @@ final class AppDatabase {
                 
                 table.column("title", .text).notNull()
                 table.column("subtitle", .text)
-                table.column("color").notNull()
+                table.column("color", .text).notNull()
+                table.column("title_color", .text)
                 table.column("order", .integer).notNull()
             }
             try db.create(table: "day_record") { table in
@@ -66,7 +68,7 @@ final class AppDatabase {
             }
             
             if true {
-                var firstBook = Book(title: String(localized: "database.firstBook"), comment: String(localized: "database.firstBook.comment"), order: 0)
+                var firstBook = Book(title: String(localized: "database.firstBook"), color: AppColor.main.generateLightDarkString(), comment: String(localized: "database.firstBook.comment"), order: 0)
                 try? firstBook.save(db)
                 
                 if let bookID = firstBook.id {
@@ -96,7 +98,7 @@ final class AppDatabase {
                         try? day5.save(db)
                     }
                 }
-                var secondBook = Book(title: String(localized: "database.secondBook"), order: 1)
+                var secondBook = Book(title: String(localized: "database.secondBook"), color: UIColor.systemMint.generateLightDarkString(), order: 1)
                 try? secondBook.save(db)
             }
         }

@@ -150,7 +150,7 @@ class MainViewController: NavigationController {
         if let lastestBook = activeBooks.last {
             bookOrder = lastestBook.order + 1
         }
-        let newBook = Book(title: "", order: bookOrder)
+        let newBook = Book(title: "", color: AppColor.main.generateLightDarkString(), order: bookOrder)
         let nav = NavigationController(rootViewController: BookDetailViewController(book: newBook))
         
         present(nav, animated: true)
