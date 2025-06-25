@@ -13,9 +13,7 @@ class DateLayer: CALayer {
     private let verticalLayer = VerticalTextLayer()
     
     private var currentLabelInset: CGFloat = 6.0
-    
-    private var mainText: String = ""
-    private var mainTextColor: UIColor = .label
+    private var layoutText: (horizontalText: String, verticalText: String)? = nil
     
     override init() {
         super.init()
@@ -42,17 +40,16 @@ class DateLayer: CALayer {
         super.init(layer: layer)
         if let dateLayer = layer as? DateLayer {
             self.currentLabelInset = dateLayer.currentLabelInset
-            self.mainText = dateLayer.mainText
-            self.mainTextColor = dateLayer.mainTextColor
         }
     }
     
     func update(text: String, secondaryText: String, textColor: UIColor) {
-        if mainText != text {
-            mainText = text
-            horizontalLayer.text = text
+        guard layoutText?.horizontalText != text || layoutText?.verticalText != secondaryText else {
+            return
         }
-        mainTextColor = textColor
+        
+        layoutText = (text, secondaryText)
+        horizontalLayer.text = text
         horizontalLayer.textColor = textColor.withAlphaComponent(0.85)
         
         let hasSecondaryText = !secondaryText.isEmpty
@@ -69,7 +66,7 @@ class DateLayer: CALayer {
             )
         }
         
-        setNeedsDisplay()
+        setNeedsLayout()
     }
     
     func updateColor() {
