@@ -54,7 +54,6 @@ class TagLayer: CALayer {
             }
         }
     }
-    private var lastDisplayInfo: DisplayInfo?
     
     private struct SharedCache {
         struct RenderInfo: Hashable {
@@ -115,7 +114,6 @@ class TagLayer: CALayer {
         
         displayInfo?.boundWidth = bounds.width
         guard let displayInfo = displayInfo else { return }
-        guard lastDisplayInfo != displayInfo else { return }
         guard let tagColor = UIColor(hex: displayInfo.tagColor) else { return }
         guard let textColor = UIColor(hex: displayInfo.textColor) else { return }
         self.tagColor = tagColor
@@ -179,8 +177,6 @@ class TagLayer: CALayer {
                 }
             }
         }
-        
-        lastDisplayInfo = displayInfo
     }
     
     private func render(for renderInfo: SharedCache.RenderInfo, context: CGContext) {
