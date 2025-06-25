@@ -167,7 +167,7 @@ class MainViewController: NavigationController {
             }
             
             let tagElements: [UIMenuElement] = tags.reversed().map({ tag in
-                return UIAction(title: tag.title, subtitle: tag.subtitle, image: UIImage(systemName: "square.fill")?.withTintColor(UIColor(string: tag.color) ?? .white, renderingMode: .alwaysOriginal)) { _ in
+                return UIAction(title: tag.title, subtitle: tag.subtitle, image: UIImage(systemName: "rectangle.fill")?.withTintColor(tag.dynamicColor, renderingMode: .alwaysOriginal)) { _ in
                     DataManager.shared.toggleActive(only: tag)
                 }
             })
@@ -182,7 +182,7 @@ class MainViewController: NavigationController {
         }
         
         let tagElements: [UIMenuElement] = tags.reversed().map({ tag in
-            return UIAction(title: tag.title, subtitle: tag.subtitle, image: UIImage(systemName: "square.fill")?.withTintColor(UIColor(string: tag.color) ?? .white, renderingMode: .alwaysOriginal), attributes: [.keepsMenuPresented], state: activeTags.contains(tag) ? .on : .off) { _ in
+            return UIAction(title: tag.title, subtitle: tag.subtitle, image: UIImage(systemName: "rectangle.fill")?.withTintColor(tag.dynamicColor, renderingMode: .alwaysOriginal), attributes: [.keepsMenuPresented], state: activeTags.contains(tag) ? .on : .off) { _ in
                 DataManager.shared.toggleActiveState(to: tag)
             }
         })
