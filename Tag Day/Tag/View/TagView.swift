@@ -29,8 +29,8 @@ class TagView: UIView {
     }
     
     func update(tag: Tag, count: Int = 1) {
-        let isDark = traitCollection.userInterfaceStyle == .dark
-        tagLayer.update(title: tag.title, count: count, tagColor: tag.getColor(isDark: isDark), textColor: tag.getTextColor(isDark: isDark), isDark: traitCollection.userInterfaceStyle == .dark)
+        let isDark = overrideUserInterfaceStyle == .dark
+        tagLayer.update(title: tag.title, count: count, tagColor: tag.getColorString(isDark: isDark), textColor: tag.getTitleColorString(isDark: isDark), isDark: traitCollection.userInterfaceStyle == .dark)
     }
 }
 

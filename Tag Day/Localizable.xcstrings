@@ -4710,25 +4710,25 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dark Color"
+            "value" : "Dark Tag Color"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "暗色"
+            "value" : "标签暗色"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "暗色"
+            "value" : "標籤暗色"
           }
         },
         "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "暗色"
+            "value" : "標籤暗色"
           }
         }
       }
@@ -4738,25 +4738,81 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Light Color"
+            "value" : "Light Tag Color"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "亮色"
+            "value" : "标签亮色"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "亮色"
+            "value" : "標籤亮色"
           }
         },
         "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "亮色"
+            "value" : "標籤亮色"
+          }
+        }
+      }
+    },
+    "tags.detail.color.text.dark" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dark Title Color"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文字暗色"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文字暗色"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文字暗色"
+          }
+        }
+      }
+    },
+    "tags.detail.color.text.light" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Light Title Color"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文字亮色"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文字亮色"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文字亮色"
           }
         }
       }

@@ -316,12 +316,13 @@ class FastEditorTagCell: FastEditorBaseCell {
         
         if let tag = state.fastEditorItem {
             let title = tag.title
-            let tagColor = UIColor(string: tag.color)
+            let tagColor = tag.dynamicColor
+            let tagTitleColor = tag.dynamicTitleColor
             tagButton.configurationUpdateHandler = { button in
                 var config = button.configuration
                 
                 config?.title = title
-                config?.baseForegroundColor = tagColor?.isLight == true ? .black.withAlphaComponent(0.8) : .white.withAlphaComponent(0.95)
+                config?.baseForegroundColor = tagTitleColor
                 button.configuration = config
             }
             tagButton.tintColor = tagColor

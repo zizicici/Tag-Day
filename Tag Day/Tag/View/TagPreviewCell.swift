@@ -89,10 +89,10 @@ class TagPreviewView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func update(title: String, color: UIColor) {
+    func update(title: String, color: UIColor, titleColor: UIColor) {
         label.text = "14"
         tagView.overrideUserInterfaceStyle = overrideUserInterfaceStyle
-        tagView.update(tag: Tag(bookID: -1, title: title, color: color.generateLightDarkString(), order: -1))
+        tagView.update(tag: Tag(bookID: -1, title: title, color: color.generateLightDarkString(), titleColor: titleColor.generateLightDarkString(), order: -1))
     }
 }
 
@@ -168,9 +168,9 @@ class TagPreviewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func update(title: String, color: UIColor) {
-        lightTagView.update(title: title, color: color)
-        darkTagView.update(title: title, color: color)
+    func update(title: String, color: UIColor, titleColor: UIColor) {
+        lightTagView.update(title: title, color: color, titleColor: titleColor)
+        darkTagView.update(title: title, color: color, titleColor: titleColor)
     }
 }
 

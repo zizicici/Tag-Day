@@ -9,8 +9,6 @@ import UIKit
 import SnapKit
 
 class TagDetailViewController: UIViewController {
-    static let defaultColor = UIColor.systemGreen
-    
     private var tag: Tag!
     
     private var tableView: UITableView!
@@ -45,60 +43,76 @@ class TagDetailViewController: UIViewController {
     
     private var tagColor: UIColor {
         get {
-            return UIColor(string: tag.color) ?? Self.defaultColor
+            tag.dynamicColor
         }
         set {
             tag.color = newValue.generateLightDarkString()
         }
     }
     
-    private var lightColor: UIColor {
+    private var titleColor: UIColor {
         get {
-            if let color = UIColor(string: tag.color)?.resolvedColor(with: .init(userInterfaceStyle: .light)) {
-                return color
-            } else {
-                var first: UIColor = Self.defaultColor
-                if !defaultColors().contains(first) {
-                    first = defaultColors().first ?? .white
-                }
-                return first
-            }
+            tag.dynamicTitleColor
         }
         set {
-            updateTagColor(lightColor: newValue, darkColor: darkColor)
+            tag.titleColor = newValue.generateLightDarkString()
         }
     }
     
-    private var darkColor: UIColor {
+    private var tagLightColor: UIColor {
         get {
-            if let color = UIColor(string: tag.color)?.resolvedColor(with: .init(userInterfaceStyle: .dark)) {
-                return color
-            } else {
-                var first: UIColor = Self.defaultColor
-                if !defaultColors().contains(first) {
-                    first = defaultColors().first ?? .white
-                }
-                return first
-            }
+            return tagColor.resolvedColor(with: .init(userInterfaceStyle: .light))
         }
         set {
-            updateTagColor(lightColor: lightColor, darkColor: newValue)
+            updateTagColor(lightColor: newValue, darkColor: tagDarkColor)
         }
     }
     
-    private var customColors: [UIColor] = []
+    private var tagDarkColor: UIColor {
+        get {
+            return tagColor.resolvedColor(with: .init(userInterfaceStyle: .dark))
+        }
+        set {
+            updateTagColor(lightColor: tagLightColor, darkColor: newValue)
+        }
+    }
+    
+    private var titleLightColor: UIColor {
+        get {
+            return titleColor.resolvedColor(with: .init(userInterfaceStyle: .light))
+        }
+        set {
+            updateTitleColor(lightColor: newValue, darkColor: titleDarkColor)
+        }
+    }
+    
+    private var titleDarkColor: UIColor {
+        get {
+            return titleColor.resolvedColor(with: .init(userInterfaceStyle: .dark))
+        }
+        set {
+            updateTitleColor(lightColor: titleLightColor, darkColor: newValue)
+        }
+    }
+    
+    private var customTagColors: [UIColor] = []
+    private var customTitleColors: [UIColor] = []
     private var isEdited: Bool = false
     private weak var titleCell: TextInputCell?
     private weak var previewCell: TagPreviewCell?
-    private weak var lightColorCell: ColorPickerCell?
-    private weak var darkColorCell: ColorPickerCell?
+    private weak var tagLightColorCell: ColorPickerCell?
+    private weak var tagDarkColorCell: ColorPickerCell?
+    private weak var titleLightColorCell: ColorPickerCell?
+    private weak var titleDarkColorCell: ColorPickerCell?
     
     enum Section: Int, Hashable {
         case preview
         case title
         case subtitle
-        case lightColor
-        case darkColor
+        case tagLightColor
+        case tagDarkColor
+        case titleLightColor
+        case titleDarkColor
         case delete
         
         var header: String? {
@@ -109,10 +123,14 @@ class TagDetailViewController: UIViewController {
                 return String(localized: "tags.detail.title")
             case .subtitle:
                 return String(localized: "tags.detail.subtitle")
-            case .lightColor:
+            case .tagLightColor:
                 return String(localized: "tags.detail.color.light")
-            case .darkColor:
+            case .tagDarkColor:
                 return String(localized: "tags.detail.color.dark")
+            case .titleLightColor:
+                return String(localized: "tags.detail.color.text.light")
+            case .titleDarkColor:
+                return String(localized: "tags.detail.color.text.dark")
             case .delete:
                 return nil
             }
@@ -126,9 +144,13 @@ class TagDetailViewController: UIViewController {
                 return nil
             case .subtitle:
                 return nil
-            case .lightColor:
+            case .tagLightColor:
                 return nil
-            case .darkColor:
+            case .tagDarkColor:
+                return nil
+            case .titleLightColor:
+                return nil
+            case .titleDarkColor:
                 return nil
             case .delete:
                 return nil
@@ -137,11 +159,13 @@ class TagDetailViewController: UIViewController {
     }
     
     enum Item: Hashable {
-        case preview(String, UIColor)
+        case preview(String, UIColor, UIColor)
         case title(String)
         case subtitle(String?)
-        case lightColor(UIColor)
-        case darkColor(UIColor)
+        case tagLightColor(UIColor)
+        case tagDarkColor(UIColor)
+        case titleLightColor(UIColor)
+        case titleDarkColor(UIColor)
         case delete
     }
     
@@ -156,9 +180,6 @@ class TagDetailViewController: UIViewController {
     convenience init(tag: Tag) {
         self.init()
         self.tag = tag
-        if UIColor(string: tag.color) == nil {
-            self.tag.color = Self.defaultColor.generateLightDarkString()
-        }
     }
     
     class DataSource: UITableViewDiffableDataSource<Section, Item> {
@@ -196,6 +217,13 @@ class TagDetailViewController: UIViewController {
         let cancelItem = UIBarButtonItem(title: String(localized: "button.cancel"), style: .plain, target: self, action: #selector(dismissViewController))
         navigationItem.leftBarButtonItem = cancelItem
         
+        if !defaultColors().map({ $0.generateLightDarkString() }).contains(tag.dynamicColor.generateLightDarkString()) {
+            customTagColors = [tag.dynamicColor]
+        }
+        if !defaultColors().map({ $0.generateLightDarkString() }).contains(tag.dynamicTitleColor.generateLightDarkString()) {
+            customTitleColors = [tag.dynamicTitleColor]
+        }
+        
         configureHierarchy()
         configureDataSource()
         reloadData()
@@ -223,11 +251,11 @@ class TagDetailViewController: UIViewController {
             guard let self = self else { return nil }
             guard let identifier = dataSource.itemIdentifier(for: indexPath) else { return nil }
             switch identifier {
-            case .preview(let title, let color):
+            case .preview(let title, let color, let titleColor):
                 let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(TagPreviewCell.self), for: indexPath)
                 if let cell = cell as? TagPreviewCell {
                     self.previewCell = cell
-                    cell.update(title: title, color: color)
+                    cell.update(title: title, color: color, titleColor: titleColor)
                 }
                 return cell
             case .title(let title):
@@ -251,31 +279,59 @@ class TagDetailViewController: UIViewController {
                     cell.tintColor = AppColor.main
                 }
                 return cell
-            case .lightColor(let color):
+            case .tagLightColor(let color):
                 let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(ColorPickerCell.self), for: indexPath)
                 if let cell = cell as? ColorPickerCell {
-                    self.lightColorCell = cell
-                    let colors: [UIColor] = self.getColors()
+                    self.tagLightColorCell = cell
+                    let colors: [UIColor] = self.getTagColors()
                     cell.update(colors: colors, selectedColor: color, isLight: true)
                     cell.selectedColorDidChange = { [weak self] newColor in
-                        self?.updateColor(newColor, isLight: true)
+                        self?.updateTagColor(newColor, isLight: true)
                     }
                     cell.showPicker = { [weak self] in
-                        self?.showColorPicker(isLight: true)
+                        self?.showTagColorPicker(isLight: true)
                     }
                 }
                 return cell
-            case .darkColor(let color):
+            case .tagDarkColor(let color):
                 let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(ColorPickerCell.self), for: indexPath)
                 if let cell = cell as? ColorPickerCell {
-                    self.darkColorCell = cell
-                    let colors: [UIColor] = self.getColors()
+                    self.tagDarkColorCell = cell
+                    let colors: [UIColor] = self.getTagColors()
                     cell.update(colors: colors, selectedColor: color, isLight: false)
                     cell.selectedColorDidChange = { [weak self] newColor in
-                        self?.updateColor(newColor, isLight: false)
+                        self?.updateTagColor(newColor, isLight: false)
                     }
                     cell.showPicker = { [weak self] in
-                        self?.showColorPicker(isLight: false)
+                        self?.showTagColorPicker(isLight: false)
+                    }
+                }
+                return cell
+            case .titleLightColor(let color):
+                let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(ColorPickerCell.self), for: indexPath)
+                if let cell = cell as? ColorPickerCell {
+                    self.titleLightColorCell = cell
+                    let colors: [UIColor] = self.getTitleColors()
+                    cell.update(colors: colors, selectedColor: color, isLight: true)
+                    cell.selectedColorDidChange = { [weak self] newColor in
+                        self?.updateTitleColor(newColor, isLight: true)
+                    }
+                    cell.showPicker = { [weak self] in
+                        self?.showTitleColorPicker(isLight: true)
+                    }
+                }
+                return cell
+            case .titleDarkColor(let color):
+                let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(ColorPickerCell.self), for: indexPath)
+                if let cell = cell as? ColorPickerCell {
+                    self.titleDarkColorCell = cell
+                    let colors: [UIColor] = self.getTitleColors()
+                    cell.update(colors: colors, selectedColor: color, isLight: false)
+                    cell.selectedColorDidChange = { [weak self] newColor in
+                        self?.updateTitleColor(newColor, isLight: false)
+                    }
+                    cell.showPicker = { [weak self] in
+                        self?.showTitleColorPicker(isLight: false)
                     }
                 }
                 return cell
@@ -297,15 +353,19 @@ class TagDetailViewController: UIViewController {
         
         var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
         snapshot.appendSections([.preview])
-        snapshot.appendItems([.preview(tagTitle, tagColor)], toSection: .preview)
+        snapshot.appendItems([.preview(tagTitle, tagColor, titleColor)], toSection: .preview)
         snapshot.appendSections([.title])
         snapshot.appendItems([.title(tagTitle)], toSection: .title)
         snapshot.appendSections([.subtitle])
         snapshot.appendItems([.subtitle(subtitle)], toSection: .subtitle)
-        snapshot.appendSections([.lightColor])
-        snapshot.appendItems([.lightColor(lightColor)])
-        snapshot.appendSections([.darkColor])
-        snapshot.appendItems([.darkColor(darkColor)])
+        snapshot.appendSections([.tagLightColor])
+        snapshot.appendItems([.tagLightColor(tagLightColor)])
+        snapshot.appendSections([.tagDarkColor])
+        snapshot.appendItems([.tagDarkColor(tagDarkColor)])
+        snapshot.appendSections([.titleLightColor])
+        snapshot.appendItems([.titleLightColor(titleLightColor)])
+        snapshot.appendSections([.titleDarkColor])
+        snapshot.appendItems([.titleDarkColor(titleDarkColor)])
         if isEditMode() {
             snapshot.appendSections([.delete])
             snapshot.appendItems([.delete], toSection: .delete)
@@ -328,8 +388,23 @@ class TagDetailViewController: UIViewController {
         isEdited = true
     }
     
+    func updateTitleColor(lightColor: UIColor, darkColor: UIColor) {
+        titleColor = UIColor(dynamicProvider: { collection in
+            switch collection.userInterfaceStyle {
+            case .light, .unspecified:
+                return lightColor
+            case .dark:
+                return darkColor
+            @unknown default:
+                fatalError()
+            }
+        })
+        updatePreview()
+        isEdited = true
+    }
+    
     func updatePreview() {
-        previewCell?.update(title: tagTitle, color: tagColor)
+        previewCell?.update(title: tagTitle, color: tagColor, titleColor: titleColor)
     }
     
     public func allowDismiss() -> Bool {
@@ -416,7 +491,9 @@ extension TagDetailViewController: UITableViewDelegate {
                 break
             case .subtitle:
                 break
-            case .lightColor, .darkColor:
+            case .tagLightColor, .tagDarkColor:
+                break
+            case .titleLightColor, .titleDarkColor:
                 break
             case .delete:
                 showDeleteAlert()
@@ -426,29 +503,57 @@ extension TagDetailViewController: UITableViewDelegate {
 }
 
 extension TagDetailViewController {
-    func updateColor(_ newColor: UIColor, isLight: Bool) {
+    func updateTagColor(_ newColor: UIColor, isLight: Bool) {
         if !defaultColors().map({ $0.generateLightDarkString(isLight ? .light : .dark) }).contains(newColor.generateLightDarkString(isLight ? .light : .dark)) {
-            if !customColors.contains(newColor) {
-                customColors.append(newColor)
+            if !customTagColors.map({ $0.generateLightDarkString(isLight ? .light : .dark) }).contains(newColor.generateLightDarkString(isLight ? .light : .dark)) {
+                customTagColors.append(newColor)
             }
         }
         
-        let colors = getColors()
+        let colors = getTagColors()
         if isLight {
-            lightColorCell?.update(colors: colors, selectedColor: newColor, isLight: true)
-            darkColorCell?.update(colors: colors, selectedColor: darkColor, isLight: false)
-            updateTagColor(lightColor: newColor, darkColor: darkColor)
+            tagLightColorCell?.update(colors: colors, selectedColor: newColor, isLight: true)
+            tagDarkColorCell?.update(colors: colors, selectedColor: tagDarkColor, isLight: false)
+            updateTagColor(lightColor: newColor, darkColor: tagDarkColor)
         } else {
-            lightColorCell?.update(colors: colors, selectedColor: lightColor, isLight: true)
-            darkColorCell?.update(colors: colors, selectedColor: newColor, isLight: false)
-            updateTagColor(lightColor: lightColor, darkColor: newColor)
+            tagLightColorCell?.update(colors: colors, selectedColor: tagLightColor, isLight: true)
+            tagDarkColorCell?.update(colors: colors, selectedColor: newColor, isLight: false)
+            updateTagColor(lightColor: tagLightColor, darkColor: newColor)
         }
     }
     
-    func getColors() -> [UIColor] {
+    func updateTitleColor(_ newColor: UIColor, isLight: Bool) {
+        if !defaultColors().map({ $0.generateLightDarkString(isLight ? .light : .dark) }).contains(newColor.generateLightDarkString(isLight ? .light : .dark)) {
+            if !customTitleColors.map({ $0.generateLightDarkString(isLight ? .light : .dark) }).contains(newColor.generateLightDarkString(isLight ? .light : .dark)) {
+                customTitleColors.append(newColor)
+            }
+        }
+        
+        let colors = getTitleColors()
+        if isLight {
+            titleLightColorCell?.update(colors: colors, selectedColor: newColor, isLight: true)
+            titleDarkColorCell?.update(colors: colors, selectedColor: titleDarkColor, isLight: false)
+            updateTitleColor(lightColor: newColor, darkColor: titleDarkColor)
+        } else {
+            titleLightColorCell?.update(colors: colors, selectedColor: titleLightColor, isLight: true)
+            titleDarkColorCell?.update(colors: colors, selectedColor: newColor, isLight: false)
+            updateTitleColor(lightColor: titleLightColor, darkColor: newColor)
+        }
+    }
+    
+    func getTagColors() -> [UIColor] {
         var colors: [UIColor] = []
         
-        colors.append(contentsOf: customColors.reversed())
+        colors.append(contentsOf: customTagColors.reversed())
+        colors.append(contentsOf: defaultColors())
+        
+        return colors
+    }
+    
+    func getTitleColors() -> [UIColor] {
+        var colors: [UIColor] = []
+        
+        colors.append(contentsOf: customTitleColors.reversed())
         colors.append(contentsOf: defaultColors())
         
         return colors
@@ -458,11 +563,20 @@ extension TagDetailViewController {
         return [.systemPink, .systemRed, .systemOrange, .systemYellow, .systemGreen, .systemMint, .systemTeal, .systemCyan, .systemBlue, .systemIndigo, .systemPurple, .systemBrown, .white, UIColor(white: 0.9, alpha: 1.0), UIColor(white: 0.8, alpha: 1.0), UIColor(white: 0.7, alpha: 1.0), UIColor(white: 0.6, alpha: 1.0), .gray, UIColor(white: 0.4, alpha: 1.0), UIColor(white: 0.3, alpha: 1.0), UIColor(white: 0.2, alpha: 1.0), UIColor(white: 0.1, alpha: 1.0), .black]
     }
     
-    func showColorPicker(isLight: Bool) {
+    func showTagColorPicker(isLight: Bool) {
         let colorPicker = StyleColorPickerViewController()
-        colorPicker.style = isLight ? .light : .dark
+        colorPicker.style = isLight ? .tag(.light) : .tag(.dark)
         
-        colorPicker.selectedColor = isLight ? self.lightColor : self.darkColor
+        colorPicker.selectedColor = isLight ? self.tagLightColor : self.tagDarkColor
+        colorPicker.delegate = self
+        present(colorPicker, animated: true)
+    }
+    
+    func showTitleColorPicker(isLight: Bool) {
+        let colorPicker = StyleColorPickerViewController()
+        colorPicker.style = isLight ? .title(.light) : .title(.dark)
+        
+        colorPicker.selectedColor = isLight ? self.titleLightColor : self.titleDarkColor
         colorPicker.delegate = self
         present(colorPicker, animated: true)
     }
@@ -473,10 +587,20 @@ extension TagDetailViewController: UIColorPickerViewControllerDelegate {
         print("Add color \(viewController.selectedColor)")
         if let viewController = viewController as? StyleColorPickerViewController {
             switch viewController.style {
-            case .light:
-                updateColor(viewController.selectedColor, isLight: true)
-            case .dark:
-                updateColor(viewController.selectedColor, isLight: false)
+            case .tag(let colorType):
+                switch colorType {
+                case .light:
+                    updateTagColor(viewController.selectedColor, isLight: true)
+                case .dark:
+                    updateTagColor(viewController.selectedColor, isLight: false)
+                }
+            case .title(let colorType):
+                switch colorType {
+                case .light:
+                    updateTitleColor(viewController.selectedColor, isLight: true)
+                case .dark:
+                    updateTitleColor(viewController.selectedColor, isLight: true)
+                }
             }
         }
         reloadData()
@@ -495,8 +619,13 @@ extension String {
 
 class StyleColorPickerViewController: UIColorPickerViewController {
     enum ColorPickerStyle {
-        case light
-        case dark
+        enum ColorType {
+            case light
+            case dark
+        }
+        
+        case tag(ColorType)
+        case title(ColorType)
     }
-    var style: ColorPickerStyle = .light
+    var style: ColorPickerStyle = .tag(.light)
 }

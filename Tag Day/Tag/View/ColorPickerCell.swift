@@ -60,7 +60,8 @@ class ColorPickerCell: UITableViewCell {
         snapshot.appendSections([0])
         snapshot.appendItems([ColorBlockCell.Item(color: .white, type: .pickerItem)])
         snapshot.appendItems(colors.enumerated().map({ (index, color) in
-            return ColorBlockCell.Item(color: color, type: color.generateLightDarkString(isLight ? .light : .dark) == selectedColor.generateLightDarkString(isLight ? .light : .dark) ? .colorSelected : .colorUnselected)
+            let displayColor = color.resolvedColor(with: .init(userInterfaceStyle: isLight ? .light : .dark))
+            return ColorBlockCell.Item(color: displayColor, type: color.generateLightDarkString(isLight ? .light : .dark) == selectedColor.generateLightDarkString(isLight ? .light : .dark) ? .colorSelected : .colorUnselected)
         }))
         dataSource.apply(snapshot, animatingDifferences: true)
     }
@@ -214,15 +215,17 @@ class ColorBlockCell: UICollectionViewCell {
         context.setFillColor(color1.cgColor)
         context.fillPath()
         
-        // 绘制三角形并填充另一个颜色
-        let trianglePath = UIBezierPath()
-        trianglePath.move(to: CGPoint(x: size, y: 0))
-        trianglePath.addLine(to: CGPoint(x: size, y: size))
-        trianglePath.addLine(to: CGPoint(x: 0, y: size))
-        trianglePath.close()
-        context.addPath(trianglePath.cgPath)
-        context.setFillColor(color2.cgColor)
-        context.fillPath()
+        if color1 != color2 {
+            // 绘制三角形并填充另一个颜色
+            let trianglePath = UIBezierPath()
+            trianglePath.move(to: CGPoint(x: size, y: 0))
+            trianglePath.addLine(to: CGPoint(x: size, y: size))
+            trianglePath.addLine(to: CGPoint(x: 0, y: size))
+            trianglePath.close()
+            context.addPath(trianglePath.cgPath)
+            context.setFillColor(color2.cgColor)
+            context.fillPath()
+        }
         
         // 获取图像并结束上下文
         let image = UIGraphicsGetImageFromCurrentImageContext()

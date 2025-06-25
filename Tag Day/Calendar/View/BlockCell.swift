@@ -150,7 +150,7 @@ class BlockCell: BlockBaseCell, HoverableCell {
             for (index, (tag, count)) in tagData.enumerated() {
                 let tagLayer = cachedTagLayers[index]
                 let isDark = traitCollection.userInterfaceStyle == .dark
-                tagLayer.update(title: tag.title, count: count, tagColor: tag.getColor(isDark: isDark), textColor: tag.getTextColor(isDark: isDark), isDark: isDark)
+                tagLayer.update(title: tag.title, count: count, tagColor: tag.getColorString(isDark: isDark), textColor: tag.getTitleColorString(isDark: isDark), isDark: isDark)
             }
             
             updateTagFramesIfNeeded()

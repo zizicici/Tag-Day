@@ -171,7 +171,8 @@ class RecordListCell: RecordListBaseCell {
         
         if let detailItem = state.detailItem, let tag = detailItem.tags.first(where: { $0.id == detailItem.record.tagID }) {
             let title = tag.title
-            let tagColor = UIColor(string: tag.color)
+            let tagColor = tag.dynamicColor
+            let tagTitleColor = tag.dynamicTitleColor
             timeButton.configurationUpdateHandler = { button in
                 var config = button.configuration
                 if let timeText = detailItem.record.getTime() {
@@ -188,7 +189,7 @@ class RecordListCell: RecordListBaseCell {
             tagButton.configurationUpdateHandler = { button in
                 var config = button.configuration
                 config?.title = title
-                config?.baseForegroundColor = tagColor?.isLight == true ? .black.withAlphaComponent(0.8) : .white.withAlphaComponent(0.95)
+                config?.baseForegroundColor = tagTitleColor
                 
                 button.configuration = config
             }

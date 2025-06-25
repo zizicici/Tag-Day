@@ -120,26 +120,8 @@ extension UIColor {
         var red: CGFloat = 0, green: CGFloat = 0, blue: CGFloat = 0
         getRed(&red, green: &green, blue: &blue, alpha: nil)
         let threshold: CGFloat = 75.0 // 自定义阈值(0-1)，数值越小，认为颜色越暗
-        let gray = YtoLstar(Y: rgbToY(r: red, g: green, b: blue)) // 计算灰度值（在RGB空间内）
+        let gray = ColorCalculator.YtoLstar(Y: ColorCalculator.rgbToY(r: red, g: green, b: blue))
         return gray > threshold
-    }
-    
-    func sRGBtoLin(_ colorChannel: CGFloat) -> CGFloat {
-        if colorChannel <= 0.04045 {
-            return colorChannel / 12.92
-        }
-        return pow((colorChannel + 0.055) / 1.055, 2.4)
-    }
-
-    func rgbToY(r: CGFloat, g: CGFloat, b: CGFloat) -> CGFloat {
-        return 0.2126 * sRGBtoLin(r) + 0.7152 * sRGBtoLin(g) + 0.0722 * sRGBtoLin(b)
-    }
-
-    func YtoLstar(Y: CGFloat) -> CGFloat {
-        if Y <= (216 / 24389) {
-            return Y * (24389 / 27)
-        }
-        return pow(Y, (1 / 3)) * 116 - 16
     }
     
     func isSimilar(to color: UIColor, threshold: CGFloat = 0.2) -> Bool {
@@ -184,5 +166,19 @@ extension UIColor {
         let finalBlue = computeComponent(fgB, fgA, bgB, bgA)
         
         return UIColor(red: finalRed, green: finalGreen, blue: finalBlue, alpha: finalAlpha)
+    }
+}
+
+struct ColorCalculator {
+    static func sRGBtoLin(_ colorChannel: CGFloat) -> CGFloat {
+        colorChannel <= 0.04045 ? colorChannel / 12.92 : pow((colorChannel + 0.055) / 1.055, 2.4)
+    }
+
+    static func rgbToY(r: CGFloat, g: CGFloat, b: CGFloat) -> CGFloat {
+        0.2126 * sRGBtoLin(r) + 0.7152 * sRGBtoLin(g) + 0.0722 * sRGBtoLin(b)
+    }
+
+    static func YtoLstar(Y: CGFloat) -> CGFloat {
+        Y <= (216 / 24389) ? Y * (24389 / 27) : pow(Y, (1 / 3)) * 116 - 16
     }
 }
