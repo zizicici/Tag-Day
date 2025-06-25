@@ -85,7 +85,7 @@ extension Tag {
             if gray > 75.0 {
                 result = "000000CC"
             } else {
-                result = "FFFFFFF2"
+                result = "FFFFFFF1"
             }
         }
         
@@ -104,9 +104,9 @@ extension Tag {
         } else {
             return UIColor { traitCollection in
                 if dynamicColor.resolvedColor(with: traitCollection).isLight {
-                    return .black.withAlphaComponent(0.8)
+                    return UIColor(hex: "000000CC") ?? .black
                 } else {
-                    return .white.withAlphaComponent(0.95)
+                    return UIColor(hex: "FFFFFFF1") ?? .white
                 }
             }
         }

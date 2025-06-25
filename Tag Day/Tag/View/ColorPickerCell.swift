@@ -33,9 +33,10 @@ class ColorPickerCell: UITableViewCell {
         collectionView.backgroundColor = .clear
         contentView.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(contentView)
+            make.leading.equalTo(contentView)
+            make.trailing.equalTo(contentView)
             make.top.bottom.equalTo(contentView).inset(5)
-            make.height.greaterThanOrEqualTo(80.0)
+            make.height.greaterThanOrEqualTo(40.0)
         }
     }
     
@@ -86,9 +87,9 @@ class ColorPickerCell: UITableViewCell {
 extension ColorPickerCell {
     func createLayout() -> UICollectionViewLayout {
         let sectionProvider = {(sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
-            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(0.5))
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
-            let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(40.0), heightDimension: .absolute(80.0))
+            let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(40.0), heightDimension: .absolute(40.0))
             let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
             
             let section = NSCollectionLayoutSection(group: group)

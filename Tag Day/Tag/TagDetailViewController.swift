@@ -50,6 +50,15 @@ class TagDetailViewController: UIViewController {
         }
     }
     
+    private var titleColorToggle: Bool = false {
+        didSet {
+            if !titleColorToggle {
+                tag.titleColor = nil
+            }
+            reloadData()
+        }
+    }
+    
     private var titleColor: UIColor {
         get {
             tag.dynamicTitleColor
@@ -105,14 +114,12 @@ class TagDetailViewController: UIViewController {
     private weak var titleLightColorCell: ColorPickerCell?
     private weak var titleDarkColorCell: ColorPickerCell?
     
-    enum Section: Int, Hashable {
+    enum Section: Hashable {
         case preview
         case title
         case subtitle
-        case tagLightColor
-        case tagDarkColor
-        case titleLightColor
-        case titleDarkColor
+        case tagColor
+        case titleColor
         case delete
         
         var header: String? {
@@ -123,14 +130,10 @@ class TagDetailViewController: UIViewController {
                 return String(localized: "tags.detail.title")
             case .subtitle:
                 return String(localized: "tags.detail.subtitle")
-            case .tagLightColor:
-                return String(localized: "tags.detail.color.light")
-            case .tagDarkColor:
-                return String(localized: "tags.detail.color.dark")
-            case .titleLightColor:
-                return String(localized: "tags.detail.color.text.light")
-            case .titleDarkColor:
-                return String(localized: "tags.detail.color.text.dark")
+            case .tagColor:
+                return String(localized: "tags.detail.color")
+            case .titleColor:
+                return String(localized: "tags.detail.color.text")
             case .delete:
                 return nil
             }
@@ -144,13 +147,9 @@ class TagDetailViewController: UIViewController {
                 return nil
             case .subtitle:
                 return nil
-            case .tagLightColor:
+            case .tagColor:
                 return nil
-            case .tagDarkColor:
-                return nil
-            case .titleLightColor:
-                return nil
-            case .titleDarkColor:
+            case .titleColor:
                 return nil
             case .delete:
                 return nil
@@ -159,11 +158,12 @@ class TagDetailViewController: UIViewController {
     }
     
     enum Item: Hashable {
-        case preview(String, UIColor, UIColor)
-        case title(String)
-        case subtitle(String?)
+        case preview(Tag)
+        case title
+        case subtitle
         case tagLightColor(UIColor)
         case tagDarkColor(UIColor)
+        case titleColorToggle(Bool)
         case titleLightColor(UIColor)
         case titleDarkColor(UIColor)
         case delete
@@ -180,6 +180,7 @@ class TagDetailViewController: UIViewController {
     convenience init(tag: Tag) {
         self.init()
         self.tag = tag
+        titleColorToggle = tag.titleColor != nil
     }
     
     class DataSource: UITableViewDiffableDataSource<Section, Item> {
@@ -251,25 +252,25 @@ class TagDetailViewController: UIViewController {
             guard let self = self else { return nil }
             guard let identifier = dataSource.itemIdentifier(for: indexPath) else { return nil }
             switch identifier {
-            case .preview(let title, let color, let titleColor):
+            case .preview:
                 let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(TagPreviewCell.self), for: indexPath)
                 if let cell = cell as? TagPreviewCell {
                     self.previewCell = cell
-                    cell.update(title: title, color: color, titleColor: titleColor)
+                    cell.update(title: tagTitle, color: tag.dynamicColor, titleColor: tag.dynamicTitleColor)
                 }
                 return cell
-            case .title(let title):
+            case .title:
                 let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(TextInputCell.self), for: indexPath)
                 if let cell = cell as? TextInputCell {
                     self.titleCell = cell
-                    cell.update(text: title, placeholder: String(localized: "tags.detail.title.hint"))
+                    cell.update(text: tagTitle, placeholder: String(localized: "tags.detail.title.hint"))
                     cell.textDidChanged = { [weak self] text in
                         self?.tagTitle = text
                     }
                     cell.tintColor = AppColor.main
                 }
                 return cell
-            case .subtitle(let subtitle):
+            case .subtitle:
                 let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(TextInputCell.self), for: indexPath)
                 if let cell = cell as? TextInputCell {
                     cell.update(text: subtitle, placeholder: String(localized: "tags.detail.title.hint"))
@@ -307,6 +308,18 @@ class TagDetailViewController: UIViewController {
                     }
                 }
                 return cell
+            case .titleColorToggle(let enable):
+                let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(UITableViewCell.self), for: indexPath)
+                let itemSwitch = UISwitch()
+                itemSwitch.isOn = enable
+                itemSwitch.addTarget(self, action: #selector(self.toggle(_:)), for: .touchUpInside)
+                itemSwitch.onTintColor = AppColor.main
+                var content = cell.defaultContentConfiguration()
+                content.text = String(localized: "tags.detail.color.text.toggle")
+                content.textProperties.color = .label
+                cell.accessoryView = itemSwitch
+                cell.contentConfiguration = content
+                return cell
             case .titleLightColor(let color):
                 let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(ColorPickerCell.self), for: indexPath)
                 if let cell = cell as? ColorPickerCell {
@@ -338,6 +351,7 @@ class TagDetailViewController: UIViewController {
             case .delete:
                 let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(UITableViewCell.self), for: indexPath)
                 cell.accessoryType = .none
+                cell.accessoryView = nil
                 var content = cell.defaultContentConfiguration()
                 content.text = String(localized: "button.delete")
                 content.textProperties.color = .systemRed
@@ -353,24 +367,28 @@ class TagDetailViewController: UIViewController {
         
         var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
         snapshot.appendSections([.preview])
-        snapshot.appendItems([.preview(tagTitle, tagColor, titleColor)], toSection: .preview)
+        snapshot.appendItems([.preview(tag)], toSection: .preview)
         snapshot.appendSections([.title])
-        snapshot.appendItems([.title(tagTitle)], toSection: .title)
+        snapshot.appendItems([.title], toSection: .title)
         snapshot.appendSections([.subtitle])
-        snapshot.appendItems([.subtitle(subtitle)], toSection: .subtitle)
-        snapshot.appendSections([.tagLightColor])
-        snapshot.appendItems([.tagLightColor(tagLightColor)])
-        snapshot.appendSections([.tagDarkColor])
-        snapshot.appendItems([.tagDarkColor(tagDarkColor)])
-        snapshot.appendSections([.titleLightColor])
-        snapshot.appendItems([.titleLightColor(titleLightColor)])
-        snapshot.appendSections([.titleDarkColor])
-        snapshot.appendItems([.titleDarkColor(titleDarkColor)])
+        snapshot.appendItems([.subtitle], toSection: .subtitle)
+        snapshot.appendSections([.tagColor])
+        snapshot.appendItems([.tagLightColor(tagLightColor), .tagDarkColor(tagDarkColor)])
+        snapshot.appendSections([.titleColor])
+        snapshot.appendItems([.titleColorToggle(titleColorToggle)], toSection: .titleColor)
+        if titleColorToggle {
+            snapshot.appendItems([.titleLightColor(titleLightColor), .titleDarkColor(titleDarkColor)], toSection: .titleColor)
+        }
         if isEditMode() {
             snapshot.appendSections([.delete])
             snapshot.appendItems([.delete], toSection: .delete)
         }
         dataSource.apply(snapshot, animatingDifferences: false)
+    }
+    
+    @objc
+    func toggle(_ titleSwitch: UISwitch) {
+        titleColorToggle = titleSwitch.isOn
     }
     
     func updateTagColor(lightColor: UIColor, darkColor: UIColor) {
@@ -493,6 +511,8 @@ extension TagDetailViewController: UITableViewDelegate {
                 break
             case .tagLightColor, .tagDarkColor:
                 break
+            case .titleColorToggle:
+                break
             case .titleLightColor, .titleDarkColor:
                 break
             case .delete:
@@ -512,13 +532,13 @@ extension TagDetailViewController {
         
         let colors = getTagColors()
         if isLight {
+            updateTagColor(lightColor: newColor, darkColor: tagDarkColor)
             tagLightColorCell?.update(colors: colors, selectedColor: newColor, isLight: true)
             tagDarkColorCell?.update(colors: colors, selectedColor: tagDarkColor, isLight: false)
-            updateTagColor(lightColor: newColor, darkColor: tagDarkColor)
         } else {
+            updateTagColor(lightColor: tagLightColor, darkColor: newColor)
             tagLightColorCell?.update(colors: colors, selectedColor: tagLightColor, isLight: true)
             tagDarkColorCell?.update(colors: colors, selectedColor: newColor, isLight: false)
-            updateTagColor(lightColor: tagLightColor, darkColor: newColor)
         }
     }
     
@@ -531,13 +551,13 @@ extension TagDetailViewController {
         
         let colors = getTitleColors()
         if isLight {
+            updateTitleColor(lightColor: newColor, darkColor: titleDarkColor)
             titleLightColorCell?.update(colors: colors, selectedColor: newColor, isLight: true)
             titleDarkColorCell?.update(colors: colors, selectedColor: titleDarkColor, isLight: false)
-            updateTitleColor(lightColor: newColor, darkColor: titleDarkColor)
         } else {
+            updateTitleColor(lightColor: titleLightColor, darkColor: newColor)
             titleLightColorCell?.update(colors: colors, selectedColor: titleLightColor, isLight: true)
             titleDarkColorCell?.update(colors: colors, selectedColor: newColor, isLight: false)
-            updateTitleColor(lightColor: titleLightColor, darkColor: newColor)
         }
     }
     
