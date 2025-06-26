@@ -9,9 +9,7 @@ import Foundation
 import UIKit
 import SnapKit
 
-class MainViewController: NavigationController {
-    var calendarVC: CalendarViewController?
-    
+class MainViewController: CalendarViewController {
     var tagButton: UIButton = {
         var configuration = UIButton.Configuration.filled()
         configuration.cornerStyle = .large
@@ -43,12 +41,9 @@ class MainViewController: NavigationController {
         return button
     }()
     
-    override init(rootViewController: UIViewController) {
-        super.init(rootViewController: rootViewController)
-        if let calendarVC = rootViewController as? CalendarViewController {
-            self.calendarVC = calendarVC
-        }
-    }
+    var tagBarButtonItem: UIBarButtonItem?
+    
+    var bookBarButtonItem: UIBarButtonItem?
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -61,6 +56,19 @@ class MainViewController: NavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if #available(iOS 26.0, *) {
+            setupBottomBarItems()
+        } else {
+            setupBottomButtons()
+        }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadButtomButtons), name: .CurrentBookChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadButtomButtons), name: .ActiveTagsUpdated, object: nil)
+
+        reloadButtomButtons()
+    }
+    
+    func setupBottomButtons() {
         view.addSubview(tagButton)
         tagButton.snp.makeConstraints { make in
             make.trailing.equalTo(view).inset(20)
@@ -100,17 +108,32 @@ class MainViewController: NavigationController {
             button.configuration = config
             button.menu = self.getBooksMenu()
         }
+    }
+    
+    func setupBottomBarItems() {
+        let bookItem = UIBarButtonItem(title: String(localized: "tags.new"), style: .done, target: nil, action: nil)
+        bookItem.tintColor = AppColor.main
         
-        NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .CurrentBookChanged, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .ActiveTagsUpdated, object: nil)
-
-        reloadData()
+        let tagItem = UIBarButtonItem(image: UIImage(systemName: "tag"), style: .done, target: nil, action: nil)
+        tagItem.tintColor = AppColor.main
+        
+        self.bookBarButtonItem = bookItem
+        self.tagBarButtonItem = tagItem
+        
+        bookBarButtonItem?.menu = getBooksMenu()
+        bookBarButtonItem?.title = DataManager.shared.currentBook?.title
+        tagBarButtonItem?.menu = getTagsMenu()
+        
+        toolbarItems = [bookBarButtonItem!, .flexibleSpace(), tagBarButtonItem!]
+        navigationController?.setToolbarHidden(false, animated: false)
     }
     
     @objc
-    func reloadData() {
+    func reloadButtomButtons() {
         bookPickerButton.setNeedsUpdateConfiguration()
         tagButton.setNeedsUpdateConfiguration()
+        bookBarButtonItem?.menu = getBooksMenu()
+        tagBarButtonItem?.menu = getTagsMenu()
     }
     
     func getBooksMenu() -> UIMenu {
@@ -140,7 +163,7 @@ class MainViewController: NavigationController {
     func showBookManagement() {
         let bookListVC = BookListViewController()
         let nav = NavigationController(rootViewController: bookListVC)
-        present(nav, animated: true)
+        navigationController?.present(nav, animated: true)
     }
     
     func showBookEditorForAdd() {
@@ -153,7 +176,7 @@ class MainViewController: NavigationController {
         let newBook = Book(title: "", color: AppColor.main.generateLightDarkString(), order: bookOrder)
         let nav = NavigationController(rootViewController: BookDetailViewController(book: newBook))
         
-        present(nav, animated: true)
+        navigationController?.present(nav, animated: true)
     }
     
     func getTagsMenu() -> UIMenu {
@@ -205,7 +228,7 @@ class MainViewController: NavigationController {
     func showTagManagement() {
         let tagListVC = TagListViewController(bookID: DataManager.shared.currentBook?.id)
         let nav = NavigationController(rootViewController: tagListVC)
-        present(nav, animated: true)
+        navigationController?.present(nav, animated: true)
     }
     
     func showTagEditorForAdd() {
@@ -219,6 +242,6 @@ class MainViewController: NavigationController {
         let newTag = Tag(bookID: bookID, title: "", color: "", order: tagIndex)
         let nav = NavigationController(rootViewController: TagDetailViewController(tag: newTag))
         
-        present(nav, animated: true)
+        navigationController?.present(nav, animated: true)
     }
 }

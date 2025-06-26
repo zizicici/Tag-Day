@@ -209,13 +209,14 @@ class TagDetailViewController: UIViewController {
         title = isEditMode() ? String(localized: "tags.detail.title.edit") : String(localized: "tags.detail.title.add")
         
         view.backgroundColor = AppColor.background
-        navigationController?.navigationBar.tintColor = AppColor.main
         
-        let saveItem = UIBarButtonItem(title: String(localized: "button.save"), style: .plain, target: self, action: #selector(save))
+        let saveItem = UIBarButtonItem(title: String(localized: "button.save"), style: .done, target: self, action: #selector(save))
+        saveItem.tintColor = AppColor.main
         saveItem.isEnabled = false
         navigationItem.rightBarButtonItem = saveItem
         
         let cancelItem = UIBarButtonItem(title: String(localized: "button.cancel"), style: .plain, target: self, action: #selector(dismissViewController))
+        cancelItem.tintColor = AppColor.main
         navigationItem.leftBarButtonItem = cancelItem
         
         if !defaultColors().map({ $0.generateLightDarkString() }).contains(tag.dynamicColor.generateLightDarkString()) {

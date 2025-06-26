@@ -75,7 +75,7 @@ class BookListViewController: UIViewController {
         
         let newBarItem = UIBarButtonItem(title: String(localized: "books.new"), style: .plain, target: self, action: #selector(new))
         newBarItem.tintColor = AppColor.main
-        toolbarItems = [newBarItem]
+        toolbarItems = [newBarItem, .flexibleSpace()]
         navigationController?.setToolbarHidden(false, animated: false)
         
         configureHierarchy()

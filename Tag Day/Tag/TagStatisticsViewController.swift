@@ -91,9 +91,9 @@ class TagStatisticsViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = AppColor.background
-        navigationController?.navigationBar.tintColor = AppColor.main
         
         let closeItem = UIBarButtonItem(title: String(localized: "button.close"), style: .plain, target: self, action: #selector(dismissViewController))
+        closeItem.tintColor = AppColor.main
         navigationItem.leftBarButtonItem = closeItem
         
         calendarBarItem.tintColor = AppColor.main

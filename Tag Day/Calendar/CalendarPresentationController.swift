@@ -7,6 +7,16 @@
 
 import UIKit
 
+var CalendarPresentationCornerRadius: CGFloat {
+    get {
+        if #available(iOS 26.0, *) {
+            return 36.0
+        } else {
+            return 12.0
+        }
+    }
+}
+
 class CalendarPresentationController: UIPresentationController {
     private let detailSize: CGSize
     private var dimmingView: UIView!
@@ -27,7 +37,7 @@ class CalendarPresentationController: UIPresentationController {
         shadowView = UIView()
         shadowView.alpha = 0
         shadowView.backgroundColor = UIColor.white
-        shadowView.layer.cornerRadius = 12.0
+        shadowView.layer.cornerRadius = CalendarPresentationCornerRadius
         shadowView.layer.shadowColor = UIColor.black.cgColor
         shadowView.layer.shadowOpacity = 0.25
         shadowView.layer.shadowOffset = .zero
@@ -161,13 +171,13 @@ class CalendarTransitionAnimator: NSObject, UIViewControllerAnimatedTransitionin
                 y: originFrame.midY
             )
             toView.clipsToBounds = true
-            toView.layer.cornerRadius = 12
+            toView.layer.cornerRadius = CalendarPresentationCornerRadius
             toView.alpha = 0
             
             // 添加一个临时视图作为动画背景
             let backgroundView = UIView(frame: originFrame)
             backgroundView.backgroundColor = cellBackgroundColor
-            backgroundView.layer.cornerRadius = 12.0
+            backgroundView.layer.cornerRadius = CalendarPresentationCornerRadius
             backgroundView.layer.shadowColor = UIColor.black.cgColor
             backgroundView.layer.shadowOpacity = 0.25
             backgroundView.layer.shadowOffset = .zero
@@ -183,11 +193,11 @@ class CalendarTransitionAnimator: NSObject, UIViewControllerAnimatedTransitionin
                 toView.transform = .identity
                 toView.frame = finalFrame
                 toView.alpha = 1
-                toView.layer.cornerRadius = 12
+                toView.layer.cornerRadius = CalendarPresentationCornerRadius
                 
                 // 背景视图同步动画
                 backgroundView.frame = finalFrame
-                backgroundView.layer.cornerRadius = 12
+                backgroundView.layer.cornerRadius = CalendarPresentationCornerRadius
             }) { _ in
                 // 移除临时视图
                 backgroundView.removeFromSuperview()
@@ -198,12 +208,12 @@ class CalendarTransitionAnimator: NSObject, UIViewControllerAnimatedTransitionin
             
             let backgroundView = UIView(frame: fromView.frame)
             backgroundView.backgroundColor = cellBackgroundColor
-            backgroundView.layer.cornerRadius = 12
+            backgroundView.layer.cornerRadius = CalendarPresentationCornerRadius
             containerView.insertSubview(backgroundView, belowSubview: fromView)
             
             UIView.animate(withDuration: duration, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: [], animations: {
                 backgroundView.frame = self.originFrame
-                backgroundView.layer.cornerRadius = 12
+                backgroundView.layer.cornerRadius = CalendarPresentationCornerRadius
                 backgroundView.alpha = 0.0
                 fromView.alpha = 0.0
             }) { _ in
