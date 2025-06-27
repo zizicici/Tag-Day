@@ -13,6 +13,7 @@ struct DateCellItem: Hashable {
     enum Mode {
         case date
         case dateAndTime
+        case time
     }
     
     var title: String
@@ -61,11 +62,6 @@ class DateCell: DateBaseCell {
             return
         }
         
-        contentView.addSubview(listContentView)
-        listContentView.snp.makeConstraints { make in
-            make.leading.top.bottom.trailing.equalTo(contentView)
-        }
-        
         let datePicker = UIDatePicker(frame: CGRect.zero, primaryAction: UIAction(handler: { [weak self] _ in
             if let date = self?.datePicker?.date {
                 self?.selectDateAction?(date.nanoSecondSince1970)
@@ -79,6 +75,12 @@ class DateCell: DateBaseCell {
             make.centerY.equalTo(contentView)
         }
         self.datePicker = datePicker
+        
+        contentView.addSubview(listContentView)
+        listContentView.snp.makeConstraints { make in
+            make.leading.top.bottom.equalTo(contentView)
+            make.trailing.equalTo(datePicker.snp.leading)
+        }
     }
     
     override func updateConfiguration(using state: UICellConfigurationState) {
@@ -98,6 +100,13 @@ class DateCell: DateBaseCell {
                     datePicker?.date = Date(nanoSecondSince1970: nanoSecondsFrom1970)
                 } else {
                     datePicker?.date = Date().combine(with: dateItem.day)
+                }
+            case .time:
+                datePicker?.datePickerMode = .time
+                if let nanoSecondsFrom1970 = dateItem.nanoSecondsFrom1970 {
+                    datePicker?.date = Date(nanoSecondSince1970: nanoSecondsFrom1970)
+                } else {
+                    datePicker?.date = Date(nanoSecondSince1970: 0)
                 }
             }
             

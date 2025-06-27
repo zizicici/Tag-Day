@@ -50,6 +50,8 @@
 		14C713552DD23064007527C5 /* CheckRecordIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C713542DD23064007527C5 /* CheckRecordIntent.swift */; };
 		14C713572DD2310C007527C5 /* TagEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C713562DD2310C007527C5 /* TagEntity.swift */; };
 		14CA128C2E09AF3400B28639 /* CalendarPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CA128B2E09AF3400B28639 /* CalendarPresentationController.swift */; };
+		14CAA2D32E0EA2C700096D98 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CAA2D22E0EA2C700096D98 /* NotificationManager.swift */; };
+		14CAA2D62E0EA2E400096D98 /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CAA2D52E0EA2E400096D98 /* NotificationViewController.swift */; };
 		14CC8A462DCF04970062F8BA /* FastEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CC8A452DCF04970062F8BA /* FastEditorViewController.swift */; };
 		14D035EA2E01156D00E32E91 /* TagStatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D035E92E01156D00E32E91 /* TagStatisticsViewController.swift */; };
 		14D07CC32DD2ED4900F6843C /* RecordDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D07CC22DD2ED4900F6843C /* RecordDetailViewController.swift */; };
@@ -143,6 +145,8 @@
 		14C713542DD23064007527C5 /* CheckRecordIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckRecordIntent.swift; sourceTree = "<group>"; };
 		14C713562DD2310C007527C5 /* TagEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagEntity.swift; sourceTree = "<group>"; };
 		14CA128B2E09AF3400B28639 /* CalendarPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarPresentationController.swift; sourceTree = "<group>"; };
+		14CAA2D22E0EA2C700096D98 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		14CAA2D52E0EA2E400096D98 /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
 		14CC8A452DCF04970062F8BA /* FastEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastEditorViewController.swift; sourceTree = "<group>"; };
 		14CD76AD2DBE6BA10035DF1F /* Tag Day.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Tag Day.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		14D035E92E01156D00E32E91 /* TagStatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagStatisticsViewController.swift; sourceTree = "<group>"; };
@@ -306,6 +310,7 @@
 				14D272BC2DC0884E00267572 /* More */,
 				14D272AD2DC073EB00267572 /* Database */,
 				14FF82A22E03F78500D3000B /* Backup */,
+				14CAA2D42E0EA2D500096D98 /* Notification */,
 				14D2729E2DC072D700267572 /* Settings */,
 				14C7134C2DD21E31007527C5 /* Intent */,
 				14D2729C2DC0721000267572 /* Extension */,
@@ -353,6 +358,15 @@
 				14C713562DD2310C007527C5 /* TagEntity.swift */,
 			);
 			path = Entity;
+			sourceTree = "<group>";
+		};
+		14CAA2D42E0EA2D500096D98 /* Notification */ = {
+			isa = PBXGroup;
+			children = (
+				14CAA2D22E0EA2C700096D98 /* NotificationManager.swift */,
+				14CAA2D52E0EA2E400096D98 /* NotificationViewController.swift */,
+			);
+			path = Notification;
 			sourceTree = "<group>";
 		};
 		14CC8A472DCF14240062F8BA /* Fast Editor */ = {
@@ -662,6 +676,7 @@
 				14D2729F2DC072D700267572 /* Settings.swift in Sources */,
 				14EBE0882DD76B0B00F7609A /* DurationCell.swift in Sources */,
 				14ACBE572DBFAD2E0056B1FD /* NavigationViewController.swift in Sources */,
+				14CAA2D32E0EA2C700096D98 /* NotificationManager.swift in Sources */,
 				14D272862DC0719400267572 /* LayoutGenerator.swift in Sources */,
 				14C7134E2DD22F86007527C5 /* RecordEntity.swift in Sources */,
 				14D272872DC0719400267572 /* DayGrid.swift in Sources */,
@@ -715,6 +730,7 @@
 				14337F822DCC70DA0043447A /* BookDetailViewController.swift in Sources */,
 				14D2727D2DC0716E00267572 /* CalendarViewController+Enum.swift in Sources */,
 				14D272722DC0712A00267572 /* AppColor.swift in Sources */,
+				14CAA2D62E0EA2E400096D98 /* NotificationViewController.swift in Sources */,
 				14D2728A2DC071A500267572 /* BlockItem.swift in Sources */,
 				14833D352DC50310001B61D5 /* Book.swift in Sources */,
 				14B239B72DBF13F30007152C /* CalendarViewController.swift in Sources */,

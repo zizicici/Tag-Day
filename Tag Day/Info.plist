@@ -31,5 +31,7 @@
 	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>
+	<key>NSUserNotificationsUsageDescription</key>
+	<string>$(NSUserNotificationsUsageDescription)</string>
 </dict>
 </plist>

@@ -20,7 +20,7 @@ class MoreViewController: UIViewController {
     enum Section: Hashable {
         case general
         case calendar
-        case backup
+        case advanced
         case contact
         case appjun
         case about
@@ -31,8 +31,8 @@ class MoreViewController: UIViewController {
                 return String(localized: "more.section.general")
             case .calendar:
                 return String(localized: "more.section.calendar")
-            case .backup:
-                return nil
+            case .advanced:
+                return String(localized: "more.section.advanced")
             case .contact:
                 return String(localized: "more.section.contact")
             case .appjun:
@@ -184,6 +184,7 @@ class MoreViewController: UIViewController {
         case settings(GeneralItem)
         case calendar(CalendarItem)
         case backup
+        case notification
         case contact(ContactItem)
         case appjun(AppJunItem)
         case about(AboutItem)
@@ -196,6 +197,8 @@ class MoreViewController: UIViewController {
                 return item.title
             case .backup:
                 return String(localized: "backup.title")
+            case .notification:
+                return String(localized: "notificationEditor.title")
             case .contact(let item):
                 return item.title
             case .appjun(let item):
@@ -293,7 +296,7 @@ class MoreViewController: UIViewController {
                 content.secondaryText = item.value
                 cell.contentConfiguration = content
                 return cell
-            case .backup:
+            case .backup, .notification:
                 let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
                 cell.accessoryType = .disclosureIndicator
                 var content = UIListContentConfiguration.valueCell()
@@ -342,8 +345,8 @@ class MoreViewController: UIViewController {
         snapshot.appendSections([.calendar])
         snapshot.appendItems([.calendar(.weekStartType(WeekStartType.getValue())), .calendar(.secondaryCalendar(SecondaryCalendar.getValue()))], toSection: .calendar)
         
-        snapshot.appendSections([.backup])
-        snapshot.appendItems([.backup], toSection: .backup)
+        snapshot.appendSections([.advanced])
+        snapshot.appendItems([.backup, .notification], toSection: .advanced)
         
         snapshot.appendSections([.contact])
         snapshot.appendItems([.contact(.email), .contact(.xiaohongshu), .contact(.bilibili), .contact(.reddit)], toSection: .contact)
@@ -386,6 +389,8 @@ extension MoreViewController: UITableViewDelegate {
                 }
             case .backup:
                 enterBackup()
+            case .notification:
+                enterNotificationEditor()
             case .contact(let item):
                 handle(contactItem: item)
             case .appjun(let item):
@@ -440,6 +445,13 @@ extension MoreViewController {
         backupViewController.hidesBottomBarWhenPushed = true
         
         navigationController?.pushViewController(backupViewController, animated: true)
+    }
+    
+    func enterNotificationEditor() {
+        let notificationEditor = NotificationViewController()
+        notificationEditor.hidesBottomBarWhenPushed = true
+        
+        navigationController?.pushViewController(notificationEditor, animated: true)
     }
     
     func openEULA() {
