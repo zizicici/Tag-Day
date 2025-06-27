@@ -40,7 +40,11 @@ struct LayoutGenerater {
                 case .none:
                     secondaryCalendar = nil
                 case .chineseCalendar:
-                    secondaryCalendar = ChineseCalendarManager.shared.findChineseDayInfo(gregorianDay, variant: .chinese)?.shortDisplayString()
+                    if let solarTerm = ChineseCalendarManager.shared.getSolarTerm(for: gregorianDay) {
+                        secondaryCalendar = solarTerm.name
+                    } else {
+                        secondaryCalendar = ChineseCalendarManager.shared.findChineseDayInfo(gregorianDay, variant: .chinese)?.shortDisplayString()
+                    }
                 case .rokuyo:
                     if let kyureki = ChineseCalendarManager.shared.findChineseDayInfo(gregorianDay, variant: .kyureki) {
                         secondaryCalendar = Rokuyo.get(at: kyureki).name

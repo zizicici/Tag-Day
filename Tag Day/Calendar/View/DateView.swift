@@ -149,7 +149,7 @@ class DateView: UIView {
         if hasSecondaryText {
             verticalLayer.configure(
                 text: secondaryText,
-                font: .systemFont(ofSize: 7.0, weight: .black),
+                font: .systemFont(ofSize: 8.0, weight: .black),
                 textColor: textColor.withAlphaComponent(0.6),
                 lineSpacing: 0.0
             )
