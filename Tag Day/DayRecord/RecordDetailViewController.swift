@@ -466,15 +466,7 @@ class RecordDetailViewController: UIViewController {
     
     @objc
     func dismissViewController() {
-        if commentCell?.isFirstResponder == true {
-            _ = commentCell?.resignFirstResponder()
-            navigationItem.rightBarButtonItem?.isEnabled = false
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.7) {
-                self.dismiss(animated: true)
-            }
-        } else {
-            dismiss(animated: true)
-        }
+        dismiss(animated: true)
     }
     
     func updateSaveButtonStatus() {
