@@ -361,10 +361,12 @@ extension RecordListViewController: FastEditorNavigator {
         }
         let lastOrder = DataManager.shared.fetchLastRecordOrder(bookID: bookID, day: Int64(day.julianDay))
         let newRecord = DayRecord(bookID: bookID, tagID: tagID, day: Int64(day.julianDay), order: lastOrder + 1)
-        _ = DataManager.shared.add(dayRecord: newRecord)
-        
-        // Dismiss
-        presentedViewController?.dismiss(animated: true)
+        if let savedRecord = DataManager.shared.add(dayRecord: newRecord) {
+            // Dismiss
+            presentedViewController?.dismiss(animated: true) {
+                self.showRecordAlert(for: savedRecord)
+            }
+        }
     }
     
     func replace(day: GregorianDay, tag: Tag, for record: DayRecord) {
@@ -425,12 +427,33 @@ extension UIViewController {
         }
         let cancelAction = UIAlertAction(title: String(localized: "button.cancel"), style: .cancel)
         
-        let alertController = UIAlertController(title: String(localized: "dayDetail.tagMenu.alert.title"), message: nil, preferredStyle: .alert)
-        alertController.addAction(timeAction)
-        alertController.addAction(commentAction)
-        alertController.addAction(cancelAction)
-        
-        present(alertController, animated: true)
+        if UIAccessibility.isVoiceOverRunning {
+            let alertController = UIAlertController(title: String(localized: "dayDetail.tagMenu.alert.title"), message: nil, preferredStyle: .alert)
+            alertController.addAction(timeAction)
+            alertController.addAction(commentAction)
+            alertController.addAction(cancelAction)
+            
+            present(alertController, animated: true)
+        } else {
+            var remainingTime: Int = 5
+
+            let alertController = UIAlertController(title: String(localized: "dayDetail.tagMenu.alert.title"), message: String(format: String(localized: "dayDetail.tagMenu.alert.message%i"), remainingTime), preferredStyle: .actionSheet)
+            alertController.addAction(timeAction)
+            alertController.addAction(commentAction)
+            alertController.addAction(cancelAction)
+            
+            present(alertController, animated: true)
+            
+            Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
+                remainingTime -= 1
+                alertController.message = String(format: String(localized: "dayDetail.tagMenu.alert.message%i"), remainingTime)
+                
+                if remainingTime <= 0 {
+                    timer.invalidate()
+                    alertController.dismiss(animated: true, completion: nil)
+                }
+            }
+        }
     }
     
     func showRecordEditor(for record: DayRecord, editMode: RecordDetailViewController.EditMode) {
