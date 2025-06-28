@@ -8,17 +8,55 @@
 import UIKit
 import SnapKit
 
-class ColorPickerCell: UITableViewCell {
+struct ColorPickerItem: Hashable {
+    var title: String
+}
+
+extension UIConfigurationStateCustomKey {
+    static let colorPickerItem = UIConfigurationStateCustomKey("com.zizicici.tag.cell.colorPicker.item")
+}
+
+extension UICellConfigurationState {
+    var colorPickerItem: ColorPickerItem? {
+        set { self[.colorPickerItem] = newValue }
+        get { return self[.colorPickerItem] as? ColorPickerItem }
+    }
+}
+
+class ColorPickerBaseCell: UITableViewCell {
+    private var colorPickerItem: ColorPickerItem? = nil
+    
+    func update(with newColorPickerItem: ColorPickerItem) {
+        guard colorPickerItem != newColorPickerItem else { return }
+        colorPickerItem = newColorPickerItem
+        setNeedsUpdateConfiguration()
+    }
+    
+    override var configurationState: UICellConfigurationState {
+        var state = super.configurationState
+        state.colorPickerItem = self.colorPickerItem
+        return state
+    }
+}
+
+class ColorPickerCell: ColorPickerBaseCell {
+    private func defaultListContentConfiguration() -> UIListContentConfiguration { return .valueCell() }
+    private lazy var listContentView = UIListContentView(configuration: defaultListContentConfiguration())
+    
     var dataSource: UICollectionViewDiffableDataSource<Int, ColorBlockCell.Item>! = nil
     var collectionView: UICollectionView! = nil
     
-    var selectedColorDidChange: ((UIColor) -> ())?
+    var selectedColorDidChange: ((String) -> ())?
     var showPicker: (() -> ())?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        configureCollectionView()
+        collectionView = UIDraggableCollectionView(frame: CGRect.zero, collectionViewLayout: createLayout())
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.delegate = self
+        collectionView.backgroundColor = .clear
+
         configureDataSource()
     }
     
@@ -26,18 +64,17 @@ class ColorPickerCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func configureCollectionView() {
-        collectionView = UIDraggableCollectionView(frame: CGRect.zero, collectionViewLayout: createLayout())
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.delegate = self
-        collectionView.backgroundColor = .clear
-        contentView.addSubview(collectionView)
-        collectionView.snp.makeConstraints { make in
-            make.leading.equalTo(contentView)
-            make.trailing.equalTo(contentView)
-            make.top.bottom.equalTo(contentView).inset(5)
-            make.height.greaterThanOrEqualTo(40.0)
+    func setupViewsIfNeeded() {
+        guard listContentView.superview == nil else {
+            return
         }
+        
+        contentView.addSubview(listContentView)
+        listContentView.snp.makeConstraints { make in
+            make.edges.equalTo(contentView)
+        }
+
+        contentView.addSubview(collectionView)
     }
     
     private func configureDataSource() {
@@ -56,15 +93,33 @@ class ColorPickerCell: UITableViewCell {
         })
     }
     
-    public func update(colors: [UIColor], selectedColor: UIColor, isLight: Bool) {
+    override func updateConfiguration(using state: UICellConfigurationState) {
+        setupViewsIfNeeded()
+        var content = defaultListContentConfiguration().updated(for: state)
+        if let colorPickerItem = state.colorPickerItem {
+            content.text = colorPickerItem.title
+            listContentView.configuration = content
+            
+            if let textLayoutGuide = listContentView.textLayoutGuide {
+                collectionView.snp.remakeConstraints { make in
+                    make.leading.equalTo(textLayoutGuide.snp.trailing).offset(20.0)
+                    make.trailing.equalTo(contentView)
+                    make.centerY.equalTo(contentView)
+                    make.height.equalTo(44.0)
+                }
+            }
+        }
+    }
+    
+    public func update(colors: [String], selectedColor: String) {
         var snapshot = NSDiffableDataSourceSnapshot<Int, ColorBlockCell.Item>()
         snapshot.appendSections([0])
-        snapshot.appendItems([ColorBlockCell.Item(color: .white, type: .pickerItem)])
+        snapshot.appendItems([ColorBlockCell.Item(color: UIColor.white.toHexString()!, type: .pickerItem)])
         snapshot.appendItems(colors.enumerated().map({ (index, color) in
-            let displayColor = color.resolvedColor(with: .init(userInterfaceStyle: isLight ? .light : .dark))
-            return ColorBlockCell.Item(color: displayColor, type: color.generateLightDarkString(isLight ? .light : .dark) == selectedColor.generateLightDarkString(isLight ? .light : .dark) ? .colorSelected : .colorUnselected)
+            let displayColor = color
+            return ColorBlockCell.Item(color: displayColor, type: color == selectedColor ? .colorSelected : .colorUnselected)
         }))
-        dataSource.apply(snapshot, animatingDifferences: true)
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
     
     private func tap(at item: ColorBlockCell.Item) {
@@ -93,7 +148,8 @@ extension ColorPickerCell {
             let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
             
             let section = NSCollectionLayoutSection(group: group)
-            section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
+            let inset: CGFloat = 2.0
+            section.contentInsets = NSDirectionalEdgeInsets(top: inset, leading: 15, bottom: inset, trailing: 15)
             
             return section
         }
@@ -118,7 +174,7 @@ class ColorBlockCell: UICollectionViewCell {
             case colorUnselected
             case pickerItem
         }
-        var color: UIColor
+        var color: String
         var type: ItemType
     }
     
@@ -175,7 +231,7 @@ class ColorBlockCell: UICollectionViewCell {
     }
     
     func update(with item: Item) {
-        self.color = item.color
+        self.color = UIColor(hex: item.color)
         switch item.type {
         case .colorSelected:
             showInfoMark = true
@@ -191,20 +247,18 @@ class ColorBlockCell: UICollectionViewCell {
     
     func update() {
         guard let color = color else { return }
-        let lightColor = color.resolvedColor(with: .init(userInterfaceStyle: .light))
-        let darkColor = color.resolvedColor(with: .init(userInterfaceStyle: .dark))
-        colorButton.setBackgroundImage(drawSquareWithDiagonal(size: 40, color1: lightColor, color2: darkColor), for: .normal)
+        colorButton.setBackgroundImage(drawSquareWithDiagonal(size: 40, color: color), for: .normal)
         colorButton.layer.borderWidth = 1.0
         colorButton.layer.borderColor = UIColor.systemGray.withAlphaComponent(0.5).cgColor
         infoMark.isHidden = !showInfoMark
-        if lightColor.isLight {
+        if color.isLight {
             infoMark.tintColor = UIColor.gray
         } else {
             infoMark.tintColor = UIColor.white
         }
     }
     
-    func drawSquareWithDiagonal(size: CGFloat, color1: UIColor, color2: UIColor) -> UIImage? {
+    func drawSquareWithDiagonal(size: CGFloat, color: UIColor) -> UIImage? {
         // 创建图像上下文并设置缩放比例
         UIGraphicsBeginImageContextWithOptions(CGSize(width: size, height: size), false, 0)
         
@@ -213,20 +267,8 @@ class ColorBlockCell: UICollectionViewCell {
         
         // 绘制矩形并填充颜色
         context.addRect(CGRect(origin: .zero, size: CGSize(width: size, height: size)))
-        context.setFillColor(color1.cgColor)
+        context.setFillColor(color.cgColor)
         context.fillPath()
-        
-        if color1 != color2 {
-            // 绘制三角形并填充另一个颜色
-            let trianglePath = UIBezierPath()
-            trianglePath.move(to: CGPoint(x: size, y: 0))
-            trianglePath.addLine(to: CGPoint(x: size, y: size))
-            trianglePath.addLine(to: CGPoint(x: 0, y: size))
-            trianglePath.close()
-            context.addPath(trianglePath.cgPath)
-            context.setFillColor(color2.cgColor)
-            context.fillPath()
-        }
         
         // 获取图像并结束上下文
         let image = UIGraphicsGetImageFromCurrentImageContext()
