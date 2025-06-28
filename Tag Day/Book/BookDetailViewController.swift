@@ -91,7 +91,7 @@ class BookDetailViewController: UIViewController {
             case .color:
                 return String(localized: "books.detail.color")
             case .tag:
-                return nil
+                return String(localized: "controller.tags.title")
             case .delete:
                 return nil
             }
