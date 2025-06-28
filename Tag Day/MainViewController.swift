@@ -140,7 +140,7 @@ class MainViewController: CalendarViewController {
         var elements: [UIMenuElement] = []
         if let books = try? DataManager.shared.fetchAllBookInfos(for: .active) {
             let bookElements: [UIMenuElement] = books.reversed().map({ info in
-                return UIAction(title: info.book.title, subtitle: info.subtitle(), state: DataManager.shared.currentBook?.id == info.book.id ? .on : .off) { _ in
+                return UIAction(title: info.book.title, subtitle: info.subtitle(), image: info.book.image, state: DataManager.shared.currentBook?.id == info.book.id ? .on : .off) { _ in
                     DataManager.shared.select(book: info.book)
                 }
             })

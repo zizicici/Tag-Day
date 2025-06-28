@@ -78,6 +78,7 @@ class BookListCell: BookBaseCell {
         content.directionalLayoutMargins = layoutMargins
         
         if let bookInfo = state.bookItem?.bookInfo {
+            content.image = bookInfo.book.image
             content.text = bookInfo.book.title
             content.textProperties.color = AppColor.text
             content.secondaryText = bookInfo.subtitle()

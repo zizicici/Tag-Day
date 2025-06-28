@@ -577,6 +577,34 @@
         }
       }
     },
+    "book.detail.updateSymbol" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选择其他"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選擇其他"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選擇其他"
+          }
+        }
+      }
+    },
     "bookInfo.subtitle.dayRecord%i" : {
       "localizations" : {
         "en" : {
@@ -693,58 +721,58 @@
         }
       }
     },
-    "books.detail.comment" : {
+    "books.detail.color" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Comment"
+            "value" : "Theme Color"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "备注"
+            "value" : "主题色"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "備註"
+            "value" : "主題色"
           }
         },
         "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "備註"
+            "value" : "主題色"
           }
         }
       }
     },
-    "books.detail.comment.hint" : {
+    "books.detail.color.hint" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The text length should be within 1-200 characters."
+            "value" : "It will affect symbol and button colors."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "文字长度在1-200范围内"
+            "value" : "将会影响标志和按钮颜色。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "文字長度在1-200範圍內"
+            "value" : "將會影響標誌和按鈕顏色。"
           }
         },
         "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "文字長度在1-200範圍內"
+            "value" : "將會影響標誌和按鈕顏色。"
           }
         }
       }
@@ -829,6 +857,34 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "刪除日曆簿"
+          }
+        }
+      }
+    },
+    "books.detail.symbol" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Symbol"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "标志"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "標誌"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "標誌"
           }
         }
       }
@@ -1557,34 +1613,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "工作排班"
-          }
-        }
-      }
-    },
-    "database.firstBook.comment" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Demo Data"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "演示数据"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "演示數據"
-          }
-        },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "演示數據"
           }
         }
       }
@@ -2851,30 +2879,30 @@
         }
       }
     },
-    "intent.book.comment" : {
+    "intent.book.symbol" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Book Comment"
+            "value" : "Book Symbol"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "日历簿备注"
+            "value" : "日历簿标志"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "日曆簿備註"
+            "value" : "日曆簿標誌"
           }
         },
         "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "日曆簿備註"
+            "value" : "日曆簿標誌"
           }
         }
       }

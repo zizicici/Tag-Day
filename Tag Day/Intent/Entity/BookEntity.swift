@@ -13,7 +13,7 @@ struct BookEntity: Identifiable, Hashable, Equatable, AppEntity {
     typealias DefaultQuery = BookIntentQuery
     static var defaultQuery = BookIntentQuery()
     var displayRepresentation: DisplayRepresentation {
-        return DisplayRepresentation(title: "\(title)", subtitle: "\(comment)")
+        return DisplayRepresentation(title: "\(title)")
     }
     
     var id: Int
@@ -21,28 +21,28 @@ struct BookEntity: Identifiable, Hashable, Equatable, AppEntity {
     @Property(title: "intent.book.title")
     var title: String
     
-    @Property(title: "intent.book.comment")
-    var comment: String
+    @Property(title: "intent.book.symbol")
+    var symbol: String
     
-    init(id: Int, title: String, comment: String) {
+    init(id: Int, title: String, symbol: String) {
         self.id = id
         self.title = title
-        self.comment = comment
+        self.symbol = symbol
     }
     
     static func == (lhs: BookEntity, rhs: BookEntity) -> Bool {
-        return lhs.id == rhs.id && lhs.title == rhs.title && lhs.comment == rhs.comment
+        return lhs.id == rhs.id && lhs.title == rhs.title && lhs.symbol == rhs.symbol
     }
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
         hasher.combine(title)
-        hasher.combine(comment)
+        hasher.combine(symbol)
     }
     
     init?(book: Book) {
         guard let bookID = book.id else { return nil }
-        self.init(id: Int(bookID), title: book.title, comment: book.comment ?? "")
+        self.init(id: Int(bookID), title: book.title, symbol: book.symbol ?? "")
     }
 }
 
@@ -53,7 +53,7 @@ struct BookIntentQuery: EntityQuery {
         var result: [BookEntity] = []
         for book in books {
             if let bookID = book.id {
-                result.append(BookEntity(id: Int(bookID), title: book.title, comment: book.comment ?? ""))
+                result.append(BookEntity(id: Int(bookID), title: book.title, symbol: book.symbol ?? ""))
             }
         }
         return result
@@ -65,7 +65,7 @@ struct BookIntentQuery: EntityQuery {
         var result: [BookEntity] = []
         for book in books {
             if let bookID = book.id {
-                result.append(BookEntity(id: Int(bookID), title: book.title, comment: book.comment ?? ""))
+                result.append(BookEntity(id: Int(bookID), title: book.title, symbol: book.symbol ?? ""))
             }
         }
         return result

@@ -27,25 +27,58 @@ class BookDetailViewController: UIViewController {
         }
     }
     
-    private var comment: String? {
+    private var symbol: String? {
         get {
-            return book.comment
+            return book.symbol
         }
         set {
-            if book.comment != newValue {
-                book.comment = newValue
+            if book.symbol != newValue {
+                book.symbol = newValue
                 isEdited = true
                 updateSaveButtonStatus()
             }
         }
     }
     
+    private var bookColor: UIColor {
+        get {
+            book.dynamicColor
+        }
+        set {
+            book.color = newValue.generateLightDarkString()
+        }
+    }
+    
+    private var bookLightColor: UIColor {
+        get {
+            return bookColor.resolvedColor(with: .init(userInterfaceStyle: .light))
+        }
+        set {
+            updateBookColor(lightColor: newValue, darkColor: bookDarkColor)
+        }
+    }
+    
+    private var bookDarkColor: UIColor {
+        get {
+            return bookColor.resolvedColor(with: .init(userInterfaceStyle: .dark))
+        }
+        set {
+            updateBookColor(lightColor: bookLightColor, darkColor: newValue)
+        }
+    }
+    
+    private var customBookColors: [UIColor] = []
+    
     private var isEdited: Bool = false
     private weak var titleCell: TextInputCell?
+    private weak var symbolCell: SymbolCell?
+    private weak var lightColorCell: ColorPickerCell?
+    private weak var darkColorCell: ColorPickerCell?
     
     enum Section: Int, Hashable {
         case title
-        case comment
+        case symbol
+        case color
         case tag
         case delete
         
@@ -53,8 +86,10 @@ class BookDetailViewController: UIViewController {
             switch self {
             case .title:
                 return String(localized: "books.detail.title")
-            case .comment:
-                return String(localized: "books.detail.comment")
+            case .symbol:
+                return String(localized: "books.detail.symbol")
+            case .color:
+                return String(localized: "books.detail.color")
             case .tag:
                 return nil
             case .delete:
@@ -66,8 +101,10 @@ class BookDetailViewController: UIViewController {
             switch self {
             case .title:
                 return nil
-            case .comment:
+            case .symbol:
                 return nil
+            case .color:
+                return String(localized: "books.detail.color.hint")
             case .tag:
                 return nil
             case .delete:
@@ -78,7 +115,9 @@ class BookDetailViewController: UIViewController {
     
     enum Item: Hashable {
         case title(String)
-        case comment(String?)
+        case symbol
+        case lightColor(ColorPickerItem)
+        case darkColor(ColorPickerItem)
         case tagEntry
         case tag(Tag)
         case delete
@@ -133,6 +172,10 @@ class BookDetailViewController: UIViewController {
         cancelItem.tintColor = AppColor.main
         navigationItem.leftBarButtonItem = cancelItem
         
+        if !defaultColors().map({ $0.generateLightDarkString() }).contains(book.dynamicColor.generateLightDarkString()) {
+            customBookColors = [book.dynamicColor]
+        }
+        
         configureHierarchy()
         configureDataSource()
         reloadData()
@@ -147,6 +190,8 @@ class BookDetailViewController: UIViewController {
         tableView.register(TextInputCell.self, forCellReuseIdentifier: NSStringFromClass(TextInputCell.self))
         tableView.register(TextViewCell.self, forCellReuseIdentifier: NSStringFromClass(TextViewCell.self))
         tableView.register(BookTagCell.self, forCellReuseIdentifier: NSStringFromClass(BookTagCell.self))
+        tableView.register(ColorPickerCell.self, forCellReuseIdentifier: NSStringFromClass(ColorPickerCell.self))
+        tableView.register(SymbolCell.self, forCellReuseIdentifier: NSStringFromClass(SymbolCell.self))
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 50.0
         tableView.delegate = self
@@ -173,14 +218,41 @@ class BookDetailViewController: UIViewController {
                     cell.tintColor = AppColor.main
                 }
                 return cell
-            case .comment(let comment):
-                let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(TextViewCell.self), for: indexPath)
-                if let cell = cell as? TextViewCell {
-                    cell.update(text: comment, placeholder: String(localized: "books.detail.comment.hint"))
-                    cell.textDidChanged = { [weak self] text in
-                        self?.comment = text
+            case .symbol:
+                let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(SymbolCell.self), for: indexPath)
+                self.symbolCell = cell as? SymbolCell
+                self.updateSymbolCell()
+                return cell
+            case .lightColor(let colorPickerItem):
+                let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(ColorPickerCell.self), for: indexPath)
+                if let cell = cell as? ColorPickerCell {
+                    self.lightColorCell = cell
+                    cell.update(with: colorPickerItem)
+                    cell.update(colors: self.getBookColors(isLight: true), selectedColor: bookLightColor.generateLightDarkString(.light))
+                    cell.selectedColorDidChange = { [weak self] newColor in
+                        if let color = UIColor(hex: newColor) {
+                            self?.updateBookColor(color, isLight: true)
+                        }
                     }
-                    cell.tintColor = AppColor.main
+                    cell.showPicker = { [weak self] in
+                        self?.showBookColorPicker(isLight: true)
+                    }
+                }
+                return cell
+            case .darkColor(let colorPickerItem):
+                let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(ColorPickerCell.self), for: indexPath)
+                if let cell = cell as? ColorPickerCell {
+                    self.darkColorCell = cell
+                    cell.update(with: colorPickerItem)
+                    cell.update(colors: self.getBookColors(isLight: false), selectedColor: bookDarkColor.generateLightDarkString(.dark))
+                    cell.selectedColorDidChange = { [weak self] newColor in
+                        if let color = UIColor(hex: newColor) {
+                            self?.updateBookColor(color, isLight: false)
+                        }
+                    }
+                    cell.showPicker = { [weak self] in
+                        self?.showBookColorPicker(isLight: false)
+                    }
                 }
                 return cell
             case .tag(let tag):
@@ -231,8 +303,13 @@ class BookDetailViewController: UIViewController {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
         snapshot.appendSections([.title])
         snapshot.appendItems([.title(bookTitle)], toSection: .title)
-        snapshot.appendSections([.comment])
-        snapshot.appendItems([.comment(comment)], toSection: .comment)
+        snapshot.appendSections([.symbol])
+        snapshot.appendItems([.symbol], toSection: .symbol)
+        snapshot.appendSections([.color])
+        snapshot.appendItems([
+            .lightColor(ColorPickerItem(title: String(localized: "tag.detail.preview.light"))),
+            .darkColor(ColorPickerItem(title: String(localized: "tag.detail.preview.dark")))
+        ], toSection: .color)
         if isEditMode() {
             snapshot.appendSections([.tag])
             if let bookID = book.id, let tags = try? DataManager.shared.fetchAllTags(bookID: bookID) {
@@ -267,7 +344,7 @@ class BookDetailViewController: UIViewController {
     
     func allowSave() -> Bool {
         let titleFlag = bookTitle.isValidBookTitle()
-        let commentFlag = comment?.isValidBookComment() ?? true
+        let commentFlag = symbol?.isValidBookComment() ?? true
         
         return titleFlag && commentFlag
     }
@@ -324,6 +401,89 @@ class BookDetailViewController: UIViewController {
         let nav = NavigationController(rootViewController: tagListVC)
         present(nav, animated: true)
     }
+    
+    func updateBookColor(lightColor: UIColor, darkColor: UIColor) {
+        bookColor = UIColor(dynamicProvider: { collection in
+            switch collection.userInterfaceStyle {
+            case .light, .unspecified:
+                return lightColor
+            case .dark:
+                return darkColor
+            @unknown default:
+                fatalError()
+            }
+        })
+        isEdited = true
+    }
+    
+    func getBookColors(isLight: Bool) -> [String] {
+        var colors: [String] = []
+        
+        let defaultColors = defaultColors().map({ $0.generateLightDarkString(isLight ? .light : .dark)}).unique()
+        
+        customBookColors.reversed().forEach { customTagColor in
+            let customTagColorString = customTagColor.generateLightDarkString(isLight ? .light : .dark)
+            if !defaultColors.contains(customTagColorString) {
+                colors.append(customTagColorString)
+            }
+        }
+        colors.append(contentsOf: defaultColors)
+        
+        return colors
+    }
+    
+    func defaultColors() -> [UIColor] {
+        return [.systemPink, .systemRed, .systemOrange, .systemYellow, .systemGreen, .systemMint, .systemTeal, .systemCyan, .systemBlue, .systemIndigo, .systemPurple, .systemBrown, .white, UIColor(white: 0.9, alpha: 1.0), UIColor(white: 0.8, alpha: 1.0), UIColor(white: 0.7, alpha: 1.0), UIColor(white: 0.6, alpha: 1.0), .gray, UIColor(white: 0.4, alpha: 1.0), UIColor(white: 0.3, alpha: 1.0), UIColor(white: 0.2, alpha: 1.0), UIColor(white: 0.1, alpha: 1.0), .black]
+    }
+    
+    func updateBookColor(_ newColor: UIColor, isLight: Bool) {
+        if !defaultColors().map({ $0.generateLightDarkString(isLight ? .light : .dark) }).unique().contains(newColor.generateLightDarkString(isLight ? .light : .dark)) {
+            if !customBookColors.map({ $0.generateLightDarkString(isLight ? .light : .dark) }).contains(newColor.generateLightDarkString(isLight ? .light : .dark)) {
+                customBookColors.append(newColor)
+            }
+        }
+        
+        let lightColors = getBookColors(isLight: true)
+        let darkColors = getBookColors(isLight: false)
+        if isLight {
+            updateBookColor(lightColor: newColor, darkColor: bookDarkColor)
+            lightColorCell?.update(colors: lightColors, selectedColor: newColor.generateLightDarkString(.light))
+            darkColorCell?.update(colors: darkColors, selectedColor: bookDarkColor.generateLightDarkString(.dark))
+        } else {
+            updateBookColor(lightColor: bookLightColor, darkColor: newColor)
+            lightColorCell?.update(colors: lightColors, selectedColor: bookLightColor.generateLightDarkString(.light))
+            darkColorCell?.update(colors: darkColors, selectedColor: newColor.generateLightDarkString(.dark))
+        }
+        updateSymbolCell()
+    }
+    
+    func updateSymbolCell() {
+        guard let cell = symbolCell else { return }
+        var content = UIListContentConfiguration.valueCell()
+        content.image = UIImage(systemName: symbol ?? "book.closed")?.withTintColor(bookColor, renderingMode: .alwaysOriginal)
+        content.text = ""
+        content.secondaryText = String(localized: "book.detail.updateSymbol")
+        cell.contentConfiguration = content
+        cell.accessoryType = .disclosureIndicator
+    }
+    
+    func showBookColorPicker(isLight: Bool) {
+        let colorPicker = StyleColorPickerViewController()
+        colorPicker.style = isLight ? .book(.light) : .book(.dark)
+        
+        colorPicker.selectedColor = isLight ? self.bookLightColor : self.bookDarkColor
+        colorPicker.delegate = self
+        present(colorPicker, animated: true)
+    }
+    
+    @objc private func showSymbolPicker() {
+        if let symbol = book.symbol {
+            presentSymbolPicker(currentSymbol: symbol) { [weak self] symbol in
+                self?.symbol = symbol
+                self?.updateSymbolCell()
+            }
+        }
+    }
 }
 
 extension BookDetailViewController: UITableViewDelegate {
@@ -333,7 +493,11 @@ extension BookDetailViewController: UITableViewDelegate {
             switch identifier {
             case .title:
                 break
-            case .comment:
+            case .symbol:
+                showSymbolPicker()
+            case .lightColor:
+                break
+            case .darkColor:
                 break
             case .tag:
                 break
@@ -343,6 +507,26 @@ extension BookDetailViewController: UITableViewDelegate {
                 showDeleteAlert()
             }
         }
+    }
+}
+
+extension BookDetailViewController: UIColorPickerViewControllerDelegate {
+    func colorPickerViewControllerDidFinish(_ viewController: UIColorPickerViewController) {
+        print("Add color \(viewController.selectedColor)")
+        if let viewController = viewController as? StyleColorPickerViewController {
+            switch viewController.style {
+            case .tag, .title:
+                break
+            case .book(let colorType):
+                switch colorType {
+                case .light:
+                    updateBookColor(viewController.selectedColor, isLight: true)
+                case .dark:
+                    updateBookColor(viewController.selectedColor, isLight: true)
+                }
+            }
+        }
+        reloadData()
     }
 }
 
@@ -357,5 +541,9 @@ extension String {
 }
 
 class BookTagCell: UITableViewCell {
+    
+}
+
+class SymbolCell: UITableViewCell {
     
 }

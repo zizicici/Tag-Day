@@ -652,6 +652,8 @@ extension TagDetailViewController: UIColorPickerViewControllerDelegate {
                 case .dark:
                     updateTitleColor(viewController.selectedColor, isLight: true)
                 }
+            case .book:
+                break
             }
         }
         reloadData()
@@ -677,6 +679,7 @@ class StyleColorPickerViewController: UIColorPickerViewController {
         
         case tag(ColorType)
         case title(ColorType)
+        case book(ColorType)
     }
     var style: ColorPickerStyle = .tag(.light)
 }

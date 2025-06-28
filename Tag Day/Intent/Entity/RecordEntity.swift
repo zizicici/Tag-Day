@@ -103,7 +103,7 @@ struct RecordIntentQuery: EntityQuery {
         var bookEntities: [BookEntity] = []
         for book in allBooks {
             if let bookID = book.id {
-                bookEntities.append(BookEntity(id: Int(bookID), title: book.title, comment: book.comment ?? ""))
+                bookEntities.append(BookEntity(id: Int(bookID), title: book.title, symbol: book.symbol ?? ""))
             }
         }
         

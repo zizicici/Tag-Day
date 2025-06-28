@@ -53,6 +53,8 @@
 		14CAA2D32E0EA2C700096D98 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CAA2D22E0EA2C700096D98 /* NotificationManager.swift */; };
 		14CAA2D62E0EA2E400096D98 /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CAA2D52E0EA2E400096D98 /* NotificationViewController.swift */; };
 		14CC10622E0FACA50076E988 /* AddRecordIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CC10612E0FACA50076E988 /* AddRecordIntent.swift */; };
+		14CC10652E0FFE1A0076E988 /* SymbolPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 14CC10642E0FFE1A0076E988 /* SymbolPicker */; };
+		14CC10672E0FFEE20076E988 /* SymbolPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CC10662E0FFEE20076E988 /* SymbolPicker.swift */; };
 		14CC8A462DCF04970062F8BA /* FastEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CC8A452DCF04970062F8BA /* FastEditorViewController.swift */; };
 		14D035EA2E01156D00E32E91 /* TagStatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D035E92E01156D00E32E91 /* TagStatisticsViewController.swift */; };
 		14D07CC32DD2ED4900F6843C /* RecordDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D07CC22DD2ED4900F6843C /* RecordDetailViewController.swift */; };
@@ -149,6 +151,7 @@
 		14CAA2D22E0EA2C700096D98 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		14CAA2D52E0EA2E400096D98 /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
 		14CC10612E0FACA50076E988 /* AddRecordIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddRecordIntent.swift; sourceTree = "<group>"; };
+		14CC10662E0FFEE20076E988 /* SymbolPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolPicker.swift; sourceTree = "<group>"; };
 		14CC8A452DCF04970062F8BA /* FastEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastEditorViewController.swift; sourceTree = "<group>"; };
 		14CD76AD2DBE6BA10035DF1F /* Tag Day.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Tag Day.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		14D035E92E01156D00E32E91 /* TagStatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagStatisticsViewController.swift; sourceTree = "<group>"; };
@@ -213,6 +216,7 @@
 				14B239D52DBF790A0007152C /* ZCCalendar in Frameworks */,
 				14EBE0862DD7679700F7609A /* DurationPicker in Frameworks */,
 				14B239CC2DBF77B10007152C /* SnapKit in Frameworks */,
+				14CC10652E0FFE1A0076E988 /* SymbolPicker in Frameworks */,
 				14B239D82DBF791E0007152C /* Toast in Frameworks */,
 				14B239CF2DBF78CD0007152C /* GRDB in Frameworks */,
 				14FF82A72E03F9B100D3000B /* ZipArchive in Frameworks */,
@@ -258,6 +262,7 @@
 			children = (
 				14AD287A2DC5B6DD0018DAF3 /* BookListViewController.swift */,
 				14337F812DCC70DA0043447A /* BookDetailViewController.swift */,
+				14CC10662E0FFEE20076E988 /* SymbolPicker.swift */,
 				14AD28822DC5BCCC0018DAF3 /* View */,
 			);
 			path = Book;
@@ -586,6 +591,7 @@
 				14EBE0852DD7679700F7609A /* DurationPicker */,
 				14B468EF2DFFE5B500415529 /* Collections */,
 				14FF82A62E03F9B100D3000B /* ZipArchive */,
+				14CC10642E0FFE1A0076E988 /* SymbolPicker */,
 			);
 			productName = "Tag Day";
 			productReference = 14CD76AD2DBE6BA10035DF1F /* Tag Day.app */;
@@ -627,6 +633,7 @@
 				14EBE0842DD7679700F7609A /* XCRemoteSwiftPackageReference "DurationPicker" */,
 				14B468EE2DFFE5B500415529 /* XCRemoteSwiftPackageReference "swift-collections" */,
 				14FF82A52E03F9B100D3000B /* XCRemoteSwiftPackageReference "ZipArchive" */,
+				14CC10632E0FFE1A0076E988 /* XCRemoteSwiftPackageReference "SymbolPicker" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 14CD76AE2DBE6BA10035DF1F /* Products */;
@@ -665,6 +672,7 @@
 				14FF82BA2E04511000D3000B /* ChineseDay.swift in Sources */,
 				14FF82BB2E04511000D3000B /* ChineseCalendarDataSource.swift in Sources */,
 				14FF82BC2E04511000D3000B /* ChineseMonth.swift in Sources */,
+				14CC10672E0FFEE20076E988 /* SymbolPicker.swift in Sources */,
 				14FF82BD2E04511000D3000B /* ChineseCalendarManager.swift in Sources */,
 				14FF82BE2E04511000D3000B /* ChineseDayInfo.swift in Sources */,
 				14FF82BF2E04511000D3000B /* ChineseYear.swift in Sources */,
@@ -1019,6 +1027,14 @@
 				minimumVersion = 1.2.0;
 			};
 		};
+		14CC10632E0FFE1A0076E988 /* XCRemoteSwiftPackageReference "SymbolPicker" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/xnth97/SymbolPicker";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.6.2;
+			};
+		};
 		14EBE0842DD7679700F7609A /* XCRemoteSwiftPackageReference "DurationPicker" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mac-gallagher/DurationPicker";
@@ -1067,6 +1083,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 14B468EE2DFFE5B500415529 /* XCRemoteSwiftPackageReference "swift-collections" */;
 			productName = Collections;
+		};
+		14CC10642E0FFE1A0076E988 /* SymbolPicker */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 14CC10632E0FFE1A0076E988 /* XCRemoteSwiftPackageReference "SymbolPicker" */;
+			productName = SymbolPicker;
 		};
 		14EBE0852DD7679700F7609A /* DurationPicker */ = {
 			isa = XCSwiftPackageProductDependency;

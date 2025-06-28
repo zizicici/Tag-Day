@@ -33,7 +33,7 @@ final class AppDatabase {
                 
                 table.column("title", .text).notNull()
                 table.column("color", .text).notNull()
-                table.column("comment", .text)
+                table.column("symbol", .text)
                 table.column("book_type", .integer).notNull()
                 table.column("order", .integer).notNull()
             }
@@ -68,7 +68,7 @@ final class AppDatabase {
             }
             
             if true {
-                var firstBook = Book(title: String(localized: "database.firstBook"), color: AppColor.main.generateLightDarkString(), comment: String(localized: "database.firstBook.comment"), order: 0)
+                var firstBook = Book(title: String(localized: "database.firstBook"), color: AppColor.main.generateLightDarkString(), order: 0)
                 try? firstBook.save(db)
                 
                 if let bookID = firstBook.id {

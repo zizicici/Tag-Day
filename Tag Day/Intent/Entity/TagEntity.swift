@@ -103,7 +103,7 @@ struct TagsOptionsProvider: DynamicOptionsProvider {
                         id: Int(tag.id!),
                         title: tag.title,
                         subtitle: tag.subtitle ?? "",
-                        book: BookEntity(id: Int(tag.bookID), title: book.title, comment: book.comment),
+                        book: BookEntity(id: Int(tag.bookID), title: book.title, symbol: book.symbol),
                         color: tag.color
                     ),
                     title: LocalizedStringResource(stringLiteral: tag.title),
