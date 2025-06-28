@@ -224,12 +224,12 @@ class RecordDetailViewController: UIViewController {
         view.backgroundColor = AppColor.background
         
         let saveItem = UIBarButtonItem(title: String(localized: "button.save"), style: .done, target: self, action: #selector(save))
-        saveItem.tintColor = AppColor.main
+        saveItem.tintColor = AppColor.dynamicColor
         saveItem.isEnabled = false
         navigationItem.rightBarButtonItem = saveItem
         
         let cancelItem = UIBarButtonItem(title: String(localized: "button.cancel"), style: .plain, target: self, action: #selector(dismissViewController))
-        cancelItem.tintColor = AppColor.main
+        cancelItem.tintColor = AppColor.dynamicColor
         navigationItem.leftBarButtonItem = cancelItem
         
         configureHierarchy()
@@ -270,7 +270,7 @@ class RecordDetailViewController: UIViewController {
                 let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(UITableViewCell.self), for: indexPath)
                 let itemSwitch = UISwitch()
                 itemSwitch.isOn = isOn
-                itemSwitch.onTintColor = AppColor.main
+                itemSwitch.onTintColor = AppColor.dynamicColor
                 itemSwitch.addTarget(self, action: #selector(self.startTimeToggle(_:)), for: .touchUpInside)
                 cell.accessoryView = itemSwitch
                 
@@ -293,7 +293,7 @@ class RecordDetailViewController: UIViewController {
                 let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(UITableViewCell.self), for: indexPath)
                 let itemSwitch = UISwitch()
                 itemSwitch.isOn = isOn
-                itemSwitch.onTintColor = AppColor.main
+                itemSwitch.onTintColor = AppColor.dynamicColor
                 itemSwitch.addTarget(self, action: #selector(self.endTimeToggle(_:)), for: .touchUpInside)
                 cell.accessoryView = itemSwitch
                 
@@ -342,7 +342,7 @@ class RecordDetailViewController: UIViewController {
             case .comment(let comment):
                 let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(TextViewCell.self), for: indexPath)
                 if let cell = cell as? TextViewCell {
-                    cell.tintColor = AppColor.main
+                    cell.tintColor = AppColor.dynamicColor
                     cell.update(text: comment, placeholder: String(localized: "dayRecord.placeholder.comment"))
                     cell.textDidChanged = { [weak self] text in
                         self?.comment = text

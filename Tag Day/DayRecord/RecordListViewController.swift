@@ -68,7 +68,7 @@ class RecordListViewController: UIViewController {
         reloadData()
         
         let newBarItem = UIBarButtonItem(title: String(localized: "dayDetail.new"), style: .plain, target: self, action: #selector(newAction))
-        newBarItem.tintColor = AppColor.main
+        newBarItem.tintColor = AppColor.dynamicColor
         toolbarItems = [newBarItem, .flexibleSpace()]
         navigationController?.setToolbarHidden(false, animated: false)
         

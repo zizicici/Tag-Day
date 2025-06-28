@@ -70,11 +70,11 @@ class BookListViewController: UIViewController {
         view.backgroundColor = AppColor.background
         
         let doneBarItem = UIBarButtonItem(title: String(localized: "button.done"), style: .plain, target: self, action: #selector(close))
-        doneBarItem.tintColor = AppColor.main
+        doneBarItem.tintColor = AppColor.dynamicColor
         navigationItem.rightBarButtonItem = doneBarItem
         
         let newBarItem = UIBarButtonItem(title: String(localized: "books.new"), style: .plain, target: self, action: #selector(new))
-        newBarItem.tintColor = AppColor.main
+        newBarItem.tintColor = AppColor.dynamicColor
         toolbarItems = [newBarItem, .flexibleSpace()]
         navigationController?.setToolbarHidden(false, animated: false)
         
@@ -191,7 +191,7 @@ class BookListViewController: UIViewController {
     }
     
     func detailAccessoryForListCellItem(_ item: BookCellItem) -> UICellAccessory {
-        return UICellAccessory.detail(options: UICellAccessory.DetailOptions(reservedLayoutWidth: .custom(44), tintColor: AppColor.main), actionHandler: { [weak self] in
+        return UICellAccessory.detail(options: UICellAccessory.DetailOptions(reservedLayoutWidth: .custom(44), tintColor: AppColor.dynamicColor), actionHandler: { [weak self] in
             self?.goToDetail(for: item)
         })
     }
@@ -204,7 +204,7 @@ class BookListViewController: UIViewController {
         if let lastestBook = activeBooks.last {
             bookOrder = lastestBook.order + 1
         }
-        let newBook = Book(title: "", color: AppColor.main.generateLightDarkString(), order: bookOrder)
+        let newBook = Book(title: "", color: AppColor.dynamicColor.generateLightDarkString(), order: bookOrder)
         let nav = NavigationController(rootViewController: BookDetailViewController(book: newBook))
         
         navigationController?.present(nav, animated: true)

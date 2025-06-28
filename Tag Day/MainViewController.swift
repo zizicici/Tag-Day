@@ -15,7 +15,6 @@ class MainViewController: CalendarViewController {
         configuration.cornerStyle = .large
         configuration.image = UIImage(systemName: "tag")?.withConfiguration(UIImage.SymbolConfiguration(textStyle: .body, scale: .default))
         configuration.baseForegroundColor = .white
-        configuration.background.backgroundColor = AppColor.main.withAlphaComponent(0.85)
         let button = UIButton(configuration: configuration)
         button.showsMenuAsPrimaryAction = true
         return button
@@ -35,7 +34,6 @@ class MainViewController: CalendarViewController {
         configuration.image = UIImage(systemName: "book.closed")?.withConfiguration( UIImage.SymbolConfiguration(textStyle: .body, scale: .default))
         configuration.imagePadding = 10.0
         configuration.baseForegroundColor = .white
-        configuration.background.backgroundColor = AppColor.main.withAlphaComponent(0.85)
         let button = UIButton(configuration: configuration)
         button.showsMenuAsPrimaryAction = true
         return button
@@ -79,6 +77,11 @@ class MainViewController: CalendarViewController {
         tagButton.configurationUpdateHandler = { [weak self] button in
             guard let self = self else { return }
             
+            var config = button.configuration
+            config?.background.backgroundColor = AppColor.dynamicColor
+            
+            button.configuration = config
+            
             button.menu = self.getTagsMenu()
             if DataManager.shared.currentBook == nil {
                 button.isEnabled = false
@@ -104,6 +107,7 @@ class MainViewController: CalendarViewController {
             } else {
                 config?.title = String(localized: "books.empty")
             }
+            config?.background.backgroundColor = AppColor.dynamicColor
             
             button.configuration = config
             button.menu = self.getBooksMenu()
@@ -112,10 +116,10 @@ class MainViewController: CalendarViewController {
     
     func setupBottomBarItems() {
         let bookItem = UIBarButtonItem(title: String(localized: "tags.new"), style: .done, target: nil, action: nil)
-        bookItem.tintColor = AppColor.main
+        bookItem.tintColor = AppColor.dynamicColor
         
         let tagItem = UIBarButtonItem(image: UIImage(systemName: "tag"), style: .done, target: nil, action: nil)
-        tagItem.tintColor = AppColor.main
+        tagItem.tintColor = AppColor.dynamicColor
         
         self.bookBarButtonItem = bookItem
         self.tagBarButtonItem = tagItem

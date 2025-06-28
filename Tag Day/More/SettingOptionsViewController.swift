@@ -75,7 +75,7 @@ class SettingOptionsViewController<T: SettingsOption>: UIViewController, UITable
             case .option(let item, let isSelected):
                 let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
                 cell.accessoryType = isSelected ? .checkmark : .none
-                cell.tintColor = AppColor.main
+                cell.tintColor = AppColor.dynamicColor
                 var content = UIListContentConfiguration.valueCell()
                 content.text = item.getName()
                 content.textProperties.color = .label

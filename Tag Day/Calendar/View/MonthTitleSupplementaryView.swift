@@ -16,7 +16,6 @@ class MonthTitleSupplementaryView: UICollectionReusableView {
         label.font = UIFont.preferredFont(forTextStyle: .headline)
         label.textAlignment = .center
         label.textColor = AppColor.text
-        label.backgroundColor = AppColor.background
         
         return label
     }()

@@ -93,10 +93,10 @@ class TagStatisticsViewController: UIViewController {
         view.backgroundColor = AppColor.background
         
         let closeItem = UIBarButtonItem(title: String(localized: "button.close"), style: .plain, target: self, action: #selector(dismissViewController))
-        closeItem.tintColor = AppColor.main
+        closeItem.tintColor = AppColor.dynamicColor
         navigationItem.leftBarButtonItem = closeItem
         
-        calendarBarItem.tintColor = AppColor.main
+        calendarBarItem.tintColor = AppColor.dynamicColor
         toolbarItems = [.flexibleSpace(), calendarBarItem]
         navigationController?.setToolbarHidden(false, animated: false)
         

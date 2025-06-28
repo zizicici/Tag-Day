@@ -211,12 +211,12 @@ class TagDetailViewController: UIViewController {
         view.backgroundColor = AppColor.background
         
         let saveItem = UIBarButtonItem(title: String(localized: "button.save"), style: .done, target: self, action: #selector(save))
-        saveItem.tintColor = AppColor.main
+        saveItem.tintColor = AppColor.dynamicColor
         saveItem.isEnabled = false
         navigationItem.rightBarButtonItem = saveItem
         
         let cancelItem = UIBarButtonItem(title: String(localized: "button.cancel"), style: .plain, target: self, action: #selector(dismissViewController))
-        cancelItem.tintColor = AppColor.main
+        cancelItem.tintColor = AppColor.dynamicColor
         navigationItem.leftBarButtonItem = cancelItem
         
         if !defaultColors().map({ $0.generateLightDarkString() }).contains(tag.dynamicColor.generateLightDarkString()) {
@@ -268,7 +268,7 @@ class TagDetailViewController: UIViewController {
                     cell.textDidChanged = { [weak self] text in
                         self?.tagTitle = text
                     }
-                    cell.tintColor = AppColor.main
+                    cell.tintColor = AppColor.dynamicColor
                 }
                 return cell
             case .subtitle:
@@ -278,7 +278,7 @@ class TagDetailViewController: UIViewController {
                     cell.textDidChanged = { [weak self] text in
                         self?.subtitle = text
                     }
-                    cell.tintColor = AppColor.main
+                    cell.tintColor = AppColor.dynamicColor
                 }
                 return cell
             case .tagLightColor(let colorPickerItem):
@@ -318,7 +318,7 @@ class TagDetailViewController: UIViewController {
                 let itemSwitch = UISwitch()
                 itemSwitch.isOn = enable
                 itemSwitch.addTarget(self, action: #selector(self.toggle(_:)), for: .touchUpInside)
-                itemSwitch.onTintColor = AppColor.main
+                itemSwitch.onTintColor = AppColor.dynamicColor
                 var content = cell.defaultContentConfiguration()
                 content.text = String(localized: "tags.detail.color.text.toggle")
                 content.textProperties.color = .label

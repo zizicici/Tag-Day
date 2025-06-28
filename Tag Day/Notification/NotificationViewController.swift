@@ -118,7 +118,7 @@ class NotificationViewController: UIViewController {
                 let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(UITableViewCell.self), for: indexPath)
                 var content = UIListContentConfiguration.cell()
                 content.text = identifier.title
-                content.textProperties.color = AppColor.main
+                content.textProperties.color = AppColor.dynamicColor
                 content.textProperties.alignment = .center
                 cell.contentConfiguration = content
                 

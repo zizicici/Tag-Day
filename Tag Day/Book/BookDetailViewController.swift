@@ -164,12 +164,12 @@ class BookDetailViewController: UIViewController {
         view.backgroundColor = AppColor.background
         
         let saveItem = UIBarButtonItem(title: String(localized: "button.save"), style: .done, target: self, action: #selector(save))
-        saveItem.tintColor = AppColor.main
+        saveItem.tintColor = AppColor.dynamicColor
         saveItem.isEnabled = false
         navigationItem.rightBarButtonItem = saveItem
         
         let cancelItem = UIBarButtonItem(title: String(localized: "button.cancel"), style: .plain, target: self, action: #selector(dismissViewController))
-        cancelItem.tintColor = AppColor.main
+        cancelItem.tintColor = AppColor.dynamicColor
         navigationItem.leftBarButtonItem = cancelItem
         
         if !defaultColors().map({ $0.generateLightDarkString() }).contains(book.dynamicColor.generateLightDarkString()) {
@@ -215,7 +215,7 @@ class BookDetailViewController: UIViewController {
                     cell.textDidChanged = { [weak self] text in
                         self?.bookTitle = text
                     }
-                    cell.tintColor = AppColor.main
+                    cell.tintColor = AppColor.dynamicColor
                 }
                 return cell
             case .symbol:
@@ -278,7 +278,7 @@ class BookDetailViewController: UIViewController {
                 cell.accessoryType = .none
                 var content = cell.defaultContentConfiguration()
                 content.text = String(localized: "tags.management")
-                content.textProperties.color = AppColor.main
+                content.textProperties.color = AppColor.dynamicColor
                 content.textProperties.alignment = .center
                 cell.contentConfiguration = content
                 cell.separatorInset = .zero

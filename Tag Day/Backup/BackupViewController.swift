@@ -114,7 +114,7 @@ class BackupViewController: UIViewController {
         super.viewDidLoad()
         
         self.title = String(localized: "backup.title")
-        navigationController?.navigationBar.tintColor = AppColor.main
+        navigationController?.navigationBar.tintColor = AppColor.dynamicColor
         
         view.backgroundColor = AppColor.background
         
@@ -156,7 +156,7 @@ class BackupViewController: UIViewController {
                     itemSwitch.isEnabled = isEnable
                     itemSwitch.isOn = isAutoUpdate
                     itemSwitch.addTarget(self, action: #selector(self.toggle(_:)), for: .touchUpInside)
-                    itemSwitch.onTintColor = AppColor.main
+                    itemSwitch.onTintColor = AppColor.dynamicColor
                     var content = cell.defaultContentConfiguration()
                     content.text = identifier.cellTitle()
                     content.textProperties.color = .label
@@ -189,7 +189,7 @@ class BackupViewController: UIViewController {
                     var content = cell.defaultContentConfiguration()
                     content.text = identifier.cellTitle()
                     if BackupManager.shared.iCloudDocumentIsAccessable {
-                        content.textProperties.color = AppColor.main
+                        content.textProperties.color = AppColor.dynamicColor
                     } else {
                         content.textProperties.color = .secondaryLabel
                     }
@@ -200,7 +200,7 @@ class BackupViewController: UIViewController {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
                 var content = cell.defaultContentConfiguration()
                 content.text = identifier.cellTitle()
-                content.textProperties.color = AppColor.main
+                content.textProperties.color = AppColor.dynamicColor
                 cell.contentConfiguration = content
                 return cell
             }

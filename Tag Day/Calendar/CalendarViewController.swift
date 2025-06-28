@@ -136,15 +136,15 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         addGestures()
         
         settingsButton = UIBarButtonItem(image: UIImage(systemName: "slider.horizontal.2.square", withConfiguration: UIImage.SymbolConfiguration(weight: .medium)), style: .plain, target: nil, action: nil)
-        settingsButton?.tintColor = AppColor.main
+        settingsButton?.tintColor = AppColor.dynamicColor
         
         moreButton = UIBarButtonItem(image: UIImage(systemName: "ellipsis", withConfiguration: UIImage.SymbolConfiguration(weight: .medium)), style: .plain, target: self, action: #selector(moreAction))
-        moreButton?.tintColor = AppColor.main
+        moreButton?.tintColor = AppColor.dynamicColor
         
         navigationItem.rightBarButtonItems = [moreButton, settingsButton].compactMap{ $0 }
         
         yearButton = UIBarButtonItem(title: displayHandler.getTitle(), style: .plain, target: self, action: #selector(showYearPicker))
-        yearButton?.tintColor = AppColor.main
+        yearButton?.tintColor = AppColor.dynamicColor
         navigationItem.leftBarButtonItems = [yearButton].compactMap{ $0 }
         
         reloadDataDebounce = Debounce(duration: 0.02, block: { [weak self] value in
@@ -332,6 +332,8 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         
 //        updateMoreMenu()
         updateSettingsMenu()
+        navigationItem.leftBarButtonItems?.forEach { $0.tintColor = AppColor.dynamicColor }
+        navigationItem.rightBarButtonItems?.forEach { $0.tintColor = AppColor.dynamicColor }
 
         applyData()
     }

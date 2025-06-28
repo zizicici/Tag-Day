@@ -17,4 +17,20 @@ struct AppColor {
     static let navigationBar = UIColor.navigationBar
     static let toolbar = UIColor.toolBar
     static let today = UIColor.today
+    
+    static var dynamicColor: UIColor {
+        get {
+            return UIColor { _ in
+                if let dynamicColor = DataManager.shared.currentBook?.dynamicColor {
+                    if dynamicColor.isSimilar(to: Self.background) || dynamicColor.isSimilar(to: Self.paper) {
+                        return Self.main
+                    } else {
+                        return dynamicColor
+                    }
+                } else {
+                    return Self.main
+                }
+            }
+        }
+    }
 }

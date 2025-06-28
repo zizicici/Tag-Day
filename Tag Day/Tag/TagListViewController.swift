@@ -50,11 +50,11 @@ class TagListViewController: UIViewController {
         view.backgroundColor = AppColor.background
 
         let doneBarItem = UIBarButtonItem(title: String(localized: "button.done"), style: .plain, target: self, action: #selector(close))
-        doneBarItem.tintColor = AppColor.main
+        doneBarItem.tintColor = AppColor.dynamicColor
         navigationItem.rightBarButtonItem = doneBarItem
         
         let newBarItem = UIBarButtonItem(title: String(localized: "tags.new"), style: .plain, target: self, action: #selector(new))
-        newBarItem.tintColor = AppColor.main
+        newBarItem.tintColor = AppColor.dynamicColor
         toolbarItems = [newBarItem, .flexibleSpace()]
         navigationController?.setToolbarHidden(false, animated: false)
         
@@ -118,7 +118,7 @@ class TagListViewController: UIViewController {
     }
     
     func detailAccessoryForListCellItem(_ item: TagCellItem) -> UICellAccessory {
-        return UICellAccessory.detail(options: UICellAccessory.DetailOptions(reservedLayoutWidth: .custom(44), tintColor: AppColor.main), actionHandler: { [weak self] in
+        return UICellAccessory.detail(options: UICellAccessory.DetailOptions(reservedLayoutWidth: .custom(44), tintColor: AppColor.dynamicColor), actionHandler: { [weak self] in
             self?.goToDetail(for: item)
         })
     }

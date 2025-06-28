@@ -104,7 +104,7 @@ class FastEditorViewController: UIViewController {
         switch editMode {
         case .add:
             let newTagItem = UIBarButtonItem(title: String(localized: "tags.new"), style: .plain, target: self, action: #selector(newTagAction))
-            newTagItem.tintColor = AppColor.main
+            newTagItem.tintColor = AppColor.dynamicColor
             items.append(newTagItem)
         case .replace:
             break
@@ -119,7 +119,7 @@ class FastEditorViewController: UIViewController {
         items.append(.flexibleSpace())
         
         let cancelItem = UIBarButtonItem(title: String(localized: "button.cancel"), style: .done, target: self, action: #selector(dismissAction))
-        cancelItem.tintColor = AppColor.main
+        cancelItem.tintColor = AppColor.dynamicColor
         items.append(cancelItem)
 
         toolbarItems = items

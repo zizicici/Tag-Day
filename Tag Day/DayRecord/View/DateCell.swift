@@ -68,7 +68,7 @@ class DateCell: DateBaseCell {
             }
         }))
         datePicker.datePickerMode = .dateAndTime
-        datePicker.tintColor = AppColor.main
+        datePicker.tintColor = AppColor.dynamicColor
         contentView.addSubview(datePicker)
         datePicker.snp.makeConstraints { make in
             make.trailing.equalTo(contentView).inset(16)
