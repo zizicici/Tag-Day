@@ -383,21 +383,22 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         let displayDivider = UIMenu(title: "", options: [.displayInline], children: [tagDisplayMenu, monthlyStatsMenu])
         
         children.append(displayDivider)
-
-        let editActions: [UIAction] = [EditMode.normal, EditMode.overwrite].map { mode in
-            return UIAction(title: mode.title, subtitle: mode.subtitle, image: UIImage(systemName: mode.image), attributes: mode.attributes, state: editMode == mode ? .on : .off) { [weak self] _ in
-                self?.switchEditMode(to: mode)
-            }
-        }
-        
-        let editModeDivider = UIMenu(title: String(localized: "editMode.title"), subtitle: editMode.title, image: UIImage(systemName: editMode.image), options: editMode.options, children: editActions)
-        children.append(editModeDivider)
         
         return UIMenu(children: children)
     }
     
     private func updateMoreMenu() {        
         moreButton?.menu = getMoreMenu()
+    }
+    
+    private func getEditModeDivider() -> UIMenu {
+        let editActions: [UIAction] = [EditMode.normal, EditMode.overwrite].map { mode in
+            return UIAction(title: mode.title, subtitle: mode.subtitle, image: UIImage(systemName: mode.image), attributes: mode.attributes, state: editMode == mode ? .on : .off) { [weak self] _ in
+                self?.switchEditMode(to: mode)
+            }
+        }
+        
+        return UIMenu(title: String(localized: "editMode.title"), subtitle: editMode.title, image: UIImage(systemName: editMode.image), options: editMode.options, children: editActions)
     }
     
     func getMoreMenu() -> UIMenu {
