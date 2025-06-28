@@ -477,11 +477,9 @@ class BookDetailViewController: UIViewController {
     }
     
     @objc private func showSymbolPicker() {
-        if let symbol = book.symbol {
-            presentSymbolPicker(currentSymbol: symbol) { [weak self] symbol in
-                self?.symbol = symbol
-                self?.updateSymbolCell()
-            }
+        presentSymbolPicker(currentSymbol: symbol ?? "") { [weak self] symbol in
+            self?.symbol = symbol
+            self?.updateSymbolCell()
         }
     }
 }
