@@ -116,20 +116,20 @@ class MainViewController: CalendarViewController {
     }
     
     func setupBottomBarItems() {
-        let bookItem = UIBarButtonItem(title: String(localized: "tags.new"), style: .done, target: nil, action: nil)
+        let bookItem = UIBarButtonItem(image: UIImage(systemName: "book"), style: .done, target: nil, action: nil)
         bookItem.tintColor = AppColor.dynamicColor
         
-        let tagItem = UIBarButtonItem(image: UIImage(systemName: "tag"), style: .done, target: nil, action: nil)
+        let tagItem = UIBarButtonItem(image: UIImage(systemName: "tag"), style: .plain, target: nil, action: nil)
         tagItem.tintColor = AppColor.dynamicColor
         
         self.bookBarButtonItem = bookItem
         self.tagBarButtonItem = tagItem
         
         bookBarButtonItem?.menu = getBooksMenu()
-        bookBarButtonItem?.title = DataManager.shared.currentBook?.title
+        bookBarButtonItem?.image = DataManager.shared.currentBook?.templateImage
         tagBarButtonItem?.menu = getTagsMenu()
         
-        toolbarItems = [bookBarButtonItem!, .flexibleSpace(), tagBarButtonItem!]
+        toolbarItems = [bookItem, .flexibleSpace(), tagItem]
         navigationController?.setToolbarHidden(false, animated: false)
     }
     
@@ -138,7 +138,10 @@ class MainViewController: CalendarViewController {
         bookPickerButton.setNeedsUpdateConfiguration()
         tagButton.setNeedsUpdateConfiguration()
         bookBarButtonItem?.menu = getBooksMenu()
+        bookBarButtonItem?.image = DataManager.shared.currentBook?.templateImage
+        bookBarButtonItem?.tintColor = AppColor.dynamicColor
         tagBarButtonItem?.menu = getTagsMenu()
+        tagBarButtonItem?.tintColor = AppColor.dynamicColor
     }
     
     func getBooksMenu() -> UIMenu {
