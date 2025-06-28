@@ -11,7 +11,7 @@ import ZCCalendar
 struct CheckRecordIntent: AppIntent {
     static var title: LocalizedStringResource = "intent.record.check.title"
     
-    static var description: IntentDescription = IntentDescription("intent.record.check.description", categoryName: "intent.record.get.category")
+    static var description: IntentDescription = IntentDescription("intent.record.check.description", categoryName: "intent.record.check.category")
     
     @Parameter(title: "intent.record.dateValue", description: "intent.record.dateValue", kind: .date, requestValueDialog: IntentDialog("intent.record.dialog"))
     var date: Date
@@ -46,7 +46,7 @@ struct CheckRecordIntent: AppIntent {
 struct CheckTomorrowRecordIntent: AppIntent {
     static var title: LocalizedStringResource = "intent.record.check.tomorrow.title"
     
-    static var description: IntentDescription = IntentDescription("intent.record.check.description", categoryName: "intent.record.get.category")
+    static var description: IntentDescription = IntentDescription("intent.record.check.description", categoryName: "intent.record.check.category")
     
     @Parameter(title: "intent.book.type")
     var book: BookEntity

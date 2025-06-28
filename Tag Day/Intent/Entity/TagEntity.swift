@@ -85,9 +85,10 @@ struct TagIntentQuery: EntityQuery {
 struct TagsOptionsProvider: DynamicOptionsProvider {
     @ParameterDependency(\CheckRecordIntent.$book) var book1
     @ParameterDependency(\CheckTomorrowRecordIntent.$book) var book2
+    @ParameterDependency(\AddRecordIntent.$book) var book3
 
     func results() async throws -> ItemCollection<TagEntity> {
-        guard let book = book1?.book ?? book2?.book else {
+        guard let book = book1?.book ?? book2?.book ?? book3?.book else {
             throw FetchError.bookFirst
         }
         
