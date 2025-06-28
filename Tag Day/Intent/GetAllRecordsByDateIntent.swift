@@ -1,5 +1,5 @@
 //
-//  GetRecordsIntent.swift
+//  GetAllRecordsByDateIntent.swift
 //  Tag Day
 //
 //  Created by Ci Zi on 2025/5/12.
@@ -8,7 +8,7 @@
 import AppIntents
 import ZCCalendar
 
-struct GetRecordsIntent: AppIntent {
+struct GetAllRecordsByDateIntent: AppIntent {
     static var title: LocalizedStringResource = "intent.record.get.title"
     
     static var description: IntentDescription = IntentDescription("intent.record.get.description", categoryName: "intent.record.get.category")
@@ -41,8 +41,8 @@ struct GetRecordsIntent: AppIntent {
             
             var result: [RecordEntity] = []
             for record in records {
-                if let recordID = record.id, let tag = tagEntities.first(where: { $0.id == record.tagID }) {
-                    result.append(RecordEntity(id: Int(recordID), date: date, tag: tag, book: book))
+                if let tag = tagEntities.first(where: { $0.id == record.tagID }), let recordEntity = RecordEntity(tag: tag, book: book, record: record) {
+                    result.append(recordEntity)
                 }
             }
             return .result(value: result)

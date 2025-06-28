@@ -28,15 +28,31 @@ struct RecordEntity: Identifiable, Hashable, Equatable, AppEntity {
     @Property(title: "intent.book.type")
     var book: BookEntity
     
-    init(id: Int, date: Date, tag: TagEntity, book: BookEntity) {
+    @Property(title: "intent.record.comment")
+    var comment: String?
+    
+    @Property(title: "intent.record.startTime")
+    var startTime: Date?
+    
+    @Property(title: "intent.record.endTime")
+    var endTime: Date?
+    
+    @Property(title: "intent.record.durationByMinutes")
+    var durationByMinutes: Int?
+    
+    init(id: Int, date: Date, tag: TagEntity, book: BookEntity, comment: String?, startTime: Date?, endTime: Date?, durationByMinutes: Int?) {
         self.id = id
         self.date = date
         self.tag = tag
         self.book = book
+        self.comment = comment
+        self.startTime = startTime
+        self.endTime = endTime
+        self.durationByMinutes = durationByMinutes
     }
     
     static func == (lhs: RecordEntity, rhs: RecordEntity) -> Bool {
-        return lhs.id == rhs.id && lhs.date == rhs.date && lhs.tag == rhs.tag && lhs.book == rhs.book
+        return lhs.id == rhs.id && lhs.date == rhs.date && lhs.tag == rhs.tag && lhs.book == rhs.book && lhs.comment == rhs.comment && lhs.startTime == rhs.startTime && lhs.endTime == rhs.endTime && lhs.durationByMinutes == rhs.durationByMinutes
     }
 
     func hash(into hasher: inout Hasher) {
@@ -44,6 +60,30 @@ struct RecordEntity: Identifiable, Hashable, Equatable, AppEntity {
         hasher.combine(date)
         hasher.combine(tag)
         hasher.combine(book)
+        hasher.combine(comment)
+        hasher.combine(startTime)
+        hasher.combine(endTime)
+        hasher.combine(durationByMinutes)
+    }
+    
+    init?(tag: TagEntity, book: BookEntity, record: DayRecord) {
+        if let recordID = record.id, let date = GregorianDay(JDN: Int(record.day)).generateDate(secondsFromGMT: Calendar.current.timeZone.secondsFromGMT()) {
+            var startTime: Date?
+            if let recordStartTime = record.startTime {
+                startTime = Date(nanoSecondSince1970: recordStartTime)
+            }
+            var endTime: Date?
+            if let recordEndTime = record.endTime {
+                endTime = Date(nanoSecondSince1970: recordEndTime)
+            }
+            var durationByMinutes: Int?
+            if let duration = record.duration {
+                durationByMinutes = Int(Double(duration) / 60000)
+            }
+            self.init(id: Int(recordID), date: date, tag: tag, book: book, comment: record.comment, startTime: startTime, endTime: endTime, durationByMinutes: durationByMinutes)
+        } else {
+            return nil
+        }
     }
 }
 
@@ -69,8 +109,10 @@ struct RecordIntentQuery: EntityQuery {
         
         var result: [RecordEntity] = []
         for record in records {
-            if let recordID = record.id, let tag = tagEntities.first(where: { $0.id == record.tagID }), let book = bookEntities.first(where: { $0.id == record.bookID }), let date = GregorianDay(JDN: Int(record.day)).generateDate(secondsFromGMT: Calendar.current.timeZone.secondsFromGMT()) {
-                result.append(RecordEntity(id: Int(recordID), date: date, tag: tag, book: book))
+            if let tag = tagEntities.first(where: { $0.id == record.tagID }), let book = bookEntities.first(where: { $0.id == record.bookID }) {
+                if let recordEntity = RecordEntity(tag: tag, book: book, record: record) {
+                    result.append(recordEntity)
+                }
             }
         }
         return result

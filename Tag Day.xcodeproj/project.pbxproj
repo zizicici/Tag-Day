@@ -43,7 +43,7 @@
 		14BBA3782DCB101100AD7BAC /* TextInputCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BBA3772DCB101100AD7BAC /* TextInputCell.swift */; };
 		14BBA37A2DCB142900AD7BAC /* ColorPickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BBA3792DCB142900AD7BAC /* ColorPickerCell.swift */; };
 		14BBA37C2DCB2EE900AD7BAC /* TagPreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BBA37B2DCB2EE900AD7BAC /* TagPreviewCell.swift */; };
-		14C7134B2DD21DF8007527C5 /* GetRecordsIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C7134A2DD21DF8007527C5 /* GetRecordsIntent.swift */; };
+		14C7134B2DD21DF8007527C5 /* GetAllRecordsByDateIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C7134A2DD21DF8007527C5 /* GetAllRecordsByDateIntent.swift */; };
 		14C7134E2DD22F86007527C5 /* RecordEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C7134D2DD22F86007527C5 /* RecordEntity.swift */; };
 		14C713502DD22F9B007527C5 /* BookEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C7134F2DD22F9B007527C5 /* BookEntity.swift */; };
 		14C713532DD22FDC007527C5 /* FetchError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C713522DD22FDC007527C5 /* FetchError.swift */; };
@@ -138,7 +138,7 @@
 		14BBA3772DCB101100AD7BAC /* TextInputCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputCell.swift; sourceTree = "<group>"; };
 		14BBA3792DCB142900AD7BAC /* ColorPickerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerCell.swift; sourceTree = "<group>"; };
 		14BBA37B2DCB2EE900AD7BAC /* TagPreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPreviewCell.swift; sourceTree = "<group>"; };
-		14C7134A2DD21DF8007527C5 /* GetRecordsIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetRecordsIntent.swift; sourceTree = "<group>"; };
+		14C7134A2DD21DF8007527C5 /* GetAllRecordsByDateIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetAllRecordsByDateIntent.swift; sourceTree = "<group>"; };
 		14C7134D2DD22F86007527C5 /* RecordEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordEntity.swift; sourceTree = "<group>"; };
 		14C7134F2DD22F9B007527C5 /* BookEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookEntity.swift; sourceTree = "<group>"; };
 		14C713522DD22FDC007527C5 /* FetchError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchError.swift; sourceTree = "<group>"; };
@@ -342,7 +342,7 @@
 		14C7134C2DD21E31007527C5 /* Intent */ = {
 			isa = PBXGroup;
 			children = (
-				14C7134A2DD21DF8007527C5 /* GetRecordsIntent.swift */,
+				14C7134A2DD21DF8007527C5 /* GetAllRecordsByDateIntent.swift */,
 				14C713542DD23064007527C5 /* CheckRecordIntent.swift */,
 				14C713522DD22FDC007527C5 /* FetchError.swift */,
 				14C713512DD22FA2007527C5 /* Entity */,
@@ -714,7 +714,7 @@
 				14D07CC92DD332DF00F6843C /* DateCell.swift in Sources */,
 				14C713532DD22FDC007527C5 /* FetchError.swift in Sources */,
 				14D272812DC0718D00267572 /* DayByDayHandler.swift in Sources */,
-				14C7134B2DD21DF8007527C5 /* GetRecordsIntent.swift in Sources */,
+				14C7134B2DD21DF8007527C5 /* GetAllRecordsByDateIntent.swift in Sources */,
 				14D272822DC0718D00267572 /* DisplayHandler.swift in Sources */,
 				14BBA37C2DCB2EE900AD7BAC /* TagPreviewCell.swift in Sources */,
 				14AD287E2DC5B7010018DAF3 /* TagListViewController.swift in Sources */,
