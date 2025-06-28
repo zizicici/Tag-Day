@@ -68,4 +68,8 @@ extension Book {
     var image: UIImage? {
         return UIImage(systemName: symbol ?? "book.closed")?.withTintColor(dynamicColor, renderingMode: .alwaysOriginal)
     }
+    
+    var templateImage: UIImage? {
+        return UIImage(systemName: symbol ?? "book.closed")?.withTintColor(dynamicColor, renderingMode: .alwaysTemplate)
+    }
 }

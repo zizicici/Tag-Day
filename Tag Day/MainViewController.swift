@@ -107,6 +107,7 @@ class MainViewController: CalendarViewController {
             } else {
                 config?.title = String(localized: "books.empty")
             }
+            config?.image = DataManager.shared.currentBook?.templateImage
             config?.background.backgroundColor = AppColor.dynamicColor
             
             button.configuration = config
