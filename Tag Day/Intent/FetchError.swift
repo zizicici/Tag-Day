@@ -9,11 +9,14 @@ import Foundation
 
 enum FetchError: Error, CustomLocalizedStringResourceConvertible {
     case notFound
+    case bookFirst
 
     var localizedStringResource: LocalizedStringResource {
         switch self {
         case .notFound:
             return "intent.error.notFound"
+        case .bookFirst:
+            return "intent.error.bookFirst"
         }
     }
 }

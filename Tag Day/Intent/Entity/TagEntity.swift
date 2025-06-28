@@ -83,38 +83,39 @@ struct TagIntentQuery: EntityQuery {
 }
 
 struct TagsOptionsProvider: DynamicOptionsProvider {
+    @ParameterDependency(\CheckRecordIntent.$book) var book1
+    @ParameterDependency(\CheckTomorrowRecordIntent.$book) var book2
+
     func results() async throws -> ItemCollection<TagEntity> {
-        let allBooks: [Book] = try DataManager.shared.fetchAllBooks()
-        let allTags = try DataManager.shared.fetchAllTags()
+        guard let book = book1?.book ?? book2?.book else {
+            throw FetchError.bookFirst
+        }
+        
+        let tags = try DataManager.shared.fetchAllTags(bookID: Int64(book.id))
         
         var sections: [IntentItemSection<TagEntity>] = .init()
         
-        for book in allBooks {
-            let filteredTags = allTags.filter { $0.bookID == book.id }
-            
-            sections.append(ItemSection(
-                LocalizedStringResource(stringLiteral: book.title),
-                items: filteredTags.map { tag in
-                    IntentItem<TagEntity>(
-                        TagEntity(
-                            id: Int(tag.id!),
-                            title: tag.title,
-                            subtitle: tag.subtitle ?? "",
-                            book: BookEntity(id: Int(tag.bookID), title: book.title, comment: book.comment ?? ""),
-                            color: tag.color
-                        ),
-                        title: LocalizedStringResource(stringLiteral: tag.title),
-                        subtitle: LocalizedStringResource(stringLiteral: tag.subtitle ?? ""),
-                        image: .init(
-                            systemName: "square.fill",
-                            tintColor: UIColor(string: tag.color),
-                            symbolConfiguration: .preferringMulticolor()
-                        )
+        sections.append(ItemSection(
+            items: tags.map { tag in
+                IntentItem<TagEntity>(
+                    TagEntity(
+                        id: Int(tag.id!),
+                        title: tag.title,
+                        subtitle: tag.subtitle ?? "",
+                        book: BookEntity(id: Int(tag.bookID), title: book.title, comment: book.comment),
+                        color: tag.color
+                    ),
+                    title: LocalizedStringResource(stringLiteral: tag.title),
+                    subtitle: LocalizedStringResource(stringLiteral: tag.subtitle ?? ""),
+                    image: .init(
+                        systemName: "square.fill",
+                        tintColor: UIColor(string: tag.color),
+                        symbolConfiguration: .preferringMulticolor()
                     )
-                }
-            ))
-        }
+                )
+            }
+        ))
         
-        return ItemCollection.init(sections: sections)
+        return ItemCollection(sections: sections)
     }
 }
