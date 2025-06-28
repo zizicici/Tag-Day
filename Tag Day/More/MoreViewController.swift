@@ -50,11 +50,14 @@ class MoreViewController: UIViewController {
     enum Item: Hashable {
         enum GeneralItem: Hashable {
             case language
+            case dynamicColor(DynamicColorType)
             
             var title: String {
                 switch self {
                 case .language:
                     return String(localized: "more.item.settings.language")
+                case .dynamicColor:
+                    return DynamicColorType.getTitle()
                 }
             }
             
@@ -62,6 +65,8 @@ class MoreViewController: UIViewController {
                 switch self {
                 case .language:
                     return String(localized: "more.item.settings.language.value")
+                case .dynamicColor(let dynamicColor):
+                    return dynamicColor.getName()
                 }
             }
         }
@@ -340,7 +345,7 @@ class MoreViewController: UIViewController {
     func reloadData() {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
         snapshot.appendSections([.general])
-        snapshot.appendItems([.settings(.language)], toSection: .general)
+        snapshot.appendItems([.settings(.language), .settings(.dynamicColor(DynamicColorType.getValue()))], toSection: .general)
         
         snapshot.appendSections([.calendar])
         snapshot.appendItems([.calendar(.weekStartType(WeekStartType.getValue())), .calendar(.secondaryCalendar(SecondaryCalendar.getValue()))], toSection: .calendar)
@@ -379,6 +384,8 @@ extension MoreViewController: UITableViewDelegate {
                 switch item {
                 case .language:
                     jumpToSettings()
+                case .dynamicColor:
+                    enterSettings(DynamicColorType.self)
                 }
             case .calendar(let item):
                 switch item {

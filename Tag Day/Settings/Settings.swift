@@ -16,6 +16,7 @@ extension UserDefaults {
         case WeekStartType = "com.zizicici.tag.settings.WeekStartType"
         case TagDisplayType = "com.zizicici.tag.settings.TagDisplayType"
         case MonthlyStatsType = "com.zizicici.tag.settings.MonthlyStatsType"
+        case DynamicColor = "com.zizicici.tag.settings.DynamicColor"
     }
 }
 
@@ -271,5 +272,37 @@ extension WeekStartType: UserDefaultSettable {
     
     static func getFooter() -> String? {
         return nil
+    }
+}
+
+enum DynamicColorType: Int, CaseIterable, Codable {
+    case disable = 0
+    case enable = 1
+}
+
+extension DynamicColorType: UserDefaultSettable {
+    static func getKey() -> UserDefaults.Settings {
+        return .DynamicColor
+    }
+    
+    static var defaultOption: DynamicColorType {
+        return .disable
+    }
+    
+    func getName() -> String {
+        switch self {
+        case .disable:
+            return String(localized: "settings.dynamicColor.disable")
+        case .enable:
+            return String(localized: "settings.dynamicColor.enable")
+        }
+    }
+    
+    static func getTitle() -> String {
+        return String(localized: "settings.dynamicColor.title")
+    }
+    
+    static func getFooter() -> String? {
+        return String(localized: "settings.dynamicColor.hint")
     }
 }

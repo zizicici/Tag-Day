@@ -20,15 +20,20 @@ struct AppColor {
     
     static var dynamicColor: UIColor {
         get {
-            return UIColor { _ in
-                if let dynamicColor = DataManager.shared.currentBook?.dynamicColor {
-                    if dynamicColor.isSimilar(to: Self.background) || dynamicColor.isSimilar(to: Self.paper) {
-                        return Self.main
+            switch DynamicColorType.current {
+            case .disable:
+                return Self.main
+            case .enable:
+                return UIColor { _ in
+                    if let dynamicColor = DataManager.shared.currentBook?.dynamicColor {
+                        if dynamicColor.isSimilar(to: Self.background) || dynamicColor.isSimilar(to: Self.paper) {
+                            return Self.main
+                        } else {
+                            return dynamicColor
+                        }
                     } else {
-                        return dynamicColor
+                        return Self.main
                     }
-                } else {
-                    return Self.main
                 }
             }
         }
