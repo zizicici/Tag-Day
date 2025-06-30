@@ -477,7 +477,7 @@ class BookDetailViewController: UIViewController {
     }
     
     @objc private func showSymbolPicker() {
-        presentSymbolPicker(currentSymbol: symbol ?? "") { [weak self] symbol in
+        presentSymbolPicker(currentSymbol: symbol ?? "book.closed") { [weak self] symbol in
             self?.symbol = symbol
             self?.updateSymbolCell()
         }

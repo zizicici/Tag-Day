@@ -28,10 +28,6 @@ extension DayRecord: FetchableRecord, MutablePersistableRecord {
         static let endTime = Column(CodingKeys.endTime)
     }
     
-    enum CodingKeys: String, CodingKey {
-        case id, bookID = "book_id", tagID = "tag_id", day, comment, startTime = "start_time", endTime = "end_time", duration, order
-    }
-    
     mutating func didInsert(_ inserted: InsertionSuccess) {
         id = inserted.rowID
     }

@@ -21,6 +21,10 @@ struct Book: Identifiable, Hashable, Codable {
     var symbol: String?
     var bookType: BookType = .active
     var order: Int
+    
+    enum CodingKeys: String, CodingKey {
+        case id, title, color, symbol, bookType = "book_type", order
+    }
 }
 
 struct Tag: Identifiable, Hashable, Codable {
@@ -33,6 +37,10 @@ struct Tag: Identifiable, Hashable, Codable {
     var color: String
     var titleColor: String?
     var order: Int
+    
+    enum CodingKeys: String, CodingKey {
+        case id, bookID = "book_id", title, subtitle, color, titleColor = "title_color", order
+    }
 }
 
 struct DayRecord: Identifiable, Hashable, Codable {
@@ -48,4 +56,8 @@ struct DayRecord: Identifiable, Hashable, Codable {
     var endTime: Int64?
     var duration: Int64?
     var order: Int64
+    
+    enum CodingKeys: String, CodingKey {
+        case id, bookID = "book_id", tagID = "tag_id", day, comment, startTime = "start_time", endTime = "end_time", duration, order
+    }
 }

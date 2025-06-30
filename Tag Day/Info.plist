@@ -6,6 +6,21 @@
 	<array>
 		<string>com.zizicici.tag.backup</string>
 	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>tagday</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>tagday</string>
+			</array>
+		</dict>
+	</array>
+	<key>NSUserNotificationsUsageDescription</key>
+	<string>$(NSUserNotificationsUsageDescription)</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -31,7 +46,5 @@
 	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>
-	<key>NSUserNotificationsUsageDescription</key>
-	<string>$(NSUserNotificationsUsageDescription)</string>
 </dict>
 </plist>

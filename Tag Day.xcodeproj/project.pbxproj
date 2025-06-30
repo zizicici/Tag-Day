@@ -10,6 +10,12 @@
 		14337F802DCC6CE50043447A /* Debounce.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14337F7F2DCC6CE50043447A /* Debounce.swift */; };
 		14337F822DCC70DA0043447A /* BookDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14337F812DCC70DA0043447A /* BookDetailViewController.swift */; };
 		14337F862DCC99220043447A /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 14337F852DCC99220043447A /* InfoPlist.xcstrings */; };
+		147E83FB2E12879500736D9F /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 147E83FA2E12879500736D9F /* Localizable.xcstrings */; };
+		147E83FC2E1288AB00736D9F /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D3A2DC5179F001B61D5 /* UIColor+Extension.swift */; };
+		147E84012E12BCF400736D9F /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147E84002E12BCF400736D9F /* Extension.swift */; };
+		147E84022E12BD4700736D9F /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147E84002E12BCF400736D9F /* Extension.swift */; };
+		147E84042E12C1FC00736D9F /* ZCCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 147E84032E12C1FC00736D9F /* ZCCalendar */; };
+		147E84062E12C20B00736D9F /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 147E84052E12C20B00736D9F /* Collections */; };
 		14833D352DC50310001B61D5 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D342DC50310001B61D5 /* Book.swift */; };
 		14833D372DC50420001B61D5 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D362DC50420001B61D5 /* Tag.swift */; };
 		14833D392DC504B9001B61D5 /* DayRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D382DC504B9001B61D5 /* DayRecord.swift */; };
@@ -18,7 +24,7 @@
 		14980E2F2E110E95009622BF /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14980E2E2E110E95009622BF /* SwiftUI.framework */; };
 		14980E322E110E95009622BF /* TagWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14980E312E110E95009622BF /* TagWidgetBundle.swift */; };
 		14980E342E110E95009622BF /* TagWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14980E332E110E95009622BF /* TagWidget.swift */; };
-		14980E362E110E95009622BF /* AppIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14980E352E110E95009622BF /* AppIntent.swift */; };
+		14980E362E110E95009622BF /* ConfigurationAppIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14980E352E110E95009622BF /* ConfigurationAppIntent.swift */; };
 		14980E382E110E96009622BF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 14980E372E110E96009622BF /* Assets.xcassets */; };
 		14980E3C2E110E96009622BF /* Tag Widget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 14980E2A2E110E95009622BF /* Tag Widget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		14AA3E072DCDB31300E1F4F8 /* RecordListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AA3E062DCDB31300E1F4F8 /* RecordListViewController.swift */; };
@@ -63,12 +69,17 @@
 		14CC10652E0FFE1A0076E988 /* SymbolPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 14CC10642E0FFE1A0076E988 /* SymbolPicker */; };
 		14CC10672E0FFEE20076E988 /* SymbolPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CC10662E0FFEE20076E988 /* SymbolPicker.swift */; };
 		14CC8A462DCF04970062F8BA /* FastEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CC8A452DCF04970062F8BA /* FastEditorViewController.swift */; };
+		14CFE3A52E1249D80021A1AE /* WidgetState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CFE3A42E1249D80021A1AE /* WidgetState.swift */; };
+		14CFE3A82E124A740021A1AE /* WidgetStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CFE3A72E124A740021A1AE /* WidgetStateManager.swift */; };
 		14CFE3AA2E1269060021A1AE /* SharedDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CFE3A92E1269060021A1AE /* SharedDataManager.swift */; };
 		14CFE3AD2E12702A0021A1AE /* SharedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CFE3AC2E12702A0021A1AE /* SharedData.swift */; };
 		14CFE3AE2E1275DF0021A1AE /* SharedDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CFE3A92E1269060021A1AE /* SharedDataManager.swift */; };
 		14CFE3AF2E1275E40021A1AE /* SharedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CFE3AC2E12702A0021A1AE /* SharedData.swift */; };
 		14CFE3B12E127A560021A1AE /* Basic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CFE3B02E127A560021A1AE /* Basic.swift */; };
 		14CFE3B22E127A560021A1AE /* Basic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CFE3B02E127A560021A1AE /* Basic.swift */; };
+		14CFE3B42E127E120021A1AE /* BookEntity+App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CFE3B32E127E120021A1AE /* BookEntity+App.swift */; };
+		14CFE3B82E127E6C0021A1AE /* BookEntity+Widget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CFE3B62E127E6C0021A1AE /* BookEntity+Widget.swift */; };
+		14CFE3BA2E127EB40021A1AE /* BookEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C7134F2DD22F9B007527C5 /* BookEntity.swift */; };
 		14D035EA2E01156D00E32E91 /* TagStatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D035E92E01156D00E32E91 /* TagStatisticsViewController.swift */; };
 		14D07CC32DD2ED4900F6843C /* RecordDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D07CC22DD2ED4900F6843C /* RecordDetailViewController.swift */; };
 		14D07CC52DD2F09900F6843C /* TextViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D07CC42DD2F09900F6843C /* TextViewCell.swift */; };
@@ -107,6 +118,7 @@
 		14EBE0862DD7679700F7609A /* DurationPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 14EBE0852DD7679700F7609A /* DurationPicker */; };
 		14EBE0882DD76B0B00F7609A /* DurationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14EBE0872DD76B0B00F7609A /* DurationCell.swift */; };
 		14ED63D12DC702F000384068 /* CalendarYearPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14ED63D02DC702F000384068 /* CalendarYearPickerViewController.swift */; };
+		14F4DEA62E11982B0006EB31 /* RecordContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14F4DEA42E1197FA0006EB31 /* RecordContainerView.swift */; };
 		14FF82A12E03F77E00D3000B /* BackupManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FF82A02E03F77E00D3000B /* BackupManager.swift */; };
 		14FF82A42E03F94400D3000B /* SQLFileBackup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FF82A32E03F94400D3000B /* SQLFileBackup.swift */; };
 		14FF82A72E03F9B100D3000B /* ZipArchive in Frameworks */ = {isa = PBXBuildFile; productRef = 14FF82A62E03F9B100D3000B /* ZipArchive */; };
@@ -150,6 +162,8 @@
 		14337F7F2DCC6CE50043447A /* Debounce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debounce.swift; sourceTree = "<group>"; };
 		14337F812DCC70DA0043447A /* BookDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailViewController.swift; sourceTree = "<group>"; };
 		14337F852DCC99220043447A /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
+		147E83FA2E12879500736D9F /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		147E84002E12BCF400736D9F /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		14833D342DC50310001B61D5 /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
 		14833D362DC50420001B61D5 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
 		14833D382DC504B9001B61D5 /* DayRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRecord.swift; sourceTree = "<group>"; };
@@ -159,7 +173,7 @@
 		14980E2E2E110E95009622BF /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		14980E312E110E95009622BF /* TagWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagWidgetBundle.swift; sourceTree = "<group>"; };
 		14980E332E110E95009622BF /* TagWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagWidget.swift; sourceTree = "<group>"; };
-		14980E352E110E95009622BF /* AppIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIntent.swift; sourceTree = "<group>"; };
+		14980E352E110E95009622BF /* ConfigurationAppIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationAppIntent.swift; sourceTree = "<group>"; };
 		14980E372E110E96009622BF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		14980E392E110E96009622BF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		14AA3E062DCDB31300E1F4F8 /* RecordListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListViewController.swift; sourceTree = "<group>"; };
@@ -200,9 +214,13 @@
 		14CC8A452DCF04970062F8BA /* FastEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastEditorViewController.swift; sourceTree = "<group>"; };
 		14CD76AD2DBE6BA10035DF1F /* Tag Day.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Tag Day.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		14CFE3A32E1231C80021A1AE /* Tag Widget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Tag Widget.entitlements"; sourceTree = "<group>"; };
+		14CFE3A42E1249D80021A1AE /* WidgetState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetState.swift; sourceTree = "<group>"; };
+		14CFE3A72E124A740021A1AE /* WidgetStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetStateManager.swift; sourceTree = "<group>"; };
 		14CFE3A92E1269060021A1AE /* SharedDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedDataManager.swift; sourceTree = "<group>"; };
 		14CFE3AC2E12702A0021A1AE /* SharedData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedData.swift; sourceTree = "<group>"; };
 		14CFE3B02E127A560021A1AE /* Basic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Basic.swift; sourceTree = "<group>"; };
+		14CFE3B32E127E120021A1AE /* BookEntity+App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BookEntity+App.swift"; sourceTree = "<group>"; };
+		14CFE3B62E127E6C0021A1AE /* BookEntity+Widget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BookEntity+Widget.swift"; sourceTree = "<group>"; };
 		14D035E92E01156D00E32E91 /* TagStatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagStatisticsViewController.swift; sourceTree = "<group>"; };
 		14D07CC22DD2ED4900F6843C /* RecordDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetailViewController.swift; sourceTree = "<group>"; };
 		14D07CC42DD2F09900F6843C /* TextViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewCell.swift; sourceTree = "<group>"; };
@@ -241,6 +259,7 @@
 		14EBE0872DD76B0B00F7609A /* DurationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DurationCell.swift; sourceTree = "<group>"; };
 		14ED63D02DC702F000384068 /* CalendarYearPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarYearPickerViewController.swift; sourceTree = "<group>"; };
 		14ED63D22DC72FF100384068 /* Tag Day.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Tag Day.entitlements"; sourceTree = "<group>"; };
+		14F4DEA42E1197FA0006EB31 /* RecordContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordContainerView.swift; sourceTree = "<group>"; };
 		14FF82A02E03F77E00D3000B /* BackupManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupManager.swift; sourceTree = "<group>"; };
 		14FF82A32E03F94400D3000B /* SQLFileBackup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLFileBackup.swift; sourceTree = "<group>"; };
 		14FF82A82E03FD4600D3000B /* BackupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupViewController.swift; sourceTree = "<group>"; };
@@ -261,6 +280,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				14980E2F2E110E95009622BF /* SwiftUI.framework in Frameworks */,
+				147E84042E12C1FC00736D9F /* ZCCalendar in Frameworks */,
+				147E84062E12C20B00736D9F /* Collections in Frameworks */,
 				14980E2D2E110E95009622BF /* WidgetKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -296,12 +317,16 @@
 		14980E422E111035009622BF /* Tag Widget */ = {
 			isa = PBXGroup;
 			children = (
-				14980E352E110E95009622BF /* AppIntent.swift */,
 				14CFE3A32E1231C80021A1AE /* Tag Widget.entitlements */,
+				147E83FA2E12879500736D9F /* Localizable.xcstrings */,
 				14980E372E110E96009622BF /* Assets.xcassets */,
 				14980E392E110E96009622BF /* Info.plist */,
-				14980E332E110E95009622BF /* TagWidget.swift */,
 				14980E312E110E95009622BF /* TagWidgetBundle.swift */,
+				14980E352E110E95009622BF /* ConfigurationAppIntent.swift */,
+				14980E332E110E95009622BF /* TagWidget.swift */,
+				14F4DEA42E1197FA0006EB31 /* RecordContainerView.swift */,
+				14CFE3A62E124A300021A1AE /* WidgetState */,
+				147E84002E12BCF400736D9F /* Extension.swift */,
 			);
 			path = "Tag Widget";
 			sourceTree = "<group>";
@@ -444,6 +469,8 @@
 			children = (
 				14C7134D2DD22F86007527C5 /* RecordEntity.swift */,
 				14C7134F2DD22F9B007527C5 /* BookEntity.swift */,
+				14CFE3B32E127E120021A1AE /* BookEntity+App.swift */,
+				14CFE3B62E127E6C0021A1AE /* BookEntity+Widget.swift */,
 				14C713562DD2310C007527C5 /* TagEntity.swift */,
 			);
 			path = Entity;
@@ -483,6 +510,15 @@
 				14980E2A2E110E95009622BF /* Tag Widget.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		14CFE3A62E124A300021A1AE /* WidgetState */ = {
+			isa = PBXGroup;
+			children = (
+				14CFE3A42E1249D80021A1AE /* WidgetState.swift */,
+				14CFE3A72E124A740021A1AE /* WidgetStateManager.swift */,
+			);
+			path = WidgetState;
 			sourceTree = "<group>";
 		};
 		14CFE3AB2E1269140021A1AE /* SharedData */ = {
@@ -677,6 +713,8 @@
 			);
 			name = "Tag Widget";
 			packageProductDependencies = (
+				147E84032E12C1FC00736D9F /* ZCCalendar */,
+				147E84052E12C20B00736D9F /* Collections */,
 			);
 			productName = WidgetExtension;
 			productReference = 14980E2A2E110E95009622BF /* Tag Widget.appex */;
@@ -769,6 +807,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				147E83FB2E12879500736D9F /* Localizable.xcstrings in Resources */,
 				14980E382E110E96009622BF /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -794,11 +833,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				14980E322E110E95009622BF /* TagWidgetBundle.swift in Sources */,
+				14CFE3A82E124A740021A1AE /* WidgetStateManager.swift in Sources */,
 				14980E342E110E95009622BF /* TagWidget.swift in Sources */,
-				14980E362E110E95009622BF /* AppIntent.swift in Sources */,
+				147E83FC2E1288AB00736D9F /* UIColor+Extension.swift in Sources */,
+				14CFE3A52E1249D80021A1AE /* WidgetState.swift in Sources */,
 				14CFE3AF2E1275E40021A1AE /* SharedData.swift in Sources */,
+				14F4DEA62E11982B0006EB31 /* RecordContainerView.swift in Sources */,
 				14CFE3AE2E1275DF0021A1AE /* SharedDataManager.swift in Sources */,
+				14CFE3BA2E127EB40021A1AE /* BookEntity.swift in Sources */,
+				147E84012E12BCF400736D9F /* Extension.swift in Sources */,
+				14CFE3B82E127E6C0021A1AE /* BookEntity+Widget.swift in Sources */,
 				14CFE3B22E127A560021A1AE /* Basic.swift in Sources */,
+				14980E362E110E95009622BF /* ConfigurationAppIntent.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -829,6 +875,7 @@
 				14EBE0882DD76B0B00F7609A /* DurationCell.swift in Sources */,
 				14ACBE572DBFAD2E0056B1FD /* NavigationViewController.swift in Sources */,
 				14CAA2D32E0EA2C700096D98 /* NotificationManager.swift in Sources */,
+				147E84022E12BD4700736D9F /* Extension.swift in Sources */,
 				14D272862DC0719400267572 /* LayoutGenerator.swift in Sources */,
 				14C7134E2DD22F86007527C5 /* RecordEntity.swift in Sources */,
 				14D272872DC0719400267572 /* DayGrid.swift in Sources */,
@@ -838,6 +885,7 @@
 				14D2727A2DC0716E00267572 /* CalendarViewController+Layout.swift in Sources */,
 				14C713552DD23064007527C5 /* CheckRecordIntent.swift in Sources */,
 				14D272942DC071B000267572 /* MonthTitleSupplementaryView.swift in Sources */,
+				14CFE3B42E127E120021A1AE /* BookEntity+App.swift in Sources */,
 				14D272952DC071B000267572 /* ImpactGenerator.swift in Sources */,
 				14CFE3AD2E12702A0021A1AE /* SharedData.swift in Sources */,
 				14D272962DC071B000267572 /* WeekdayOrderView.swift in Sources */,
@@ -1272,6 +1320,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		147E84032E12C1FC00736D9F /* ZCCalendar */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 14B239D32DBF790A0007152C /* XCRemoteSwiftPackageReference "ZCCalendar" */;
+			productName = ZCCalendar;
+		};
+		147E84052E12C20B00736D9F /* Collections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 14B468EE2DFFE5B500415529 /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = Collections;
+		};
 		14B239CB2DBF77B10007152C /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 14B239CA2DBF77B10007152C /* XCRemoteSwiftPackageReference "SnapKit" */;

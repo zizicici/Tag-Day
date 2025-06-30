@@ -25,7 +25,6 @@ struct SharedDataManager {
         }
         
         let encoder = JSONEncoder()
-        encoder.outputFormatting = .prettyPrinted
         let jsonData = try encoder.encode(data)
         
         let coordinator = NSFileCoordinator()

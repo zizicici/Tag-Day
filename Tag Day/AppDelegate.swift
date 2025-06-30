@@ -7,12 +7,10 @@
 
 import UIKit
 import ZCCalendar
+import WidgetKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
-
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
@@ -24,6 +22,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(cancelBGTasks), name: UIApplication.didBecomeActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(readSharedData), name: UIApplication.didBecomeActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(updateSharedData), name: UIApplication.willResignActiveNotification, object: nil)
+        
+        readSharedData()
 
         return true
     }
@@ -31,9 +31,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: UISceneSession Lifecycle
 
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
-        // Called when a new scene session is being created.
-        // Use this method to select a configuration to create the new scene with.
-        return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+        let sceneConfig = UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+        sceneConfig.delegateClass = SceneDelegate.self
+        
+        return sceneConfig
     }
 
     func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
@@ -57,12 +58,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         do {
             if let widgetAddDayRecords = try SharedDataManager.read(SharedData.self)?.widgetAddDayRecords, widgetAddDayRecords.count > 0 {
                 widgetAddDayRecords.forEach{ _ = DataManager.shared.add(dayRecord: $0) }
-                updateSharedData()
             }
         }
         catch {
             print(error)
         }
+        updateSharedData()
     }
     
     @objc
@@ -77,5 +78,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         catch {
             print(error)
         }
+        reloadWidget()
+    }
+    
+    func reloadWidget() {
+        WidgetCenter.shared.reloadAllTimelines()
     }
 }

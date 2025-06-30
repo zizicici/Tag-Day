@@ -21,6 +21,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
         window?.rootViewController = NavigationController(rootViewController: MainViewController())
         window?.makeKeyAndVisible()
+        
+        if let urlContext = connectionOptions.urlContexts.first {
+            handleURL(urlContext.url)
+        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -50,7 +54,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
     }
-
-
+    
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        if let context = URLContexts.first {
+            handleURL(context.url)
+        }
+    }
+    
+    func handleURL(_ url: URL) {
+        if url.scheme == "tagday", url.host == "book", let bookID = url.pathComponents.dropFirst().first {
+            DataManager.shared.select(bookID: bookID)
+        }
+    }
 }
 

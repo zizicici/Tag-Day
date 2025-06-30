@@ -7,13 +7,14 @@
 
 import AppIntents
 import ZCCalendar
+import UIKit
 
 struct BookEntity: Identifiable, Hashable, Equatable, AppEntity {
     static var typeDisplayRepresentation = TypeDisplayRepresentation(name: "intent.book.type")
     typealias DefaultQuery = BookIntentQuery
     static var defaultQuery = BookIntentQuery()
     var displayRepresentation: DisplayRepresentation {
-        return DisplayRepresentation(title: "\(title)")
+        return DisplayRepresentation(title: "\(title)", image: .init(systemName: symbol, tintColor: UIColor(string: color), symbolConfiguration: UIImage.SymbolConfiguration.preferringMulticolor()))
     }
     
     var id: Int
@@ -24,50 +25,29 @@ struct BookEntity: Identifiable, Hashable, Equatable, AppEntity {
     @Property(title: "intent.book.symbol")
     var symbol: String
     
-    init(id: Int, title: String, symbol: String) {
+    @Property(title: "intent.book.color")
+    var color: String
+    
+    init(id: Int, title: String, symbol: String, color: String) {
         self.id = id
         self.title = title
         self.symbol = symbol
+        self.color = color
     }
     
     static func == (lhs: BookEntity, rhs: BookEntity) -> Bool {
-        return lhs.id == rhs.id && lhs.title == rhs.title && lhs.symbol == rhs.symbol
+        return lhs.id == rhs.id && lhs.title == rhs.title && lhs.symbol == rhs.symbol && lhs.color == rhs.color
     }
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
         hasher.combine(title)
         hasher.combine(symbol)
+        hasher.combine(color)
     }
     
     init?(book: Book) {
         guard let bookID = book.id else { return nil }
-        self.init(id: Int(bookID), title: book.title, symbol: book.symbol ?? "")
-    }
-}
-
-struct BookIntentQuery: EntityQuery {
-    func entities(for identifiers: [BookEntity.ID]) async throws -> [BookEntity] {
-        let books = try DataManager.shared.fetchBooks(ids: identifiers.map{ Int64($0) })
-        
-        var result: [BookEntity] = []
-        for book in books {
-            if let bookID = book.id {
-                result.append(BookEntity(id: Int(bookID), title: book.title, symbol: book.symbol ?? ""))
-            }
-        }
-        return result
-    }
-    
-    func suggestedEntities() async throws -> [BookEntity] {
-        let books = try DataManager.shared.fetchAllBooks()
-        
-        var result: [BookEntity] = []
-        for book in books {
-            if let bookID = book.id {
-                result.append(BookEntity(id: Int(bookID), title: book.title, symbol: book.symbol ?? ""))
-            }
-        }
-        return result
+        self.init(id: Int(bookID), title: book.title, symbol: book.symbol ?? "book.closed", color: book.color)
     }
 }

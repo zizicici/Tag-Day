@@ -24,10 +24,6 @@ extension Book: FetchableRecord, MutablePersistableRecord {
         static let bookType = Column(CodingKeys.bookType)
     }
     
-    enum CodingKeys: String, CodingKey {
-        case id, title, color, symbol, bookType = "book_type", order
-    }
-    
     mutating func didInsert(_ inserted: InsertionSuccess) {
         id = inserted.rowID
     }
