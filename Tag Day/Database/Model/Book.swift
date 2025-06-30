@@ -9,28 +9,11 @@ import Foundation
 import GRDB
 import UIKit
 
-enum BookType: Int, Codable {
-    case active = 0
-    case hidden = 1
-    case archived = 2
-}
-
-struct Book: Identifiable, Hashable {
-    var id: Int64?
-    
-    var title: String
-    var color: String
-    var symbol: String?
-    var bookType: BookType = .active
-    var order: Int
-}
-
 extension Book: TableRecord {
     static var databaseTableName: String = "book"
 }
 
-
-extension Book: Codable, FetchableRecord, MutablePersistableRecord {
+extension Book: FetchableRecord, MutablePersistableRecord {
     enum Columns: String, ColumnExpression {
         case id
         case title

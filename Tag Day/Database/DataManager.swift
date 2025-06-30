@@ -401,6 +401,26 @@ extension DataManager {
         return result
     }
     
+    func fetchAllDayRecords(after day: Int64) throws -> [DayRecord] {
+        var result: [DayRecord] = []
+        try AppDatabase.shared.reader?.read { db in
+            do {
+                let bookIDColumn = DayRecord.Columns.bookID
+                let dayColumn = DayRecord.Columns.day
+                let orderColumn = DayRecord.Columns.order
+                result = try DayRecord
+                    .filter(dayColumn >= day)
+                    .order(orderColumn.asc)
+                    .fetchAll(db)
+            }
+            catch {
+                print(error)
+            }
+        }
+        
+        return result
+    }
+    
     func fetchAllDayRecords(bookID: Int64, day: Int64) throws -> [DayRecord] {
         var result: [DayRecord] = []
         try AppDatabase.shared.reader?.read { db in
@@ -492,5 +512,14 @@ extension DataManager {
     
     func resetDayRecord(bookID: Int64, day: Int64) -> Bool {
         return AppDatabase.shared.resetDayRecord(bookID: bookID, day: day)
+    }
+    
+    func add(dayRecord: WidgetAddDayRecord) -> DayRecord? {
+        let bookID = dayRecord.bookID
+        let tagID = dayRecord.tagID
+        let day = dayRecord.day
+        let lastOrder = fetchLastRecordOrder(bookID: Int64(bookID), day: Int64(day))
+        let newRecord = DayRecord(bookID: Int64(bookID), tagID: Int64(tagID), day: Int64(day), order: lastOrder + 1)
+        return add(dayRecord: newRecord)
     }
 }

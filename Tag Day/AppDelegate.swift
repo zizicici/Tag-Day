@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ZCCalendar
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -21,7 +22,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         NotificationCenter.default.addObserver(self, selector: #selector(scheduleBGTasks), name: UIApplication.didEnterBackgroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(cancelBGTasks), name: UIApplication.didBecomeActiveNotification, object: nil)
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(readSharedData), name: UIApplication.didBecomeActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateSharedData), name: UIApplication.willResignActiveNotification, object: nil)
+
         return true
     }
 
@@ -47,5 +50,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     @objc
     func scheduleBGTasks() {
         BackupManager.shared.scheduleBGTasks()
+    }
+    
+    @objc
+    func readSharedData() {
+        do {
+            if let widgetAddDayRecords = try SharedDataManager.read(SharedData.self)?.widgetAddDayRecords, widgetAddDayRecords.count > 0 {
+                widgetAddDayRecords.forEach{ _ = DataManager.shared.add(dayRecord: $0) }
+                updateSharedData()
+            }
+        }
+        catch {
+            print(error)
+        }
+    }
+    
+    @objc
+    func updateSharedData() {
+        do {
+            let books = try DataManager.shared.fetchAllBooks()
+            let tags = try DataManager.shared.fetchAllTags()
+            let dayRecords = try DataManager.shared.fetchAllDayRecords(after: Int64(ZCCalendar.manager.today.julianDay))
+            let sharedData = SharedData(version: 1, books: books, tags: tags, dayRecord: dayRecords, widgetAddDayRecords: [])
+            try SharedDataManager.write(sharedData)
+        }
+        catch {
+            print(error)
+        }
     }
 }

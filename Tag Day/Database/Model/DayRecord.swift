@@ -8,26 +8,11 @@
 import Foundation
 import GRDB
 
-struct DayRecord: Identifiable, Hashable {
-    var id: Int64?
-    
-    var bookID: Int64
-    var tagID: Int64
-    var day: Int64
-    
-    var comment: String?
-    
-    var startTime: Int64?
-    var endTime: Int64?
-    var duration: Int64?
-    var order: Int64
-}
-
 extension DayRecord: TableRecord {
     static var databaseTableName: String = "day_record"
 }
 
-extension DayRecord: Codable, FetchableRecord, MutablePersistableRecord {
+extension DayRecord: FetchableRecord, MutablePersistableRecord {
     enum Columns: String, ColumnExpression {
         case id
         case day

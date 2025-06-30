@@ -17,5 +17,9 @@
 	<array>
 		<string>iCloud.com.zizicici.tag</string>
 	</array>
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>group.com.zizicici.tag</string>
+	</array>
 </dict>
 </plist>

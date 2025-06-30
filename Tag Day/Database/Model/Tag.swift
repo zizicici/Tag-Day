@@ -9,23 +9,11 @@ import Foundation
 import GRDB
 import UIKit
 
-struct Tag: Identifiable, Hashable {
-    var id: Int64?
-    
-    var bookID: Int64
-
-    var title: String
-    var subtitle: String?
-    var color: String
-    var titleColor: String?
-    var order: Int
-}
-
 extension Tag: TableRecord {
     static var databaseTableName: String = "tag"
 }
 
-extension Tag: Codable, FetchableRecord, MutablePersistableRecord {
+extension Tag: FetchableRecord, MutablePersistableRecord {
     enum Columns: String, ColumnExpression {
         case id
         case title
