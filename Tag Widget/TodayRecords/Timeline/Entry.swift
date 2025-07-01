@@ -8,7 +8,7 @@
 import WidgetKit
 import ZCCalendar
 import Collections
-import SwiftUICore
+import SwiftUI
 import UIKit
 
 struct TodayRecordsEntry: TimelineEntry {
