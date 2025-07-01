@@ -511,6 +511,8 @@ extension DataManager {
     }
     
     func add(dayRecord: DayRecord) -> DayRecord? {
+        guard let tag = try? fetchTag(id: Int64(dayRecord.tagID)), tag.bookID == dayRecord.bookID else { return nil }
+        
         return AppDatabase.shared.add(dayRecord: dayRecord)
     }
     
