@@ -18,6 +18,7 @@ struct TodayRecordsWidgetEntryView : View {
                     .font(.system(size: 35, weight: .light))
                     .foregroundStyle(entry.color)
                     .frame(width: 50.0, height: 50.0)
+                    .widgetAccentable()
 //                    .border(.black, width: 1.0)
                 Spacer()
                 
@@ -27,6 +28,7 @@ struct TodayRecordsWidgetEntryView : View {
                 }
                 .buttonStyle(.bordered)
                 .tint(entry.color)
+                .widgetAccentable()
 //                .buttonBorderShape(.circle)
             }
             .padding(.vertical, 4.0)

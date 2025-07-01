@@ -16,7 +16,11 @@ struct RecordView: View {
     }
     
     var color: Color {
-        return displayData.tag.widgetColor
+        if widgetRenderingMode == .fullColor {
+            return displayData.tag.widgetColor
+        } else {
+            return Color(.secondarySystemGroupedBackground.withAlphaComponent(0.3))
+        }
     }
     
     var titleColor: Color {
@@ -27,9 +31,11 @@ struct RecordView: View {
         return displayData.count
     }
     
+    @Environment(\.widgetRenderingMode) var widgetRenderingMode
+    
     var body: some View {
         ZStack {
-            displayData.tag.widgetColor
+            color
                 .cornerRadius(6)
             
             if displayData.count <= 1 {
@@ -77,6 +83,8 @@ struct RecordContainerView: View {
     let displayData: [RecordDisplayData]
     let policy: WidgetTagSortPolicy
     
+    @Environment(\.widgetRenderingMode) var widgetRenderingMode
+    
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
             HStack {
@@ -84,14 +92,17 @@ struct RecordContainerView: View {
                 Text(dateFormatter.string(from: date))
                     .font(.system(size: 20, weight: .medium).monospacedDigit())
                     .foregroundColor(.primary)
+                    .widgetAccentable()
                 VStack(spacing: 3.0) {
                     Text(weekday)
                         .font(.system(size: 10, weight: .medium))
                         .foregroundColor(.secondary)
+                        .widgetAccentable()
                     if let string = secondaryString {
                         Text(string)
                             .font(.system(size: 10, weight: .medium))
                             .foregroundColor(.secondary)
+                            .widgetAccentable()
                     }
                 }
                 Spacer()
@@ -121,9 +132,9 @@ struct RecordContainerView: View {
         }
         .background(
             RoundedRectangle(cornerRadius: 10)
-                .fill(Color(.secondarySystemGroupedBackground))
+                .fill(Color(.secondarySystemGroupedBackground.withAlphaComponent(widgetRenderingMode == .fullColor ? 1.0 : 0.1)))
                 .shadow(color: Color(.sRGBLinear, white: 0, opacity: 0.1), radius: 3.0)
-            )
+        )
     }
     
     // 日期格式化
