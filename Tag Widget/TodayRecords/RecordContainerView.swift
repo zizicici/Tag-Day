@@ -33,11 +33,18 @@ struct RecordView: View {
                 .cornerRadius(6)
             
             if displayData.count <= 1 {
-                Text(title)
-                    .foregroundColor(titleColor)
-                    .font(.system(size: 14, weight: .medium))
-                    .lineLimit(1)
-                    .padding(2)
+                Group {
+                    if displayData.tag.id == nil {
+                        Text(title)
+                            .minimumScaleFactor(0.3)
+                    } else {
+                        Text(title)
+                            .lineLimit(1)
+                    }
+                }
+                .foregroundColor(titleColor)
+                .font(.system(size: 14, weight: .medium))
+                .padding(2)
             } else {
                 HStack() {
                     HStack(alignment: .center) {
@@ -66,37 +73,27 @@ struct RecordView: View {
 struct RecordContainerView: View {
     let date: Date
     let weekday: String
+    let secondaryString: String?
     let displayData: [RecordDisplayData]
     let policy: WidgetTagSortPolicy
-    
-    // 默认初始化
-    init(date: Date = Date(),
-         weekday: String = "周一",
-         displayData: [RecordDisplayData] = [],
-         policy: WidgetTagSortPolicy = .countFirst) {
-        self.date = date
-        self.weekday = weekday
-        self.displayData = displayData
-        self.policy = policy
-    }
     
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
             HStack {
                 Spacer()
-                // 日期显示 (横向)
                 Text(dateFormatter.string(from: date))
                     .font(.system(size: 20, weight: .medium).monospacedDigit())
                     .foregroundColor(.primary)
-                
-                // 星期显示 (竖向)
-                VStack {
-                    ForEach(Array(weekday), id: \.self) { char in
-                        Text(String(char))
-                            .font(.system(size: 10, weight: .black))
+                VStack(spacing: 3.0) {
+                    Text(weekday)
+                        .font(.system(size: 10, weight: .medium))
+                        .foregroundColor(.secondary)
+                    if let string = secondaryString {
+                        Text(string)
+                            .font(.system(size: 10, weight: .medium))
                             .foregroundColor(.secondary)
                     }
-                }.frame(width: 12)
+                }
                 Spacer()
             }.frame(height: 36.0).padding(.top, 4.0)
 
@@ -138,5 +135,5 @@ struct RecordContainerView: View {
 }
 
 #Preview {
-    RecordContainerView()
+    RecordContainerView.init(date: Date(), weekday: "Mon", secondaryString: nil, displayData: [], policy: .countFirst)
 }

@@ -10,7 +10,6 @@
 		14337F802DCC6CE50043447A /* Debounce.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14337F7F2DCC6CE50043447A /* Debounce.swift */; };
 		14337F822DCC70DA0043447A /* BookDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14337F812DCC70DA0043447A /* BookDetailViewController.swift */; };
 		14337F862DCC99220043447A /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 14337F852DCC99220043447A /* InfoPlist.xcstrings */; };
-		147E83FB2E12879500736D9F /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 147E83FA2E12879500736D9F /* Localizable.xcstrings */; };
 		147E83FC2E1288AB00736D9F /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D3A2DC5179F001B61D5 /* UIColor+Extension.swift */; };
 		147E84012E12BCF400736D9F /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147E84002E12BCF400736D9F /* Extension.swift */; };
 		147E84022E12BD4700736D9F /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147E84002E12BCF400736D9F /* Extension.swift */; };
@@ -115,6 +114,16 @@
 		14D272BE2DC0884E00267572 /* SettingOptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D272BA2DC0884E00267572 /* SettingOptionsViewController.swift */; };
 		14D272BF2DC0884E00267572 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D272B92DC0884E00267572 /* MoreViewController.swift */; };
 		14D2B3CC2E07B9280000CE05 /* DateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D2B3CB2E07B9280000CE05 /* DateView.swift */; };
+		14E71B182E138B6D001CA8EE /* ChineseCalendarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FF82AA2E04511000D3000B /* ChineseCalendarManager.swift */; };
+		14E71B192E138B72001CA8EE /* YearRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FF82AB2E04511000D3000B /* YearRange.swift */; };
+		14E71B1A2E138B77001CA8EE /* ChineseDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FF82AD2E04511000D3000B /* ChineseDay.swift */; };
+		14E71B1B2E138B7C001CA8EE /* ChineseMonth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FF82AE2E04511000D3000B /* ChineseMonth.swift */; };
+		14E71B1C2E138B81001CA8EE /* ChineseYear.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FF82AF2E04511000D3000B /* ChineseYear.swift */; };
+		14E71B1D2E138B85001CA8EE /* ChineseDayInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FF82B02E04511000D3000B /* ChineseDayInfo.swift */; };
+		14E71B1E2E138B8B001CA8EE /* ChineseCalendarDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FF82B12E04511000D3000B /* ChineseCalendarDataSource.swift */; };
+		14E71B1F2E138BB1001CA8EE /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 14B239C62DBF765B0007152C /* Localizable.xcstrings */; };
+		14E71B212E13925B001CA8EE /* kyureki.json in Resources */ = {isa = PBXBuildFile; fileRef = 14FF82B32E04511000D3000B /* kyureki.json */; };
+		14E71B222E13925F001CA8EE /* HKO1901_2099.json in Resources */ = {isa = PBXBuildFile; fileRef = 14FF82B42E04511000D3000B /* HKO1901_2099.json */; };
 		14E900BF2E1376EC00F9D0DC /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E900BE2E1376EC00F9D0DC /* Provider.swift */; };
 		14E900C22E13773D00F9D0DC /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E900C12E13773D00F9D0DC /* Entry.swift */; };
 		14E900C42E13779A00F9D0DC /* EntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E900C32E13779A00F9D0DC /* EntryView.swift */; };
@@ -165,7 +174,6 @@
 		14337F7F2DCC6CE50043447A /* Debounce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debounce.swift; sourceTree = "<group>"; };
 		14337F812DCC70DA0043447A /* BookDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailViewController.swift; sourceTree = "<group>"; };
 		14337F852DCC99220043447A /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
-		147E83FA2E12879500736D9F /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		147E84002E12BCF400736D9F /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		14833D342DC50310001B61D5 /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
 		14833D362DC50420001B61D5 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
@@ -324,7 +332,6 @@
 			isa = PBXGroup;
 			children = (
 				14CFE3A32E1231C80021A1AE /* Tag Widget.entitlements */,
-				147E83FA2E12879500736D9F /* Localizable.xcstrings */,
 				14980E372E110E96009622BF /* Assets.xcassets */,
 				14980E392E110E96009622BF /* Info.plist */,
 				14980E312E110E95009622BF /* TagWidgetBundle.swift */,
@@ -840,7 +847,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				147E83FB2E12879500736D9F /* Localizable.xcstrings in Resources */,
+				14E71B212E13925B001CA8EE /* kyureki.json in Resources */,
+				14E71B222E13925F001CA8EE /* HKO1901_2099.json in Resources */,
+				14E71B1F2E138BB1001CA8EE /* Localizable.xcstrings in Resources */,
 				14980E382E110E96009622BF /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -874,12 +883,19 @@
 				14CFE3AF2E1275E40021A1AE /* SharedData.swift in Sources */,
 				14E900C42E13779A00F9D0DC /* EntryView.swift in Sources */,
 				14F4DEA62E11982B0006EB31 /* RecordContainerView.swift in Sources */,
+				14E71B182E138B6D001CA8EE /* ChineseCalendarManager.swift in Sources */,
 				14CFE3AE2E1275DF0021A1AE /* SharedDataManager.swift in Sources */,
 				14CFE3BA2E127EB40021A1AE /* BookEntity.swift in Sources */,
+				14E71B192E138B72001CA8EE /* YearRange.swift in Sources */,
 				14E900BF2E1376EC00F9D0DC /* Provider.swift in Sources */,
+				14E71B1E2E138B8B001CA8EE /* ChineseCalendarDataSource.swift in Sources */,
+				14E71B1D2E138B85001CA8EE /* ChineseDayInfo.swift in Sources */,
+				14E71B1A2E138B77001CA8EE /* ChineseDay.swift in Sources */,
 				147E84012E12BCF400736D9F /* Extension.swift in Sources */,
+				14E71B1C2E138B81001CA8EE /* ChineseYear.swift in Sources */,
 				14CFE3B82E127E6C0021A1AE /* BookEntity+Widget.swift in Sources */,
 				14CFE3B22E127A560021A1AE /* Basic.swift in Sources */,
+				14E71B1B2E138B7C001CA8EE /* ChineseMonth.swift in Sources */,
 				14980E362E110E95009622BF /* ConfigurationAppIntent.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

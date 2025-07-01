@@ -26,15 +26,36 @@ enum WidgetTagSortPolicy: Int, AppEnum {
     }
 }
 
+enum SecondaryCalendar: Int, AppEnum {
+    case none
+    case chineseCalendar
+    case rokuyo
+    
+    static var typeDisplayRepresentation: TypeDisplayRepresentation {
+        return "settings.secondaryCalendar.title"
+    }
+    
+    static var caseDisplayRepresentations: [SecondaryCalendar : DisplayRepresentation] {
+        return [
+            .none: DisplayRepresentation(title: "settings.secondaryCalendar.none"),
+            .chineseCalendar: DisplayRepresentation(title: "settings.secondaryCalendar.chineseCalendar"),
+            .rokuyo: DisplayRepresentation(title: "settings.secondaryCalendar.rokuyo")
+        ]
+    }
+}
+
 struct TodayRecordsConfigurationAppIntent: WidgetConfigurationIntent {
     static var title: LocalizedStringResource { "" }
     static var description: IntentDescription { "" }
-
+    
     @Parameter(title: "intent.book.type")
     var book: BookEntity?
     
     @Parameter(title: "widget.config.tagSortPolicy", default: WidgetTagSortPolicy.countFirst)
     var tagSortPolicy: WidgetTagSortPolicy?
+    
+    @Parameter(title: "settings.secondaryCalendar.title", default: SecondaryCalendar.none)
+    var secondaryCalendar: SecondaryCalendar?
 }
 
 // For Preview
@@ -58,6 +79,6 @@ extension BookEntity {
 
 extension Tag {
     static let placeholder0 = Tag(bookID: -1, title: String(localized: "tag.placeholder.0"), color: "FF9500FF,FF9F0AFF", order: 0)
-    static let placeholder1 = Tag(bookID: -1, title: String(localized: "tag.placeholder.1"), color: "FF9500DD,FF9F0ADD", order: 1)
-    static let placeholder2 = Tag(bookID: -1, title: String(localized: "tag.placeholder.2"), color: "FF9500BB,FF9F0ABB", order: 2)
+    static let placeholder1 = Tag(bookID: -1, title: String(localized: "tag.placeholder.1"), color: "FF9500BB,FF9F0ABB", order: 1)
+    static let placeholder2 = Tag(bookID: -1, title: String(localized: "tag.placeholder.2"), color: "FF950099,FF9F0A99", order: 2)
 }
