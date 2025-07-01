@@ -27,6 +27,7 @@ extension AppDatabase {
     static func generateDatabasePool() throws -> DatabasePool {
         let folderURL = try databaseFolderURL()
         try FileManager().createDirectory(at: folderURL, withIntermediateDirectories: true)
+        setProtectionForDirectory(at: folderURL)
         
         let dbURL = folderURL.appendingPathComponent("db.sqlite")
         var config = Configuration()
@@ -39,5 +40,32 @@ extension AppDatabase {
         return try FileManager()
             .url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
             .appendingPathComponent("database", isDirectory: true)
+    }
+    
+    static func setProtectionForDirectory(at url: URL) {
+        let fileManager = FileManager.default
+        
+        do {
+            // 获取目录下的所有文件和子目录
+            let items = try fileManager.contentsOfDirectory(at: url, includingPropertiesForKeys: nil, options: [])
+            
+            for item in items {
+                // 设置保护属性为 none
+                let attributes: [FileAttributeKey: Any] = [
+                    FileAttributeKey.protectionKey: FileProtectionType.none
+                ]
+                
+                // 更新文件或文件夹的属性
+                try fileManager.setAttributes(attributes, ofItemAtPath: item.path)
+                print("Set protection to none for: \(item.path)")
+                
+                // 如果是文件夹，递归调用
+                if item.hasDirectoryPath {
+                    setProtectionForDirectory(at: item)
+                }
+            }
+        } catch {
+            print("Error processing directory: \(error)")
+        }
     }
 }
