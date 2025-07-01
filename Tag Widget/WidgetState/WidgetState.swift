@@ -8,7 +8,7 @@
 import Foundation
 import WidgetKit
 
-enum WidgetState: Codable {
+enum WidgetState: Codable, Equatable {
     case idle
     case showTags(index: Int)
 }
@@ -19,7 +19,7 @@ extension WidgetFamily: Codable {
 
 struct WidgetStateInfo: Codable {
     let kind: String          // Widget种类标识符
-    let family: WidgetFamily  // Widget尺寸
+    let family: Int  // Widget尺寸,rawValue
     let bookID: Int        // 关联的书籍ID
     let state: WidgetState
     let lastUpdate: Date      // 状态更新时间戳
@@ -30,8 +30,8 @@ extension WidgetStateInfo {
         return Self.generateUID(kind: kind, family: family, bookID: bookID)
     }
     
-    static func generateUID(kind: String, family: WidgetFamily, bookID: Int) -> String {
-        return "\(kind)_\(family.rawValue)_\(bookID)"
+    static func generateUID(kind: String, family: Int, bookID: Int) -> String {
+        return "\(kind)_\(family)_\(bookID)"
     }
 }
 

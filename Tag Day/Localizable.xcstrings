@@ -6724,6 +6724,58 @@
           }
         }
       }
+    },
+    "widget.hint.noTags" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Tags"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无标签"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無標籤"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無標籤"
+          }
+        }
+      }
+    },
+    "widget.intent.add.description" : {
+
+    },
+    "widget.intent.add.title" : {
+
+    },
+    "widget.intent.closeTag.description" : {
+
+    },
+    "widget.intent.closeTag.title" : {
+
+    },
+    "widget.intent.scrollTag.description" : {
+
+    },
+    "widget.intent.scrollTag.title" : {
+
+    },
+    "widget.intent.selectTag.description" : {
+
+    },
+    "widget.intent.selectTag.title" : {
+
     }
   },
   "version" : "1.0"

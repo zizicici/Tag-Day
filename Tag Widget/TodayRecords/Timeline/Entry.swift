@@ -16,8 +16,9 @@ struct TodayRecordsEntry: TimelineEntry {
     let configuration: TodayRecordsConfigurationAppIntent
     let tags: [Tag]
     let records: [DayRecord]
+    let state: WidgetState
     
-    static let placeholder: Self = TodayRecordsEntry.init(date: Date(), configuration: TodayRecordsConfigurationAppIntent(), tags: [], records: [])
+    static let placeholder: Self = TodayRecordsEntry.init(date: Date(), configuration: TodayRecordsConfigurationAppIntent(), tags: [], records: [], state: .idle)
 }
 
 extension TodayRecordsEntry {
@@ -34,7 +35,7 @@ extension TodayRecordsEntry {
         records.forEach { record in
             counts[record.tagID, default: 0] += 1
         }
-        return counts
+        return OrderedDictionary(uniqueKeysWithValues: counts.sorted { $0.value > $1.value })
     }
     
     var tagDisplayData: [RecordDisplayData] {

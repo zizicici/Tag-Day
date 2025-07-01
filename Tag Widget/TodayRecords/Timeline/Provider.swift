@@ -14,49 +14,56 @@ struct TodayRecordsWidgetProvider: AppIntentTimelineProvider {
     }
 
     func snapshot(for configuration: TodayRecordsConfigurationAppIntent, in context: Context) async -> TodayRecordsEntry {
-        TodayRecordsEntry(date: Date(), configuration: configuration, tags: [], records: [])
+        TodayRecordsEntry(date: Date(), configuration: configuration, tags: [], records: [], state: .idle)
     }
     
     func timeline(for configuration: TodayRecordsConfigurationAppIntent, in context: Context) async -> Timeline<TodayRecordsEntry> {
-        var entries: [TodayRecordsEntry] = []
         let calendar = Calendar.current
         
         let currentDate = Date()
         let bookID = configuration.book?.id ?? -1
         
+        let stateManager = WidgetStateManager.shared
+        let state = stateManager.getState(kind: TodayRecordsWidgetKindString, family: context.family.rawValue, bookID: bookID)
+        
         let sharedData = try? SharedDataManager.read(SharedData.self)
         
         let tags: [Tag] = sharedData?.tags.filter{ $0.bookID == bookID } ?? []
-        let records: [DayRecord] = sharedData?.dayRecord.filter{ $0.bookID == bookID } ?? []
+        var records: [DayRecord] = sharedData?.dayRecord.filter{ $0.bookID == bookID } ?? []
         
-        guard let nextMidnight = calendar.nextDate(
+        if let widgetAddDayRecords = sharedData?.widgetAddDayRecords, widgetAddDayRecords.count > 0 {
+            let fakeRecords: [DayRecord] = widgetAddDayRecords.filter{ $0.bookID == bookID }.map({ widgetRecord in
+                return .init(bookID: Int64(widgetRecord.bookID), tagID: Int64(widgetRecord.tagID), day: Int64(widgetRecord.day), order: Int64(widgetRecord.order))
+            })
+            records.append(contentsOf: fakeRecords)
+        }
+        
+        var timePoints = [currentDate]
+
+        if let nextMidnight = calendar.nextDate(
             after: currentDate,
             matching: DateComponents(hour: 0, minute: 0, second: 0),
             matchingPolicy: .nextTime
-        ) else {
-            let fallbackEntries = (0..<5).map { hourOffset in
-                let entryDate = calendar.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-                let day = GregorianDay(from: entryDate)
-                
-                return TodayRecordsEntry(date: entryDate, configuration: configuration, tags: tags, records: records.filter({ $0.day == day.julianDay }))
+        ) {
+            timePoints += (1..<5).compactMap {
+                calendar.date(byAdding: .day, value: $0, to: nextMidnight)
             }
-            return Timeline(entries: fallbackEntries, policy: .atEnd)
+        } else {
+            timePoints += (1..<5).compactMap {
+                calendar.date(byAdding: .hour, value: $0, to: currentDate)
+            }
         }
         
-        let day = GregorianDay(from: Date())
-        let filterdRecords = records.filter({ $0.day == day.julianDay })
-        let entry = TodayRecordsEntry(date: Date(), configuration: configuration, tags: tags, records: filterdRecords)
-        entries.append(entry)
-        
-        for dayOffset in 0 ..< 4 {
-            if let entryDate = calendar.date(byAdding: .day, value: dayOffset, to: nextMidnight) {
-                let day = GregorianDay(from: entryDate)
-                
-                let filterdRecords = records.filter({ $0.day == day.julianDay })
-                
-                let entry = TodayRecordsEntry(date: entryDate, configuration: configuration, tags: tags, records: filterdRecords)
-                entries.append(entry)
-            }
+        let entries = timePoints.map { date in
+            let day = GregorianDay(from: date)
+            let filteredRecords = records.filter { $0.day == day.julianDay }.sorted(by: { $0.order < $1.order })
+            return TodayRecordsEntry(
+                date: date,
+                configuration: configuration,
+                tags: tags.sorted(by: { $0.order < $1.order }),
+                records: filteredRecords,
+                state: state
+            )
         }
         
         return Timeline(entries: entries, policy: .after(entries.last?.date ?? currentDate))

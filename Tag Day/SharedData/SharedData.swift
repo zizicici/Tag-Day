@@ -11,6 +11,8 @@ struct WidgetAddDayRecord: Codable {
     var tagID: Int
     var bookID: Int
     var day: Int
+    var date: Int
+    var order: Int
 }
 
 struct SharedData: Codable {

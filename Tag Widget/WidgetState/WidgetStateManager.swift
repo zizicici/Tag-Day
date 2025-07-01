@@ -20,7 +20,7 @@ class WidgetStateManager {
     }
     
     // 保存状态（包含kind和family）
-    func saveState(kind: String, family: WidgetFamily, bookID: Int, state: WidgetState) {
+    func saveState(kind: String, family: Int, bookID: Int, state: WidgetState) {
         let stateInfo = WidgetStateInfo(
             kind: kind,
             family: family,
@@ -35,7 +35,7 @@ class WidgetStateManager {
     }
     
     // 获取状态（考虑kind和family）
-    func getState(kind: String, family: WidgetFamily, bookID: Int) -> WidgetState {
+    func getState(kind: String, family: Int, bookID: Int) -> WidgetState {
         let identifier = WidgetStateInfo.generateUID(kind: kind, family: family, bookID: bookID)
         var allStates = loadAllStates()
         
@@ -79,7 +79,7 @@ class WidgetStateManager {
     }
     
     // 删除指定状态
-    func removeState(kind: String, family: WidgetFamily, bookID: Int) {
+    func removeState(kind: String, family: Int, bookID: Int) {
         let identifier = WidgetStateInfo.generateUID(kind: kind, family: family, bookID: bookID)
         var allStates = loadAllStates()
         allStates.removeValue(forKey: identifier)

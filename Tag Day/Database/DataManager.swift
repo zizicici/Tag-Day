@@ -7,6 +7,7 @@
 
 import Foundation
 import GRDB
+import ZCCalendar
 
 extension Notification.Name {
     static let CurrentBookChanged = Notification.Name(rawValue: "com.zizicici.data.currentBook.changed")
@@ -529,7 +530,30 @@ extension DataManager {
         let tagID = dayRecord.tagID
         let day = dayRecord.day
         let lastOrder = fetchLastRecordOrder(bookID: Int64(bookID), day: Int64(day))
-        let newRecord = DayRecord(bookID: Int64(bookID), tagID: Int64(tagID), day: Int64(day), order: lastOrder + 1)
+        let newRecord = DayRecord(bookID: Int64(bookID), tagID: Int64(tagID), day: Int64(day), startTime: Int64(dayRecord.date), order: lastOrder + 1)
         return add(dayRecord: newRecord)
+    }
+}
+
+extension DataManager {
+    func syncSharedData() throws {
+        try syncSharedDataToDatabase()
+        try syncDatabaseToSharedData()
+    }
+    
+    func syncSharedDataToDatabase() throws {
+        // SharedData -> Database
+        if let widgetAddDayRecords = try SharedDataManager.read(SharedData.self)?.widgetAddDayRecords, widgetAddDayRecords.count > 0 {
+            widgetAddDayRecords.forEach{ _ = add(dayRecord: $0) }
+        }
+    }
+    
+    func syncDatabaseToSharedData() throws {
+        // Database -> SharedData
+        let books = try DataManager.shared.fetchAllBooks()
+        let tags = try DataManager.shared.fetchAllTags()
+        let dayRecords = try DataManager.shared.fetchAllDayRecords(after: Int64(ZCCalendar.manager.today.julianDay))
+        let sharedData = SharedData(version: 1, books: books, tags: tags, dayRecord: dayRecords, widgetAddDayRecords: [])
+        try SharedDataManager.write(sharedData)
     }
 }
