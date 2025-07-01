@@ -11,6 +11,6 @@ import SwiftUI
 @main
 struct TagWidgetBundle: WidgetBundle {
     var body: some Widget {
-        TagWidget()
+        TodayRecordsWidget()
     }
 }

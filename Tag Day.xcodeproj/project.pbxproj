@@ -23,7 +23,7 @@
 		14980E2D2E110E95009622BF /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14980E2C2E110E95009622BF /* WidgetKit.framework */; };
 		14980E2F2E110E95009622BF /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14980E2E2E110E95009622BF /* SwiftUI.framework */; };
 		14980E322E110E95009622BF /* TagWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14980E312E110E95009622BF /* TagWidgetBundle.swift */; };
-		14980E342E110E95009622BF /* TagWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14980E332E110E95009622BF /* TagWidget.swift */; };
+		14980E342E110E95009622BF /* Widget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14980E332E110E95009622BF /* Widget.swift */; };
 		14980E362E110E95009622BF /* ConfigurationAppIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14980E352E110E95009622BF /* ConfigurationAppIntent.swift */; };
 		14980E382E110E96009622BF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 14980E372E110E96009622BF /* Assets.xcassets */; };
 		14980E3C2E110E96009622BF /* Tag Widget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 14980E2A2E110E95009622BF /* Tag Widget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -115,6 +115,9 @@
 		14D272BE2DC0884E00267572 /* SettingOptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D272BA2DC0884E00267572 /* SettingOptionsViewController.swift */; };
 		14D272BF2DC0884E00267572 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D272B92DC0884E00267572 /* MoreViewController.swift */; };
 		14D2B3CC2E07B9280000CE05 /* DateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D2B3CB2E07B9280000CE05 /* DateView.swift */; };
+		14E900BF2E1376EC00F9D0DC /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E900BE2E1376EC00F9D0DC /* Provider.swift */; };
+		14E900C22E13773D00F9D0DC /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E900C12E13773D00F9D0DC /* Entry.swift */; };
+		14E900C42E13779A00F9D0DC /* EntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E900C32E13779A00F9D0DC /* EntryView.swift */; };
 		14EBE0862DD7679700F7609A /* DurationPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 14EBE0852DD7679700F7609A /* DurationPicker */; };
 		14EBE0882DD76B0B00F7609A /* DurationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14EBE0872DD76B0B00F7609A /* DurationCell.swift */; };
 		14ED63D12DC702F000384068 /* CalendarYearPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14ED63D02DC702F000384068 /* CalendarYearPickerViewController.swift */; };
@@ -172,7 +175,7 @@
 		14980E2C2E110E95009622BF /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		14980E2E2E110E95009622BF /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		14980E312E110E95009622BF /* TagWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagWidgetBundle.swift; sourceTree = "<group>"; };
-		14980E332E110E95009622BF /* TagWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagWidget.swift; sourceTree = "<group>"; };
+		14980E332E110E95009622BF /* Widget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Widget.swift; sourceTree = "<group>"; };
 		14980E352E110E95009622BF /* ConfigurationAppIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationAppIntent.swift; sourceTree = "<group>"; };
 		14980E372E110E96009622BF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		14980E392E110E96009622BF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -256,6 +259,9 @@
 		14D272BA2DC0884E00267572 /* SettingOptionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingOptionsViewController.swift; sourceTree = "<group>"; };
 		14D272BB2DC0884E00267572 /* SpecificationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpecificationsViewController.swift; sourceTree = "<group>"; };
 		14D2B3CB2E07B9280000CE05 /* DateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateView.swift; sourceTree = "<group>"; };
+		14E900BE2E1376EC00F9D0DC /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
+		14E900C12E13773D00F9D0DC /* Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entry.swift; sourceTree = "<group>"; };
+		14E900C32E13779A00F9D0DC /* EntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryView.swift; sourceTree = "<group>"; };
 		14EBE0872DD76B0B00F7609A /* DurationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DurationCell.swift; sourceTree = "<group>"; };
 		14ED63D02DC702F000384068 /* CalendarYearPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarYearPickerViewController.swift; sourceTree = "<group>"; };
 		14ED63D22DC72FF100384068 /* Tag Day.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Tag Day.entitlements"; sourceTree = "<group>"; };
@@ -322,9 +328,7 @@
 				14980E372E110E96009622BF /* Assets.xcassets */,
 				14980E392E110E96009622BF /* Info.plist */,
 				14980E312E110E95009622BF /* TagWidgetBundle.swift */,
-				14980E352E110E95009622BF /* ConfigurationAppIntent.swift */,
-				14980E332E110E95009622BF /* TagWidget.swift */,
-				14F4DEA42E1197FA0006EB31 /* RecordContainerView.swift */,
+				14E900BD2E13765900F9D0DC /* TodayRecords */,
 				14CFE3A62E124A300021A1AE /* WidgetState */,
 				147E84002E12BCF400736D9F /* Extension.swift */,
 			);
@@ -647,6 +651,35 @@
 			path = More;
 			sourceTree = "<group>";
 		};
+		14E900BC2E1374E000F9D0DC /* ConfigurationIntent */ = {
+			isa = PBXGroup;
+			children = (
+				14980E352E110E95009622BF /* ConfigurationAppIntent.swift */,
+			);
+			path = ConfigurationIntent;
+			sourceTree = "<group>";
+		};
+		14E900BD2E13765900F9D0DC /* TodayRecords */ = {
+			isa = PBXGroup;
+			children = (
+				14980E332E110E95009622BF /* Widget.swift */,
+				14E900C32E13779A00F9D0DC /* EntryView.swift */,
+				14F4DEA42E1197FA0006EB31 /* RecordContainerView.swift */,
+				14E900BC2E1374E000F9D0DC /* ConfigurationIntent */,
+				14E900C02E13771A00F9D0DC /* Timeline */,
+			);
+			path = TodayRecords;
+			sourceTree = "<group>";
+		};
+		14E900C02E13771A00F9D0DC /* Timeline */ = {
+			isa = PBXGroup;
+			children = (
+				14E900BE2E1376EC00F9D0DC /* Provider.swift */,
+				14E900C12E13773D00F9D0DC /* Entry.swift */,
+			);
+			path = Timeline;
+			sourceTree = "<group>";
+		};
 		14FF82A22E03F78500D3000B /* Backup */ = {
 			isa = PBXGroup;
 			children = (
@@ -832,15 +865,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				14E900C22E13773D00F9D0DC /* Entry.swift in Sources */,
 				14980E322E110E95009622BF /* TagWidgetBundle.swift in Sources */,
 				14CFE3A82E124A740021A1AE /* WidgetStateManager.swift in Sources */,
-				14980E342E110E95009622BF /* TagWidget.swift in Sources */,
+				14980E342E110E95009622BF /* Widget.swift in Sources */,
 				147E83FC2E1288AB00736D9F /* UIColor+Extension.swift in Sources */,
 				14CFE3A52E1249D80021A1AE /* WidgetState.swift in Sources */,
 				14CFE3AF2E1275E40021A1AE /* SharedData.swift in Sources */,
+				14E900C42E13779A00F9D0DC /* EntryView.swift in Sources */,
 				14F4DEA62E11982B0006EB31 /* RecordContainerView.swift in Sources */,
 				14CFE3AE2E1275DF0021A1AE /* SharedDataManager.swift in Sources */,
 				14CFE3BA2E127EB40021A1AE /* BookEntity.swift in Sources */,
+				14E900BF2E1376EC00F9D0DC /* Provider.swift in Sources */,
 				147E84012E12BCF400736D9F /* Extension.swift in Sources */,
 				14CFE3B82E127E6C0021A1AE /* BookEntity+Widget.swift in Sources */,
 				14CFE3B22E127A560021A1AE /* Basic.swift in Sources */,

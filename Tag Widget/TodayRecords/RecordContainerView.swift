@@ -1,15 +1,15 @@
 import SwiftUI
 import UIKit
 
-// TagDisplayData structure to hold the display parameters
-struct TagDisplayData {
+// RecordDisplayData structure to hold the display parameters
+struct RecordDisplayData {
     let tag: Tag
-    let count: Int
+    var count: Int = 1
 }
 
 // Extracted DayRecordView
-struct DayRecordView: View {
-    let displayData: TagDisplayData
+struct RecordView: View {
+    let displayData: RecordDisplayData
     
     var title: String {
         return displayData.tag.title
@@ -66,17 +66,17 @@ struct DayRecordView: View {
 struct RecordContainerView: View {
     let date: Date
     let weekday: String
-    let tagDisplayDatas: [TagDisplayData]
+    let displayData: [RecordDisplayData]
     let policy: WidgetTagSortPolicy
     
     // 默认初始化
     init(date: Date = Date(),
          weekday: String = "周一",
-         tags: [TagDisplayData] = [],
+         displayData: [RecordDisplayData] = [],
          policy: WidgetTagSortPolicy = .countFirst) {
         self.date = date
         self.weekday = weekday
-        self.tagDisplayDatas = tags
+        self.displayData = displayData
         self.policy = policy
     }
     
@@ -106,17 +106,17 @@ struct RecordContainerView: View {
             VStack(spacing: 4) {
                 switch policy {
                 case .countFirst:
-                    ForEach(0..<min(tagDisplayDatas.count, 3), id: \.self) { index in
-                        DayRecordView(displayData: tagDisplayDatas[index])
+                    ForEach(0..<min(displayData.count, 3), id: \.self) { index in
+                        RecordView(displayData: displayData[index])
                     }
                 case .orderFirst:
-                    ForEach(0..<min(tagDisplayDatas.count, 3), id: \.self) { index in
-                        DayRecordView(displayData: tagDisplayDatas[index])
+                    ForEach(0..<min(displayData.count, 3), id: \.self) { index in
+                        RecordView(displayData: displayData[index])
                     }
                 case .orderLast:
-                    let displayCount = min(tagDisplayDatas.count, 3)
+                    let displayCount = min(displayData.count, 3)
                     ForEach(0..<displayCount, id: \.self) { index in
-                        DayRecordView(displayData: tagDisplayDatas[tagDisplayDatas.count - displayCount + index])
+                        RecordView(displayData: displayData[displayData.count - displayCount + index])
                     }
                 }
             }
