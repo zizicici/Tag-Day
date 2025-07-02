@@ -96,7 +96,11 @@ struct TodayRecordsWidgetEntryView : View {
             Spacer()
             
             if isIdle {
-                RecordContainerView(date: entry.date, weekday: entry.weekDay, secondaryString: entry.secondaryCalendarString, displayData: entry.tagDisplayData, policy: entry.configuration.tagSortPolicy ?? .countFirst)
+                if family == .systemSmall {
+                    RecordContainerView(date: entry.date, weekday: entry.weekDay, secondaryString: entry.secondaryCalendarString, displayData: entry.tagDisplayData, policy: entry.configuration.tagSortPolicy ?? .countFirst, columnCount: 1)
+                } else {
+                    RecordContainerView(date: entry.date, weekday: entry.weekDay, secondaryString: entry.secondaryCalendarString, displayData: entry.tagDisplayData, policy: entry.configuration.tagSortPolicy ?? .countFirst, columnCount: 2)
+                }
             } else {
                 if let pageIndex = pageIndex {
                     TagButtonView(tags: entry.tags, pageIndex: pageIndex, bookID: entry.book.id, kind: kind, familyRawValue: family.rawValue, day: GregorianDay(from: entry.date).julianDay)
