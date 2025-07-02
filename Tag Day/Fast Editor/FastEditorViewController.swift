@@ -188,7 +188,7 @@ class FastEditorViewController: UIViewController {
         if let lastestTag = DataManager.shared.tags.last {
             tagIndex = lastestTag.order + 1
         }
-        let newTag = Tag(bookID: bookID, title: "", color: "", order: tagIndex)
+        let newTag = Tag(bookID: bookID, title: "", subtitle: "", color: "", order: tagIndex)
         let nav = NavigationController(rootViewController: TagDetailViewController(tag: newTag))
         
         present(nav, animated: true)

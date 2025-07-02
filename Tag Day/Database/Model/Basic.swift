@@ -18,7 +18,7 @@ struct Book: Identifiable, Hashable, Codable {
     
     var title: String
     var color: String
-    var symbol: String?
+    var symbol: String
     var bookType: BookType = .active
     var order: Int
     
@@ -33,7 +33,7 @@ struct Tag: Identifiable, Hashable, Codable {
     var bookID: Int64
 
     var title: String
-    var subtitle: String?
+    var subtitle: String
     var color: String
     var titleColor: String?
     var order: Int

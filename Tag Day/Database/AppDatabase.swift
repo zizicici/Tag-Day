@@ -33,7 +33,7 @@ final class AppDatabase {
                 
                 table.column("title", .text).notNull()
                 table.column("color", .text).notNull()
-                table.column("symbol", .text)
+                table.column("symbol", .text).notNull()
                 table.column("book_type", .integer).notNull()
                 table.column("order", .integer).notNull()
             }
@@ -44,7 +44,7 @@ final class AppDatabase {
                     .indexed()
                 
                 table.column("title", .text).notNull()
-                table.column("subtitle", .text)
+                table.column("subtitle", .text).notNull()
                 table.column("color", .text).notNull()
                 table.column("title_color", .text)
                 table.column("order", .integer).notNull()
@@ -68,7 +68,7 @@ final class AppDatabase {
             }
             
             if true {
-                var firstBook = Book(title: String(localized: "database.firstBook"), color: AppColor.main.generateLightDarkString(), order: 0)
+                var firstBook = Book(title: String(localized: "database.firstBook"), color: AppColor.main.generateLightDarkString(), symbol: "latch.2.case", order: 0)
                 try? firstBook.save(db)
                 
                 if let bookID = firstBook.id {
@@ -84,21 +84,21 @@ final class AppDatabase {
                         try? day3.save(db)
                     }
                     
-                    var secondTag = Tag(bookID: bookID, title: String(localized: "database.secondTag.name"), subtitle: nil, color: UIColor.systemPurple.generateLightDarkString(), order: 1)
+                    var secondTag = Tag(bookID: bookID, title: String(localized: "database.secondTag.name"), subtitle: "", color: UIColor.systemPurple.generateLightDarkString(), order: 1)
                     try? secondTag.save(db)
                     if let bookId = firstBook.id, let tagId = secondTag.id {
                         var day4 = DayRecord(bookID: bookId, tagID: tagId, day: Int64(ZCCalendar.manager.today.julianDay + 3), order: 0)
                         try? day4.save(db)
                     }
                     
-                    var thirdTag = Tag(bookID: bookID, title: String(localized: "database.thirdTag.name"), subtitle: nil, color: UIColor.systemCyan.generateLightDarkString(), order: 2)
+                    var thirdTag = Tag(bookID: bookID, title: String(localized: "database.thirdTag.name"), subtitle: "", color: UIColor.systemCyan.generateLightDarkString(), order: 2)
                     try? thirdTag.save(db)
                     if let bookId = firstBook.id, let tagId = thirdTag.id {
                         var day5 = DayRecord(bookID: bookId, tagID: tagId, day: Int64(ZCCalendar.manager.today.julianDay + 4), order: 0)
                         try? day5.save(db)
                     }
                 }
-                var secondBook = Book(title: String(localized: "database.secondBook"), color: UIColor.systemMint.generateLightDarkString(), order: 1)
+                var secondBook = Book(title: String(localized: "database.secondBook"), color: UIColor.systemMint.generateLightDarkString(), symbol: "figure.run", order: 1)
                 try? secondBook.save(db)
             }
         }

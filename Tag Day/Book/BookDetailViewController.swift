@@ -27,7 +27,7 @@ class BookDetailViewController: UIViewController {
         }
     }
     
-    private var symbol: String? {
+    private var symbol: String {
         get {
             return book.symbol
         }
@@ -344,9 +344,8 @@ class BookDetailViewController: UIViewController {
     
     func allowSave() -> Bool {
         let titleFlag = bookTitle.isValidBookTitle()
-        let commentFlag = symbol?.isValidBookComment() ?? true
         
-        return titleFlag && commentFlag
+        return titleFlag
     }
     
     @objc
@@ -460,7 +459,7 @@ class BookDetailViewController: UIViewController {
     func updateSymbolCell() {
         guard let cell = symbolCell else { return }
         var content = UIListContentConfiguration.valueCell()
-        content.image = UIImage(systemName: symbol ?? "book.closed")?.withTintColor(bookColor, renderingMode: .alwaysOriginal)
+        content.image = UIImage(systemName: symbol)?.withTintColor(bookColor, renderingMode: .alwaysOriginal)
         content.text = ""
         content.secondaryText = String(localized: "book.detail.updateSymbol")
         cell.contentConfiguration = content
@@ -477,7 +476,7 @@ class BookDetailViewController: UIViewController {
     }
     
     @objc private func showSymbolPicker() {
-        presentSymbolPicker(currentSymbol: symbol ?? "book.closed") { [weak self] symbol in
+        presentSymbolPicker(currentSymbol: symbol) { [weak self] symbol in
             self?.symbol = symbol
             self?.updateSymbolCell()
         }
@@ -531,10 +530,6 @@ extension BookDetailViewController: UIColorPickerViewControllerDelegate {
 extension String {
     func isValidBookTitle() -> Bool{
         return count > 0 && count <= 60
-    }
-    
-    func isValidBookComment() -> Bool{
-        return count <= 200
     }
 }
 

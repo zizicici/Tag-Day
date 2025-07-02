@@ -62,7 +62,7 @@ struct TagIntentQuery: EntityQuery {
         var result: [TagEntity] = []
         for tag in tags {
             if let tagID = tag.id, let book = allBooks.first(where: { $0.id == tag.bookID }), let bookEntity = BookEntity(book: book) {
-                result.append(TagEntity(id: Int(tagID), title: tag.title, subtitle: tag.subtitle ?? "", book: bookEntity, color: tag.color))
+                result.append(TagEntity(id: Int(tagID), title: tag.title, subtitle: tag.subtitle, book: bookEntity, color: tag.color))
             }
         }
         return result
@@ -75,7 +75,7 @@ struct TagIntentQuery: EntityQuery {
         var result: [TagEntity] = []
         for tag in tags {
             if let tagID = tag.id, let book = allBooks.first(where: { $0.id == tag.bookID }), let bookEntity = BookEntity(book: book) {
-                result.append(TagEntity(id: Int(tagID), title: tag.title, subtitle: tag.subtitle ?? "", book: bookEntity, color: tag.color))
+                result.append(TagEntity(id: Int(tagID), title: tag.title, subtitle: tag.subtitle, book: bookEntity, color: tag.color))
             }
         }
         return result
@@ -102,12 +102,12 @@ struct TagsOptionsProvider: DynamicOptionsProvider {
                     TagEntity(
                         id: Int(tag.id!),
                         title: tag.title,
-                        subtitle: tag.subtitle ?? "",
+                        subtitle: tag.subtitle,
                         book: BookEntity(id: Int(tag.bookID), title: book.title, symbol: book.symbol, color: book.color),
                         color: tag.color
                     ),
                     title: LocalizedStringResource(stringLiteral: tag.title),
-                    subtitle: LocalizedStringResource(stringLiteral: tag.subtitle ?? ""),
+                    subtitle: LocalizedStringResource(stringLiteral: tag.subtitle),
                     image: .init(
                         systemName: "square.fill",
                         tintColor: UIColor(string: tag.color),

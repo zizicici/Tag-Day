@@ -28,7 +28,7 @@ class TagDetailViewController: UIViewController {
         }
     }
     
-    private var subtitle: String? {
+    private var subtitle: String {
         get {
             return tag.subtitle
         }
@@ -462,7 +462,7 @@ class TagDetailViewController: UIViewController {
     
     func allowSave() -> Bool {
         let titleFlag = tagTitle.isValidTagTitle()
-        let subtitleFlag = subtitle?.isValidTagSubtitle() ?? true
+        let subtitleFlag = subtitle.isValidTagSubtitle()
         return titleFlag && subtitleFlag
     }
     

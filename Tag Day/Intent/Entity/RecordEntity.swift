@@ -96,7 +96,7 @@ struct RecordIntentQuery: EntityQuery {
         var tagEntities: [TagEntity] = []
         for tag in allTags {
             if let tagID = tag.id, let book = allBooks.first(where: { $0.id == tag.bookID }), let bookEntity = BookEntity(book: book) {
-                tagEntities.append(TagEntity(id: Int(tagID), title: tag.title, subtitle: tag.subtitle ?? "", book: bookEntity, color: tag.color))
+                tagEntities.append(TagEntity(id: Int(tagID), title: tag.title, subtitle: tag.subtitle, book: bookEntity, color: tag.color))
             }
         }
         

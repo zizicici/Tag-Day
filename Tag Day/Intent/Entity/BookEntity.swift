@@ -48,6 +48,6 @@ struct BookEntity: Identifiable, Hashable, Equatable, AppEntity {
     
     init?(book: Book) {
         guard let bookID = book.id else { return nil }
-        self.init(id: Int(bookID), title: book.title, symbol: book.symbol ?? "book.closed", color: book.color)
+        self.init(id: Int(bookID), title: book.title, symbol: book.symbol, color: book.color)
     }
 }

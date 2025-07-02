@@ -35,7 +35,7 @@ struct GetAllRecordsByDateIntent: AppIntent {
             var tagEntities: [TagEntity] = []
             for tag in tags {
                 if let tagID = tag.id {
-                    tagEntities.append(TagEntity(id: Int(tagID), title: tag.title, subtitle: tag.subtitle ?? "", book: book, color: tag.color))
+                    tagEntities.append(TagEntity(id: Int(tagID), title: tag.title, subtitle: tag.subtitle, book: book, color: tag.color))
                 }
             }
             

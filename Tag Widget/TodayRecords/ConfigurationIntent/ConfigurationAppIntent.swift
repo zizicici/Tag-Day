@@ -78,7 +78,7 @@ extension BookEntity {
 }
 
 extension Tag {
-    static let placeholder0 = Tag(bookID: -1, title: String(localized: "tag.placeholder.0"), color: "FF9500FF,FF9F0AFF", order: 0)
-    static let placeholder1 = Tag(bookID: -1, title: String(localized: "tag.placeholder.1"), color: "FF9500BB,FF9F0ABB", order: 1)
-    static let placeholder2 = Tag(bookID: -1, title: String(localized: "tag.placeholder.2"), color: "FF950099,FF9F0A99", order: 2)
+    static let placeholder0 = Tag(bookID: -1, title: String(localized: "tag.placeholder.0"), subtitle: "", color: "FF9500FF,FF9F0AFF", order: 0)
+    static let placeholder1 = Tag(bookID: -1, title: String(localized: "tag.placeholder.1"), subtitle: "", color: "FF9500BB,FF9F0ABB", order: 1)
+    static let placeholder2 = Tag(bookID: -1, title: String(localized: "tag.placeholder.2"), subtitle: "", color: "FF950099,FF9F0A99", order: 2)
 }

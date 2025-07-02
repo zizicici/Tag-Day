@@ -414,7 +414,6 @@ extension DataManager {
         var result: [DayRecord] = []
         try AppDatabase.shared.reader?.read { db in
             do {
-                let bookIDColumn = DayRecord.Columns.bookID
                 let dayColumn = DayRecord.Columns.day
                 let orderColumn = DayRecord.Columns.order
                 result = try DayRecord

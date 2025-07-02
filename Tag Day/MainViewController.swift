@@ -181,7 +181,7 @@ class MainViewController: CalendarViewController {
         if let lastestBook = activeBooks.last {
             bookOrder = lastestBook.order + 1
         }
-        let newBook = Book(title: "", color: AppColor.main.generateLightDarkString(), order: bookOrder)
+        let newBook = Book(title: "", color: AppColor.main.generateLightDarkString(), symbol: "book.closed", order: bookOrder)
         let nav = NavigationController(rootViewController: BookDetailViewController(book: newBook))
         
         navigationController?.present(nav, animated: true)
@@ -247,7 +247,7 @@ class MainViewController: CalendarViewController {
         if let lastestTag = DataManager.shared.tags.last {
             tagIndex = lastestTag.order + 1
         }
-        let newTag = Tag(bookID: bookID, title: "", color: "", order: tagIndex)
+        let newTag = Tag(bookID: bookID, title: "", subtitle: "", color: "", order: tagIndex)
         let nav = NavigationController(rootViewController: TagDetailViewController(tag: newTag))
         
         navigationController?.present(nav, animated: true)

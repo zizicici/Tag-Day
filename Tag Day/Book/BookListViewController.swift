@@ -204,7 +204,7 @@ class BookListViewController: UIViewController {
         if let lastestBook = activeBooks.last {
             bookOrder = lastestBook.order + 1
         }
-        let newBook = Book(title: "", color: AppColor.dynamicColor.generateLightDarkString(), order: bookOrder)
+        let newBook = Book(title: "", color: AppColor.dynamicColor.generateLightDarkString(), symbol: "book.closed", order: bookOrder)
         let nav = NavigationController(rootViewController: BookDetailViewController(book: newBook))
         
         navigationController?.present(nav, animated: true)
