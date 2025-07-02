@@ -51,7 +51,8 @@ struct WidgetAddButtonActionIntent: AppIntent {
         case .idle:
             nextState = .showTags(index: 0)
         case .showTags(let index):
-            if index < ((tags.count + 2) / 3) {
+            let countPerPage = WidgetFamily(rawValue: family) == .systemSmall ? 3 : 6
+            if index < ((tags.count + 2) / countPerPage) {
                 nextState = .showTags(index: index + 1)
             } else {
                 nextState = .idle
@@ -114,8 +115,9 @@ struct WidgetTagsNavigationActionIntent: AppIntent {
         case .idle:
             nextState = .idle
         case .showTags(let index):
+            let countPerPage = WidgetFamily(rawValue: family) == .systemSmall ? 3 : 6
             if toNext == true {
-                if (index + 1) < ((tags.count + 2) / 3) {
+                if (index + 1) < ((tags.count + 2) / countPerPage) {
                     nextState = .showTags(index: index + 1)
                 } else {
                     nextState = .idle

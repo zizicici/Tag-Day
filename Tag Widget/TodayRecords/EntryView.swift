@@ -35,7 +35,8 @@ struct TodayRecordsWidgetEntryView : View {
     }
     
     var pageCount: Int {
-        return (entry.tags.count + 2) / 3
+        let countPerPage = family == .systemSmall ? 3 : 6
+        return (entry.tags.count + 2) / countPerPage
     }
 
     var body: some View {
@@ -98,12 +99,15 @@ struct TodayRecordsWidgetEntryView : View {
             if isIdle {
                 if family == .systemSmall {
                     RecordContainerView(date: entry.date, weekday: entry.weekDay, secondaryString: entry.secondaryCalendarString, displayData: entry.tagDisplayData, policy: entry.configuration.tagSortPolicy ?? .countFirst, columnCount: 1)
+                        .privacySensitive()
                 } else {
                     RecordContainerView(date: entry.date, weekday: entry.weekDay, secondaryString: entry.secondaryCalendarString, displayData: entry.tagDisplayData, policy: entry.configuration.tagSortPolicy ?? .countFirst, columnCount: entry.configuration.columnCount?.numberOfColumns ?? 1)
+                        .privacySensitive()
                 }
             } else {
                 if let pageIndex = pageIndex {
-                    TagButtonView(tags: entry.tags, pageIndex: pageIndex, bookID: entry.book.id, kind: kind, familyRawValue: family.rawValue, day: GregorianDay(from: entry.date).julianDay)
+                    TagButtonView(tags: entry.tags, pageIndex: pageIndex, columns: family == .systemSmall ? 1 : 2, bookID: entry.book.id, kind: kind, familyRawValue: family.rawValue, day: GregorianDay(from: entry.date).julianDay)
+                        .privacySensitive()
                 }
             }
         }
@@ -114,7 +118,7 @@ struct TodayRecordsWidgetEntryView : View {
 struct TagButtonView: View {
     let tags: [Tag]
     let pageIndex: Int
-    let tagsPerPage = 3
+    let columns: Int
     let bookID: Int
     let kind: String
     let familyRawValue: Int
@@ -122,38 +126,83 @@ struct TagButtonView: View {
     
     @Environment(\.widgetRenderingMode) var widgetRenderingMode
     
+    // 计算属性
+    private var tagsPerPage: Int {
+        columns * 3 // 每页显示列数×3行
+    }
+    
+    private var tagsPerColumn: Int {
+        3 // 每列固定显示3个按钮
+    }
+    
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            let startIndex = pageIndex * tagsPerPage
-            let endIndex = min(startIndex + tagsPerPage, tags.count)
-            
-            if startIndex < tags.count {
-                ForEach(startIndex..<endIndex, id: \.self) { index in
-                    Button(intent: WidgetSelectTagActionIntent(bookID: bookID, kind: kind, family: familyRawValue, tagID: Int(tags[index].id!), day: day)) {
-                        Spacer(minLength: 0.0)
-                        Text(tags[index].title)
-                            .lineLimit(1)
-                            .font(.system(size: 16, weight: .medium))
-                            .minimumScaleFactor(0.75)
-                            .foregroundStyle(tags[index].widgetTitleColor)
-                            .widgetAccentable()
-                        Spacer(minLength: 0.0)
-                    }
-                    .buttonStyle(widgetRenderingMode == .fullColor ? AnyPrimitiveButtonStyle(.borderedProminent) : AnyPrimitiveButtonStyle(.bordered))
-                    .tint(tags[index].widgetColor)
-                    .buttonBorderShape(.roundedRectangle(radius: 8.0))
-                }
+        HStack(alignment: .center, spacing: 8) {
+            if tags.count == 0 {
+                Spacer(minLength: 0)
+                emptyTagView
+                Spacer(minLength: 0)
             } else {
-                HStack {
-                    Spacer(minLength: 0.0)
-                    Text("widget.hint.noTags")
-                        .lineLimit(1)
-                        .font(.system(size: 16, weight: .medium))
-                        .foregroundStyle(.secondary)
-                    Spacer(minLength: 0.0)
+                ForEach(0..<columns, id: \.self) { column in
+                    columnView(for: column)
                 }
             }
         }
+        .padding(4)
+    }
+    
+    // 单列视图
+    private func columnView(for column: Int) -> some View {
+        VStack(alignment: .center, spacing: 2) {
+            Spacer(minLength: 0)
+            let startIndex = pageIndex * tagsPerPage + column * tagsPerColumn
+            let endIndex = min(startIndex + tagsPerColumn, tags.count)
+            
+            if startIndex < tags.count {
+                ForEach(startIndex..<endIndex, id: \.self) { index in
+                    tagButton(for: tags[index])
+                }
+            }
+            
+            // 补充不足的按钮以保持高度一致
+            if endIndex - startIndex < tagsPerColumn {
+                ForEach(0..<(tagsPerColumn - (endIndex - startIndex)), id: \.self) { _ in
+                    Color.clear.frame(height: 40) // 保持高度一致
+                }
+            }
+            Spacer(minLength: 0)
+        }
+    }
+    
+    // 单个标签按钮
+    private func tagButton(for tag: Tag) -> some View {
+        Button(intent: WidgetSelectTagActionIntent(
+            bookID: bookID,
+            kind: kind,
+            family: familyRawValue,
+            tagID: Int(tag.id!),
+            day: day
+        )) {
+            Text(tag.title)
+                .lineLimit(1)
+                .font(.system(size: 16, weight: .medium))
+                .minimumScaleFactor(0.75)
+                .foregroundStyle(tag.widgetTitleColor)
+                .widgetAccentable()
+                .frame(maxWidth: .infinity)
+        }
+        .buttonStyle(widgetRenderingMode == .fullColor ?
+                    AnyPrimitiveButtonStyle(.borderedProminent) :
+                    AnyPrimitiveButtonStyle(.bordered))
+        .tint(tag.widgetColor)
+        .buttonBorderShape(.roundedRectangle(radius: 8))
+        .frame(height: 40)
+    }
+    
+    // 无标签时的提示视图
+    private var emptyTagView: some View {
+        Text("widget.hint.noTags")
+            .font(.system(size: 16, weight: .medium))
+            .foregroundStyle(.secondary)
     }
 }
 
