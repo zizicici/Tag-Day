@@ -14,7 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        try? DataManager.shared.syncSharedData()
+        DataManager.shared.syncSharedData()
         
         BackupManager.shared.registerBGTasks()
         
@@ -53,7 +53,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     @objc
     func updateSharedData() {
-        try? DataManager.shared.syncSharedData()
+        DataManager.shared.syncSharedData()
         reloadWidget()
     }
     

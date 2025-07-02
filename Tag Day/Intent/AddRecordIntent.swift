@@ -29,14 +29,14 @@ struct AddRecordIntent: AppIntent {
 
     @MainActor
     func perform() async throws -> some IntentResult & ReturnsValue<Bool> {
-        try DataManager.shared.syncSharedDataToDatabase()
+        try? DataManager.shared.syncSharedDataToDatabase()
         let components = Calendar.current.dateComponents([.year, .month, .day], from: date)
         if let year = components.year, let month = components.month, let day = components.day, let month = Month(rawValue: month) {
             let day = GregorianDay(year: year, month: month, day: day)
             let lastOrder = DataManager.shared.fetchLastRecordOrder(bookID: Int64(book.id), day: Int64(day.julianDay))
             let record: DayRecord = DayRecord(bookID: Int64(book.id), tagID: Int64(tag.id), day: Int64(day.julianDay), startTime: Int64(date.nanoSecondSince1970), order: lastOrder + 1)
             let result = DataManager.shared.add(dayRecord: record)
-            try DataManager.shared.syncDatabaseToSharedData()
+            try? DataManager.shared.syncDatabaseToSharedData()
             WidgetCenter.shared.reloadAllTimelines()
             return .result(value: (result != nil))
         } else {

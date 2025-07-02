@@ -535,9 +535,19 @@ extension DataManager {
 }
 
 extension DataManager {
-    func syncSharedData() throws {
-        try syncSharedDataToDatabase()
-        try syncDatabaseToSharedData()
+    func syncSharedData() {
+        do {
+            try syncSharedDataToDatabase()
+        }
+        catch {
+            print(error)
+        }
+        do {
+            try syncDatabaseToSharedData()
+        }
+        catch {
+            print(error)
+        }
     }
     
     func syncSharedDataToDatabase() throws {
