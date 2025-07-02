@@ -99,7 +99,7 @@ struct TodayRecordsWidgetEntryView : View {
                 if family == .systemSmall {
                     RecordContainerView(date: entry.date, weekday: entry.weekDay, secondaryString: entry.secondaryCalendarString, displayData: entry.tagDisplayData, policy: entry.configuration.tagSortPolicy ?? .countFirst, columnCount: 1)
                 } else {
-                    RecordContainerView(date: entry.date, weekday: entry.weekDay, secondaryString: entry.secondaryCalendarString, displayData: entry.tagDisplayData, policy: entry.configuration.tagSortPolicy ?? .countFirst, columnCount: 2)
+                    RecordContainerView(date: entry.date, weekday: entry.weekDay, secondaryString: entry.secondaryCalendarString, displayData: entry.tagDisplayData, policy: entry.configuration.tagSortPolicy ?? .countFirst, columnCount: entry.configuration.columnCount?.numberOfColumns ?? 1)
                 }
             } else {
                 if let pageIndex = pageIndex {

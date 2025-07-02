@@ -44,6 +44,35 @@ enum SecondaryCalendar: Int, AppEnum {
     }
 }
 
+enum ColumnCount: Int, AppEnum {
+    case one
+    case two
+    case three
+    
+    static var typeDisplayRepresentation: TypeDisplayRepresentation {
+        return "widget.config.columnCount"
+    }
+    
+    static var caseDisplayRepresentations: [ColumnCount : DisplayRepresentation] {
+        return [
+            .one: DisplayRepresentation(title: "widget.config.columnCount.1"),
+            .two: DisplayRepresentation(title: "widget.config.columnCount.2"),
+            .three: DisplayRepresentation(title: "widget.config.columnCount.3")
+        ]
+    }
+    
+    var numberOfColumns: Int {
+        switch self {
+        case .one:
+            return 1
+        case .two:
+            return 2
+        case .three:
+            return 3
+        }
+    }
+}
+
 struct TodayRecordsConfigurationAppIntent: WidgetConfigurationIntent {
     static var title: LocalizedStringResource { "" }
     static var description: IntentDescription { "" }
@@ -56,6 +85,9 @@ struct TodayRecordsConfigurationAppIntent: WidgetConfigurationIntent {
     
     @Parameter(title: "settings.secondaryCalendar.title", default: SecondaryCalendar.none)
     var secondaryCalendar: SecondaryCalendar?
+    
+    @Parameter(title: "widget.config.columnCount", default: ColumnCount.one)
+    var columnCount: ColumnCount?
 }
 
 // For Preview

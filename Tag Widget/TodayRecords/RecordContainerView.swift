@@ -90,7 +90,22 @@ struct RecordContainerView: View {
         return columnCount > 1
     }
     
+    var displayMaxCount: Int {
+        switch columnCount {
+        case 1:
+            return firstPageMaxCount
+        case 2:
+            return secondPageMaxCount + firstPageMaxCount
+        case 3:
+            return thirdPageMaxCount + secondPageMaxCount + firstPageMaxCount
+        default:
+            return firstPageMaxCount
+        }
+    }
+    
     let firstPageMaxCount = 3
+    let secondPageMaxCount = 4
+    let thirdPageMaxCount = 4
     
     var firstPageData: [RecordDisplayData] {
         let displayCount = min(firstPageMaxCount, displayData.count)
@@ -103,16 +118,9 @@ struct RecordContainerView: View {
         case .orderFirst:
             break
         case .orderLast:
-            if isMultiColoumsMode {
-                let offset = displayData.count - firstPageMaxCount - secondPageMaxCount
-                if offset > 0 {
-                    newDisplayData = Array(displayData.dropFirst(offset))
-                }
-            } else {
-                let offset = displayData.count - firstPageMaxCount
-                if offset > 0 {
-                    newDisplayData = Array(displayData.dropFirst(offset))
-                }
+            let offset = displayData.count - displayMaxCount
+            if offset > 0 {
+                newDisplayData = Array(displayData.dropFirst(offset))
             }
         }
         
@@ -120,8 +128,6 @@ struct RecordContainerView: View {
             newDisplayData[index]
         }
     }
-    
-    let secondPageMaxCount = 4
     
     var secondPageData: [RecordDisplayData] {
         let displayCount = min(secondPageMaxCount, max(0, displayData.count - firstPageMaxCount))
@@ -134,7 +140,7 @@ struct RecordContainerView: View {
         case .orderFirst:
             break
         case .orderLast:
-            let offset = displayData.count - firstPageMaxCount - secondPageMaxCount
+            let offset = displayData.count - displayMaxCount
             if offset > 0 {
                 newDisplayData = Array(displayData.dropFirst(offset))
             }
@@ -145,12 +151,38 @@ struct RecordContainerView: View {
         }
     }
     
+    var thirdPageData: [RecordDisplayData] {
+        let displayCount = min(thirdPageMaxCount, max(0, displayData.count - firstPageMaxCount - secondPageMaxCount))
+
+        var newDisplayData = displayData
+        
+        switch policy {
+        case .countFirst:
+            break
+        case .orderFirst:
+            break
+        case .orderLast:
+            let offset = displayData.count - displayMaxCount
+            if offset > 0 {
+                newDisplayData = Array(displayData.dropFirst(offset))
+            }
+        }
+        
+        return Array(0..<displayCount).map { index in
+            newDisplayData[index + firstPageMaxCount + secondPageMaxCount]
+        }
+    }
+    
     var firstPageBottom: CGFloat {
         return CGFloat(30 * (firstPageMaxCount - firstPageData.count) + 9)
     }
     
     var secondPageBottom: CGFloat {
         return CGFloat(30 * (secondPageMaxCount - secondPageData.count) + 9)
+    }
+    
+    var thirdPageBottom: CGFloat {
+        return CGFloat(30 * (thirdPageMaxCount - thirdPageData.count) + 9)
     }
     
     var body: some View {
@@ -199,7 +231,7 @@ struct RecordContainerView: View {
                     }
                 }
                 .padding([.leading], 4)
-                .padding([.trailing], isMultiColoumsMode ? 2 : 4)
+                .padding([.trailing], columnCount > 1 ? 2 : 4)
                 
                 HStack {
                     Spacer()
@@ -208,7 +240,7 @@ struct RecordContainerView: View {
                     Spacer()
                 }
             }
-            if isMultiColoumsMode {
+            if columnCount > 1 {
                 VStack(alignment: .center, spacing: 0) {
                     Color.clear
                         .frame(width: 20, height: 9)
@@ -218,13 +250,35 @@ struct RecordContainerView: View {
                             RecordView(displayData: secondPageData[index])
                         }
                     }
-                    .padding([.trailing], 4)
+                    .padding([.trailing], columnCount > 2 ? 2 : 4)
                     .padding([.leading], 2)
 
                     HStack {
                         Spacer()
                         Color.clear
                             .frame(width: 20, height: secondPageBottom)
+                        Spacer()
+                    }
+                }
+            }
+
+            if columnCount > 2 {
+                VStack(alignment: .center, spacing: 0) {
+                    Color.clear
+                        .frame(width: 20, height: 9)
+                    // DayRecordView
+                    VStack(spacing: 4) {
+                        ForEach(0..<thirdPageData.count, id: \.self) { index in
+                            RecordView(displayData: thirdPageData[index])
+                        }
+                    }
+                    .padding([.trailing], 4)
+                    .padding([.leading], 2)
+
+                    HStack {
+                        Spacer()
+                        Color.clear
+                            .frame(width: 20, height: thirdPageBottom)
                         Spacer()
                     }
                 }
