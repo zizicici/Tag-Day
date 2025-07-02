@@ -86,202 +86,107 @@ struct RecordContainerView: View {
     
     @Environment(\.widgetRenderingMode) var widgetRenderingMode
     
-    var isMultiColoumsMode: Bool {
-        return columnCount > 1
+    // 页面配置
+    private let pageConfigurations = [
+        (maxCount: 3, bottomSpacing: 9),  // 第一页
+        (maxCount: 4, bottomSpacing: 9),  // 第二页
+        (maxCount: 4, bottomSpacing: 9)   // 第三页
+    ]
+    
+    private var isMultiColumnMode: Bool { columnCount > 1 }
+    
+    private var displayMaxCount: Int {
+        pageConfigurations.prefix(columnCount).reduce(0) { $0 + $1.maxCount }
     }
     
-    var displayMaxCount: Int {
-        switch columnCount {
-        case 1:
-            return firstPageMaxCount
-        case 2:
-            return secondPageMaxCount + firstPageMaxCount
-        case 3:
-            return thirdPageMaxCount + secondPageMaxCount + firstPageMaxCount
-        default:
-            return firstPageMaxCount
-        }
-    }
-    
-    let firstPageMaxCount = 3
-    let secondPageMaxCount = 4
-    let thirdPageMaxCount = 4
-    
-    var firstPageData: [RecordDisplayData] {
-        let displayCount = min(firstPageMaxCount, displayData.count)
+    private func pageData(for pageIndex: Int) -> [RecordDisplayData] {
+        let previousPagesCount = pageConfigurations.prefix(pageIndex).reduce(0) { $0 + $1.maxCount }
+        let currentPageMaxCount = pageConfigurations[pageIndex].maxCount
         
-        var newDisplayData = displayData
-        
-        switch policy {
-        case .countFirst:
-            break
-        case .orderFirst:
-            break
-        case .orderLast:
-            let offset = displayData.count - displayMaxCount
-            if offset > 0 {
-                newDisplayData = Array(displayData.dropFirst(offset))
-            }
-        }
+        let displayCount = min(currentPageMaxCount, max(0, displayData.count - previousPagesCount))
+        let adjustedData = adjustedDisplayData()
         
         return Array(0..<displayCount).map { index in
-            newDisplayData[index]
+            adjustedData[index + previousPagesCount]
         }
     }
     
-    var secondPageData: [RecordDisplayData] {
-        let displayCount = min(secondPageMaxCount, max(0, displayData.count - firstPageMaxCount))
-
-        var newDisplayData = displayData
-        
-        switch policy {
-        case .countFirst:
-            break
-        case .orderFirst:
-            break
-        case .orderLast:
-            let offset = displayData.count - displayMaxCount
-            if offset > 0 {
-                newDisplayData = Array(displayData.dropFirst(offset))
+    private func adjustedDisplayData() -> [RecordDisplayData] {
+        guard policy == .orderLast else { return displayData }
+        let offset = displayData.count - displayMaxCount
+        return offset > 0 ? Array(displayData.dropFirst(offset)) : displayData
+    }
+    
+    private func bottomSpacing(for pageIndex: Int) -> CGFloat {
+        let config = pageConfigurations[pageIndex]
+        let dataCount = pageData(for: pageIndex).count
+        return 30.0 * CGFloat(config.maxCount - dataCount) + CGFloat(config.bottomSpacing)
+    }
+    
+    private func pageView(for pageIndex: Int) -> some View {
+        VStack(alignment: .center, spacing: 0) {
+            if pageIndex > 0 {
+                Color.clear.frame(height: 9)
+            } else {
+                headerView
+            }
+            
+            VStack(spacing: 4) {
+                ForEach(Array(pageData(for: pageIndex).enumerated()), id: \.offset) { _, data in
+                    RecordView(displayData: data)
+                }
+            }
+            .padding(.leading, pageIndex == 0 ? 4 : 2)
+            .padding(.trailing, pageIndex == columnCount - 1 ? 4 : 2)
+            
+            HStack {
+                Spacer()
+                Color.clear.frame(width: 20, height: bottomSpacing(for: pageIndex))
+                Spacer()
             }
         }
-        
-        return Array(0..<displayCount).map { index in
-            newDisplayData[index + firstPageMaxCount]
-        }
     }
     
-    var thirdPageData: [RecordDisplayData] {
-        let displayCount = min(thirdPageMaxCount, max(0, displayData.count - firstPageMaxCount - secondPageMaxCount))
-
-        var newDisplayData = displayData
-        
-        switch policy {
-        case .countFirst:
-            break
-        case .orderFirst:
-            break
-        case .orderLast:
-            let offset = displayData.count - displayMaxCount
-            if offset > 0 {
-                newDisplayData = Array(displayData.dropFirst(offset))
+    private var headerView: some View {
+        HStack {
+            Spacer()
+            Text(dateFormatter.string(from: date))
+                .font(.system(size: 20, weight: .medium).monospacedDigit())
+                .foregroundColor(.primary)
+                .widgetAccentable()
+            
+            if isMultiColumnMode {
+                headerTextViews
+            } else {
+                VStack(spacing: 2) {
+                    headerTextViews
+                }
+            }
+            Spacer()
+        }
+        .frame(height: 39)
+    }
+    
+    private var headerTextViews: some View {
+        Group {
+            Text(weekday)
+                .font(.system(size: isMultiColumnMode ? 10 : 9, weight: .medium))
+                .foregroundColor(.secondary)
+                .widgetAccentable()
+            
+            if let string = secondaryString {
+                Text(string)
+                    .font(.system(size: isMultiColumnMode ? 10 : 9, weight: .medium))
+                    .foregroundColor(.secondary)
+                    .widgetAccentable()
             }
         }
-        
-        return Array(0..<displayCount).map { index in
-            newDisplayData[index + firstPageMaxCount + secondPageMaxCount]
-        }
-    }
-    
-    var firstPageBottom: CGFloat {
-        return CGFloat(30 * (firstPageMaxCount - firstPageData.count) + 9)
-    }
-    
-    var secondPageBottom: CGFloat {
-        return CGFloat(30 * (secondPageMaxCount - secondPageData.count) + 9)
-    }
-    
-    var thirdPageBottom: CGFloat {
-        return CGFloat(30 * (thirdPageMaxCount - thirdPageData.count) + 9)
     }
     
     var body: some View {
         HStack {
-            VStack(alignment: .center, spacing: 0) {
-                HStack {
-                    Spacer()
-                    Text(dateFormatter.string(from: date))
-                        .font(.system(size: 20, weight: .medium).monospacedDigit())
-                        .foregroundColor(.primary)
-                        .widgetAccentable()
-                    if isMultiColoumsMode {
-                        Text(weekday)
-                            .font(.system(size: 10, weight: .medium))
-                            .foregroundColor(.secondary)
-                            .widgetAccentable()
-                        if let string = secondaryString {
-                            Text(string)
-                                .font(.system(size: 10, weight: .medium))
-                                .foregroundColor(.secondary)
-                                .widgetAccentable()
-                        }
-                    } else {
-                        VStack(spacing: 2.0) {
-                            Text(weekday)
-                                .font(.system(size: 9, weight: .medium))
-                                .foregroundColor(.secondary)
-                                .widgetAccentable()
-                            if let string = secondaryString {
-                                Text(string)
-                                    .font(.system(size: 9, weight: .medium))
-                                    .foregroundColor(.secondary)
-                                    .widgetAccentable()
-                            }
-                        }
-                    }
-                    Spacer()
-                }
-                .frame(height: 39.0)
-                .padding(.vertical, 0.0)
-                
-                // DayRecordView
-                VStack(spacing: 4) {
-                    ForEach(0..<firstPageData.count, id: \.self) { index in
-                        RecordView(displayData: firstPageData[index])
-                    }
-                }
-                .padding([.leading], 4)
-                .padding([.trailing], columnCount > 1 ? 2 : 4)
-                
-                HStack {
-                    Spacer()
-                    Color.clear
-                        .frame(width: 20, height: firstPageBottom)
-                    Spacer()
-                }
-            }
-            if columnCount > 1 {
-                VStack(alignment: .center, spacing: 0) {
-                    Color.clear
-                        .frame(width: 20, height: 9)
-                    // DayRecordView
-                    VStack(spacing: 4) {
-                        ForEach(0..<secondPageData.count, id: \.self) { index in
-                            RecordView(displayData: secondPageData[index])
-                        }
-                    }
-                    .padding([.trailing], columnCount > 2 ? 2 : 4)
-                    .padding([.leading], 2)
-
-                    HStack {
-                        Spacer()
-                        Color.clear
-                            .frame(width: 20, height: secondPageBottom)
-                        Spacer()
-                    }
-                }
-            }
-
-            if columnCount > 2 {
-                VStack(alignment: .center, spacing: 0) {
-                    Color.clear
-                        .frame(width: 20, height: 9)
-                    // DayRecordView
-                    VStack(spacing: 4) {
-                        ForEach(0..<thirdPageData.count, id: \.self) { index in
-                            RecordView(displayData: thirdPageData[index])
-                        }
-                    }
-                    .padding([.trailing], 4)
-                    .padding([.leading], 2)
-
-                    HStack {
-                        Spacer()
-                        Color.clear
-                            .frame(width: 20, height: thirdPageBottom)
-                        Spacer()
-                    }
-                }
+            ForEach(0..<columnCount, id: \.self) { pageIndex in
+                pageView(for: pageIndex)
             }
         }
         .background(
@@ -291,7 +196,6 @@ struct RecordContainerView: View {
         )
     }
     
-    // 日期格式化
     private var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = "d"
