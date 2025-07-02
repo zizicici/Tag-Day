@@ -74,7 +74,7 @@ extension TodayRecordsConfigurationAppIntent {
 }
 
 extension BookEntity {
-    static let questionPlaceholder = BookEntity(id: -1, title: "", symbol: "questionmark.diamond", color: "FF9500FF,FF9F0AFF")
+    static let questionPlaceholder = BookEntity(id: -1, title: "", symbol: "questionmark.square.dashed", color: "FF9500FF,FF9F0AFF")
 }
 
 extension Tag {
