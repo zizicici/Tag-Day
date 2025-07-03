@@ -559,9 +559,9 @@ extension DataManager {
     
     func syncDatabaseToSharedData() throws {
         // Database -> SharedData
-        let books = try DataManager.shared.fetchAllBooks()
-        let tags = try DataManager.shared.fetchAllTags()
-        let dayRecords = try DataManager.shared.fetchAllDayRecords(after: Int64(ZCCalendar.manager.today.julianDay))
+        let books = try fetchAllBooks()
+        let tags = try fetchAllTags()
+        let dayRecords = try fetchAllDayRecords(after: Int64(ZCCalendar.manager.today.julianDay))
         let sharedData = SharedData(version: 1, books: books, tags: tags, dayRecord: dayRecords, widgetAddDayRecords: [])
         try SharedDataManager.write(sharedData)
     }
