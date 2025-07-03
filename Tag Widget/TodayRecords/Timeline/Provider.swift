@@ -45,7 +45,7 @@ struct TodayRecordsWidgetProvider: AppIntentTimelineProvider {
             matching: DateComponents(hour: 0, minute: 0, second: 0),
             matchingPolicy: .nextTime
         ) {
-            timePoints += (1..<5).compactMap {
+            timePoints += (0..<4).compactMap {
                 calendar.date(byAdding: .day, value: $0, to: nextMidnight)
             }
         } else {
