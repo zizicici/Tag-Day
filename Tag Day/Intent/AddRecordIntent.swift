@@ -22,9 +22,26 @@ struct AddRecordIntent: AppIntent {
 
     @Parameter(title: "intent.tag.type", optionsProvider: TagsOptionsProvider())
     var tag: TagEntity
+    
+    @Parameter(title: "intent.record.comment")
+    var comment: String?
+    
+    @Parameter(title: "intent.record.startTime", kind: .dateTime)
+    var startTime: Date?
+    
+    @Parameter(title: "intent.record.endTime", kind: .dateTime)
+    var endTime: Date?
+    
+    @Parameter(title: "intent.record.durationByMinutes")
+    var durationByMinutes: Int?
 
     static var parameterSummary: some ParameterSummary {
-        Summary("intent.record.add.summary\(\.$book)\(\.$date)\(\.$tag)")
+        Summary("intent.record.add.summary\(\.$book)\(\.$date)\(\.$tag)") {
+            \.$comment
+            \.$startTime
+            \.$endTime
+            \.$durationByMinutes
+        }
     }
 
     @MainActor
@@ -34,13 +51,21 @@ struct AddRecordIntent: AppIntent {
         if let year = components.year, let month = components.month, let day = components.day, let month = Month(rawValue: month) {
             let day = GregorianDay(year: year, month: month, day: day)
             let lastOrder = DataManager.shared.fetchLastRecordOrder(bookID: Int64(book.id), day: Int64(day.julianDay))
-            let record: DayRecord = DayRecord(bookID: Int64(book.id), tagID: Int64(tag.id), day: Int64(day.julianDay), startTime: Int64(date.nanoSecondSince1970), order: lastOrder + 1)
+            let record: DayRecord = DayRecord(bookID: Int64(book.id), tagID: Int64(tag.id), day: Int64(day.julianDay), comment: comment, startTime: startTime?.nanoSecondSince1970 ?? nil, endTime: endTime?.nanoSecondSince1970 ?? nil, duration: duration, order: lastOrder + 1)
             let result = DataManager.shared.add(dayRecord: record)
             try? DataManager.shared.syncDatabaseToSharedData()
             WidgetCenter.shared.reloadAllTimelines()
             return .result(value: (result != nil))
         } else {
             throw FetchError.notFound
+        }
+    }
+    
+    var duration: Int64? {
+        if let durationByMinutes = durationByMinutes {
+            return Int64(durationByMinutes * 60 * 1000)
+        } else {
+            return nil
         }
     }
 

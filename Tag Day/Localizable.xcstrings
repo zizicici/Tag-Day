@@ -3388,25 +3388,25 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Comment"
+            "value" : "Comment(Optional)"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "备注"
+            "value" : "备注（可选）"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "備註"
+            "value" : "備註（可選）"
           }
         },
         "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "備註"
+            "value" : "備註（可選）"
           }
         }
       }
@@ -3472,25 +3472,25 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Duration(by minutes)"
+            "value" : "Duration(by minutes, Optional)"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "时长（以分钟计）"
+            "value" : "时长（以分钟计，可选）"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "時長（以分鐘計）"
+            "value" : "時長（以分鐘計，可選）"
           }
         },
         "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "時長（以分鐘計）"
+            "value" : "時長（以分鐘計，可選）"
           }
         }
       }
@@ -3500,25 +3500,25 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "End Time"
+            "value" : "End Time(Optional)"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "结束时间"
+            "value" : "结束时间（可选）"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "結束時間"
+            "value" : "結束時間（可選）"
           }
         },
         "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "結束時間"
+            "value" : "結束時間（可選）"
           }
         }
       }
@@ -3640,25 +3640,25 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Start Time"
+            "value" : "Start Time(Optional)"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "开始时间"
+            "value" : "开始时间（可选）"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "開始時間"
+            "value" : "開始時間（可選）"
           }
         },
         "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "開始時間"
+            "value" : "開始時間（可選）"
           }
         }
       }
