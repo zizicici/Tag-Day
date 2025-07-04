@@ -90,10 +90,13 @@ class DateCell: DateBaseCell {
             content.text = dateItem.title
             listContentView.configuration = content
             
+            let pronunciationText: String
+            
             switch dateItem.mode {
             case .date:
                 datePicker?.datePickerMode = .date
                 datePicker?.date = dateItem.day.generateDate(secondsFromGMT: Calendar.current.timeZone.secondsFromGMT()) ?? Date()
+                pronunciationText = datePicker?.date.formatted(date: .long, time: .omitted) ?? ""
             case .dateAndTime:
                 datePicker?.datePickerMode = .dateAndTime
                 if let nanoSecondsFrom1970 = dateItem.nanoSecondsFrom1970 {
@@ -101,6 +104,7 @@ class DateCell: DateBaseCell {
                 } else {
                     datePicker?.date = Date().combine(with: dateItem.day)
                 }
+                pronunciationText = datePicker?.date.formatted(date: .long, time: .standard) ?? ""
             case .time:
                 datePicker?.datePickerMode = .time
                 if let nanoSecondsFrom1970 = dateItem.nanoSecondsFrom1970 {
@@ -108,11 +112,10 @@ class DateCell: DateBaseCell {
                 } else {
                     datePicker?.date = Date(nanoSecondSince1970: 0)
                 }
+                pronunciationText = datePicker?.date.formatted(date: .omitted, time: .standard) ?? ""
             }
-            
-            let text: String = datePicker?.date.formatted(date: .omitted, time: .standard) ?? ""
 
-            accessibilityLabel = dateItem.title + ":" + text
+            accessibilityLabel = dateItem.title + ":" + pronunciationText
         }
         isAccessibilityElement = true
         accessibilityTraits = .button
