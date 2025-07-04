@@ -73,7 +73,7 @@ class SnapInfoCell: SnapInfoBaseCell {
         
         contentView.addSubview(commentLabel)
         commentLabel.snp.makeConstraints { make in
-            make.leading.equalTo(timeInfoLabel.snp.trailing).inset(6)
+            make.leading.greaterThanOrEqualTo(timeInfoLabel.snp.trailing).offset(6)
             make.centerY.equalTo(contentView)
             make.trailing.equalTo(contentView).inset(6)
             make.top.equalTo(contentView).inset(3)
@@ -86,7 +86,7 @@ class SnapInfoCell: SnapInfoBaseCell {
         setupViewsIfNeeded()
         
         if let item = state.snapInfoItem {
-            timeInfoLabel.text = item.dayRecord.getTime()
+            timeInfoLabel.text = item.dayRecord.getTime() ?? ""
             if let comment = item.dayRecord.comment {
                 commentLabel.text = comment
                 commentLabel.textColor = AppColor.text
