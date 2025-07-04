@@ -132,12 +132,12 @@ class RecordListCell: RecordListBaseCell {
             if detailItem.record.getTime() != nil {
                 contentView.addSubview(timeButton)
                 timeButton.snp.makeConstraints { make in
-                    make.leading.equalTo(contentView).inset(6)
+                    make.leading.equalTo(contentView).inset(ConsideringUser.buttonShapesEnabled ? 10 : 6)
                     make.trailing.lessThanOrEqualTo(contentView).inset(44)
                     make.top.equalTo(contentView)
                 }
                 tagButton.snp.makeConstraints { make in
-                    make.top.equalTo(timeButton.snp.bottom)
+                    make.top.equalTo(timeButton.snp.bottom).offset(ConsideringUser.buttonShapesEnabled ? 4 : 0)
                 }
             } else {
                 tagButton.snp.makeConstraints { make in
@@ -148,9 +148,9 @@ class RecordListCell: RecordListBaseCell {
             if detailItem.record.comment != nil {
                 contentView.addSubview(commentButton)
                 commentButton.snp.makeConstraints { make in
-                    make.leading.equalTo(contentView).inset(6)
+                    make.leading.equalTo(contentView).inset(ConsideringUser.buttonShapesEnabled ? 10 : 6)
                     make.trailing.lessThanOrEqualTo(tagButton)
-                    make.top.equalTo(tagButton.snp.bottom)
+                    make.top.equalTo(tagButton.snp.bottom).offset(ConsideringUser.buttonShapesEnabled ? 4 : 0)
                     make.bottom.equalTo(contentView)
                 }
             } else {
