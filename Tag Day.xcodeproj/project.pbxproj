@@ -149,6 +149,7 @@
 		14FFDD602E1797C2007C6E44 /* SnapInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FFDD5F2E1797C2007C6E44 /* SnapInfoView.swift */; };
 		14FFDD622E17B19E007C6E44 /* SnapInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FFDD612E17B19E007C6E44 /* SnapInfoCell.swift */; };
 		14FFDD642E17B5BE007C6E44 /* InfoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FFDD632E17B5BE007C6E44 /* InfoItem.swift */; };
+		14FFDD662E182B00007C6E44 /* ConsideringUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FFDD652E182B00007C6E44 /* ConsideringUser.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -295,6 +296,7 @@
 		14FFDD5F2E1797C2007C6E44 /* SnapInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapInfoView.swift; sourceTree = "<group>"; };
 		14FFDD612E17B19E007C6E44 /* SnapInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapInfoCell.swift; sourceTree = "<group>"; };
 		14FFDD632E17B5BE007C6E44 /* InfoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoItem.swift; sourceTree = "<group>"; };
+		14FFDD652E182B00007C6E44 /* ConsideringUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsideringUser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -618,6 +620,7 @@
 			isa = PBXGroup;
 			children = (
 				14D272712DC0712A00267572 /* AppColor.swift */,
+				14FFDD652E182B00007C6E44 /* ConsideringUser.swift */,
 				14833D3A2DC5179F001B61D5 /* UIColor+Extension.swift */,
 				14D272A02DC0736A00267572 /* UIViewController+Extension.swift */,
 				14D272B72DC074B300267572 /* Toast+Stryle.swift */,
@@ -931,6 +934,7 @@
 				14FF82B92E04511000D3000B /* YearRange.swift in Sources */,
 				14CC10622E0FACA50076E988 /* AddRecordIntent.swift in Sources */,
 				14FFDD622E17B19E007C6E44 /* SnapInfoCell.swift in Sources */,
+				14FFDD662E182B00007C6E44 /* ConsideringUser.swift in Sources */,
 				14FF82BA2E04511000D3000B /* ChineseDay.swift in Sources */,
 				14FF82BB2E04511000D3000B /* ChineseCalendarDataSource.swift in Sources */,
 				14FF82BC2E04511000D3000B /* ChineseMonth.swift in Sources */,

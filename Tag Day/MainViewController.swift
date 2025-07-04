@@ -189,7 +189,7 @@ class MainViewController: CalendarViewController {
     func showBookManagement() {
         let bookListVC = BookListViewController()
         let nav = NavigationController(rootViewController: bookListVC)
-        navigationController?.present(nav, animated: true)
+        navigationController?.present(nav, animated: ConsideringUser.animated)
     }
     
     func showBookEditorForAdd() {
@@ -202,7 +202,7 @@ class MainViewController: CalendarViewController {
         let newBook = Book(title: "", color: AppColor.main.generateLightDarkString(), symbol: "book.closed", order: bookOrder)
         let nav = NavigationController(rootViewController: BookDetailViewController(book: newBook))
         
-        navigationController?.present(nav, animated: true)
+        navigationController?.present(nav, animated: ConsideringUser.animated)
     }
     
     func getTagsMenu() -> UIMenu {
@@ -254,7 +254,7 @@ class MainViewController: CalendarViewController {
     func showTagManagement() {
         let tagListVC = TagListViewController(bookID: DataManager.shared.currentBook?.id)
         let nav = NavigationController(rootViewController: tagListVC)
-        navigationController?.present(nav, animated: true)
+        navigationController?.present(nav, animated: ConsideringUser.animated)
     }
     
     func showTagEditorForAdd() {
@@ -268,6 +268,6 @@ class MainViewController: CalendarViewController {
         let newTag = Tag(bookID: bookID, title: "", subtitle: "", color: "", order: tagIndex)
         let nav = NavigationController(rootViewController: TagDetailViewController(tag: newTag))
         
-        navigationController?.present(nav, animated: true)
+        navigationController?.present(nav, animated: ConsideringUser.animated)
     }
 }

@@ -16,6 +16,6 @@ extension UIViewController {
         let hostingController = UIHostingController(rootView: symbolPicker)
         hostingController.isModalInPresentation = true
 
-        present(hostingController, animated: true)
+        present(hostingController, animated: ConsideringUser.animated)
     }
 }

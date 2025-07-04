@@ -202,7 +202,7 @@ class TagStatisticsViewController: UIViewController {
     
     @objc
     func dismissViewController() {
-        dismiss(animated: true)
+        dismiss(animated: ConsideringUser.animated)
     }
     
     @objc
@@ -210,7 +210,7 @@ class TagStatisticsViewController: UIViewController {
         guard let tagID = tag?.id, let tag = try? DataManager.shared.fetchTag(id: tagID) else { return }
         let nav = NavigationController(rootViewController: TagDetailViewController(tag: tag))
         
-        present(nav, animated: true)
+        present(nav, animated: ConsideringUser.animated)
     }
     
     func humanReadableTime(_ interval: TimeInterval) -> String {

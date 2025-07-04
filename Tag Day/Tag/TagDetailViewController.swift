@@ -485,7 +485,7 @@ class TagDetailViewController: UIViewController {
     
     @objc
     func dismissViewController() {
-        dismiss(animated: true)
+        dismiss(animated: ConsideringUser.animated)
     }
     
     func delete() {
@@ -503,13 +503,13 @@ class TagDetailViewController: UIViewController {
         
         let alertController = UIAlertController(title: String(localized: "tags.detail.delete.alert.title"), message: message, preferredStyle: .alert)
         let deleteAction = UIAlertAction(title: String(localized: "button.delete"), style: .destructive) { [weak self] _ in
-            alertController.dismiss(animated: true)
+            alertController.dismiss(animated: ConsideringUser.animated)
             self?.delete()
         }
         let cancelAction = UIAlertAction(title: String(localized: "button.cancel"), style: .cancel)
         alertController.addAction(deleteAction)
         alertController.addAction(cancelAction)
-        present(alertController, animated: true)
+        present(alertController, animated: ConsideringUser.animated)
     }
 }
 
@@ -620,7 +620,7 @@ extension TagDetailViewController {
         
         colorPicker.selectedColor = isLight ? self.tagLightColor : self.tagDarkColor
         colorPicker.delegate = self
-        present(colorPicker, animated: true)
+        present(colorPicker, animated: ConsideringUser.animated)
     }
     
     func showTitleColorPicker(isLight: Bool) {
@@ -629,7 +629,7 @@ extension TagDetailViewController {
         
         colorPicker.selectedColor = isLight ? self.titleLightColor : self.titleDarkColor
         colorPicker.delegate = self
-        present(colorPicker, animated: true)
+        present(colorPicker, animated: ConsideringUser.animated)
     }
 }
 

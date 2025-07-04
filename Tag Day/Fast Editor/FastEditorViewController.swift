@@ -177,7 +177,7 @@ class FastEditorViewController: UIViewController {
     
     @objc
     func dismissAction() {
-        self.dismiss(animated: true)
+        self.dismiss(animated: ConsideringUser.animated)
     }
     
     @objc
@@ -197,7 +197,7 @@ class FastEditorViewController: UIViewController {
         let newTag = Tag(bookID: bookID, title: "", subtitle: "", color: "", order: tagIndex)
         let nav = NavigationController(rootViewController: TagDetailViewController(tag: newTag))
         
-        present(nav, animated: true)
+        present(nav, animated: ConsideringUser.animated)
     }
     
     @objc
@@ -205,7 +205,7 @@ class FastEditorViewController: UIViewController {
         guard let tagID = editMode.tag?.id, let tag = try? DataManager.shared.fetchTag(id: tagID) else { return }
         let nav = NavigationController(rootViewController: TagDetailViewController(tag: tag))
         
-        present(nav, animated: true)
+        present(nav, animated: ConsideringUser.animated)
     }
     
     func tap(tag: Tag) {

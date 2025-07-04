@@ -96,7 +96,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
             if didScrollToday == false, newValue == true {
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.25) { [weak self] in
                     guard let self = self else { return }
-                    self.scrollToToday()
+                    self.scrollToToday(animated: ConsideringUser.animated)
                 }
             }
         }
@@ -270,7 +270,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
                 if !UIAccessibility.isVoiceOverRunning {
                     showPopoverView(at: targetView, contentViewController: nav, width: 240.0, height: 300.0)
                 } else {
-                    present(nav, animated: true)
+                    present(nav, animated: ConsideringUser.animated)
                 }
             } else {
                 let detailViewController = RecordListViewController(day: blockItem.day, book: current)
@@ -282,7 +282,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
                     calendarTransitionDelegate = CalendarTransitionDelegate(originFrame: cellFrame, cellBackgroundColor: AppColor.background, detailSize: CGSize(width: min(view.frame.width - 80.0, 300), height: min(view.frame.height * 0.7, 480)))
                     nav.transitioningDelegate = calendarTransitionDelegate
                 }
-                present(nav, animated: true)
+                present(nav, animated: ConsideringUser.animated)
             }
         case .overwrite:
             let detailViewController = FastEditorViewController(day: blockItem.day, book: current, editMode: .overwrite)
@@ -467,7 +467,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     
     @objc
     func moreAction() {
-        navigationController?.present(NavigationController(rootViewController: MoreViewController()), animated: true)
+        navigationController?.present(NavigationController(rootViewController: MoreViewController()), animated: ConsideringUser.animated)
     }
     
     @objc
@@ -500,7 +500,7 @@ extension CalendarViewController: FastEditorNavigator {
         let newRecord = DayRecord(bookID: bookID, tagID: tagID, day: Int64(day.julianDay), order: lastOrder + 1)
         if let savedRecord = DataManager.shared.add(dayRecord: newRecord) {
             // Dismiss
-            presentedViewController?.dismiss(animated: true) { [weak self] in
+            presentedViewController?.dismiss(animated: ConsideringUser.animated) { [weak self] in
                 self?.showRecordAlert(for: savedRecord)
             }
         }
@@ -514,7 +514,7 @@ extension CalendarViewController: FastEditorNavigator {
         }
         
         // Dismiss
-        presentedViewController?.dismiss(animated: true) {
+        presentedViewController?.dismiss(animated: ConsideringUser.animated) {
             self.tap(day: day + 1)
         }
     }
@@ -532,7 +532,7 @@ extension CalendarViewController {
         }
         if let item = targetItem {
             if let indexPath = dataSource.indexPath(for: item) {
-                collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
+                collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: ConsideringUser.animated)
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.25) {
                     self.tap(in: indexPath)
                 }
@@ -554,7 +554,7 @@ extension CalendarViewController: DayPresenter {
         }) else { return }
         guard let indexPath = dataSource.indexPath(for: targetItem) else { return }
         guard let cell = collectionView.cellForItem(at: indexPath) else { return }
-        collectionView.scrollRectToVisible(cell.frame, animated: true)
+        collectionView.scrollRectToVisible(cell.frame, animated: ConsideringUser.animated)
         
         popover.sourceView = cell
     }

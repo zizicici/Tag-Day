@@ -367,7 +367,7 @@ class BookDetailViewController: UIViewController {
     
     @objc
     func dismissViewController() {
-        dismiss(animated: true)
+        dismiss(animated: ConsideringUser.animated)
     }
     
     func delete() {
@@ -386,19 +386,19 @@ class BookDetailViewController: UIViewController {
         
         let alertController = UIAlertController(title: String(localized: "books.detail.delete.alert.title"), message: message, preferredStyle: .alert)
         let deleteAction = UIAlertAction(title: String(localized: "button.delete"), style: .destructive) { [weak self] _ in
-            alertController.dismiss(animated: true)
+            alertController.dismiss(animated: ConsideringUser.animated)
             self?.delete()
         }
         let cancelAction = UIAlertAction(title: String(localized: "button.cancel"), style: .cancel)
         alertController.addAction(deleteAction)
         alertController.addAction(cancelAction)
-        present(alertController, animated: true)
+        present(alertController, animated: ConsideringUser.animated)
     }
     
     func showTagManagement() {
         let tagListVC = TagListViewController(bookID: book.id)
         let nav = NavigationController(rootViewController: tagListVC)
-        present(nav, animated: true)
+        present(nav, animated: ConsideringUser.animated)
     }
     
     func updateBookColor(lightColor: UIColor, darkColor: UIColor) {
@@ -472,7 +472,7 @@ class BookDetailViewController: UIViewController {
         
         colorPicker.selectedColor = isLight ? self.bookLightColor : self.bookDarkColor
         colorPicker.delegate = self
-        present(colorPicker, animated: true)
+        present(colorPicker, animated: ConsideringUser.animated)
     }
     
     @objc private func showSymbolPicker() {
@@ -485,7 +485,7 @@ class BookDetailViewController: UIViewController {
 
 extension BookDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
+        tableView.deselectRow(at: indexPath, animated: ConsideringUser.animated)
         if let identifier = dataSource.itemIdentifier(for: indexPath) {
             switch identifier {
             case .title:

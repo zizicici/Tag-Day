@@ -272,7 +272,7 @@ extension BackupViewController: UITableViewDelegate {
 
                 alertController.addAction(cancelAction)
                 alertController.addAction(okAction)
-                present(alertController, animated: true, completion: nil)
+                present(alertController, animated: ConsideringUser.animated, completion: nil)
             case .backupNow:
                 let result = BackupManager.shared.backup(overwrite: true)
                 if result {
@@ -295,7 +295,7 @@ extension BackupViewController: UITableViewDelegate {
 
                 alertController.addAction(cancelAction)
                 alertController.addAction(okAction)
-                present(alertController, animated: true, completion: nil)
+                present(alertController, animated: ConsideringUser.animated, completion: nil)
             case .export:
                 exportDatabaseAction()
             }
@@ -322,7 +322,7 @@ extension BackupViewController {
         documentPickerViewController.allowsMultipleSelection = false
         documentPickerViewController.shouldShowFileExtensions = true
         documentPickerViewController.delegate = self
-        present(documentPickerViewController, animated: true)
+        present(documentPickerViewController, animated: ConsideringUser.animated)
     }
     
     func pick(file: URL) {
@@ -349,7 +349,7 @@ extension BackupViewController {
             }
         }
         
-        present(controller, animated: true)
+        present(controller, animated: ConsideringUser.animated)
     }
 }
 

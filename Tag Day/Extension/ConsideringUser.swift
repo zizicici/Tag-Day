@@ -1,0 +1,18 @@
+//
+//  ConsideringUser.swift
+//  Tag Day
+//
+//  Created by Ci Zi on 2025/7/4.
+//
+
+import UIKit
+
+struct ConsideringUser {
+    static var animated: Bool {
+        return UIAccessibility.isReduceMotionEnabled ? false : true
+    }
+    
+    static var pushAnimated: Bool {
+        return UIAccessibility.prefersCrossFadeTransitions ? false : true
+    }
+}

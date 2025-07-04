@@ -207,18 +207,18 @@ class BookListViewController: UIViewController {
         let newBook = Book(title: "", color: AppColor.dynamicColor.generateLightDarkString(), symbol: "book.closed", order: bookOrder)
         let nav = NavigationController(rootViewController: BookDetailViewController(book: newBook))
         
-        navigationController?.present(nav, animated: true)
+        navigationController?.present(nav, animated: ConsideringUser.animated)
     }
     
     @objc
     func close() {
-        dismiss(animated: true)
+        dismiss(animated: ConsideringUser.animated)
     }
     
     func goToDetail(for item: BookCellItem) {
         let nav = NavigationController(rootViewController: BookDetailViewController(book: item.bookInfo.book))
         
-        navigationController?.present(nav, animated: true)
+        navigationController?.present(nav, animated: ConsideringUser.animated)
     }
     
     func updateOrder() {

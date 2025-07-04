@@ -135,18 +135,18 @@ class TagListViewController: UIViewController {
         let newTag = Tag(bookID: bookID, title: "", subtitle: "", color: "", order: tagIndex)
         let nav = NavigationController(rootViewController: TagDetailViewController(tag: newTag))
         
-        navigationController?.present(nav, animated: true)
+        navigationController?.present(nav, animated: ConsideringUser.animated)
     }
     
     @objc
     func close() {
-        dismiss(animated: true)
+        dismiss(animated: ConsideringUser.animated)
     }
     
     func goToDetail(for item: TagCellItem) {
         let nav = NavigationController(rootViewController: TagDetailViewController(tag: item.tag))
 
-        navigationController?.present(nav, animated: true)
+        navigationController?.present(nav, animated: ConsideringUser.animated)
     }
     
     func updateOrder() {

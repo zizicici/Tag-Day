@@ -85,7 +85,7 @@ class RecordListViewController: UIViewController {
     }
     
     override func accessibilityPerformEscape() -> Bool {
-        dismiss(animated: true)
+        dismiss(animated: ConsideringUser.animated)
         return true
     }
     
@@ -348,13 +348,13 @@ extension RecordListViewController {
         
         let alertController = UIAlertController(title: String(localized: "dayDetail.delete.alert.title"), message: message, preferredStyle: .alert)
         let deleteAction = UIAlertAction(title: String(localized: "button.delete"), style: .destructive) { _ in
-            alertController.dismiss(animated: true)
+            alertController.dismiss(animated: ConsideringUser.animated)
             _ = DataManager.shared.delete(dayRecord: record)
         }
         let cancelAction = UIAlertAction(title: String(localized: "button.cancel"), style: .cancel)
         alertController.addAction(deleteAction)
         alertController.addAction(cancelAction)
-        present(alertController, animated: true)
+        present(alertController, animated: ConsideringUser.animated)
     }
 }
 
@@ -371,7 +371,7 @@ extension RecordListViewController: FastEditorNavigator {
         let newRecord = DayRecord(bookID: bookID, tagID: tagID, day: Int64(day.julianDay), order: lastOrder + 1)
         if let savedRecord = DataManager.shared.add(dayRecord: newRecord) {
             // Dismiss
-            presentedViewController?.dismiss(animated: true) {
+            presentedViewController?.dismiss(animated: ConsideringUser.animated) {
                 self.showRecordAlert(for: savedRecord)
             }
         }
@@ -386,7 +386,7 @@ extension RecordListViewController: FastEditorNavigator {
         _ = DataManager.shared.update(dayRecord: newRecord)
         
         // Dismiss
-        presentedViewController?.dismiss(animated: true)
+        presentedViewController?.dismiss(animated: ConsideringUser.animated)
     }
 }
 
@@ -405,7 +405,7 @@ extension RecordListViewController {
         if let pres = nav.presentationController {
             pres.delegate = self
         }
-        present(nav, animated: true, completion: nil)
+        present(nav, animated: ConsideringUser.animated, completion: nil)
         
         if let popover = nav.popoverPresentationController {
             popover.sourceView = sourceView
@@ -441,7 +441,7 @@ extension UIViewController {
             alertController.addAction(commentAction)
             alertController.addAction(cancelAction)
             
-            present(alertController, animated: true)
+            present(alertController, animated: ConsideringUser.animated)
         } else {
             var remainingTime: Int = 5
 
@@ -450,7 +450,7 @@ extension UIViewController {
             alertController.addAction(commentAction)
             alertController.addAction(cancelAction)
             
-            present(alertController, animated: true)
+            present(alertController, animated: ConsideringUser.animated)
             
             Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
                 remainingTime -= 1
@@ -458,7 +458,7 @@ extension UIViewController {
                 
                 if remainingTime <= 0 {
                     timer.invalidate()
-                    alertController.dismiss(animated: true, completion: nil)
+                    alertController.dismiss(animated: ConsideringUser.animated, completion: nil)
                 }
             }
         }
@@ -468,7 +468,7 @@ extension UIViewController {
         let recordEditor = RecordDetailViewController(dayRecord: record, editMode: editMode)
         let nav = NavigationController(rootViewController: recordEditor)
         
-        present(nav, animated: true)
+        present(nav, animated: ConsideringUser.animated)
     }
 }
 

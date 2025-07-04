@@ -466,7 +466,7 @@ class RecordDetailViewController: UIViewController {
     
     @objc
     func dismissViewController() {
-        dismiss(animated: true)
+        dismiss(animated: ConsideringUser.animated)
     }
     
     func updateSaveButtonStatus() {

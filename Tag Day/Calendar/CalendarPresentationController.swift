@@ -46,7 +46,7 @@ class CalendarPresentationController: UIPresentationController {
     }
     
     @objc private func dismiss() {
-        presentedViewController.dismiss(animated: true)
+        presentedViewController.dismiss(animated: ConsideringUser.animated)
     }
     
     override var frameOfPresentedViewInContainerView: CGRect {
@@ -85,6 +85,19 @@ class CalendarPresentationController: UIPresentationController {
         presentedView?.frame = frameOfPresentedViewInContainerView
         dimmingView.frame = containerView?.bounds ?? .zero
         shadowView.frame = frameOfPresentedViewInContainerView
+    }
+    
+    override func presentationTransitionDidEnd(_ completed: Bool) {
+        super.presentationTransitionDidEnd(completed)
+        
+        let toView = presentedViewController.view
+        if toView?.layer.cornerRadius == 0.0 {
+            toView?.layer.cornerRadius = CalendarPresentationCornerRadius
+            toView?.layer.shadowColor = UIColor.black.cgColor
+            toView?.layer.shadowOpacity = 0.25
+            toView?.layer.shadowOffset = .zero
+            toView?.layer.shadowRadius = 40.0
+        }
     }
 }
 
