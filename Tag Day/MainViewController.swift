@@ -90,6 +90,7 @@ class MainViewController: CalendarViewController {
                 button.isEnabled = true
             }
         }
+        tagButton.accessibilityLabel = String(localized: "a11y.tag")
         
         view.addSubview(bookPickerButton)
         bookPickerButton.snp.makeConstraints { make in
@@ -115,7 +116,9 @@ class MainViewController: CalendarViewController {
             
             button.configuration = config
             button.menu = self.getBooksMenu()
+            button.accessibilityValue = config?.title
         }
+        bookPickerButton.accessibilityLabel = String(localized: "a11y.bookPicker")
     }
     
     func setupBottomBarItems() {
