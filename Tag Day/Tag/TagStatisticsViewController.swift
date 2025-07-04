@@ -96,12 +96,15 @@ class TagStatisticsViewController: UIViewController {
         closeItem.tintColor = AppColor.dynamicColor
         navigationItem.leftBarButtonItem = closeItem
         
+        let editTagItem = UIBarButtonItem(title: String(localized: "tag.edit"), style: .plain, target: self, action: #selector(editTagAction))
+        editTagItem.tintColor = AppColor.dynamicColor
+        
         let calendarBarItem = UIBarButtonItem(image: UIImage(systemName: "calendar"), style: .plain, target: nil, action: nil)
         calendarBarItem.tintColor = AppColor.dynamicColor
         calendarBarItem.accessibilityLabel = String(localized: "a11y.changeDateRange")
         self.calendarBarItem = calendarBarItem
         
-        toolbarItems = [.flexibleSpace(), calendarBarItem]
+        toolbarItems = [editTagItem, .flexibleSpace(), calendarBarItem]
         navigationController?.setToolbarHidden(false, animated: false)
         
         navigationItem.title = tag.title
@@ -200,6 +203,14 @@ class TagStatisticsViewController: UIViewController {
     @objc
     func dismissViewController() {
         dismiss(animated: true)
+    }
+    
+    @objc
+    func editTagAction() {
+        guard let tagID = tag?.id, let tag = try? DataManager.shared.fetchTag(id: tagID) else { return }
+        let nav = NavigationController(rootViewController: TagDetailViewController(tag: tag))
+        
+        present(nav, animated: true)
     }
     
     func humanReadableTime(_ interval: TimeInterval) -> String {
