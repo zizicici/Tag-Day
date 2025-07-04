@@ -1,5 +1,5 @@
 //
-//  DateView.swift
+//  DateLayer.swift
 //  Tag Day
 //
 //  Created by Ci Zi on 2025/6/22.
@@ -12,7 +12,6 @@ class DateLayer: CALayer {
     private let horizontalLayer = HorizontalTextLayer()
     private let verticalLayer = VerticalTextLayer()
     
-    private var currentLabelInset: CGFloat = 6.0
     private var layoutText: (horizontalText: String, verticalText: String)? = nil
     
     override init() {
@@ -38,9 +37,6 @@ class DateLayer: CALayer {
     
     override init(layer: Any) {
         super.init(layer: layer)
-        if let dateLayer = layer as? DateLayer {
-            self.currentLabelInset = dateLayer.currentLabelInset
-        }
     }
     
     func update(text: String, secondaryText: String, textColor: UIColor) {
@@ -54,8 +50,6 @@ class DateLayer: CALayer {
         
         let hasSecondaryText = !secondaryText.isEmpty
         verticalLayer.isHidden = !hasSecondaryText
-        
-        currentLabelInset = hasSecondaryText ? 14.0 : 11.0
         
         if hasSecondaryText {
             verticalLayer.configure(
@@ -77,117 +71,44 @@ class DateLayer: CALayer {
     override func layoutSublayers() {
         super.layoutSublayers()
         
-        let labelInsetTrailing = currentLabelInset + (verticalLayer.isHidden ? 0 : 7.0)
-        
         let labelHeight: CGFloat = 20.0
         let labelTopInset: CGFloat = 3.0
-        let labelLeadingInset: CGFloat = 11.0
+        let spacing = 2.0
         
-        let labelWidth = bounds.width - labelLeadingInset - labelInsetTrailing
-        
-        let newFrame = CGRect(
-            x: labelLeadingInset,
-            y: labelTopInset,
-            width: labelWidth,
-            height: labelHeight
-        )
-        if !horizontalLayer.frame.equalTo(newFrame) {
-            horizontalLayer.frame = newFrame
-        }
-        
-        let verticalSize = verticalLayer.textSize()
-        
-        if !verticalLayer.isHidden, !verticalLayer.bounds.size.equalTo(verticalSize) {
-            verticalLayer.frame = CGRect(
-                x: bounds.width - verticalSize.width - 8.0,
-                y: bounds.midY - verticalSize.height / 2,
-                width: verticalSize.width,
-                height: verticalSize.height
+        if verticalLayer.isHidden {
+            let newFrame = CGRect(
+                x: 0,
+                y: labelTopInset,
+                width: bounds.width,
+                height: labelHeight
             )
-        }
-    }
-}
+            
+            if !horizontalLayer.frame.equalTo(newFrame) {
+                horizontalLayer.frame = newFrame
+            }
+        } else {
+            let labelWidth: CGFloat = 24.0
+            let verticalSize = verticalLayer.textSize()
 
-class DateView: UIView {
-    private let horizontalLayer = HorizontalTextLayer()
-    private let verticalLayer = VerticalTextLayer()
-    
-    private var currentLabelInset: CGFloat = 6.0
-    
-    private var mainText: String = ""
-    private var mainTextColor: UIColor = .label
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        layer.addSublayer(horizontalLayer)
-        layer.addSublayer(verticalLayer)
-        
-        verticalLayer.isHidden = true
-        
-        horizontalLayer.font = UIFont.monospacedSystemFont(ofSize: 15, weight: .regular)
-        horizontalLayer.textColor = UIColor.label
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func update(text: String, secondaryText: String, textColor: UIColor) {
-        if mainText != text {
-            mainText = text
-            horizontalLayer.text = text
-        }
-        mainTextColor = textColor
-        horizontalLayer.textColor = textColor.withAlphaComponent(0.85)
-        
-        let hasSecondaryText = !secondaryText.isEmpty
-        verticalLayer.isHidden = !hasSecondaryText
-        
-        currentLabelInset = hasSecondaryText ? 14.0 : 6.0
-        
-        if hasSecondaryText {
-            verticalLayer.configure(
-                text: secondaryText,
-                font: .systemFont(ofSize: 8.0, weight: .black),
-                textColor: textColor.withAlphaComponent(0.6),
-                lineSpacing: 0.0
+            let newFrame = CGRect(
+                x: (bounds.width - labelWidth - verticalSize.width - spacing) / 2.0,
+                y: labelTopInset,
+                width: labelWidth,
+                height: labelHeight
             )
-        }
-        
-        setNeedsLayout()
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        let labelInsetTrailing = currentLabelInset + (verticalLayer.isHidden ? 0 : 7.0)
-        
-        let labelHeight: CGFloat = 20.0
-        let labelTopInset: CGFloat = 3.0
-        let labelLeadingInset: CGFloat = 6.0
-        
-        let labelWidth = bounds.width - labelLeadingInset - labelInsetTrailing
-        
-        let newFrame = CGRect(
-            x: labelLeadingInset,
-            y: labelTopInset,
-            width: labelWidth,
-            height: labelHeight
-        )
-        if !horizontalLayer.frame.equalTo(newFrame) {
-            horizontalLayer.frame = newFrame
-        }
-        
-        let verticalSize = verticalLayer.textSize()
-        
-        if !verticalLayer.isHidden, !verticalLayer.bounds.size.equalTo(verticalSize) {
-            verticalLayer.frame = CGRect(
-                x: bounds.width - verticalSize.width - 7.0,
-                y: bounds.midY - verticalSize.height / 2,
-                width: verticalSize.width,
-                height: verticalSize.height
-            )
+            
+            if !horizontalLayer.frame.equalTo(newFrame) {
+                horizontalLayer.frame = newFrame
+            }
+            
+            if !verticalLayer.bounds.size.equalTo(verticalSize) {
+                verticalLayer.frame = CGRect(
+                    x: newFrame.maxX + spacing,
+                    y: newFrame.midY - verticalSize.height / 2,
+                    width: verticalSize.width,
+                    height: verticalSize.height
+                )
+            }
         }
     }
 }
