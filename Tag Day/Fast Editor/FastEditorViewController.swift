@@ -122,7 +122,11 @@ class FastEditorViewController: UIViewController {
         
         let cancelItem = UIBarButtonItem(title: String(localized: "button.cancel"), style: .done, target: self, action: #selector(dismissAction))
         cancelItem.tintColor = AppColor.dynamicColor
-        items.append(cancelItem)
+        if !UIAccessibility.isVoiceOverRunning {
+            items.append(cancelItem)
+        } else {
+            navigationItem.rightBarButtonItem = cancelItem
+        }
 
         toolbarItems = items
         navigationController?.setToolbarHidden(false, animated: false)

@@ -267,7 +267,11 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
                 let detailViewController = FastEditorViewController(day: blockItem.day, book: current, editMode: .add)
                 detailViewController.delegate = self
                 let nav = NavigationController(rootViewController: detailViewController)
-                showPopoverView(at: targetView, contentViewController: nav, width: 240.0, height: 300.0)
+                if !UIAccessibility.isVoiceOverRunning {
+                    showPopoverView(at: targetView, contentViewController: nav, width: 240.0, height: 300.0)
+                } else {
+                    present(nav, animated: true)
+                }
             } else {
                 let detailViewController = RecordListViewController(day: blockItem.day, book: current)
                 detailViewController.dayPresenter = self
