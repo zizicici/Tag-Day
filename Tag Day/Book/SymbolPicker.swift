@@ -15,6 +15,7 @@ extension UIViewController {
         
         let hostingController = UIHostingController(rootView: symbolPicker)
         hostingController.isModalInPresentation = true
+        hostingController.view.tintColor = AppColor.dynamicColor
 
         present(hostingController, animated: ConsideringUser.animated)
     }
