@@ -71,7 +71,8 @@ class MainViewController: CalendarViewController {
         tagButton.snp.makeConstraints { make in
             make.trailing.equalTo(view).inset(20)
             make.bottom.equalTo(view.safeAreaLayoutGuide).inset(20)
-            make.height.width.equalTo(44)
+            make.height.width.greaterThanOrEqualTo(44)
+            make.height.width.equalTo(44).priority(.low)
         }
         
         tagButton.configurationUpdateHandler = { [weak self] button in
@@ -95,7 +96,9 @@ class MainViewController: CalendarViewController {
             make.leading.equalTo(view).inset(20)
             make.trailing.lessThanOrEqualTo(tagButton.snp.leading).offset(-20)
             make.bottom.equalTo(view.safeAreaLayoutGuide).inset(20)
-            make.height.equalTo(44)
+            make.height.greaterThanOrEqualTo(44)
+            make.height.equalTo(44).priority(.low)
+            make.height.equalTo(tagButton.snp.height)
         }
         
         bookPickerButton.configurationUpdateHandler = { [weak self] button in
