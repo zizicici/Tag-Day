@@ -272,10 +272,12 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
                 let detailViewController = RecordListViewController(day: blockItem.day, book: current)
                 detailViewController.dayPresenter = self
                 let nav = NavigationController(rootViewController: detailViewController)
-                let cellFrame = targetView.convert(targetView.bounds, to: nil)
-                nav.modalPresentationStyle = .custom
-                calendarTransitionDelegate = CalendarTransitionDelegate(originFrame: cellFrame, cellBackgroundColor: AppColor.background, detailSize: CGSize(width: min(view.frame.width - 80.0, 300), height: min(view.frame.height * 0.7, 480)))
-                nav.transitioningDelegate = calendarTransitionDelegate
+                if !UIAccessibility.isVoiceOverRunning {
+                    let cellFrame = targetView.convert(targetView.bounds, to: nil)
+                    nav.modalPresentationStyle = .custom
+                    calendarTransitionDelegate = CalendarTransitionDelegate(originFrame: cellFrame, cellBackgroundColor: AppColor.background, detailSize: CGSize(width: min(view.frame.width - 80.0, 300), height: min(view.frame.height * 0.7, 480)))
+                    nav.transitioningDelegate = calendarTransitionDelegate
+                }
                 present(nav, animated: true)
             }
         case .overwrite:

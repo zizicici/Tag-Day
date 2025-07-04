@@ -178,9 +178,13 @@ class RecordListCell: RecordListBaseCell {
                 if let timeText = detailItem.record.getTime() {
                     config?.title = timeText
                     config?.baseForegroundColor = AppColor.text
+                    
+                    button.accessibilityValue = detailItem.record.getTime(timeFormatStyle: .standard)
                 } else {
                     config?.title = String(localized: "dayRecord.time")
                     config?.baseForegroundColor = AppColor.text.withAlphaComponent(0.5)
+                    
+                    button.accessibilityValue = nil
                 }
                 
                 button.configuration = config
@@ -191,6 +195,8 @@ class RecordListCell: RecordListBaseCell {
                 config?.title = title
                 config?.baseForegroundColor = tagTitleColor
                 
+                button.accessibilityValue = title
+                
                 button.configuration = config
             }
             tagButton.tintColor = tagColor
@@ -199,16 +205,25 @@ class RecordListCell: RecordListBaseCell {
             
             commentButton.configurationUpdateHandler = { button in
                 var config = button.configuration
-                if let commetnText = detailItem.record.comment {
-                    config?.title = commetnText
+                if let commentText = detailItem.record.comment {
+                    config?.title = commentText
                     config?.baseForegroundColor = AppColor.text.withAlphaComponent(0.8)
+                    
+                    button.accessibilityValue = commentText
                 } else {
                     config?.title = String(localized: "dayRecord.comment")
                     config?.baseForegroundColor = AppColor.text.withAlphaComponent(0.4)
+                    
+                    button.accessibilityValue = nil
                 }
                 
                 button.configuration = config
             }
+            
+            timeButton.accessibilityLabel = String(localized: "a11y.record.time")
+            tagButton.accessibilityLabel = String(localized: "a11y.record.tag")
+            tagButton.accessibilityHint = String(localized: "a11y.record.changeTag")
+            commentButton.accessibilityLabel = String(localized: "a11y.record.comment")
         }
     }
     

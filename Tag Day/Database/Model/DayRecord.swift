@@ -34,20 +34,20 @@ extension DayRecord: FetchableRecord, MutablePersistableRecord {
 }
 
 extension DayRecord {
-    func getTime() -> String? {
+    func getTime(timeFormatStyle: Date.FormatStyle.TimeStyle = .shortened) -> String? {
         var result: String?
         if let startTime = startTime {
             if let endTime = endTime {
                 // Start And End
-                result = Date(nanoSecondSince1970: startTime).formatted(date: .omitted, time: .shortened) + "~" + Date(nanoSecondSince1970: endTime).formatted(date: .omitted, time: .shortened)
+                result = Date(nanoSecondSince1970: startTime).formatted(date: .omitted, time: timeFormatStyle) + "~" + Date(nanoSecondSince1970: endTime).formatted(date: .omitted, time: timeFormatStyle)
             } else {
                 // Start Only
-                result = Date(nanoSecondSince1970: startTime).formatted(date: .omitted, time: .shortened)
+                result = Date(nanoSecondSince1970: startTime).formatted(date: .omitted, time: timeFormatStyle)
             }
         } else {
             if let endTime = endTime {
                 // End Only
-                result = "~" + Date(nanoSecondSince1970: endTime).formatted(date: .omitted, time: .shortened)
+                result = "~" + Date(nanoSecondSince1970: endTime).formatted(date: .omitted, time: timeFormatStyle)
             } else {
                 // None
                 result = nil

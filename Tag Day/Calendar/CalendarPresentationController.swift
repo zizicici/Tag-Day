@@ -34,6 +34,7 @@ class CalendarPresentationController: UIPresentationController {
         dimmingView.alpha = 0
         dimmingView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismiss)))
         dimmingView.isAccessibilityElement = true
+        dimmingView.accessibilityLabel = String(localized: "a11y.dismiss")
         shadowView = UIView()
         shadowView.alpha = 0
         shadowView.backgroundColor = UIColor.white

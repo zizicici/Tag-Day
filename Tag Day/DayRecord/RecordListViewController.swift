@@ -53,13 +53,17 @@ class RecordListViewController: UIViewController {
         
         view.backgroundColor = AppColor.background
         
+        accessibilityViewIsModal = true
+        
         updateTitle()
         
         let nextDayItem = UIBarButtonItem(image: UIImage(systemName: "chevron.forward", withConfiguration: UIImage.SymbolConfiguration(pointSize: 10.0, weight: .bold)), style: .plain, target: self, action: #selector(nextDayAction))
+        nextDayItem.accessibilityLabel = String(localized: "a11y.forward")
         nextDayItem.tintColor = AppColor.text.withAlphaComponent(0.75)
         navigationItem.rightBarButtonItems = [nextDayItem]
         
         let preiviousDayItem = UIBarButtonItem(image: UIImage(systemName: "chevron.backward", withConfiguration: UIImage.SymbolConfiguration(pointSize: 10.0, weight: .bold)), style: .plain, target: self, action: #selector(previousDayAction))
+        preiviousDayItem.accessibilityLabel = String(localized: "a11y.backward")
         preiviousDayItem.tintColor = AppColor.text.withAlphaComponent(0.75)
         navigationItem.leftBarButtonItem = preiviousDayItem
         
@@ -132,7 +136,11 @@ class RecordListViewController: UIViewController {
         }
         snapshot.appendItems(items, toSection: .main)
 
-        dataSource.apply(snapshot, animatingDifferences: true)
+        dataSource.apply(snapshot, animatingDifferences: true) {
+            if let navBar = self.navigationController?.navigationBar {
+                UIAccessibility.post(notification: .screenChanged, argument: navBar)
+            }
+        }
     }
     
     @objc
