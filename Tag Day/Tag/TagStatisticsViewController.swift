@@ -24,7 +24,7 @@ class TagStatisticsViewController: UIViewController {
         }
     }
     
-    private let calendarBarItem = UIBarButtonItem(image: UIImage(systemName: "calendar"), style: .plain, target: nil, action: nil)
+    private var calendarBarItem: UIBarButtonItem?
     
     private var tableView: UITableView!
     private var dataSource: DataSource!
@@ -96,7 +96,11 @@ class TagStatisticsViewController: UIViewController {
         closeItem.tintColor = AppColor.dynamicColor
         navigationItem.leftBarButtonItem = closeItem
         
+        let calendarBarItem = UIBarButtonItem(image: UIImage(systemName: "calendar"), style: .plain, target: nil, action: nil)
         calendarBarItem.tintColor = AppColor.dynamicColor
+        calendarBarItem.accessibilityLabel = String(localized: "a11y.changeDateRange")
+        self.calendarBarItem = calendarBarItem
+        
         toolbarItems = [.flexibleSpace(), calendarBarItem]
         navigationController?.setToolbarHidden(false, animated: false)
         
@@ -190,7 +194,7 @@ class TagStatisticsViewController: UIViewController {
         
         dataSource.apply(snapshot, animatingDifferences: false)
         
-        calendarBarItem.menu = getDatePickerMenu()
+        calendarBarItem?.menu = getDatePickerMenu()
     }
     
     @objc

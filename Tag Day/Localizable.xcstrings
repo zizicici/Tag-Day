@@ -169,6 +169,34 @@
         }
       }
     },
+    "a11y.changeDateRange" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Change Date Range"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更换日期范围"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更換日期範圍"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更換日期範圍"
+          }
+        }
+      }
+    },
     "a11y.dismiss" : {
       "localizations" : {
         "en" : {
