@@ -71,6 +71,8 @@ class DateLayer: CALayer {
     override func layoutSublayers() {
         super.layoutSublayers()
         
+        guard bounds.width > 0.0 else { return }
+        
         let labelHeight: CGFloat = 20.0
         let labelTopInset: CGFloat = 3.0
         let spacing = 2.0
