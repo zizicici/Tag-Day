@@ -6389,7 +6389,7 @@
         }
       }
     },
-    "tags.detail.title.add" : {
+    "tag.add" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -6417,7 +6417,7 @@
         }
       }
     },
-    "tags.detail.title.edit" : {
+    "tag.edit" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -6501,7 +6501,7 @@
         }
       }
     },
-    "tags.new" : {
+    "tag.new" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {

@@ -53,7 +53,7 @@ class TagListViewController: UIViewController {
         doneBarItem.tintColor = AppColor.dynamicColor
         navigationItem.rightBarButtonItem = doneBarItem
         
-        let newBarItem = UIBarButtonItem(title: String(localized: "tags.new"), style: .plain, target: self, action: #selector(new))
+        let newBarItem = UIBarButtonItem(title: String(localized: "tag.new"), style: .plain, target: self, action: #selector(new))
         newBarItem.tintColor = AppColor.dynamicColor
         toolbarItems = [newBarItem, .flexibleSpace()]
         navigationController?.setToolbarHidden(false, animated: false)

@@ -206,7 +206,7 @@ class TagDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = isEditMode() ? String(localized: "tags.detail.title.edit") : String(localized: "tags.detail.title.add")
+        title = isEditMode() ? String(localized: "tag.edit") : String(localized: "tag.add")
         
         view.backgroundColor = AppColor.background
         

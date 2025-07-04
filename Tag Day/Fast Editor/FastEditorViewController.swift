@@ -103,11 +103,13 @@ class FastEditorViewController: UIViewController {
 
         switch editMode {
         case .add:
-            let newTagItem = UIBarButtonItem(title: String(localized: "tags.new"), style: .plain, target: self, action: #selector(newTagAction))
+            let newTagItem = UIBarButtonItem(title: String(localized: "tag.new"), style: .plain, target: self, action: #selector(newTagAction))
             newTagItem.tintColor = AppColor.dynamicColor
             items.append(newTagItem)
         case .replace:
-            break
+            let editTagItem = UIBarButtonItem(title: String(localized: "tag.edit"), style: .plain, target: self, action: #selector(editTagAction))
+            editTagItem.tintColor = AppColor.dynamicColor
+            items.append(editTagItem)
         case .overwrite:
             let resetItem = UIBarButtonItem(title: String(localized: "fastEditor.reset"), style: .plain, target: self, action: #selector(resetAction))
             resetItem.tintColor = .systemRed
@@ -159,7 +161,7 @@ class FastEditorViewController: UIViewController {
     private func reloadData() {
         guard let bookID = book.id else { return }
         self.tags = ((try? DataManager.shared.fetchAllTags(bookID: bookID)) ?? []).filter({ tag in
-            return tag != self.editMode.tag
+            return tag.id != self.editMode.tag?.id
         })
         
         var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
@@ -190,6 +192,14 @@ class FastEditorViewController: UIViewController {
         }
         let newTag = Tag(bookID: bookID, title: "", subtitle: "", color: "", order: tagIndex)
         let nav = NavigationController(rootViewController: TagDetailViewController(tag: newTag))
+        
+        present(nav, animated: true)
+    }
+    
+    @objc
+    func editTagAction() {
+        guard let tagID = editMode.tag?.id, let tag = try? DataManager.shared.fetchTag(id: tagID) else { return }
+        let nav = NavigationController(rootViewController: TagDetailViewController(tag: tag))
         
         present(nav, animated: true)
     }

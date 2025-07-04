@@ -223,7 +223,7 @@ class MainViewController: CalendarViewController {
         let manageAction = UIAction(title: String(localized: "tags.management"), image: UIImage(systemName: "list.bullet")) { [weak self] action in
             self?.showTagManagement()
         }
-        let newAction = UIAction(title: String(localized: "tags.new"), image: UIImage(systemName: "plus")) { [weak self] action in
+        let newAction = UIAction(title: String(localized: "tag.new"), image: UIImage(systemName: "plus")) { [weak self] action in
             self?.showTagEditorForAdd()
         }
         
