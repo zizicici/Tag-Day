@@ -43,6 +43,16 @@ class MainViewController: CalendarViewController {
     
     var bookBarButtonItem: UIBarButtonItem?
     
+    var dynamicTitleColor: UIColor {
+        return UIColor { traitCollection in
+            if AppColor.dynamicColor.resolvedColor(with: traitCollection).isLight {
+                return UIColor(hex: "000000CC") ?? .black
+            } else {
+                return UIColor(hex: "FFFFFFF1") ?? .white
+            }
+        }
+    }
+    
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
@@ -80,6 +90,7 @@ class MainViewController: CalendarViewController {
             
             var config = button.configuration
             config?.background.backgroundColor = AppColor.dynamicColor
+            config?.baseForegroundColor = self.dynamicTitleColor
             
             button.configuration = config
             
@@ -113,6 +124,7 @@ class MainViewController: CalendarViewController {
             }
             config?.image = DataManager.shared.currentBook?.templateImage
             config?.background.backgroundColor = AppColor.dynamicColor
+            config?.baseForegroundColor = self.dynamicTitleColor
             
             button.configuration = config
             button.menu = self.getBooksMenu()
