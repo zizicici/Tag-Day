@@ -185,6 +185,15 @@ class BlockCell: BlockBaseCell, HoverableCell {
             }
         }
     }
+    
+    public func getTagOrder(in position: CGPoint) -> Int? {
+        for (index, layer) in cachedTagLayers.enumerated() {
+            if layer.frame.contains(CGPoint(x: position.x - tagContainerView.frame.origin.x, y: position.y - tagContainerView.frame.origin.y)) {
+                return index
+            }
+        }
+        return nil
+    }
 }
 
 struct BlockCellBackgroundConfiguration {

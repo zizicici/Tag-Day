@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Toast
 
 protocol HoverableCell {
     var isHover: Bool { get }
@@ -20,7 +19,6 @@ class CalendarBaseViewController: UIViewController {
     
     var lastIndexPath: IndexPath? = nil {
         didSet {
-            view.hideAllToasts()
             if let previousIndexPath = oldValue {
                 if let cell = collectionView?.cellForItem(at: previousIndexPath) as? HoverableCell {
                     cell.update(isHover: false)
@@ -41,10 +39,6 @@ class CalendarBaseViewController: UIViewController {
         swipeGesture.delaysTouchesEnded = false
         collectionView?.addGestureRecognizer(swipeGesture)
         self.hoverGesture = swipeGesture
-        
-//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapGestureAction(_:)))
-//        collectionView?.addGestureRecognizer(tapGesture)
-//        swipeGesture.require(toFail: tapGesture)
     }
     
     @objc func tapGestureAction(_ recognizer: UITapGestureRecognizer) {
@@ -62,21 +56,19 @@ class CalendarBaseViewController: UIViewController {
     
     @objc func panGestureAction(_ recognizer: UIPanGestureRecognizer) {
         let point = recognizer.location(in: collectionView)
-        print(recognizer.state.rawValue)
         switch recognizer.state {
         case .possible:
-            print("possible")
+            break
         case .began:
             lastIndexPath = collectionView?.indexPathForItem(at: point)
+            hover(position: point)
         case .changed:
             updateLastIndexPath(at: point)
+            hover(position: point)
         case .failed, .cancelled:
             updateLastIndexPath(at: nil)
         case .ended:
             updateLastIndexPath(at: nil)
-            if let currentIndexPath = collectionView?.indexPathForItem(at: point) {
-                tap(in: currentIndexPath)
-            }
         @unknown default:
             updateLastIndexPath(at: nil)
         }
@@ -102,7 +94,11 @@ class CalendarBaseViewController: UIViewController {
     }
     
     func impactFeedbackGeneratorCoourred() {
-        ImpactGenerator.impact(intensity: 0.5, style: .rigid)
+        ImpactGenerator.impact(intensity: 0.8, style: .rigid)
+    }
+    
+    open func hover(position: CGPoint) {
+        
     }
     
     func updateVisibleItems() {

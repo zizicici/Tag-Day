@@ -96,3 +96,9 @@ extension Tag {
         }
     }
 }
+
+extension Tag: Equatable {
+    static func == (lhs: Tag, rhs: Tag) -> Bool {
+        return lhs.hashValue == rhs.hashValue
+    }
+}

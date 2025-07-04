@@ -43,13 +43,3 @@ extension BlockItem {
         return dateString
     }
 }
-
-struct InfoItem: Hashable {
-    var month: GregorianMonth
-    var tag: Tag
-    var count: Int
-    var duration: Int64?
-    var durationRecordCount: Int
-    var dayCount: Int
-    var monthlyStateType: MonthlyStatsType
-}

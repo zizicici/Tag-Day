@@ -21,8 +21,8 @@ extension CalendarViewController {
         return cellRegistration
     }
     
-    func getInfoCellRegistration() -> UICollectionView.CellRegistration<InfoCell, Item> {
-        let cellRegistration = UICollectionView.CellRegistration<InfoCell, Item> { (cell, indexPath, identifier) in
+    func getInfoCellRegistration() -> UICollectionView.CellRegistration<TagInfoCell, Item> {
+        let cellRegistration = UICollectionView.CellRegistration<TagInfoCell, Item> { (cell, indexPath, identifier) in
             switch identifier {
             case .invisible, .block:
                 break

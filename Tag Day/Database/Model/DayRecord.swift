@@ -73,3 +73,9 @@ extension DayRecord {
         return formatter.string(from: interval)?.replacingOccurrences(of: " ", with: "") ?? ""
     }
 }
+
+extension DayRecord: Equatable {
+    static func == (lhs: DayRecord, rhs: DayRecord) -> Bool {
+        return lhs.hashValue == rhs.hashValue
+    }
+}

@@ -1,5 +1,5 @@
 //
-//  InfoCell.swift
+//  TagInfoCell.swift
 //  Tag Day
 //
 //  Created by Ci Zi on 2025/6/15.
@@ -35,7 +35,7 @@ class InfoBaseCell: UICollectionViewCell {
     }
 }
 
-class InfoCell: InfoBaseCell, HoverableCell {
+class TagInfoCell: InfoBaseCell, HoverableCell {
     let tagView: TagView = TagView()
     
     let label: UILabel = {
@@ -89,14 +89,7 @@ class InfoCell: InfoBaseCell, HoverableCell {
         if let item = state.infoItem {
             tagView.update(tag: item.tag)
             
-            switch item.monthlyStateType {
-            case .hidden:
-                break
-            case .loggedCount:
-                label.text = String(format: "× %i", item.count)
-            case .dayCount:
-                label.text = String(format: "× %i", item.dayCount)
-            }
+            label.text = String(format: "× %i", item.count)
         }
         
         if isHover {

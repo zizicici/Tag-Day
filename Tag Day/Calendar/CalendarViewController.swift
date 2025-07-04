@@ -7,8 +7,8 @@
 
 import UIKit
 import SnapKit
-import Toast
 import ZCCalendar
+import Collections
 
 class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate {
     static let sectionHeaderElementKind = "sectionHeaderElementKind"
@@ -105,6 +105,29 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     private var editMode: EditMode = .normal
     
     private var calendarTransitionDelegate: CalendarTransitionDelegate?
+    
+    private var snapDisplayData: SnapDisplayData? = nil {
+        didSet {
+            if oldValue != snapDisplayData {
+                if let displayData = snapDisplayData {
+                    impactFeedbackGeneratorCoourred()
+                    snapView.update(displayData: displayData)
+                }
+            }
+        }
+    }
+    
+    private var snapView: SnapInfoView = {
+        let snapView = SnapInfoView(frame: .zero)
+        snapView.isUserInteractionEnabled = false
+        snapView.isHidden = true
+        snapView.layer.shadowColor = UIColor.black.withAlphaComponent(0.1).cgColor
+        snapView.layer.shadowRadius = 5.0
+        snapView.layer.shadowOpacity = 0.5
+        snapView.layer.shadowOffset = .zero
+        
+        return snapView
+    }()
 
     // Debounce
     private var reloadDataDebounce: Debounce<Int>!
@@ -151,6 +174,13 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
             await self?.commit()
         })
         
+        view.addSubview(snapView)
+        snapView.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(view).inset(40)
+            make.top.equalTo(view.safeAreaLayoutGuide).inset(40)
+            make.height.equalTo(200)
+        }
+        
         NotificationCenter.default.addObserver(self, selector: #selector(needReload), name: .CurrentBookChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(needReload), name: .ActiveTagsUpdated, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(needReload), name: .DayRecordsUpdated, object: nil)
@@ -190,24 +220,42 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
             impactFeedbackGeneratorCoourred()
             tap(in: cell, for: blockItem)
         case .info(let infoItem):
+            guard case .info(let gregorianMonth) = dataSource.sectionIdentifier(for: indexPath.section) else { return }
             impactFeedbackGeneratorCoourred()
-            tap(in: cell, for: infoItem)
+            tap(in: cell, for: infoItem, month: gregorianMonth)
         }
     }
     
-    override func hover(in indexPath: IndexPath) {
-        super.hover(in: indexPath)
-        guard let blockItem = dataSource.itemIdentifier(for: indexPath) else {
-            return
-        }
-        switch blockItem {
-        case .invisible:
-            break
-        case .block(let blockItem):
-            let style = ToastStyle.getStyle(messageColor: blockItem.foregroundColor, backgroundColor: blockItem.backgroundColor)
-            view.makeToast(blockItem.calendarString, position: .top, style: style)
-        case .info:
-            break
+    override func hover(position: CGPoint) {
+        if let lastIndexPath = lastIndexPath, let cell = collectionView.cellForItem(at: lastIndexPath) as? BlockCell, let item = dataSource.itemIdentifier(for: lastIndexPath) {
+            switch item {
+            case .block(let item):
+                let positionInCell = cell.convert(position, from: collectionView)
+                
+                let tagData: [SnapDisplayData]
+                switch item.tagDisplayType {
+                case .normal:
+                    tagData = item.records.compactMap { record in
+                        item.tags.first(where: { $0.id == record.tagID }).map { .init(tag: $0, records: [record]) }
+                    }
+                case .aggregation:
+                    var groupedRecords = OrderedDictionary<Int64, [DayRecord]>()
+                    for record in item.records {
+                        groupedRecords[record.tagID, default: []].append(record)
+                    }
+                    tagData = groupedRecords.compactMap { tagID, records in
+                        item.tags.first(where: { $0.id == tagID }).map { .init(tag: $0, records: records) }
+                    }
+                }
+                
+                if let tagIndex = cell.getTagOrder(in: positionInCell) {
+                    snapDisplayData = tagData[tagIndex]
+                } else {
+                    snapDisplayData = nil
+                }
+            default:
+                snapDisplayData = nil
+            }
         }
     }
     
@@ -238,8 +286,8 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         }
     }
     
-    private func tap(in targetView: UIView, for infoItem: InfoItem) {
-        let statisticViewController = TagStatisticsViewController(tag: infoItem.tag, start: infoItem.month.startDay, end: infoItem.month.endDay)
+    private func tap(in targetView: UIView, for infoItem: InfoItem, month: GregorianMonth) {
+        let statisticViewController = TagStatisticsViewController(tag: infoItem.tag, start: month.startDay, end: month.endDay)
         let nav = NavigationController(rootViewController: statisticViewController)
 
         showPopoverView(at: targetView, contentViewController: nav, width: 280.0, height: 400.0)

@@ -62,8 +62,9 @@ struct LayoutGenerater {
                 snapshot.appendSections([.info(gregorianMonth)])
                 
                 let tagStatics = getTagStatistics(in: items, matching: tags)
+                let isLoggedCount = MonthlyStatsType.getValue() == .loggedCount
                 
-                snapshot.appendItems(tagStatics.map{ Item.info(InfoItem(month: gregorianMonth, tag: $0.tag, count: $0.totalCount, duration: $0.totalDuration, durationRecordCount: $0.durationRecordCount, dayCount: $0.dayCount, monthlyStateType: MonthlyStatsType.getValue())) }, toSection: .info(gregorianMonth))
+                snapshot.appendItems(tagStatics.map{ Item.info(InfoItem(tag: $0.tag, count: isLoggedCount ? $0.totalCount : $0.dayCount)) }, toSection: .info(gregorianMonth))
             }
         }
     }

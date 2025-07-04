@@ -30,7 +30,7 @@
 		14980E3C2E110E96009622BF /* Tag Widget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 14980E2A2E110E95009622BF /* Tag Widget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		14AA3E072DCDB31300E1F4F8 /* RecordListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AA3E062DCDB31300E1F4F8 /* RecordListViewController.swift */; };
 		14AA3E0B2DCDF3BE00E1F4F8 /* RecordListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AA3E0A2DCDF3BE00E1F4F8 /* RecordListCell.swift */; };
-		14AA90542DFE7EDE00EA331A /* InfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AA90532DFE7EDE00EA331A /* InfoCell.swift */; };
+		14AA90542DFE7EDE00EA331A /* TagInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AA90532DFE7EDE00EA331A /* TagInfoCell.swift */; };
 		14ACBE562DBFAD2E0056B1FD /* TabbarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14ACBE542DBFAD2E0056B1FD /* TabbarController.swift */; };
 		14ACBE572DBFAD2E0056B1FD /* NavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14ACBE532DBFAD2E0056B1FD /* NavigationViewController.swift */; };
 		14AD287B2DC5B6DD0018DAF3 /* BookListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AD287A2DC5B6DD0018DAF3 /* BookListViewController.swift */; };
@@ -146,6 +146,9 @@
 		14FF82BD2E04511000D3000B /* ChineseCalendarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FF82AA2E04511000D3000B /* ChineseCalendarManager.swift */; };
 		14FF82BE2E04511000D3000B /* ChineseDayInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FF82B02E04511000D3000B /* ChineseDayInfo.swift */; };
 		14FF82BF2E04511000D3000B /* ChineseYear.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FF82AF2E04511000D3000B /* ChineseYear.swift */; };
+		14FFDD602E1797C2007C6E44 /* SnapInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FFDD5F2E1797C2007C6E44 /* SnapInfoView.swift */; };
+		14FFDD622E17B19E007C6E44 /* SnapInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FFDD612E17B19E007C6E44 /* SnapInfoCell.swift */; };
+		14FFDD642E17B5BE007C6E44 /* InfoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FFDD632E17B5BE007C6E44 /* InfoItem.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -192,7 +195,7 @@
 		14980E392E110E96009622BF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		14AA3E062DCDB31300E1F4F8 /* RecordListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListViewController.swift; sourceTree = "<group>"; };
 		14AA3E0A2DCDF3BE00E1F4F8 /* RecordListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListCell.swift; sourceTree = "<group>"; };
-		14AA90532DFE7EDE00EA331A /* InfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoCell.swift; sourceTree = "<group>"; };
+		14AA90532DFE7EDE00EA331A /* TagInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagInfoCell.swift; sourceTree = "<group>"; };
 		14ACBE532DBFAD2E0056B1FD /* NavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationViewController.swift; sourceTree = "<group>"; };
 		14ACBE542DBFAD2E0056B1FD /* TabbarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbarController.swift; sourceTree = "<group>"; };
 		14AD287A2DC5B6DD0018DAF3 /* BookListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookListViewController.swift; sourceTree = "<group>"; };
@@ -289,6 +292,9 @@
 		14FF82B12E04511000D3000B /* ChineseCalendarDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChineseCalendarDataSource.swift; sourceTree = "<group>"; };
 		14FF82B32E04511000D3000B /* kyureki.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = kyureki.json; sourceTree = "<group>"; };
 		14FF82B42E04511000D3000B /* HKO1901_2099.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = HKO1901_2099.json; sourceTree = "<group>"; };
+		14FFDD5F2E1797C2007C6E44 /* SnapInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapInfoView.swift; sourceTree = "<group>"; };
+		14FFDD612E17B19E007C6E44 /* SnapInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapInfoCell.swift; sourceTree = "<group>"; };
+		14FFDD632E17B5BE007C6E44 /* InfoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoItem.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -586,6 +592,7 @@
 			isa = PBXGroup;
 			children = (
 				14D272882DC071A500267572 /* BlockItem.swift */,
+				14FFDD632E17B5BE007C6E44 /* InfoItem.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -595,11 +602,13 @@
 			children = (
 				14D2728B2DC071B000267572 /* BlockCell.swift */,
 				14D2B3CB2E07B9280000CE05 /* DateLayer.swift */,
-				14AA90532DFE7EDE00EA331A /* InfoCell.swift */,
+				14AA90532DFE7EDE00EA331A /* TagInfoCell.swift */,
 				14D2728D2DC071B000267572 /* MonthTitleSupplementaryView.swift */,
 				14D2728E2DC071B000267572 /* WeekdayOrderView.swift */,
 				14D2728F2DC071B000267572 /* HoverGestureRecognizer.swift */,
 				14D272902DC071B000267572 /* UIDraggableCollectionView.swift */,
+				14FFDD5F2E1797C2007C6E44 /* SnapInfoView.swift */,
+				14FFDD612E17B19E007C6E44 /* SnapInfoCell.swift */,
 				14D272912DC071B000267572 /* ImpactGenerator.swift */,
 			);
 			path = View;
@@ -921,9 +930,11 @@
 				14BBA3762DCB0B0700AD7BAC /* TagDetailViewController.swift in Sources */,
 				14FF82B92E04511000D3000B /* YearRange.swift in Sources */,
 				14CC10622E0FACA50076E988 /* AddRecordIntent.swift in Sources */,
+				14FFDD622E17B19E007C6E44 /* SnapInfoCell.swift in Sources */,
 				14FF82BA2E04511000D3000B /* ChineseDay.swift in Sources */,
 				14FF82BB2E04511000D3000B /* ChineseCalendarDataSource.swift in Sources */,
 				14FF82BC2E04511000D3000B /* ChineseMonth.swift in Sources */,
+				14FFDD602E1797C2007C6E44 /* SnapInfoView.swift in Sources */,
 				14CC10672E0FFEE20076E988 /* SymbolPicker.swift in Sources */,
 				14FF82BD2E04511000D3000B /* ChineseCalendarManager.swift in Sources */,
 				14FF82BE2E04511000D3000B /* ChineseDayInfo.swift in Sources */,
@@ -936,7 +947,7 @@
 				14B239B62DBF13F30007152C /* SceneDelegate.swift in Sources */,
 				14BBA37A2DCB142900AD7BAC /* ColorPickerCell.swift in Sources */,
 				14ACBE562DBFAD2E0056B1FD /* TabbarController.swift in Sources */,
-				14AA90542DFE7EDE00EA331A /* InfoCell.swift in Sources */,
+				14AA90542DFE7EDE00EA331A /* TagInfoCell.swift in Sources */,
 				14D2729F2DC072D700267572 /* Settings.swift in Sources */,
 				14EBE0882DD76B0B00F7609A /* DurationCell.swift in Sources */,
 				14ACBE572DBFAD2E0056B1FD /* NavigationViewController.swift in Sources */,
@@ -960,6 +971,7 @@
 				14FF82A92E03FD4600D3000B /* BackupViewController.swift in Sources */,
 				14CFE3AA2E1269060021A1AE /* SharedDataManager.swift in Sources */,
 				14D272972DC071B000267572 /* BlockCell.swift in Sources */,
+				14FFDD642E17B5BE007C6E44 /* InfoItem.swift in Sources */,
 				14833D392DC504B9001B61D5 /* DayRecord.swift in Sources */,
 				14D272982DC071B000267572 /* UIDraggableCollectionView.swift in Sources */,
 				14D272992DC071B000267572 /* HoverGestureRecognizer.swift in Sources */,
