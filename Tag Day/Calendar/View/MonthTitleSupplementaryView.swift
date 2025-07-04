@@ -54,5 +54,7 @@ class MonthTitleSupplementaryView: UICollectionReusableView {
     func update(text: String, startWeekOrder: WeekdayOrder) {
         label.text = text
         weekdayOrderView.startWeekdayOrder = startWeekOrder
+        isAccessibilityElement = true
+        accessibilityLabel = text
     }
 }

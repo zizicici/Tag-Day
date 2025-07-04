@@ -90,6 +90,10 @@ class TagInfoCell: InfoBaseCell, HoverableCell {
             tagView.update(tag: item.tag)
             
             label.text = String(format: "× %i", item.count)
+            
+            isAccessibilityElement = true
+            accessibilityTraits = .button
+            accessibilityLabel = String(format: "%@ × %i", item.tag.title, item.count)
         }
         
         if isHover {
