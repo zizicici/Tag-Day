@@ -48,6 +48,8 @@ struct TodayRecordsWidgetEntryView : View {
                         .foregroundStyle(entry.color)
                         .frame(width: 50.0, height: 50.0)
                         .widgetAccentable()
+                        .accessibilityLabel(entry.book.title)
+                        .accessibilitySortPriority(102)
     //                    .border(.black, width: 1.0)
                     
                     Spacer()
@@ -59,6 +61,7 @@ struct TodayRecordsWidgetEntryView : View {
                     .buttonStyle(.bordered)
                     .tint(entry.color)
                     .widgetAccentable()
+                    .accessibilitySortPriority(101)
     //                .buttonBorderShape(.circle)
                 } else {
                     Button(intent: WidgetTagsNavigationActionIntent(bookID: entry.book.id, kind: kind, family: family.rawValue, toNext: false)) {
@@ -69,6 +72,7 @@ struct TodayRecordsWidgetEntryView : View {
                     .tint(entry.color)
                     .widgetAccentable()
                     .disabled(pageIndex == 0)
+                    .accessibilitySortPriority(102)
                     
                     Spacer()
                     
@@ -79,6 +83,7 @@ struct TodayRecordsWidgetEntryView : View {
                     .buttonStyle(.bordered)
                     .tint(.red)
                     .widgetAccentable()
+                    .accessibilitySortPriority(101)
                     
                     Spacer()
                     
@@ -90,6 +95,7 @@ struct TodayRecordsWidgetEntryView : View {
                     .tint(entry.color)
                     .widgetAccentable()
                     .disabled(pageIndex ?? 0 >= pageCount - 1)
+                    .accessibilitySortPriority(102)
                 }
             }
             .padding(.vertical, 4.0)
@@ -160,6 +166,7 @@ struct TagButtonView: View {
             if startIndex < tags.count {
                 ForEach(startIndex..<endIndex, id: \.self) { index in
                     tagButton(for: tags[index])
+                        .accessibilitySortPriority(Double((columns - column) * 10 - index))
                 }
             }
             

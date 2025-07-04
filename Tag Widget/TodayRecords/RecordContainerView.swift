@@ -129,11 +129,15 @@ struct RecordContainerView: View {
                 Color.clear.frame(height: 9)
             } else {
                 headerView
+                    .accessibilityElement()
+                    .accessibilityLabel(date.formatted(date: .complete, time: .omitted) + (secondaryString ?? ""))
+                    .accessibilitySortPriority(100)
             }
             
             VStack(spacing: 4) {
-                ForEach(Array(pageData(for: pageIndex).enumerated()), id: \.offset) { _, data in
+                ForEach(Array(pageData(for: pageIndex).enumerated()), id: \.offset) { index, data in
                     RecordView(displayData: data)
+                        .accessibilitySortPriority(Double((columnCount - pageIndex) * 10 - index))
                 }
             }
             .padding(.leading, pageIndex == 0 ? 4 : 2)
