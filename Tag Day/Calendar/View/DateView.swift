@@ -55,7 +55,7 @@ class DateLayer: CALayer {
         let hasSecondaryText = !secondaryText.isEmpty
         verticalLayer.isHidden = !hasSecondaryText
         
-        currentLabelInset = hasSecondaryText ? 14.0 : 6.0
+        currentLabelInset = hasSecondaryText ? 14.0 : 11.0
         
         if hasSecondaryText {
             verticalLayer.configure(
@@ -81,7 +81,7 @@ class DateLayer: CALayer {
         
         let labelHeight: CGFloat = 20.0
         let labelTopInset: CGFloat = 3.0
-        let labelLeadingInset: CGFloat = 6.0
+        let labelLeadingInset: CGFloat = 11.0
         
         let labelWidth = bounds.width - labelLeadingInset - labelInsetTrailing
         
@@ -99,7 +99,7 @@ class DateLayer: CALayer {
         
         if !verticalLayer.isHidden, !verticalLayer.bounds.size.equalTo(verticalSize) {
             verticalLayer.frame = CGRect(
-                x: bounds.width - verticalSize.width - 7.0,
+                x: bounds.width - verticalSize.width - 8.0,
                 y: bounds.midY - verticalSize.height / 2,
                 width: verticalSize.width,
                 height: verticalSize.height

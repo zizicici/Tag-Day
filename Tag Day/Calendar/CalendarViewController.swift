@@ -252,10 +252,8 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
             guard let self = self else {
                 return nil
             }
-            var cellHeight: CGFloat = DayGrid.itemHeight(in: environment.container.contentSize.width)
-            if let count = self.sectionRecordMaxCount[index], count > 1 {
-                cellHeight = 39.0 + 20.0 * CGFloat(count) + 3.0 * (CGFloat(count) - 1.0)
-            }
+            let displayCount = max(1, self.sectionRecordMaxCount[index] ?? 1)
+            let cellHeight: CGFloat = 39.0 + 20.0 * CGFloat(displayCount) + 3.0 * (CGFloat(displayCount) - 1.0)
             
             return self.sectionProvider(index: index, environment: environment, cellHeight: cellHeight)
         }, configuration: config)
