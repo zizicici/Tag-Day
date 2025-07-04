@@ -115,7 +115,7 @@
 		14D272BD2DC0884E00267572 /* SpecificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D272BB2DC0884E00267572 /* SpecificationsViewController.swift */; };
 		14D272BE2DC0884E00267572 /* SettingOptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D272BA2DC0884E00267572 /* SettingOptionsViewController.swift */; };
 		14D272BF2DC0884E00267572 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D272B92DC0884E00267572 /* MoreViewController.swift */; };
-		14D2B3CC2E07B9280000CE05 /* DateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D2B3CB2E07B9280000CE05 /* DateView.swift */; };
+		14D2B3CC2E07B9280000CE05 /* DateLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D2B3CB2E07B9280000CE05 /* DateLayer.swift */; };
 		14E71B182E138B6D001CA8EE /* ChineseCalendarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FF82AA2E04511000D3000B /* ChineseCalendarManager.swift */; };
 		14E71B192E138B72001CA8EE /* YearRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FF82AB2E04511000D3000B /* YearRange.swift */; };
 		14E71B1A2E138B77001CA8EE /* ChineseDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FF82AD2E04511000D3000B /* ChineseDay.swift */; };
@@ -269,7 +269,7 @@
 		14D272B92DC0884E00267572 /* MoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
 		14D272BA2DC0884E00267572 /* SettingOptionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingOptionsViewController.swift; sourceTree = "<group>"; };
 		14D272BB2DC0884E00267572 /* SpecificationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpecificationsViewController.swift; sourceTree = "<group>"; };
-		14D2B3CB2E07B9280000CE05 /* DateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateView.swift; sourceTree = "<group>"; };
+		14D2B3CB2E07B9280000CE05 /* DateLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateLayer.swift; sourceTree = "<group>"; };
 		14E900BE2E1376EC00F9D0DC /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
 		14E900C12E13773D00F9D0DC /* Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entry.swift; sourceTree = "<group>"; };
 		14E900C32E13779A00F9D0DC /* EntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryView.swift; sourceTree = "<group>"; };
@@ -594,7 +594,7 @@
 			isa = PBXGroup;
 			children = (
 				14D2728B2DC071B000267572 /* BlockCell.swift */,
-				14D2B3CB2E07B9280000CE05 /* DateView.swift */,
+				14D2B3CB2E07B9280000CE05 /* DateLayer.swift */,
 				14AA90532DFE7EDE00EA331A /* InfoCell.swift */,
 				14D2728D2DC071B000267572 /* MonthTitleSupplementaryView.swift */,
 				14D2728E2DC071B000267572 /* WeekdayOrderView.swift */,
@@ -975,7 +975,7 @@
 				14D272BF2DC0884E00267572 /* MoreViewController.swift in Sources */,
 				14AD28812DC5BCC50018DAF3 /* BookCell.swift in Sources */,
 				14D272B12DC073EB00267572 /* Date+Extension.swift in Sources */,
-				14D2B3CC2E07B9280000CE05 /* DateView.swift in Sources */,
+				14D2B3CC2E07B9280000CE05 /* DateLayer.swift in Sources */,
 				14D272B22DC073EB00267572 /* AppDatabase.swift in Sources */,
 				14CA128C2E09AF3400B28639 /* CalendarPresentationController.swift in Sources */,
 				14AD28862DC5C21E0018DAF3 /* DataManager.swift in Sources */,
