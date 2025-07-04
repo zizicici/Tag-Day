@@ -156,10 +156,12 @@ class BlockCell: BlockBaseCell, HoverableCell {
             updateTagFramesIfNeeded()
             
             if item.isToday {
-                accessibilityLabel = String(localized: "weekCalendar.today") + item.calendarString
+                accessibilityLabel = String(localized: "weekCalendar.today") + "," + item.calendarString + "," + (item.a11ySecondaryCalendar ?? "")
             } else {
-                accessibilityLabel = item.calendarString
+                accessibilityLabel = item.calendarString + "," + (item.a11ySecondaryCalendar ?? "")
             }
+            accessibilityValue = item.recordString
+            accessibilityHint = item.records.count == 0 ? String(localized: "a11y.block.hint.add") : String(localized: "a11y.block.hint.review")
             
             backgroundConfiguration = BlockCellBackgroundConfiguration.configuration(for: state, backgroundColor: backgroundColor, cornerRadius: 6.0, showStroke: item.isToday, strokeColor: UIColor.systemYellow, strokeWidth: 1.5, strokeOutset: 1.0)
         }

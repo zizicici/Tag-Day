@@ -36,14 +36,19 @@ struct LayoutGenerater {
                 let foregroundColor: UIColor = AppColor.text
                 
                 let secondaryCalendar: String?
+                let a11ySecondaryCallendar: String?
                 switch SecondaryCalendar.getValue() {
                 case .none:
                     secondaryCalendar = nil
+                    a11ySecondaryCallendar = secondaryCalendar
                 case .chineseCalendar:
+                    let chineseDayInfo = ChineseCalendarManager.shared.findChineseDayInfo(gregorianDay, variant: .chinese)
                     if let solarTerm = ChineseCalendarManager.shared.getSolarTerm(for: gregorianDay) {
                         secondaryCalendar = solarTerm.name
+                        a11ySecondaryCallendar = (chineseDayInfo?.pronounceString() ?? "") + solarTerm.name
                     } else {
-                        secondaryCalendar = ChineseCalendarManager.shared.findChineseDayInfo(gregorianDay, variant: .chinese)?.shortDisplayString()
+                        secondaryCalendar = chineseDayInfo?.shortDisplayString()
+                        a11ySecondaryCallendar = chineseDayInfo?.pronounceString()
                     }
                 case .rokuyo:
                     if let kyureki = ChineseCalendarManager.shared.findChineseDayInfo(gregorianDay, variant: .kyureki) {
@@ -51,9 +56,10 @@ struct LayoutGenerater {
                     } else {
                         secondaryCalendar = nil
                     }
+                    a11ySecondaryCallendar = secondaryCalendar
                 }
                 
-                return BlockItem(index: julianDay, backgroundColor: backgroundColor, foregroundColor: foregroundColor, isToday: ZCCalendar.manager.isToday(gregorianDay: gregorianDay), tags: tags, records: records.filter{ $0.day == gregorianDay.julianDay }, tagDisplayType: TagDisplayType.getValue(), secondaryCalendar: secondaryCalendar)
+                return BlockItem(index: julianDay, backgroundColor: backgroundColor, foregroundColor: foregroundColor, isToday: ZCCalendar.manager.isToday(gregorianDay: gregorianDay), tags: tags, records: records.filter{ $0.day == gregorianDay.julianDay }, tagDisplayType: TagDisplayType.getValue(), secondaryCalendar: secondaryCalendar, a11ySecondaryCalendar: a11ySecondaryCallendar)
             })
             
             snapshot.appendItems(items.map{ Item.block($0) }, toSection: .row(gregorianMonth))
