@@ -115,6 +115,7 @@ class PlaceholderTextView: UITextView {
         placeholderLabel.snp.makeConstraints { make in
             make.top.equalTo(self.snp.top).inset(8)
             make.leading.trailing.equalTo(self).inset(16)
+            make.width.lessThanOrEqualTo(self).offset(-32)
         }
     }
     
