@@ -585,7 +585,7 @@ extension TagDetailViewController {
         
         customTagColors.reversed().forEach { customTagColor in
             let customTagColorString = customTagColor.generateLightDarkString(isLight ? .light : .dark)
-            if !defaultColors.contains(customTagColorString) {
+            if !defaultColors.contains(customTagColorString), !colors.contains(customTagColorString) {
                 colors.append(customTagColorString)
             }
         }
@@ -601,7 +601,7 @@ extension TagDetailViewController {
         
         customTitleColors.reversed().forEach { customTitleColor in
             let customTitleColorString = customTitleColor.generateLightDarkString(isLight ? .light : .dark)
-            if !defaultColors.contains(customTitleColorString) {
+            if !defaultColors.contains(customTitleColorString), !colors.contains(customTitleColorString) {
                 colors.append(customTitleColorString)
             }
         }
@@ -650,7 +650,7 @@ extension TagDetailViewController: UIColorPickerViewControllerDelegate {
                 case .light:
                     updateTitleColor(viewController.selectedColor, isLight: true)
                 case .dark:
-                    updateTitleColor(viewController.selectedColor, isLight: true)
+                    updateTitleColor(viewController.selectedColor, isLight: false)
                 }
             case .book:
                 break

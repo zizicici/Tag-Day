@@ -422,7 +422,7 @@ class BookDetailViewController: UIViewController {
         
         customBookColors.reversed().forEach { customTagColor in
             let customTagColorString = customTagColor.generateLightDarkString(isLight ? .light : .dark)
-            if !defaultColors.contains(customTagColorString) {
+            if !defaultColors.contains(customTagColorString), !colors.contains(customTagColorString) {
                 colors.append(customTagColorString)
             }
         }
@@ -519,7 +519,7 @@ extension BookDetailViewController: UIColorPickerViewControllerDelegate {
                 case .light:
                     updateBookColor(viewController.selectedColor, isLight: true)
                 case .dark:
-                    updateBookColor(viewController.selectedColor, isLight: true)
+                    updateBookColor(viewController.selectedColor, isLight: false)
                 }
             }
         }
