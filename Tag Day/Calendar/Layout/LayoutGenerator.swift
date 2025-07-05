@@ -59,7 +59,9 @@ struct LayoutGenerater {
                     a11ySecondaryCallendar = secondaryCalendar
                 }
                 
-                return BlockItem(index: julianDay, backgroundColor: backgroundColor, foregroundColor: foregroundColor, isToday: ZCCalendar.manager.isToday(gregorianDay: gregorianDay), tags: tags, records: records.filter{ $0.day == gregorianDay.julianDay }, tagDisplayType: TagDisplayType.getValue(), secondaryCalendar: secondaryCalendar, a11ySecondaryCalendar: a11ySecondaryCallendar)
+                let isToday: Bool = TodayIndicator.getValue() == .enable ? ZCCalendar.manager.isToday(gregorianDay: gregorianDay) : false
+                
+                return BlockItem(index: julianDay, backgroundColor: backgroundColor, foregroundColor: foregroundColor, isToday: isToday, tags: tags, records: records.filter{ $0.day == gregorianDay.julianDay }, tagDisplayType: TagDisplayType.getValue(), secondaryCalendar: secondaryCalendar, a11ySecondaryCalendar: a11ySecondaryCallendar)
             })
             
             snapshot.appendItems(items.map{ Item.block($0) }, toSection: .row(gregorianMonth))

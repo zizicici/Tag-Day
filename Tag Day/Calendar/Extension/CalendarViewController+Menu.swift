@@ -58,4 +58,21 @@ extension CalendarViewController {
     
         return monthlyStatsTypeMenu
     }
+    
+    func getTodayIndicator() -> TodayIndicator {
+        return TodayIndicator.getValue()
+    }
+    
+    func getTodayIndicatorMenu() -> UIMenu {
+        let todayIndicatorCases: [TodayIndicator] = TodayIndicator.allCases
+        let todayIndicatorActions = todayIndicatorCases.map { type in
+            let action = UIAction(title: type.getName(), state: type == getTodayIndicator() ? .on : .off) { _ in
+                TodayIndicator.setValue(type)
+            }
+            return action
+        }
+        let todayIndicatorMenu = UIMenu(title: TodayIndicator.getTitle(), subtitle: getTodayIndicator().getName(), image: UIImage(systemName: "calendar"), children: todayIndicatorActions)
+    
+        return todayIndicatorMenu
+    }
 }

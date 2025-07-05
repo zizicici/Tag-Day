@@ -14,6 +14,7 @@ extension UserDefaults {
         case BackupFolder = "com.zizicici.tag.settings.BackupFolder"
         case SecondaryCalendar = "com.zizicici.tag.settings.SecondaryCalendar"
         case WeekStartType = "com.zizicici.tag.settings.WeekStartType"
+        case TodayIndicator = "com.zizicici.tag.settings.TodayIndicator"
         case TagDisplayType = "com.zizicici.tag.settings.TagDisplayType"
         case MonthlyStatsType = "com.zizicici.tag.settings.MonthlyStatsType"
         case DynamicColor = "com.zizicici.tag.settings.DynamicColor"
@@ -124,6 +125,34 @@ extension AutoBackup: UserDefaultSettable {
     
     static func getTitle() -> String {
         return ""
+    }
+}
+
+enum TodayIndicator: Int, CaseIterable, Codable {
+    case enable
+    case disable
+}
+
+extension TodayIndicator: UserDefaultSettable {
+    static func getKey() -> UserDefaults.Settings {
+        return .TodayIndicator
+    }
+    
+    static var defaultOption: TodayIndicator {
+        return .enable
+    }
+    
+    func getName() -> String {
+        switch self {
+        case .enable:
+            return String(localized: "settings.todayIndicator.enable")
+        case .disable:
+            return String(localized: "settings.todayIndicator.disable")
+        }
+    }
+    
+    static func getTitle() -> String {
+        return String(localized: "settings.todayIndicator.title")
     }
 }
 
