@@ -6,8 +6,10 @@
 //
 
 import Foundation
+import ZCCalendar
 
 struct InfoItem: Hashable {
     var tag: Tag
     var count: Int
+    var month: GregorianMonth?
 }
