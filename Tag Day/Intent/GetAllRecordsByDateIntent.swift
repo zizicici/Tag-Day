@@ -25,6 +25,8 @@ struct GetAllRecordsByDateIntent: AppIntent {
     
     @MainActor
     func perform() async throws -> some IntentResult & ReturnsValue<[RecordEntity]> {
+        try? DataManager.shared.syncSharedDataToDatabase()
+        
         let components = Calendar.current.dateComponents([.year, .month, .day], from: date)
         if let year = components.year, let month = components.month, let day = components.day, let month = Month(rawValue: month) {
             let target = GregorianDay(year: year, month: month, day: day)

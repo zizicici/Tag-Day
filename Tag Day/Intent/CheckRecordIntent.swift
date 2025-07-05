@@ -28,6 +28,8 @@ struct CheckRecordIntent: AppIntent {
     
     @MainActor
     func perform() async throws -> some IntentResult & ReturnsValue<Bool> {
+        try? DataManager.shared.syncSharedDataToDatabase()
+
         let components = Calendar.current.dateComponents([.year, .month, .day], from: date)
         if let year = components.year, let month = components.month, let day = components.day, let month = Month(rawValue: month) {
             let day = GregorianDay(year: year, month: month, day: day)
@@ -60,6 +62,8 @@ struct CheckTomorrowRecordIntent: AppIntent {
     
     @MainActor
     func perform() async throws -> some IntentResult & ReturnsValue<Bool> {
+        try? DataManager.shared.syncSharedDataToDatabase()
+
         let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: Date())!
         let components = Calendar.current.dateComponents([.year, .month, .day], from: tomorrow)
         if let year = components.year, let month = components.month, let day = components.day, let month = Month(rawValue: month) {
