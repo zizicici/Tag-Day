@@ -57,10 +57,11 @@
 		14BBA3782DCB101100AD7BAC /* TextInputCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BBA3772DCB101100AD7BAC /* TextInputCell.swift */; };
 		14BBA37A2DCB142900AD7BAC /* ColorPickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BBA3792DCB142900AD7BAC /* ColorPickerCell.swift */; };
 		14BBA37C2DCB2EE900AD7BAC /* TagPreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BBA37B2DCB2EE900AD7BAC /* TagPreviewCell.swift */; };
+		14BD5DED2E1A39DC0063DCA9 /* BackupIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BD5DEC2E1A39DC0063DCA9 /* BackupIntent.swift */; };
 		14C7134B2DD21DF8007527C5 /* GetAllRecordsByDateIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C7134A2DD21DF8007527C5 /* GetAllRecordsByDateIntent.swift */; };
 		14C7134E2DD22F86007527C5 /* RecordEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C7134D2DD22F86007527C5 /* RecordEntity.swift */; };
 		14C713502DD22F9B007527C5 /* BookEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C7134F2DD22F9B007527C5 /* BookEntity.swift */; };
-		14C713532DD22FDC007527C5 /* FetchError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C713522DD22FDC007527C5 /* FetchError.swift */; };
+		14C713532DD22FDC007527C5 /* IntentError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C713522DD22FDC007527C5 /* IntentError.swift */; };
 		14C713552DD23064007527C5 /* CheckRecordIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C713542DD23064007527C5 /* CheckRecordIntent.swift */; };
 		14C713572DD2310C007527C5 /* TagEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C713562DD2310C007527C5 /* TagEntity.swift */; };
 		14CA128C2E09AF3400B28639 /* CalendarPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CA128B2E09AF3400B28639 /* CalendarPresentationController.swift */; };
@@ -218,10 +219,11 @@
 		14BBA3772DCB101100AD7BAC /* TextInputCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputCell.swift; sourceTree = "<group>"; };
 		14BBA3792DCB142900AD7BAC /* ColorPickerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerCell.swift; sourceTree = "<group>"; };
 		14BBA37B2DCB2EE900AD7BAC /* TagPreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPreviewCell.swift; sourceTree = "<group>"; };
+		14BD5DEC2E1A39DC0063DCA9 /* BackupIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupIntent.swift; sourceTree = "<group>"; };
 		14C7134A2DD21DF8007527C5 /* GetAllRecordsByDateIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetAllRecordsByDateIntent.swift; sourceTree = "<group>"; };
 		14C7134D2DD22F86007527C5 /* RecordEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordEntity.swift; sourceTree = "<group>"; };
 		14C7134F2DD22F9B007527C5 /* BookEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookEntity.swift; sourceTree = "<group>"; };
-		14C713522DD22FDC007527C5 /* FetchError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchError.swift; sourceTree = "<group>"; };
+		14C713522DD22FDC007527C5 /* IntentError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentError.swift; sourceTree = "<group>"; };
 		14C713542DD23064007527C5 /* CheckRecordIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckRecordIntent.swift; sourceTree = "<group>"; };
 		14C713562DD2310C007527C5 /* TagEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagEntity.swift; sourceTree = "<group>"; };
 		14CA128B2E09AF3400B28639 /* CalendarPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarPresentationController.swift; sourceTree = "<group>"; };
@@ -488,7 +490,8 @@
 				14CC10612E0FACA50076E988 /* AddRecordIntent.swift */,
 				14C7134A2DD21DF8007527C5 /* GetAllRecordsByDateIntent.swift */,
 				14C713542DD23064007527C5 /* CheckRecordIntent.swift */,
-				14C713522DD22FDC007527C5 /* FetchError.swift */,
+				14BD5DEC2E1A39DC0063DCA9 /* BackupIntent.swift */,
+				14C713522DD22FDC007527C5 /* IntentError.swift */,
 				14C713512DD22FA2007527C5 /* Entity */,
 			);
 			path = Intent;
@@ -936,6 +939,7 @@
 				14FFDD622E17B19E007C6E44 /* SnapInfoCell.swift in Sources */,
 				14FFDD662E182B00007C6E44 /* ConsideringUser.swift in Sources */,
 				14FF82BA2E04511000D3000B /* ChineseDay.swift in Sources */,
+				14BD5DED2E1A39DC0063DCA9 /* BackupIntent.swift in Sources */,
 				14FF82BB2E04511000D3000B /* ChineseCalendarDataSource.swift in Sources */,
 				14FF82BC2E04511000D3000B /* ChineseMonth.swift in Sources */,
 				14FFDD602E1797C2007C6E44 /* SnapInfoView.swift in Sources */,
@@ -996,7 +1000,7 @@
 				14CA128C2E09AF3400B28639 /* CalendarPresentationController.swift in Sources */,
 				14AD28862DC5C21E0018DAF3 /* DataManager.swift in Sources */,
 				14D07CC92DD332DF00F6843C /* DateCell.swift in Sources */,
-				14C713532DD22FDC007527C5 /* FetchError.swift in Sources */,
+				14C713532DD22FDC007527C5 /* IntentError.swift in Sources */,
 				14D272812DC0718D00267572 /* DayByDayHandler.swift in Sources */,
 				14C7134B2DD21DF8007527C5 /* GetAllRecordsByDateIntent.swift in Sources */,
 				14D272822DC0718D00267572 /* DisplayHandler.swift in Sources */,

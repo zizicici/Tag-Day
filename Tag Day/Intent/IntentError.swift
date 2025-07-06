@@ -1,5 +1,5 @@
 //
-//  FetchError.swift
+//  IntentError.swift
 //  Tag Day
 //
 //  Created by Ci Zi on 2025/5/12.
@@ -17,6 +17,17 @@ enum FetchError: Error, CustomLocalizedStringResourceConvertible {
             return "intent.error.notFound"
         case .bookFirst:
             return "intent.error.bookFirst"
+        }
+    }
+}
+
+enum BackupError: Error, CustomLocalizedStringResourceConvertible {
+    case noAccess
+
+    var localizedStringResource: LocalizedStringResource {
+        switch self {
+        case .noAccess:
+            return "intent.error.backupNoAccess"
         }
     }
 }
