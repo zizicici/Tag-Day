@@ -493,7 +493,7 @@ extension CalendarViewController {
         displayHandler.updateSelectedYear(to: day.year)
         
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
-            self.scroll(to: day, animated: ConsideringUser.animated)            
+            self.scroll(to: day, animated: ConsideringUser.animated)
         }
     }
 }
