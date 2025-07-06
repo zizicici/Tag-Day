@@ -58,6 +58,8 @@
 		14BBA37A2DCB142900AD7BAC /* ColorPickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BBA3792DCB142900AD7BAC /* ColorPickerCell.swift */; };
 		14BBA37C2DCB2EE900AD7BAC /* TagPreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BBA37B2DCB2EE900AD7BAC /* TagPreviewCell.swift */; };
 		14BD5DED2E1A39DC0063DCA9 /* BackupDatabaseIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BD5DEC2E1A39DC0063DCA9 /* BackupDatabaseIntent.swift */; };
+		14BD5DEF2E1A3EDD0063DCA9 /* OpenBookIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BD5DEE2E1A3EDD0063DCA9 /* OpenBookIntent.swift */; };
+		14BD5DF12E1A5A340063DCA9 /* UIApplication+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BD5DF02E1A5A340063DCA9 /* UIApplication+Extension.swift */; };
 		14C7134B2DD21DF8007527C5 /* GetAllRecordsByDateIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C7134A2DD21DF8007527C5 /* GetAllRecordsByDateIntent.swift */; };
 		14C7134E2DD22F86007527C5 /* RecordEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C7134D2DD22F86007527C5 /* RecordEntity.swift */; };
 		14C713502DD22F9B007527C5 /* BookEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C7134F2DD22F9B007527C5 /* BookEntity.swift */; };
@@ -220,6 +222,8 @@
 		14BBA3792DCB142900AD7BAC /* ColorPickerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerCell.swift; sourceTree = "<group>"; };
 		14BBA37B2DCB2EE900AD7BAC /* TagPreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPreviewCell.swift; sourceTree = "<group>"; };
 		14BD5DEC2E1A39DC0063DCA9 /* BackupDatabaseIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupDatabaseIntent.swift; sourceTree = "<group>"; };
+		14BD5DEE2E1A3EDD0063DCA9 /* OpenBookIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenBookIntent.swift; sourceTree = "<group>"; };
+		14BD5DF02E1A5A340063DCA9 /* UIApplication+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extension.swift"; sourceTree = "<group>"; };
 		14C7134A2DD21DF8007527C5 /* GetAllRecordsByDateIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetAllRecordsByDateIntent.swift; sourceTree = "<group>"; };
 		14C7134D2DD22F86007527C5 /* RecordEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordEntity.swift; sourceTree = "<group>"; };
 		14C7134F2DD22F9B007527C5 /* BookEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookEntity.swift; sourceTree = "<group>"; };
@@ -491,6 +495,7 @@
 				14C7134A2DD21DF8007527C5 /* GetAllRecordsByDateIntent.swift */,
 				14C713542DD23064007527C5 /* CheckRecordIntent.swift */,
 				14BD5DEC2E1A39DC0063DCA9 /* BackupDatabaseIntent.swift */,
+				14BD5DEE2E1A3EDD0063DCA9 /* OpenBookIntent.swift */,
 				14C713522DD22FDC007527C5 /* IntentError.swift */,
 				14C713512DD22FA2007527C5 /* Entity */,
 			);
@@ -628,6 +633,7 @@
 				14D272A02DC0736A00267572 /* UIViewController+Extension.swift */,
 				14D272B72DC074B300267572 /* Toast+Stryle.swift */,
 				14D2729A2DC0720600267572 /* UIFont+Extension.swift */,
+				14BD5DF02E1A5A340063DCA9 /* UIApplication+Extension.swift */,
 				14337F7F2DCC6CE50043447A /* Debounce.swift */,
 			);
 			path = Extension;
@@ -940,6 +946,7 @@
 				14FFDD662E182B00007C6E44 /* ConsideringUser.swift in Sources */,
 				14FF82BA2E04511000D3000B /* ChineseDay.swift in Sources */,
 				14BD5DF12E1A5A340063DCA9 /* UIApplication+Extension.swift in Sources */,
+				14BD5DED2E1A39DC0063DCA9 /* BackupDatabaseIntent.swift in Sources */,
 				14FF82BB2E04511000D3000B /* ChineseCalendarDataSource.swift in Sources */,
 				14FF82BC2E04511000D3000B /* ChineseMonth.swift in Sources */,
 				14FFDD602E1797C2007C6E44 /* SnapInfoView.swift in Sources */,
@@ -1027,6 +1034,7 @@
 				14AA3E0B2DCDF3BE00E1F4F8 /* RecordListCell.swift in Sources */,
 				14B239B82DBF13F30007152C /* AppDelegate.swift in Sources */,
 				14CFE3B12E127A560021A1AE /* Basic.swift in Sources */,
+				14BD5DEF2E1A3EDD0063DCA9 /* OpenBookIntent.swift in Sources */,
 				14D272702DC0709300267572 /* CalendarBaseViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

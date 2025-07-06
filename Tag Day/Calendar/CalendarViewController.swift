@@ -96,7 +96,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
             if didScrollToday == false, newValue == true {
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.25) { [weak self] in
                     guard let self = self else { return }
-                    self.scrollToToday(animated: ConsideringUser.animated)
+                    self.scroll(to: ZCCalendar.manager.today, animated: ConsideringUser.animated)
                 }
             }
         }
@@ -404,13 +404,13 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         }
     }
     
-    func scrollToToday(animated: Bool = true) {
+    func scroll(to day: GregorianDay, animated: Bool) {
         let item = dataSource.snapshot().itemIdentifiers.first { item in
             switch item {
             case .invisible, .info:
                 return false
             case .block(let blockItem):
-                if blockItem.day == ZCCalendar.manager.today {
+                if blockItem.day == day {
                     return true
                 } else {
                     return false
@@ -485,6 +485,16 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     func switchEditMode(to editMode: EditMode) {
         self.editMode = editMode
         updateSettingsMenu()
+    }
+}
+
+extension CalendarViewController {
+    public func display(to day: GregorianDay) {
+        displayHandler.updateSelectedYear(to: day.year)
+        
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
+            self.scroll(to: day, animated: ConsideringUser.animated)            
+        }
     }
 }
 

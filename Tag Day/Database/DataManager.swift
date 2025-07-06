@@ -97,11 +97,9 @@ class DataManager {
         updateCurrentBookIfNeeded()
     }
     
-    public func select(bookID: String) {
-        if let id = Int64(bookID) {
-            if let targetBook = books.first(where: { $0.id == id }) {
-                select(book: targetBook)
-            }
+    public func select(bookID: Int64) {
+        if let targetBook = books.first(where: { $0.id == bookID }) {
+            select(book: targetBook)
         }
     }
     

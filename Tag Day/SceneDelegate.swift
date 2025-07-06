@@ -62,7 +62,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     func handleURL(_ url: URL) {
-        if url.scheme == "tagday", url.host == "book", let bookID = url.pathComponents.dropFirst().first {
+        if url.scheme == "tagday", url.host == "book", let bookIDString = url.pathComponents.dropFirst().first, let bookID = Int64(bookIDString) {
             DataManager.shared.select(bookID: bookID)
         }
     }
