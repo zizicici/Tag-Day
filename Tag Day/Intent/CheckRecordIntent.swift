@@ -79,3 +79,37 @@ struct CheckTomorrowRecordIntent: AppIntent {
 
     static var openAppWhenRun: Bool = false
 }
+
+struct CheckHasRecordsIntent: AppIntent {
+    static var title: LocalizedStringResource = "intent.record.check.hasRecords.title"
+    
+    static var description: IntentDescription = IntentDescription("intent.record.check.hasRecords.description", categoryName: "intent.record.check.category")
+    
+    @Parameter(title: "intent.record.dateValue", description: "intent.record.dateValue", kind: .date, requestValueDialog: IntentDialog("intent.record.dialog"))
+    var date: Date
+    
+    @Parameter(title: "intent.book.type")
+    var book: BookEntity
+    
+    static var parameterSummary: some ParameterSummary {
+        Summary("intent.record.check.hasRecords.summary\(\.$book)\(\.$date)")
+    }
+    
+    @MainActor
+    func perform() async throws -> some IntentResult & ReturnsValue<Bool> {
+        try? DataManager.shared.syncSharedDataToDatabase()
+
+        let components = Calendar.current.dateComponents([.year, .month, .day], from: date)
+        if let year = components.year, let month = components.month, let day = components.day, let month = Month(rawValue: month) {
+            let day = GregorianDay(year: year, month: month, day: day)
+            let bookID = book.id
+            let tagIDs = try DataManager.shared.fetchAllTags().compactMap({ $0.id })
+            let records = try DataManager.shared.fetchAllDayRecords(bookID: Int64(bookID), day: Int64(day.julianDay)).filter { tagIDs.contains($0.tagID) }
+            return .result(value: records.count > 0)
+        } else {
+            throw FetchError.notFound
+        }
+    }
+
+    static var openAppWhenRun: Bool = false
+}
