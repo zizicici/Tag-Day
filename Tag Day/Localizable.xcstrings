@@ -3545,7 +3545,7 @@
         }
       }
     },
-    "intent.backup.category" : {
+    "intent.backup.database.category" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3573,7 +3573,7 @@
         }
       }
     },
-    "intent.backup.description" : {
+    "intent.backup.database.description" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3601,7 +3601,7 @@
         }
       }
     },
-    "intent.backup.overwrite" : {
+    "intent.backup.database.overwrite" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3629,7 +3629,7 @@
         }
       }
     },
-    "intent.backup.overwrite.description" : {
+    "intent.backup.database.overwrite.description" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3657,7 +3657,7 @@
         }
       }
     },
-    "intent.backup.summary" : {
+    "intent.backup.database.summary" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3685,7 +3685,7 @@
         }
       }
     },
-    "intent.backup.title" : {
+    "intent.backup.database.title" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
