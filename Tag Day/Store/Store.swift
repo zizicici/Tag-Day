@@ -49,7 +49,7 @@ class User {
     }
     
     func proTier() -> ProTier {
-        let userDefaultLifetimeMembership = UserDefaults.standard.bool(forKey: UserDefaults.Store.LifetimeMembership.rawValue)
+        let userDefaultLifetimeMembership = appGroupUserDefaults.bool(forKey: UserDefaults.Store.LifetimeMembership.rawValue)
         if userDefaultLifetimeMembership {
             return .lifetime
         } else {
