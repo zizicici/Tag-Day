@@ -8,13 +8,12 @@
 import Foundation
 
 struct SharedDataManager {    
-    private static let appGroupID = "group.com.zizicici.tag"
     private static let fileName = "shared_data.json"
     
     // 获取共享目录的 URL
     private static var sharedContainerURL: URL? {
         return FileManager.default.containerURL(
-            forSecurityApplicationGroupIdentifier: appGroupID
+            forSecurityApplicationGroupIdentifier: AppConfig.appGroupID
         )?.appendingPathComponent(fileName)
     }
     

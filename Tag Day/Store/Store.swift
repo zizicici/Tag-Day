@@ -31,13 +31,21 @@ enum ProTier {
 class User {
     static let shared = User()
     
+    private var appGroupUserDefaults: UserDefaults
+    
     init() {
+        guard let userDefaults = UserDefaults(suiteName: AppConfig.appGroupID) else {
+            fatalError("无法初始化 App Group 的 UserDefaults")
+        }
+        appGroupUserDefaults = userDefaults
+        
         NotificationCenter.default.addObserver(self, selector: #selector(lifetimeMembershipDidRegisted), name: Notification.Name.LifetimeMembership, object: nil)
     }
     
     @objc
     private func lifetimeMembershipDidRegisted() {
-        UserDefaults.standard.setValue(true, forKey: UserDefaults.Store.LifetimeMembership.rawValue)
+        appGroupUserDefaults.setValue(true, forKey: UserDefaults.Store.LifetimeMembership.rawValue)
+        appGroupUserDefaults.synchronize()
     }
     
     func proTier() -> ProTier {

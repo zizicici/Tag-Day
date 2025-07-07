@@ -111,9 +111,19 @@ struct TodayRecordsWidgetEntryView : View {
                         .privacySensitive()
                 }
             } else {
-                if let pageIndex = pageIndex {
-                    TagButtonView(tags: entry.tags, pageIndex: pageIndex, columns: family == .systemSmall ? 1 : 2, bookID: entry.book.id, kind: kind, familyRawValue: family.rawValue, day: GregorianDay(from: entry.date).julianDay)
-                        .privacySensitive()
+                if User.shared.proTier() == .none {
+                    HStack {
+                        Spacer(minLength: 0)
+                        Text("pro.needed")
+                            .font(.system(size: 16, weight: .medium))
+                            .foregroundStyle(.secondary)
+                        Spacer(minLength: 0)
+                    }
+                } else {
+                    if let pageIndex = pageIndex {
+                        TagButtonView(tags: entry.tags, pageIndex: pageIndex, columns: family == .systemSmall ? 1 : 2, bookID: entry.book.id, kind: kind, familyRawValue: family.rawValue, day: GregorianDay(from: entry.date).julianDay)
+                            .privacySensitive()
+                    }
                 }
             }
         }
