@@ -203,10 +203,19 @@ class TagDetailViewController: UIViewController {
         return tag.id != nil
     }
     
+    func needShowAlertForNewTagLimitation() -> Bool {
+        guard let tagCount = try? DataManager.shared.fetchAllTags().count else { return true }
+        return tagCount >= 5 && !isEditMode() && User.shared.proTier() == .none
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         title = isEditMode() ? String(localized: "tag.edit") : String(localized: "tag.add")
+        
+        if needShowAlertForNewTagLimitation() {
+            showNewTagLimitationAlert()
+        }
         
         view.backgroundColor = AppColor.background
         
@@ -463,7 +472,12 @@ class TagDetailViewController: UIViewController {
     func allowSave() -> Bool {
         let titleFlag = tagTitle.isValidTagTitle()
         let subtitleFlag = subtitle.isValidTagSubtitle()
-        return titleFlag && subtitleFlag
+        
+        if needShowAlertForNewTagLimitation() {
+            return false
+        } else {
+            return titleFlag && subtitleFlag
+        }
     }
     
     @objc
@@ -510,6 +524,35 @@ class TagDetailViewController: UIViewController {
         alertController.addAction(deleteAction)
         alertController.addAction(cancelAction)
         present(alertController, animated: ConsideringUser.animated)
+    }
+    
+    func showNewTagLimitationAlert() {
+        let alertController = UIAlertController(title: String(localized: "tags.detail.limitation.alert.title"), message: nil, preferredStyle: .alert)
+        let purchaseAction = UIAlertAction(title: String(localized: "membership.purchase"), style: .default) { [weak self] _ in
+            self?.purchaseAction()
+        }
+        let cancelAction = UIAlertAction(title: String(localized: "button.ok"), style: .cancel) { [weak self] _ in
+            self?.dismissViewController()
+        }
+        alertController.addAction(purchaseAction)
+        alertController.addAction(cancelAction)
+        present(alertController, animated: ConsideringUser.animated)
+    }
+    
+    func purchaseAction() {
+        showOverlayViewController()
+        Task {
+            do {
+                if let _ = try await Store.shared.purchaseLifetimeMembership() {
+                    reloadData()
+                }
+            }
+            catch {
+                showAlert(title: String(localized: "membership.purchases.order.failure", comment: "Order Failure"), message: error.localizedDescription)
+            }
+            
+            hideOverlayViewController()
+        }
     }
 }
 

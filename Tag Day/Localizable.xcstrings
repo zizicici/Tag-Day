@@ -7868,6 +7868,34 @@
         }
       }
     },
+    "tags.detail.limitation.alert.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pro users can create unlimited tags (beyond the 5-tag limit)."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pro用户可以创建不限数目的标签（当前限制为5个标签）"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pro用戶可以創建不限數目的標籤（當前限制爲5個標籤）"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pro用戶可以創建不限數目的標籤（當前限制爲5個標籤）"
+          }
+        }
+      }
+    },
     "tags.detail.subtitle" : {
       "localizations" : {
         "en" : {

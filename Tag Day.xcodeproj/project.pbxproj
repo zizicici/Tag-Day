@@ -138,6 +138,7 @@
 		14EBE0882DD76B0B00F7609A /* DurationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14EBE0872DD76B0B00F7609A /* DurationCell.swift */; };
 		14ED63D12DC702F000384068 /* CalendarYearPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14ED63D02DC702F000384068 /* CalendarYearPickerViewController.swift */; };
 		14F4DEA62E11982B0006EB31 /* RecordContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14F4DEA42E1197FA0006EB31 /* RecordContainerView.swift */; };
+		14F92E252E1B839200712D87 /* OverlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14F92E242E1B839200712D87 /* OverlayViewController.swift */; };
 		14FF82A12E03F77E00D3000B /* BackupManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FF82A02E03F77E00D3000B /* BackupManager.swift */; };
 		14FF82A42E03F94400D3000B /* SQLFileBackup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FF82A32E03F94400D3000B /* SQLFileBackup.swift */; };
 		14FF82A72E03F9B100D3000B /* ZipArchive in Frameworks */ = {isa = PBXBuildFile; productRef = 14FF82A62E03F9B100D3000B /* ZipArchive */; };
@@ -291,6 +292,7 @@
 		14ED63D02DC702F000384068 /* CalendarYearPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarYearPickerViewController.swift; sourceTree = "<group>"; };
 		14ED63D22DC72FF100384068 /* Tag Day.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Tag Day.entitlements"; sourceTree = "<group>"; };
 		14F4DEA42E1197FA0006EB31 /* RecordContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordContainerView.swift; sourceTree = "<group>"; };
+		14F92E242E1B839200712D87 /* OverlayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayViewController.swift; sourceTree = "<group>"; };
 		14FF82A02E03F77E00D3000B /* BackupManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupManager.swift; sourceTree = "<group>"; };
 		14FF82A32E03F94400D3000B /* SQLFileBackup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLFileBackup.swift; sourceTree = "<group>"; };
 		14FF82A82E03FD4600D3000B /* BackupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupViewController.swift; sourceTree = "<group>"; };
@@ -648,6 +650,7 @@
 				14D2729A2DC0720600267572 /* UIFont+Extension.swift */,
 				14BD5DF02E1A5A340063DCA9 /* UIApplication+Extension.swift */,
 				14337F7F2DCC6CE50043447A /* Debounce.swift */,
+				14F92E242E1B839200712D87 /* OverlayViewController.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -960,6 +963,7 @@
 				14FFDD662E182B00007C6E44 /* ConsideringUser.swift in Sources */,
 				14FF82BA2E04511000D3000B /* ChineseDay.swift in Sources */,
 				14BD5DF62E1AC4890063DCA9 /* PromotionCell.swift in Sources */,
+				14F92E252E1B839200712D87 /* OverlayViewController.swift in Sources */,
 				14BD5DF12E1A5A340063DCA9 /* UIApplication+Extension.swift in Sources */,
 				14BD5DED2E1A39DC0063DCA9 /* BackupDatabaseIntent.swift in Sources */,
 				14FF82BB2E04511000D3000B /* ChineseCalendarDataSource.swift in Sources */,
