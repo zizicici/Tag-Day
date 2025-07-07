@@ -45,6 +45,10 @@ class BackupManager {
     var iCloudDocumentIsAccessable: Bool {
         return FileManager.iCloudDocumentsURL != nil
     }
+    
+    var allowAutoBackup: Bool {
+        return BackupManager.shared.iCloudDocumentIsAccessable && User.shared.proTier() == .lifetime
+    }
 }
 
 extension BackupManager {
@@ -71,7 +75,7 @@ extension BackupManager {
     }
     
     func handleDatabaseBackup(task: BGProcessingTask) {
-        guard iCloudDocumentIsAccessable, AutoBackup.getValue() == .enable else {
+        guard allowAutoBackup, AutoBackup.getValue() == .enable else {
             task.setTaskCompleted(success: false)
             return
         }

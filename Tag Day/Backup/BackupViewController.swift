@@ -37,12 +37,18 @@ class BackupViewController: UIViewController {
             switch self {
             case .autoBackup:
                 let footer = String(localized: "backup.section.toggle.hint", comment: "The database file will be automatically backed up to the 'Tag Day' folder in iCloud. Up to once per day.")
-
-                if BackupManager.shared.iCloudDocumentIsAccessable {
-                    return footer
-                } else {
-                    return String(localized: "backup.section.toggle.hint2", comment: "This function required iCloud access.") + "\n" + footer
+                
+                var addition: String = ""
+                
+                if !BackupManager.shared.iCloudDocumentIsAccessable {
+                    addition += String(localized: "backup.section.toggle.hint2", comment: "") + "\n"
                 }
+                
+                if User.shared.proTier() == .none {                    
+                    addition += String(localized: "pro.needed") + "\n"
+                }
+                
+                return addition + footer
             case .summary:
                 return nil
             case .database:
@@ -151,7 +157,7 @@ class BackupViewController: UIViewController {
                 case .switch:
                     let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
                     let itemSwitch = UISwitch()
-                    let isEnable = BackupManager.shared.iCloudDocumentIsAccessable
+                    let isEnable = BackupManager.shared.allowAutoBackup
                     let isAutoUpdate = (AutoBackup.getValue() == .enable) && isEnable
                     itemSwitch.isEnabled = isEnable
                     itemSwitch.isOn = isAutoUpdate

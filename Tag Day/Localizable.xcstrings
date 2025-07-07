@@ -1082,19 +1082,19 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "导入数据库将会删除所有现有数据"
+            "value" : "导入数据库将会删除所有现有数据。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "導入數據庫將會刪除所有現有數據"
+            "value" : "導入數據庫將會刪除所有現有數據。"
           }
         },
         "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "導入數據庫將會刪除所有現有數據"
+            "value" : "導入數據庫將會刪除所有現有數據。"
           }
         }
       }
@@ -1169,19 +1169,19 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "数据库文件将会自动同步到iCloud里的标签日文件夹。每天最多备份一次"
+            "value" : "数据库文件将会自动同步到iCloud里的标签日文件夹。每天最多备份一次。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "數據庫文件將會自動同步到iCloud裏的標籤日文件夾。每天最多備份一次"
+            "value" : "數據庫文件將會自動同步到iCloud裏的標籤日文件夾。每天最多備份一次。"
           }
         },
         "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "數據庫文件將會自動同步到iCloud裏的標籤日文件夾。每天最多備份一次"
+            "value" : "數據庫文件將會自動同步到iCloud裏的標籤日文件夾。每天最多備份一次。"
           }
         }
       }
@@ -1192,25 +1192,25 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This function required iCloud access."
+            "value" : "This function required iCloud Drive access."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "此功能需用户已开启iCloud云盘"
+            "value" : "此功能需要iCloud云盘访问权限。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "此功能需用戶已開啓iCloud雲盤"
+            "value" : "此功能需要iCloud雲碟訪問權限。"
           }
         },
         "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "此功能需用戶已開啓iCloud雲盤"
+            "value" : "此功能需要iCloud雲碟訪問權限。"
           }
         }
       }
@@ -5530,6 +5530,34 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "通知"
+          }
+        }
+      }
+    },
+    "pro.needed" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This function required Pro Membership."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此功能需要升级为Pro。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此功能需要升級爲Pro。"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此功能需要升級爲Pro。"
           }
         }
       }
