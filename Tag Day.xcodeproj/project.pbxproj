@@ -60,6 +60,8 @@
 		14BD5DED2E1A39DC0063DCA9 /* BackupDatabaseIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BD5DEC2E1A39DC0063DCA9 /* BackupDatabaseIntent.swift */; };
 		14BD5DEF2E1A3EDD0063DCA9 /* OpenBookIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BD5DEE2E1A3EDD0063DCA9 /* OpenBookIntent.swift */; };
 		14BD5DF12E1A5A340063DCA9 /* UIApplication+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BD5DF02E1A5A340063DCA9 /* UIApplication+Extension.swift */; };
+		14BD5DF32E1A62600063DCA9 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BD5DF22E1A62600063DCA9 /* Store.swift */; };
+		14BD5DF62E1AC4890063DCA9 /* PromotionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BD5DF52E1AC4890063DCA9 /* PromotionCell.swift */; };
 		14C7134B2DD21DF8007527C5 /* GetAllRecordsByDateIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C7134A2DD21DF8007527C5 /* GetAllRecordsByDateIntent.swift */; };
 		14C7134E2DD22F86007527C5 /* RecordEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C7134D2DD22F86007527C5 /* RecordEntity.swift */; };
 		14C713502DD22F9B007527C5 /* BookEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C7134F2DD22F9B007527C5 /* BookEntity.swift */; };
@@ -224,6 +226,8 @@
 		14BD5DEC2E1A39DC0063DCA9 /* BackupDatabaseIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupDatabaseIntent.swift; sourceTree = "<group>"; };
 		14BD5DEE2E1A3EDD0063DCA9 /* OpenBookIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenBookIntent.swift; sourceTree = "<group>"; };
 		14BD5DF02E1A5A340063DCA9 /* UIApplication+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extension.swift"; sourceTree = "<group>"; };
+		14BD5DF22E1A62600063DCA9 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
+		14BD5DF52E1AC4890063DCA9 /* PromotionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromotionCell.swift; sourceTree = "<group>"; };
 		14C7134A2DD21DF8007527C5 /* GetAllRecordsByDateIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetAllRecordsByDateIntent.swift; sourceTree = "<group>"; };
 		14C7134D2DD22F86007527C5 /* RecordEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordEntity.swift; sourceTree = "<group>"; };
 		14C7134F2DD22F9B007527C5 /* BookEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookEntity.swift; sourceTree = "<group>"; };
@@ -460,6 +464,7 @@
 				14FF82A22E03F78500D3000B /* Backup */,
 				14CAA2D42E0EA2D500096D98 /* Notification */,
 				14D2729E2DC072D700267572 /* Settings */,
+				14BD5DF42E1A62670063DCA9 /* Store */,
 				14C7134C2DD21E31007527C5 /* Intent */,
 				14CFE3AB2E1269140021A1AE /* SharedData */,
 				14D2729C2DC0721000267572 /* Extension */,
@@ -486,6 +491,14 @@
 				14D272922DC071B000267572 /* View */,
 			);
 			path = Calendar;
+			sourceTree = "<group>";
+		};
+		14BD5DF42E1A62670063DCA9 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				14BD5DF22E1A62600063DCA9 /* Store.swift */,
+			);
+			path = Store;
 			sourceTree = "<group>";
 		};
 		14C7134C2DD21E31007527C5 /* Intent */ = {
@@ -686,6 +699,7 @@
 				14D272B92DC0884E00267572 /* MoreViewController.swift */,
 				14D272BA2DC0884E00267572 /* SettingOptionsViewController.swift */,
 				14D272BB2DC0884E00267572 /* SpecificationsViewController.swift */,
+				14BD5DF52E1AC4890063DCA9 /* PromotionCell.swift */,
 			);
 			path = More;
 			sourceTree = "<group>";
@@ -945,6 +959,7 @@
 				14FFDD622E17B19E007C6E44 /* SnapInfoCell.swift in Sources */,
 				14FFDD662E182B00007C6E44 /* ConsideringUser.swift in Sources */,
 				14FF82BA2E04511000D3000B /* ChineseDay.swift in Sources */,
+				14BD5DF62E1AC4890063DCA9 /* PromotionCell.swift in Sources */,
 				14BD5DF12E1A5A340063DCA9 /* UIApplication+Extension.swift in Sources */,
 				14BD5DED2E1A39DC0063DCA9 /* BackupDatabaseIntent.swift in Sources */,
 				14FF82BB2E04511000D3000B /* ChineseCalendarDataSource.swift in Sources */,
@@ -960,6 +975,7 @@
 				14FF82A42E03F94400D3000B /* SQLFileBackup.swift in Sources */,
 				14833D372DC50420001B61D5 /* Tag.swift in Sources */,
 				14B239B62DBF13F30007152C /* SceneDelegate.swift in Sources */,
+				14BD5DF32E1A62600063DCA9 /* Store.swift in Sources */,
 				14BBA37A2DCB142900AD7BAC /* ColorPickerCell.swift in Sources */,
 				14ACBE562DBFAD2E0056B1FD /* TabbarController.swift in Sources */,
 				14AA90542DFE7EDE00EA331A /* TagInfoCell.swift in Sources */,
