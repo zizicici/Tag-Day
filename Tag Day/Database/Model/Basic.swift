@@ -61,3 +61,31 @@ struct DayRecord: Identifiable, Hashable, Codable {
         case id, bookID = "book_id", tagID = "tag_id", day, comment, startTime = "start_time", endTime = "end_time", duration, order
     }
 }
+
+struct BookConfig: Identifiable, Hashable, Codable {
+    var id: Int64?
+    
+    var bookID: Int64
+    var notificationTime: Int64?
+    var notificationText: String?
+    var repeatWeekday: String?
+    
+    enum CodingKeys: String, CodingKey {
+        case id, bookID = "book_id", notificationTime = "notification_time", notificationText = "notification_text", repeatWeekday = "repeat_weekday"
+    }
+}
+
+extension BookConfig {
+    var isNotificationOn: Bool {
+        return notificationTime != nil
+    }
+    
+    mutating func update(to enable: Bool) {
+        if enable {
+            notificationTime = Int64(3600 * 1000 * 20)
+        } else {
+            notificationText = nil
+            notificationTime = nil
+        }
+    }
+}

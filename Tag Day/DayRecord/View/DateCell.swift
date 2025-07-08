@@ -16,9 +16,9 @@ struct DateCellItem: Hashable {
         case time
     }
     
-    var title: String
+    var title: String?
     var nanoSecondsFrom1970: Int64?
-    var day: GregorianDay
+    var day: GregorianDay?
     var mode: Mode = .dateAndTime
 }
 
@@ -62,11 +62,7 @@ class DateCell: DateBaseCell {
             return
         }
         
-        let datePicker = UIDatePicker(frame: CGRect.zero, primaryAction: UIAction(handler: { [weak self] _ in
-            if let date = self?.datePicker?.date {
-                self?.selectDateAction?(date.nanoSecondSince1970)
-            }
-        }))
+        let datePicker = UIDatePicker(frame: CGRect.zero)
         datePicker.datePickerMode = .dateAndTime
         datePicker.tintColor = AppColor.dynamicColor
         contentView.addSubview(datePicker)
@@ -80,6 +76,14 @@ class DateCell: DateBaseCell {
         listContentView.snp.makeConstraints { make in
             make.leading.top.bottom.equalTo(contentView)
             make.trailing.equalTo(datePicker.snp.leading)
+        }
+        
+        datePicker.addTarget(self, action: #selector(editingDidEnd), for: UIControl.Event.editingDidEnd)
+    }
+    
+    @objc func editingDidEnd() {
+        if let date = datePicker?.date {
+            selectDateAction?(date.nanoSecondSince1970)
         }
     }
     
@@ -95,14 +99,18 @@ class DateCell: DateBaseCell {
             switch dateItem.mode {
             case .date:
                 datePicker?.datePickerMode = .date
-                datePicker?.date = dateItem.day.generateDate(secondsFromGMT: Calendar.current.timeZone.secondsFromGMT()) ?? Date()
+                datePicker?.date = dateItem.day?.generateDate(secondsFromGMT: Calendar.current.timeZone.secondsFromGMT()) ?? Date()
                 pronunciationText = datePicker?.date.formatted(date: .long, time: .omitted) ?? ""
             case .dateAndTime:
                 datePicker?.datePickerMode = .dateAndTime
                 if let nanoSecondsFrom1970 = dateItem.nanoSecondsFrom1970 {
                     datePicker?.date = Date(nanoSecondSince1970: nanoSecondsFrom1970)
                 } else {
-                    datePicker?.date = Date().combine(with: dateItem.day)
+                    if let day = dateItem.day {
+                        datePicker?.date = Date().combine(with: day)
+                    } else {
+                        datePicker?.date = Date()
+                    }
                 }
                 pronunciationText = datePicker?.date.formatted(date: .long, time: .standard) ?? ""
             case .time:
@@ -115,7 +123,7 @@ class DateCell: DateBaseCell {
                 pronunciationText = datePicker?.date.formatted(date: .omitted, time: .standard) ?? ""
             }
 
-            accessibilityLabel = dateItem.title + ":" + pronunciationText
+            accessibilityLabel = (dateItem.title ?? "") + ":" + pronunciationText
         }
         isAccessibilityElement = true
         accessibilityTraits = .button

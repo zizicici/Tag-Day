@@ -67,6 +67,15 @@ final class AppDatabase {
                 table.column("order", .integer).notNull()
             }
             
+            try db.create(table: "book_config") { table in
+                table.autoIncrementedPrimaryKey("id")
+                
+                table.column("book_id", .integer).notNull()
+                table.column("notification_time", .integer)
+                table.column("notification_text", .text)
+                table.column("repeat_weekday", .text)
+            }
+            
             if true {
                 var firstBook = Book(title: String(localized: "database.firstBook"), color: AppColor.main.generateLightDarkString(), symbol: "latch.2.case", order: 0)
                 try? firstBook.save(db)
@@ -369,6 +378,91 @@ extension AppDatabase {
                 let bookIDColumn = DayRecord.Columns.bookID
                 let dayColumn = DayRecord.Columns.day
                 try DayRecord.filter(bookIDColumn == bookID && dayColumn == day).deleteAll(db)
+            }
+        }
+        catch {
+            print(error)
+            return false
+        }
+        NotificationCenter.default.post(Notification(name: Notification.Name.DatabaseUpdated))
+        return true
+    }
+}
+
+// Book Configs
+extension AppDatabase {
+    func update(bookConfig: BookConfig) -> Bool {
+        guard bookConfig.id != nil else {
+            // No ID
+            return false
+        }
+        do {
+            _ = try dbWriter?.write{ db in
+                try bookConfig.update(db)
+            }
+        }
+        catch {
+            print(error)
+            return false
+        }
+        NotificationCenter.default.post(Notification(name: Notification.Name.DatabaseUpdated))
+        return true
+    }
+    
+    func update(bookConfigs: [BookConfig]) -> Bool {
+        guard !bookConfigs.contains(where: { $0.id == nil }) else {
+            // No ID
+            return false
+        }
+        do {
+            _ = try dbWriter?.write{ db in
+                for book in bookConfigs {
+                    try book.update(db)
+                }
+            }
+        }
+        catch {
+            print(error)
+            return false
+        }
+        NotificationCenter.default.post(Notification(name: Notification.Name.DatabaseUpdated))
+        return true
+    }
+    
+    func add(bookConfig: BookConfig) -> Bool {
+        guard bookConfig.id == nil else {
+            // Should no ID
+            return false
+        }
+        var saveBookConfig: BookConfig = bookConfig
+        do {
+            _ = try dbWriter?.write{ db in
+                try saveBookConfig.save(db)
+            }
+        }
+        catch {
+            print(error)
+            return false
+        }
+        NotificationCenter.default.post(Notification(name: Notification.Name.DatabaseUpdated))
+        return true
+    }
+    
+    func delete(bookConfig: BookConfig) -> Bool {
+        guard let bookConfigID = bookConfig.id else {
+            return false
+        }
+        do {
+            _ = try dbWriter?.write{ db in
+                try BookConfig.deleteAll(db, ids: [bookConfigID])
+                // Delete Day Records
+                let bookIDColumnInDayRecord = DayRecord.Columns.bookID
+                let dayRecordRequest = DayRecord.filter(bookIDColumnInDayRecord == bookConfigID)
+                try dayRecordRequest.deleteAll(db)
+                // Delete Tags
+                let bookIDColumnInTag = Tag.Columns.bookID
+                let tagRequest = Tag.filter(bookIDColumnInTag == bookConfigID)
+                try tagRequest.deleteAll(db)
             }
         }
         catch {

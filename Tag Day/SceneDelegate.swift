@@ -22,8 +22,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.rootViewController = NavigationController(rootViewController: MainViewController())
         window?.makeKeyAndVisible()
         
+        UNUserNotificationCenter.current().delegate = self
+        
         if let urlContext = connectionOptions.urlContexts.first {
             handleURL(urlContext.url)
+        } else if let userInfo = connectionOptions.notificationResponse?.notification.request.content.userInfo {
+            handleNotificationUserInfo(userInfo)
         }
     }
 
@@ -66,5 +70,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             DataManager.shared.select(bookID: bookID)
         }
     }
+    
+    func handleNotificationUserInfo(_ userInfo: [AnyHashable : Any]) {
+        guard let bookID = userInfo["bookID"] as? Int64 else { return }
+        DataManager.shared.select(bookID: bookID)
+    }
 }
 
+extension SceneDelegate: UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        handleNotificationUserInfo(response.notification.request.content.userInfo)
+        completionHandler()
+    }
+}

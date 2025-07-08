@@ -466,10 +466,10 @@ extension DataManager {
         var result: [DayRecord] = []
         try AppDatabase.shared.reader?.read { db in
             do {
-                let bookIDColumn = DayRecord.Columns.tagID
+                let tagIDColumn = DayRecord.Columns.tagID
                 let dayColumn = DayRecord.Columns.day
                 result = try DayRecord
-                    .filter(bookIDColumn == tagID)
+                    .filter(tagIDColumn == tagID)
                     .order(dayColumn.asc)
                     .fetchAll(db)
             }
@@ -485,10 +485,10 @@ extension DataManager {
         var result: [DayRecord] = []
         try AppDatabase.shared.reader?.read { db in
             do {
-                let bookIDColumn = DayRecord.Columns.tagID
+                let tagIDColumn = DayRecord.Columns.tagID
                 let dayColumn = DayRecord.Columns.day
                 result = try DayRecord
-                    .filter(bookIDColumn == tagID)
+                    .filter(tagIDColumn == tagID)
                     .filter(dayColumn <= to && dayColumn >= from)
                     .fetchAll(db)
             }
@@ -529,6 +529,52 @@ extension DataManager {
         let lastOrder = fetchLastRecordOrder(bookID: Int64(bookID), day: Int64(day))
         let newRecord = DayRecord(bookID: Int64(bookID), tagID: Int64(tagID), day: Int64(day), startTime: Int64(dayRecord.date), order: lastOrder + 1)
         return add(dayRecord: newRecord)
+    }
+}
+
+// Book Config
+extension DataManager {
+    func fetchAllBookConfigs() throws -> [BookConfig] {
+        var result: [BookConfig] = []
+        try AppDatabase.shared.reader?.read { db in
+            do {
+                result = try BookConfig
+                    .fetchAll(db)
+            }
+            catch {
+                print(error)
+            }
+        }
+        
+        return result
+    }
+    
+    func fetchBookConfig(bookID: Int64) throws -> BookConfig? {
+        var result: BookConfig? = nil
+        try AppDatabase.shared.reader?.read { db in
+            do {
+                let bookIDColumn = BookConfig.Columns.bookID
+                result = try BookConfig
+                    .filter(bookIDColumn == bookID)
+                    .fetchOne(db)
+            }
+            catch {
+                print(error)
+            }
+        }
+        return result
+    }
+    
+    func add(bookConfig: BookConfig) -> Bool {
+        return AppDatabase.shared.add(bookConfig: bookConfig)
+    }
+    
+    func update(bookConfig: BookConfig) -> Bool {
+        return AppDatabase.shared.update(bookConfig: bookConfig)
+    }
+    
+    func delete(bookConfig: BookConfig) -> Bool {
+        return AppDatabase.shared.delete(bookConfig: bookConfig)
     }
 }
 
