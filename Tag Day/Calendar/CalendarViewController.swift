@@ -70,6 +70,9 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     private var yearButton: UIBarButtonItem?
     private var settingsButton: UIBarButtonItem?
     private var moreButton: UIBarButtonItem?
+    
+    // Search
+    let searchController = UISearchController(searchResultsController: nil)
 
     // Data
     
@@ -132,6 +135,8 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     // Debounce
     private var reloadDataDebounce: Debounce<Int>!
     
+    private var searchDebounce: Debounce<String>!
+    
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         
@@ -158,13 +163,16 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         
         addGestures()
         
+        let searchButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(showSearchBar))
+        searchButton.tintColor = AppColor.dynamicColor
+        
         settingsButton = UIBarButtonItem(image: UIImage(systemName: "slider.horizontal.2.square", withConfiguration: UIImage.SymbolConfiguration(weight: .medium)), style: .plain, target: nil, action: nil)
         settingsButton?.tintColor = AppColor.dynamicColor
         
         moreButton = UIBarButtonItem(image: UIImage(systemName: "ellipsis", withConfiguration: UIImage.SymbolConfiguration(weight: .medium)), style: .plain, target: self, action: #selector(moreAction))
         moreButton?.tintColor = AppColor.dynamicColor
         
-        navigationItem.rightBarButtonItems = [moreButton, settingsButton].compactMap{ $0 }
+        navigationItem.rightBarButtonItems = [moreButton, settingsButton, searchButton].compactMap{ $0 }
         
         yearButton = UIBarButtonItem(title: displayHandler.getTitle(), style: .plain, target: self, action: #selector(showYearPicker))
         yearButton?.tintColor = AppColor.dynamicColor
@@ -174,12 +182,22 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
             await self?.commit()
         })
         
+        searchDebounce = Debounce(duration: 0.5, block: { [weak self] value in
+            await self?.commit()
+        })
+        
         view.addSubview(snapView)
         snapView.snp.makeConstraints { make in
             make.leading.trailing.equalTo(view).inset(40)
             make.top.equalTo(view.safeAreaLayoutGuide).inset(40)
             make.height.equalTo(200)
         }
+        
+        searchController.searchResultsUpdater = self
+        searchController.delegate = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = String(localized: "search")
+        searchController.searchBar.tintColor = AppColor.dynamicColor
         
         NotificationCenter.default.addObserver(self, selector: #selector(needReload), name: .CurrentBookChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(needReload), name: .ActiveTagsUpdated, object: nil)
@@ -367,8 +385,9 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         collectionView.backgroundColor = AppColor.background
         collectionView.delaysContentTouches = false
         collectionView.canCancelContentTouches = true
-        collectionView.scrollsToTop = false
+        collectionView.scrollsToTop = true
         collectionView.delegate = self
+        collectionView.keyboardDismissMode = .onDrag
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(view)
@@ -393,7 +412,13 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     private func applyData() {
         book = DataManager.shared.currentBook
         tags = DataManager.shared.activeTags
-        records = DataManager.shared.dayRecords
+        records = DataManager.shared.dayRecords.filter({ dayRecord in
+            if let searchText = self.searchText {
+                return dayRecord.comment?.contains(searchText) == true
+            } else {
+                return true
+            }
+        })
         if let snapshot = displayHandler.getSnapshot(tags: tags, records: records) {
             sectionRecordMaxCount = getMaxRecordsPerSection(from: snapshot, activeTags: tags, shouldDeduplicate: getTagDisplayType() == .aggregation)
             dataSource.apply(snapshot, animatingDifferences: true) { [weak self] in
@@ -485,6 +510,24 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     func switchEditMode(to editMode: EditMode) {
         self.editMode = editMode
         updateSettingsMenu()
+    }
+    
+    var searchText: String? {
+        if let text = searchController.searchBar.text, !text.isBlank, !text.isEmpty {
+            return text
+        } else {
+            return nil
+        }
+    }
+    
+    @objc
+    func showSearchBar() {
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+            self.searchController.isActive = true
+            self.searchController.searchBar.becomeFirstResponder()
+        }
     }
 }
 
@@ -602,6 +645,24 @@ extension CalendarViewController {
         }
         
         return result
+    }
+}
+
+extension CalendarViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        searchDebounce.emit(value: searchController.searchBar.text ?? "")
+    }
+}
+
+extension CalendarViewController: UISearchControllerDelegate {
+    func willPresentSearchController(_ searchController: UISearchController) {
+        searchController.searchBar.tintColor = AppColor.dynamicColor
+    }
+    
+    func willDismissSearchController(_ searchController: UISearchController) {
+        UIView.animate(withDuration: 0.2) {
+            self.navigationItem.searchController = nil
+        }
     }
 }
 
