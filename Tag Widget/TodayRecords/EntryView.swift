@@ -168,8 +168,7 @@ struct TagButtonView: View {
     
     // 单列视图
     private func columnView(for column: Int) -> some View {
-        VStack(alignment: .center, spacing: 2) {
-            Spacer(minLength: 0)
+        VStack(alignment: .center, spacing: 8) {
             let startIndex = pageIndex * tagsPerPage + column * tagsPerColumn
             let endIndex = min(startIndex + tagsPerColumn, tags.count)
             
@@ -183,10 +182,9 @@ struct TagButtonView: View {
             // 补充不足的按钮以保持高度一致
             if endIndex - startIndex < tagsPerColumn {
                 ForEach(0..<(tagsPerColumn - (endIndex - startIndex)), id: \.self) { _ in
-                    Color.clear.frame(height: 40) // 保持高度一致
+                    Color.clear.frame(height: 36) // 保持高度一致
                 }
             }
-            Spacer(minLength: 0)
         }
     }
     
@@ -206,13 +204,16 @@ struct TagButtonView: View {
                 .foregroundStyle(tag.widgetTitleColor)
                 .widgetAccentable()
                 .frame(maxWidth: .infinity)
+                .frame(height: 30)
+                .padding(.horizontal, -6)
+                .padding(.vertical, -4)
         }
         .buttonStyle(widgetRenderingMode == .fullColor ?
                     AnyPrimitiveButtonStyle(.borderedProminent) :
                     AnyPrimitiveButtonStyle(.bordered))
         .tint(tag.widgetColor)
         .buttonBorderShape(.roundedRectangle(radius: 8))
-        .frame(height: 40)
+        .frame(height: 36)
     }
     
     // 无标签时的提示视图
