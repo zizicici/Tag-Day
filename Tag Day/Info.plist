@@ -19,6 +19,18 @@
 			</array>
 		</dict>
 	</array>
+	<key>NSUbiquitousContainers</key>
+	<dict>
+		<key>iCloud.com.zizicici.tag</key>
+		<dict>
+			<key>NSUbiquitousContainerIsDocumentScopePublic</key>
+			<true/>
+			<key>NSUbiquitousContainerName</key>
+			<string>Tag Day</string>
+			<key>NSUbiquitousContainerSupportedFolderLevels</key>
+			<string>Any</string>
+		</dict>
+	</dict>
 	<key>NSUserNotificationsUsageDescription</key>
 	<string>$(NSUserNotificationsUsageDescription)</string>
 	<key>UIApplicationSceneManifest</key>
