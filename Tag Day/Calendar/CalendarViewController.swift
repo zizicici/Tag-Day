@@ -163,10 +163,12 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         
         addGestures()
         
-        let searchButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(showSearchBar))
+        let searchButton = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass.circle", withConfiguration: UIImage.SymbolConfiguration(weight: .medium)), style: .plain, target: self, action: #selector(showSearchBar))
+        searchButton.accessibilityLabel = String(localized: "search")
         searchButton.tintColor = AppColor.dynamicColor
         
         settingsButton = UIBarButtonItem(image: UIImage(systemName: "slider.horizontal.2.square", withConfiguration: UIImage.SymbolConfiguration(weight: .medium)), style: .plain, target: nil, action: nil)
+        settingsButton?.accessibilityLabel = String(localized: "display.settings")
         settingsButton?.tintColor = AppColor.dynamicColor
         
         moreButton = UIBarButtonItem(image: UIImage(systemName: "ellipsis", withConfiguration: UIImage.SymbolConfiguration(weight: .medium)), style: .plain, target: self, action: #selector(moreAction))
