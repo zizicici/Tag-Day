@@ -235,7 +235,7 @@ struct WidgetSelectTagActionIntent: AppIntent {
         let stateManager = WidgetStateManager.shared
         stateManager.saveState(kind: kind, family: family, bookID: bookID, state: .idle)
         
-        WidgetCenter.shared.reloadTimelines(ofKind: kind)
+        WidgetCenter.shared.reloadAllTimelines()
         
         return .result(value: true)
     }
