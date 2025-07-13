@@ -26,7 +26,6 @@
 		14980E322E110E95009622BF /* TagWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14980E312E110E95009622BF /* TagWidgetBundle.swift */; };
 		14980E342E110E95009622BF /* Widget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14980E332E110E95009622BF /* Widget.swift */; };
 		14980E362E110E95009622BF /* ConfigurationAppIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14980E352E110E95009622BF /* ConfigurationAppIntent.swift */; };
-		14980E382E110E96009622BF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 14980E372E110E96009622BF /* Assets.xcassets */; };
 		14980E3C2E110E96009622BF /* Tag Widget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 14980E2A2E110E95009622BF /* Tag Widget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		14AA3E072DCDB31300E1F4F8 /* RecordListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AA3E062DCDB31300E1F4F8 /* RecordListViewController.swift */; };
 		14AA3E0B2DCDF3BE00E1F4F8 /* RecordListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AA3E0A2DCDF3BE00E1F4F8 /* RecordListCell.swift */; };
@@ -86,6 +85,7 @@
 		14CFE3B42E127E120021A1AE /* BookEntity+App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CFE3B32E127E120021A1AE /* BookEntity+App.swift */; };
 		14CFE3B82E127E6C0021A1AE /* BookEntity+Widget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CFE3B62E127E6C0021A1AE /* BookEntity+Widget.swift */; };
 		14CFE3BA2E127EB40021A1AE /* BookEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C7134F2DD22F9B007527C5 /* BookEntity.swift */; };
+		14CFE5452E236318004A253A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 14B239AF2DBF13F30007152C /* Assets.xcassets */; };
 		14D035EA2E01156D00E32E91 /* TagStatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D035E92E01156D00E32E91 /* TagStatisticsViewController.swift */; };
 		14D07CC32DD2ED4900F6843C /* RecordDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D07CC22DD2ED4900F6843C /* RecordDetailViewController.swift */; };
 		14D07CC52DD2F09900F6843C /* TextViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D07CC42DD2F09900F6843C /* TextViewCell.swift */; };
@@ -202,7 +202,6 @@
 		14980E312E110E95009622BF /* TagWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagWidgetBundle.swift; sourceTree = "<group>"; };
 		14980E332E110E95009622BF /* Widget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Widget.swift; sourceTree = "<group>"; };
 		14980E352E110E95009622BF /* ConfigurationAppIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationAppIntent.swift; sourceTree = "<group>"; };
-		14980E372E110E96009622BF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		14980E392E110E96009622BF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		14AA3E062DCDB31300E1F4F8 /* RecordListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListViewController.swift; sourceTree = "<group>"; };
 		14AA3E0A2DCDF3BE00E1F4F8 /* RecordListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListCell.swift; sourceTree = "<group>"; };
@@ -369,7 +368,6 @@
 			isa = PBXGroup;
 			children = (
 				14CFE3A32E1231C80021A1AE /* Tag Widget.entitlements */,
-				14980E372E110E96009622BF /* Assets.xcassets */,
 				14980E392E110E96009622BF /* Info.plist */,
 				14980E312E110E95009622BF /* TagWidgetBundle.swift */,
 				14E900BD2E13765900F9D0DC /* TodayRecords */,
@@ -907,8 +905,8 @@
 			files = (
 				14E71B212E13925B001CA8EE /* kyureki.json in Resources */,
 				14E71B222E13925F001CA8EE /* HKO1901_2099.json in Resources */,
+				14CFE5452E236318004A253A /* Assets.xcassets in Resources */,
 				14E71B1F2E138BB1001CA8EE /* Localizable.xcstrings in Resources */,
-				14980E382E110E96009622BF /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
