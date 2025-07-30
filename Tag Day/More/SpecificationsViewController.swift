@@ -73,7 +73,7 @@ class SpecificationsViewController: UIViewController {
                 case .publisher:
                     return "ZIZICICI LIMITED"
                 case .date:
-                    return "2025/07/25"
+                    return "2025/07/30"
                 case .license:
                     return "粤ICP备2025448771号-1A"
                 }
@@ -101,7 +101,22 @@ class SpecificationsViewController: UIViewController {
                     name: "Toast",
                     version: "5.1.1"
                 )
-                return [SnapKit, GRDB, Toast]
+                let DurationPicker = ThirdParty(
+                    urlString: "https://github.com/mac-gallagher/DurationPicker",
+                    name: "DurationPicker",
+                    version: "1.0.2"
+                )
+                let SymbolPicker = ThirdParty(
+                    urlString: "https://github.com/xnth97/SymbolPicker",
+                    name: "SymbolPicker",
+                    version: "1.6.2"
+                )
+                let ZipArchive = ThirdParty(
+                    urlString: "https://github.com/ZipArchive/ZipArchive",
+                    name: "ZipArchive",
+                    version: "2.6.0"
+                )
+                return [SnapKit, GRDB, Toast, DurationPicker, SymbolPicker, ZipArchive]
             }()
         }
         
