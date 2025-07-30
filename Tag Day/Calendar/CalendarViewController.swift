@@ -460,9 +460,12 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         let monthlyStatsMenu = getMonthlyStatsTypeMenu()
         let todayIndicatorMenu = getTodayIndicatorMenu()
         
-        let displayDivider = UIMenu(title: "", options: [.displayInline], children: [todayIndicatorMenu, tagDisplayMenu, monthlyStatsMenu])
+        children = [todayIndicatorMenu, tagDisplayMenu, monthlyStatsMenu]
         
-        children.append(displayDivider)
+        if #available(iOS 26.0, *) {
+        } else {
+            children.append(getBookTitleDisplayMenu())
+        }
         
         return UIMenu(children: children)
     }

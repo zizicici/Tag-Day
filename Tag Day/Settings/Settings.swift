@@ -18,6 +18,7 @@ extension UserDefaults {
         case TagDisplayType = "com.zizicici.tag.settings.TagDisplayType"
         case MonthlyStatsType = "com.zizicici.tag.settings.MonthlyStatsType"
         case DynamicColor = "com.zizicici.tag.settings.DynamicColor"
+        case BookTitleDisplay = "com.zizicici.tag.settings.BookTitleDisplay"
     }
 }
 
@@ -329,5 +330,41 @@ extension DynamicColorType: UserDefaultSettable {
     
     static func getFooter() -> String? {
         return String(localized: "settings.dynamicColor.hint")
+    }
+}
+
+enum BookTitleDisplay: Int, CaseIterable, Codable {
+    case hidden
+    case display
+}
+
+extension BookTitleDisplay: UserDefaultSettable {
+    static func getKey() -> UserDefaults.Settings {
+        return .BookTitleDisplay
+    }
+    
+    static var defaultOption: BookTitleDisplay {
+        return .display
+    }
+    
+    func getName() -> String {
+        switch self {
+        case .hidden:
+            return String(localized: "settings.bookTitleDisplay.hidden")
+        case .display:
+            return String(localized: "settings.bookTitleDisplay.display")
+        }
+    }
+    
+    static func getTitle() -> String {
+        return String(localized: "settings.bookTitleDisplay.title")
+    }
+    
+    static func getHeader() -> String? {
+        return nil
+    }
+    
+    static func getFooter() -> String? {
+        return nil
     }
 }

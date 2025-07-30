@@ -75,4 +75,21 @@ extension CalendarViewController {
     
         return todayIndicatorMenu
     }
+    
+    func getBookTitleDisplay() -> BookTitleDisplay {
+        return BookTitleDisplay.getValue()
+    }
+    
+    func getBookTitleDisplayMenu() -> UIMenu {
+        let bookTitleDisplayCases: [BookTitleDisplay] = BookTitleDisplay.allCases
+        let bookTitleDisplayActions = bookTitleDisplayCases.map { type in
+            let action = UIAction(title: type.getName(), state: type == getBookTitleDisplay() ? .on : .off) { _ in
+                BookTitleDisplay.setValue(type)
+            }
+            return action
+        }
+        let bookTitleDisplayMenu = UIMenu(title: BookTitleDisplay.getTitle(), subtitle: getBookTitleDisplay().getName(), image: UIImage(systemName: "text.book.closed"), children: bookTitleDisplayActions)
+    
+        return bookTitleDisplayMenu
+    }
 }

@@ -71,6 +71,7 @@ class MainViewController: CalendarViewController {
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(reloadButtomButtons), name: .CurrentBookChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadButtomButtons), name: .SettingsUpdate, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(reloadButtomButtons), name: .ActiveTagsUpdated, object: nil)
 
         reloadButtomButtons()
@@ -118,7 +119,12 @@ class MainViewController: CalendarViewController {
             
             var config = button.configuration
             if let title = DataManager.shared.currentBook?.title {
-                config?.title = title
+                switch BookTitleDisplay.current {
+                case .hidden:
+                    config?.title = nil
+                case .display:
+                    config?.title = title
+                }
             } else {
                 config?.title = String(localized: "books.empty")
             }
