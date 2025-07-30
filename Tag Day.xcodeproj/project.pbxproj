@@ -136,6 +136,7 @@
 		14E900C42E13779A00F9D0DC /* EntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E900C32E13779A00F9D0DC /* EntryView.swift */; };
 		14EBE0862DD7679700F7609A /* DurationPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 14EBE0852DD7679700F7609A /* DurationPicker */; };
 		14EBE0882DD76B0B00F7609A /* DurationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14EBE0872DD76B0B00F7609A /* DurationCell.swift */; };
+		14ED21102E39FACC00BB2C77 /* CheckRecordTagByTextIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14ED210F2E39FACC00BB2C77 /* CheckRecordTagByTextIntent.swift */; };
 		14ED63D12DC702F000384068 /* CalendarYearPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14ED63D02DC702F000384068 /* CalendarYearPickerViewController.swift */; };
 		14F4DEA62E11982B0006EB31 /* RecordContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14F4DEA42E1197FA0006EB31 /* RecordContainerView.swift */; };
 		14F92E252E1B839200712D87 /* OverlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14F92E242E1B839200712D87 /* OverlayViewController.swift */; };
@@ -292,6 +293,7 @@
 		14E900C12E13773D00F9D0DC /* Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entry.swift; sourceTree = "<group>"; };
 		14E900C32E13779A00F9D0DC /* EntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryView.swift; sourceTree = "<group>"; };
 		14EBE0872DD76B0B00F7609A /* DurationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DurationCell.swift; sourceTree = "<group>"; };
+		14ED210F2E39FACC00BB2C77 /* CheckRecordTagByTextIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckRecordTagByTextIntent.swift; sourceTree = "<group>"; };
 		14ED63D02DC702F000384068 /* CalendarYearPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarYearPickerViewController.swift; sourceTree = "<group>"; };
 		14ED63D22DC72FF100384068 /* Tag Day.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Tag Day.entitlements"; sourceTree = "<group>"; };
 		14F4DEA42E1197FA0006EB31 /* RecordContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordContainerView.swift; sourceTree = "<group>"; };
@@ -513,6 +515,7 @@
 				14CC10612E0FACA50076E988 /* AddRecordIntent.swift */,
 				14C7134A2DD21DF8007527C5 /* GetAllRecordsByDateIntent.swift */,
 				14C713542DD23064007527C5 /* CheckRecordIntent.swift */,
+				14ED210F2E39FACC00BB2C77 /* CheckRecordTagByTextIntent.swift */,
 				14BD5DEC2E1A39DC0063DCA9 /* BackupDatabaseIntent.swift */,
 				14BD5DEE2E1A3EDD0063DCA9 /* OpenBookIntent.swift */,
 				14C713522DD22FDC007527C5 /* IntentError.swift */,
@@ -1005,6 +1008,7 @@
 				14C713502DD22F9B007527C5 /* BookEntity.swift in Sources */,
 				14D2727A2DC0716E00267572 /* CalendarViewController+Layout.swift in Sources */,
 				14C713552DD23064007527C5 /* CheckRecordIntent.swift in Sources */,
+				14ED21102E39FACC00BB2C77 /* CheckRecordTagByTextIntent.swift in Sources */,
 				14D272942DC071B000267572 /* MonthTitleSupplementaryView.swift in Sources */,
 				14CFE3B42E127E120021A1AE /* BookEntity+App.swift in Sources */,
 				14D272952DC071B000267572 /* ImpactGenerator.swift in Sources */,
