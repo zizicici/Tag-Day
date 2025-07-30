@@ -325,7 +325,7 @@ extension RecordListViewController: RecordListCellDelegate {
             self?.showDeleteAlert(for: record)
         }
         
-        let actionDivider = UIMenu(title: String(localized: "dayDetail.tagMenu.more"), children: [deleteAction])
+        let actionDivider = UIMenu(title: String(localized: "dayDetail.tagMenu.more"), options: .displayInline, children: [deleteAction])
         children.append(actionDivider)
         
         return UIMenu(title: "", children: children)
