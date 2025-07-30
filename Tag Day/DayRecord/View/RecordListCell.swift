@@ -65,6 +65,7 @@ class RecordListCell: RecordListBaseCell {
         })
         configuration.titleLineBreakMode = .byTruncatingTail
         configuration.subtitleLineBreakMode = .byTruncatingTail
+        configuration.background.strokeColor = AppColor.text.withAlphaComponent(0.33)
         let button = UIButton(configuration: configuration)
         return button
     }()
@@ -194,6 +195,11 @@ class RecordListCell: RecordListBaseCell {
                 var config = button.configuration
                 config?.title = title
                 config?.baseForegroundColor = tagTitleColor
+                if tagColor.isSimilar(to: AppColor.background) {
+                    config?.background.strokeWidth = 1.0
+                } else {
+                    config?.background.strokeWidth = 0.0
+                }
                 
                 button.accessibilityValue = title
                 
