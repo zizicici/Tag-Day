@@ -102,3 +102,9 @@ extension Tag: Equatable {
         return lhs.hashValue == rhs.hashValue
     }
 }
+
+extension Tag {
+    static func empty() -> Self {
+        Self.init(bookID: -1, title: "", subtitle: "", color: "", order: -1)
+    }
+}

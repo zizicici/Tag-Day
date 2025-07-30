@@ -115,6 +115,13 @@ class TagLayer: CALayer {
     
     // MARK: - Update Content
     func update(title: String, count: Int = 1, tagColor: String, textColor: String, isDark: Bool) {
+        var tagColor = tagColor
+        var textColor = textColor
+        if tagColor.isEmpty || tagColor.isBlank {
+            let tag = Tag.empty()
+            tagColor = tag.dynamicColor.generateLightDarkString(isDark ? .dark : .light)
+            textColor = tag.dynamicTitleColor.generateLightDarkString(isDark ? .dark : .light)
+        }
         displayInfo = DisplayInfo(title: title, count: count, tagColor: tagColor, textColor: textColor, boundWidth: bounds.width, isDark: isDark)
     }
     

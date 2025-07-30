@@ -43,7 +43,10 @@ class TagDetailViewController: UIViewController {
     
     private var tagColor: UIColor {
         get {
-            tag.dynamicColor
+            if tag.color.isEmpty || tag.color.isBlank {
+                tag.color = tag.dynamicColor.generateLightDarkString()
+            }
+            return tag.dynamicColor
         }
         set {
             tag.color = newValue.generateLightDarkString()
