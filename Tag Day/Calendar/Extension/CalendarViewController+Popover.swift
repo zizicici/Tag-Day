@@ -26,6 +26,7 @@ extension CalendarViewController {
 
         if let popover = nav.popoverPresentationController {
             popover.sourceView = sourceView
+            popover.sourceRect = sourceView.bounds
             popover.permittedArrowDirections = arrowDirections
         }
     }

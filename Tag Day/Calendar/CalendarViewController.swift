@@ -616,6 +616,7 @@ extension CalendarViewController: DayPresenter {
         collectionView.scrollRectToVisible(cell.frame, animated: ConsideringUser.animated)
         
         popover.sourceView = cell
+        popover.sourceRect = cell.bounds
     }
 }
 

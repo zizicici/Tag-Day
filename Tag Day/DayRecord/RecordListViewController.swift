@@ -409,6 +409,7 @@ extension RecordListViewController {
         
         if let popover = nav.popoverPresentationController {
             popover.sourceView = sourceView
+            popover.sourceRect = sourceView.bounds
             popover.permittedArrowDirections = [.up, .down]
         }
     }
