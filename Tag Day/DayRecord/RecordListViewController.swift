@@ -451,13 +451,19 @@ extension UIViewController {
             alertController.addAction(commentAction)
             alertController.addAction(cancelAction)
             
+            if let popoverController = alertController.popoverPresentationController {
+                popoverController.sourceView = view
+                popoverController.sourceRect = view.bounds
+                popoverController.permittedArrowDirections = []
+            }
+            
             present(alertController, animated: ConsideringUser.animated)
             
             Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
                 remainingTime -= 1
                 alertController.message = String(format: String(localized: "dayDetail.tagMenu.alert.message%i"), remainingTime)
                 
-                if remainingTime <= 0 {
+                if remainingTime <= 1 {
                     timer.invalidate()
                     alertController.dismiss(animated: ConsideringUser.animated, completion: nil)
                 }
