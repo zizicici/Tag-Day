@@ -8,6 +8,13 @@
 import UIKit
 import ZCCalendar
 import WidgetKit
+import StoreKit
+
+extension UserDefaults {
+    enum Support: String {
+        case AppReviewRequestDate = "com.zizicici.common.support.AppReviewRequestDate"
+    }
+}
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,6 +22,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         
         DataManager.shared.syncSharedData()
+        
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 5.0) {
+            self.requestAppReview()
+        }
         
         BackupManager.shared.registerBGTasks()
         
@@ -61,5 +72,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func reloadWidget() {
         WidgetCenter.shared.reloadAllTimelines()
+    }
+}
+
+extension AppDelegate {
+    func requestAppReview() {
+        do {
+            guard let creationDate = try AppDatabase.getDatabaseCreationDate() else { return }
+            guard let daysSinceCreation = Calendar.current.dateComponents([.day], from: creationDate, to: Date()).day else { return }
+            guard daysSinceCreation >= 10 else { return }
+            
+            let userDefaultsFlag: Bool
+            let userDefaultsKey = UserDefaults.Support.AppReviewRequestDate.rawValue
+            if let storedJDN = UserDefaults.standard.getInt(forKey: userDefaultsKey) {
+                userDefaultsFlag = (ZCCalendar.manager.today.julianDay - storedJDN) >= 180
+            } else {
+                userDefaultsFlag = true
+            }
+            
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene, userDefaultsFlag {
+                UserDefaults.standard.set(ZCCalendar.manager.today.julianDay, forKey: userDefaultsKey)
+                AppStore.requestReview(in: windowScene)
+            }
+        } catch {
+            print("\(error.localizedDescription)")
+        }
     }
 }

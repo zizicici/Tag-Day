@@ -11,6 +11,8 @@ import GRDB
 extension AppDatabase {
     static let shared = makeShared()
     
+    static let dbName: String = "db.sqlite"
+    
     private static func makeShared() -> AppDatabase {
         do {
             let databasePool = try generateDatabasePool()
@@ -29,7 +31,7 @@ extension AppDatabase {
         try FileManager().createDirectory(at: folderURL, withIntermediateDirectories: true)
         setProtectionForDirectory(at: folderURL)
         
-        let dbURL = folderURL.appendingPathComponent("db.sqlite")
+        let dbURL = folderURL.appendingPathComponent(dbName)
         var config = Configuration()
         config.automaticMemoryManagement = true
         let dbPool = try DatabasePool(path: dbURL.path, configuration: config)
@@ -67,5 +69,13 @@ extension AppDatabase {
         } catch {
             print("Error processing directory: \(error)")
         }
+    }
+    
+    static func getDatabaseCreationDate() throws -> Date? {
+        let folderURL = try databaseFolderURL()
+        let dbURL = folderURL.appendingPathComponent(dbName)
+        
+        let attributes = try FileManager.default.attributesOfItem(atPath: dbURL.path)
+        return attributes[.creationDate] as? Date
     }
 }
