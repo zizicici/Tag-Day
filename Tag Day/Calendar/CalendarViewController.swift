@@ -163,18 +163,14 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         
         addGestures()
         
-        let searchButton = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass.circle", withConfiguration: UIImage.SymbolConfiguration(weight: .medium)), style: .plain, target: self, action: #selector(showSearchBar))
-        searchButton.accessibilityLabel = String(localized: "search")
-        searchButton.tintColor = AppColor.dynamicColor
-        
         settingsButton = UIBarButtonItem(image: UIImage(systemName: "slider.horizontal.2.square", withConfiguration: UIImage.SymbolConfiguration(weight: .medium)), style: .plain, target: nil, action: nil)
         settingsButton?.accessibilityLabel = String(localized: "display.settings")
         settingsButton?.tintColor = AppColor.dynamicColor
         
-        moreButton = UIBarButtonItem(image: UIImage(systemName: "ellipsis", withConfiguration: UIImage.SymbolConfiguration(weight: .medium)), style: .plain, target: self, action: #selector(moreAction))
+        moreButton = UIBarButtonItem(image: UIImage(systemName: "ellipsis", withConfiguration: UIImage.SymbolConfiguration(weight: .medium)), style: .plain, target: nil, action: nil)
         moreButton?.tintColor = AppColor.dynamicColor
         
-        navigationItem.rightBarButtonItems = [moreButton, settingsButton, searchButton].compactMap{ $0 }
+        navigationItem.rightBarButtonItems = [moreButton, settingsButton].compactMap{ $0 }
         
         yearButton = UIBarButtonItem(title: displayHandler.getTitle(), style: .plain, target: self, action: #selector(showYearPicker))
         yearButton?.tintColor = AppColor.dynamicColor
@@ -403,7 +399,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     internal func reloadData() {
         yearButton?.title = displayHandler.getTitle()
         
-//        updateMoreMenu()
+        updateMoreMenu()
         updateSettingsMenu()
         navigationItem.leftBarButtonItems?.forEach { $0.tintColor = AppColor.dynamicColor }
         navigationItem.rightBarButtonItems?.forEach { $0.tintColor = AppColor.dynamicColor }
@@ -487,11 +483,17 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     func getMoreMenu() -> UIMenu {
         var children: [UIMenuElement] = []
         
+        let searchAction = UIAction(title: String(localized: "search"), image: UIImage(systemName: "magnifyingglass")) { [weak self] _ in
+            self?.showSearchBar()
+        }
+        children.append(searchAction)
+        
         let moreAction = UIAction(title: String(localized: "controller.more.title"), image: UIImage(systemName: "ellipsis.circle")) { [weak self] _ in
             self?.moreAction()
         }
-
-        children.append(moreAction)
+        
+        let currentPageDivider = UIMenu(title: "", options: .displayInline, children: [moreAction])
+        children.append(currentPageDivider)
         
         return UIMenu(children: children)
     }
