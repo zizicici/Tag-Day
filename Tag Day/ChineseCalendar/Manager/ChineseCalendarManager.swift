@@ -54,7 +54,7 @@ class ChineseCalendarManager {
     
     private func calSolarTerms(for year: Int) -> [GregorianDay: SolarTerm] {
         let index = year - 1901
-        guard index < solorTermsData.count else {
+        guard index < solorTermsData.count, index >= 0 else {
             return [:]
         }
         
