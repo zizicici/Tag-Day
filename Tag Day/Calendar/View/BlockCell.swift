@@ -205,6 +205,14 @@ struct BlockCellBackgroundConfiguration {
         background.cornerRadius = cornerRadius
         background.strokeWidth = strokeWidth
         background.strokeOutset = strokeOutset
+        background.backgroundColorTransformer = UIConfigurationColorTransformer({ color in
+            if state.isSelected {
+                return UIColor.gray.withAlphaComponent(0.5).overlay(on: color)
+            } else {
+                return color
+            }
+        })
+        
         if showStroke {
             background.strokeColor = strokeColor
         } else {

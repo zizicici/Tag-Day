@@ -483,6 +483,11 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     func getMoreMenu() -> UIMenu {
         var children: [UIMenuElement] = []
         
+        let batchEditorAction = UIAction(title: String(localized: "controller.batchEditor.title"), image: UIImage(systemName: "square.grid.2x2")) { [weak self] _ in
+            self?.showBatchEditor()
+        }
+        children.append(batchEditorAction)
+        
         let searchAction = UIAction(title: String(localized: "search"), image: UIImage(systemName: "magnifyingglass")) { [weak self] _ in
             self?.showSearchBar()
         }
@@ -535,6 +540,10 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
             self.searchController.isActive = true
             self.searchController.searchBar.becomeFirstResponder()
         }
+    }
+    
+    func showBatchEditor() {
+        navigationController?.present(NavigationController(rootViewController: BatchEditorViewController()), animated: ConsideringUser.animated)
     }
 }
 
