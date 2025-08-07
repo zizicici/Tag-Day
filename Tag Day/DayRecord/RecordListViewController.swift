@@ -444,7 +444,10 @@ extension UIViewController {
             
             present(alertController, animated: ConsideringUser.animated)
         } else {
-            var remainingTime: Int = 5
+            var remainingTime: Int = AutoDismissInterval.current.timeInterval
+            if remainingTime == 0 {
+                return
+            }
 
             let alertController = UIAlertController(title: String(localized: "dayDetail.tagMenu.alert.title"), message: String(format: String(localized: "dayDetail.tagMenu.alert.message%i"), remainingTime), preferredStyle: .actionSheet)
             alertController.addAction(timeAction)

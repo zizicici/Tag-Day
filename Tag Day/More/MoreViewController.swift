@@ -21,6 +21,7 @@ class MoreViewController: UIViewController {
         case membership
         case general
         case calendar
+        case editing
         case advanced
         case contact
         case appjun
@@ -34,6 +35,8 @@ class MoreViewController: UIViewController {
                 return String(localized: "more.section.general")
             case .calendar:
                 return String(localized: "more.section.calendar")
+            case .editing:
+                return String(localized: "more.section.editing")
             case .advanced:
                 return String(localized: "more.section.advanced")
             case .contact:
@@ -93,6 +96,24 @@ class MoreViewController: UIViewController {
                     return value.getName()
                 case .secondaryCalendar(let secondaryCalendar):
                     return secondaryCalendar.getName()
+                }
+            }
+        }
+        
+        enum EditItem: Hashable {
+            case autoDismissInterval(AutoDismissInterval)
+            
+            var title: String {
+                switch self {
+                case .autoDismissInterval:
+                    return AutoDismissInterval.getTitle()
+                }
+            }
+            
+            var value: String {
+                switch self {
+                case .autoDismissInterval(let autoDismissInterval):
+                    return autoDismissInterval.getName()
                 }
             }
         }
@@ -186,6 +207,7 @@ class MoreViewController: UIViewController {
         case thanks
         case settings(GeneralItem)
         case calendar(CalendarItem)
+        case editing(EditItem)
         case backup
         case notification
         case contact(ContactItem)
@@ -199,6 +221,8 @@ class MoreViewController: UIViewController {
             case .settings(let item):
                 return item.title
             case .calendar(let item):
+                return item.title
+            case .editing(let item):
                 return item.title
             case .backup:
                 return String(localized: "backup.title")
@@ -323,6 +347,15 @@ class MoreViewController: UIViewController {
                 content.secondaryText = item.value
                 cell.contentConfiguration = content
                 return cell
+            case .editing(let item):
+                let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+                cell.accessoryType = .disclosureIndicator
+                var content = UIListContentConfiguration.valueCell()
+                content.text = identifier.title
+                content.textProperties.color = .label
+                content.secondaryText = item.value
+                cell.contentConfiguration = content
+                return cell
             case .backup, .notification:
                 let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
                 cell.accessoryType = .disclosureIndicator
@@ -381,6 +414,9 @@ class MoreViewController: UIViewController {
         snapshot.appendSections([.calendar])
         snapshot.appendItems([.calendar(.weekStartType(WeekStartType.getValue())), .calendar(.secondaryCalendar(SecondaryCalendar.getValue()))], toSection: .calendar)
         
+        snapshot.appendSections([.editing])
+        snapshot.appendItems([.editing(.autoDismissInterval(AutoDismissInterval.getValue()))], toSection: .editing)
+        
         snapshot.appendSections([.advanced])
         snapshot.appendItems([.backup, .notification], toSection: .advanced)
         
@@ -422,6 +458,11 @@ extension MoreViewController: UITableViewDelegate {
                     enterSettings(WeekStartType.self)
                 case .secondaryCalendar:
                     enterSettings(SecondaryCalendar.self)
+                }
+            case .editing(let item):
+                switch item {
+                case .autoDismissInterval:
+                    enterSettings(AutoDismissInterval.self)
                 }
             case .backup:
                 enterBackup()

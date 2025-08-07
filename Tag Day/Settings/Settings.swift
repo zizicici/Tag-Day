@@ -19,6 +19,7 @@ extension UserDefaults {
         case MonthlyStatsType = "com.zizicici.tag.settings.MonthlyStatsType"
         case DynamicColor = "com.zizicici.tag.settings.DynamicColor"
         case BookTitleDisplay = "com.zizicici.tag.settings.BookTitleDisplay"
+        case AutoDismissInterval = "com.zizicici.tag.settings.AutoDismissInterval"
     }
 }
 
@@ -366,5 +367,60 @@ extension BookTitleDisplay: UserDefaultSettable {
     
     static func getFooter() -> String? {
         return nil
+    }
+}
+
+enum AutoDismissInterval: Int, CaseIterable, Codable {
+    case zero = 0
+    case three = 3
+    case five = 5
+    case ten = 10
+}
+
+extension AutoDismissInterval: UserDefaultSettable {
+    static func getKey() -> UserDefaults.Settings {
+        return .AutoDismissInterval
+    }
+    
+    static var defaultOption: AutoDismissInterval {
+        return .five
+    }
+    
+    func getName() -> String {
+        switch self {
+        case .zero:
+            return String(localized: "settings.autoDismissInterval.zero")
+        case .three:
+            return String(localized: "settings.autoDismissInterval.three")
+        case .five:
+            return String(localized: "settings.autoDismissInterval.five")
+        case .ten:
+            return String(localized: "settings.autoDismissInterval.ten")
+        }
+    }
+    
+    static func getTitle() -> String {
+        return String(localized: "settings.autoDismissInterval.title")
+    }
+    
+    static func getHeader() -> String? {
+        return nil
+    }
+    
+    static func getFooter() -> String? {
+        return nil
+    }
+    
+    var timeInterval: Int {
+        switch self {
+        case .zero:
+            return 0
+        case .three:
+            return 3
+        case .five:
+            return 5
+        case .ten:
+            return 10
+        }
     }
 }
