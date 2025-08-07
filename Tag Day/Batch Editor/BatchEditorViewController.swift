@@ -619,7 +619,7 @@ extension BatchEditorViewController {
             return newRecord
         }))
         
-        dismissAction()
+        dismiss(animated: ConsideringUser.animated)
     }
     
     @objc
