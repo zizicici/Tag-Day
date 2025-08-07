@@ -10,6 +10,8 @@
 		14337F802DCC6CE50043447A /* Debounce.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14337F7F2DCC6CE50043447A /* Debounce.swift */; };
 		14337F822DCC70DA0043447A /* BookDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14337F812DCC70DA0043447A /* BookDetailViewController.swift */; };
 		14337F862DCC99220043447A /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 14337F852DCC99220043447A /* InfoPlist.xcstrings */; };
+		144A9C0B2E4390C700190205 /* TagCircleEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 144A9C0A2E4390C700190205 /* TagCircleEditorViewController.swift */; };
+		144A9C0D2E439E8200190205 /* TagCircleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 144A9C0C2E439E8200190205 /* TagCircleCell.swift */; };
 		1456FC6C2E13BB2A00E5FB62 /* ActionIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1456FC6B2E13BB2A00E5FB62 /* ActionIntent.swift */; };
 		1456FC6E2E142BD200E5FB62 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D272AB2DC073EB00267572 /* Date+Extension.swift */; };
 		147E83FC2E1288AB00736D9F /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D3A2DC5179F001B61D5 /* UIColor+Extension.swift */; };
@@ -50,6 +52,7 @@
 		14B239D22DBF78F10007152C /* AppInfo in Frameworks */ = {isa = PBXBuildFile; productRef = 14B239D12DBF78F10007152C /* AppInfo */; };
 		14B239D52DBF790A0007152C /* ZCCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 14B239D42DBF790A0007152C /* ZCCalendar */; };
 		14B239D82DBF791E0007152C /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 14B239D72DBF791E0007152C /* Toast */; };
+		14B2BE0E2E447A9C0024E508 /* TagCircleDayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B2BE0D2E447A9C0024E508 /* TagCircleDayViewController.swift */; };
 		14B468F02DFFE5B500415529 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 14B468EF2DFFE5B500415529 /* Collections */; };
 		14B468F22DFFF4FA00415529 /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B468F12DFFF4FA00415529 /* TagView.swift */; };
 		14BBA3762DCB0B0700AD7BAC /* TagDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BBA3752DCB0B0700AD7BAC /* TagDetailViewController.swift */; };
@@ -192,6 +195,8 @@
 		14337F7F2DCC6CE50043447A /* Debounce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debounce.swift; sourceTree = "<group>"; };
 		14337F812DCC70DA0043447A /* BookDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailViewController.swift; sourceTree = "<group>"; };
 		14337F852DCC99220043447A /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
+		144A9C0A2E4390C700190205 /* TagCircleEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagCircleEditorViewController.swift; sourceTree = "<group>"; };
+		144A9C0C2E439E8200190205 /* TagCircleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagCircleCell.swift; sourceTree = "<group>"; };
 		1456FC6B2E13BB2A00E5FB62 /* ActionIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionIntent.swift; sourceTree = "<group>"; };
 		147E84002E12BCF400736D9F /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		14833D342DC50310001B61D5 /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
@@ -224,6 +229,7 @@
 		14B239B32DBF13F30007152C /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		14B239B42DBF13F30007152C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		14B239C62DBF765B0007152C /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		14B2BE0D2E447A9C0024E508 /* TagCircleDayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagCircleDayViewController.swift; sourceTree = "<group>"; };
 		14B468F12DFFF4FA00415529 /* TagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagView.swift; sourceTree = "<group>"; };
 		14BBA3752DCB0B0700AD7BAC /* TagDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagDetailViewController.swift; sourceTree = "<group>"; };
 		14BBA3772DCB101100AD7BAC /* TextInputCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputCell.swift; sourceTree = "<group>"; };
@@ -351,6 +357,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		144A9C0E2E439E9300190205 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				144A9C0C2E439E8200190205 /* TagCircleCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		1456FC6D2E13BB3000E5FB62 /* ActionIntent */ = {
 			isa = PBXGroup;
 			children = (
@@ -516,6 +530,9 @@
 			isa = PBXGroup;
 			children = (
 				14BFEBDD2E3E58EF00BF7923 /* BatchEditorViewController.swift */,
+				144A9C0A2E4390C700190205 /* TagCircleEditorViewController.swift */,
+				14B2BE0D2E447A9C0024E508 /* TagCircleDayViewController.swift */,
+				144A9C0E2E439E9300190205 /* View */,
 			);
 			path = "Batch Editor";
 			sourceTree = "<group>";
@@ -1006,6 +1023,7 @@
 				14BBA37A2DCB142900AD7BAC /* ColorPickerCell.swift in Sources */,
 				14BFEBDE2E3E58EF00BF7923 /* BatchEditorViewController.swift in Sources */,
 				14ACBE562DBFAD2E0056B1FD /* TabbarController.swift in Sources */,
+				144A9C0B2E4390C700190205 /* TagCircleEditorViewController.swift in Sources */,
 				14AA90542DFE7EDE00EA331A /* TagInfoCell.swift in Sources */,
 				14D2729F2DC072D700267572 /* Settings.swift in Sources */,
 				14EBE0882DD76B0B00F7609A /* DurationCell.swift in Sources */,
@@ -1014,6 +1032,7 @@
 				147E84022E12BD4700736D9F /* Extension.swift in Sources */,
 				14D272862DC0719400267572 /* LayoutGenerator.swift in Sources */,
 				14C7134E2DD22F86007527C5 /* RecordEntity.swift in Sources */,
+				14B2BE0E2E447A9C0024E508 /* TagCircleDayViewController.swift in Sources */,
 				14D272872DC0719400267572 /* DayGrid.swift in Sources */,
 				14D272B82DC074B300267572 /* Toast+Stryle.swift in Sources */,
 				14D272792DC0716E00267572 /* CalendarViewController+CellRegistration.swift in Sources */,
@@ -1041,6 +1060,7 @@
 				14D272AF2DC073EB00267572 /* Persistence.swift in Sources */,
 				14D272B02DC073EB00267572 /* TimestampedRecord.swift in Sources */,
 				14D07CC32DD2ED4900F6843C /* RecordDetailViewController.swift in Sources */,
+				144A9C0D2E439E8200190205 /* TagCircleCell.swift in Sources */,
 				14D272BD2DC0884E00267572 /* SpecificationsViewController.swift in Sources */,
 				14D272BE2DC0884E00267572 /* SettingOptionsViewController.swift in Sources */,
 				14CC8A462DCF04970062F8BA /* FastEditorViewController.swift in Sources */,

@@ -47,6 +47,8 @@ class BatchEditorViewController: UIViewController {
     private var resetButton: UIBarButtonItem?
     private var replaceButton: UIBarButtonItem?
     private var appendButton: UIBarButtonItem?
+    private var applyTagCircleButton: UIBarButtonItem?
+    private var exitTagCircleButton: UIBarButtonItem?
     
     private var collectionView: UICollectionView! = nil
     private var dataSource: UICollectionViewDiffableDataSource<Section, Item>! = nil
@@ -70,6 +72,16 @@ class BatchEditorViewController: UIViewController {
         }
     }
     
+    //
+    private weak var tagCircleEditor: TagCircleEditorViewController?
+    private var tagCircleContainerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = AppColor.text
+        
+        return view
+    }()
+    private var isReplacing: Bool = true
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -88,6 +100,8 @@ class BatchEditorViewController: UIViewController {
         updateBottomBarItems()
         
         currentYear = ZCCalendar.manager.today.year
+        
+        navigationController?.presentationController?.delegate = self
     }
     
     func setupTopBarItems() {
@@ -122,6 +136,12 @@ class BatchEditorViewController: UIViewController {
         
         toolbarItems = [stateButton, .flexibleSpace(), resetButton, replaceButton, appendButton].compactMap{ $0 }
         navigationController?.setToolbarHidden(false, animated: false)
+        
+        applyTagCircleButton = UIBarButtonItem(title: String(localized: "batchEditor.apply"), style: .plain, target: self, action: #selector(applyTagCircleAction))
+        applyTagCircleButton?.tintColor = AppColor.dynamicColor
+        
+        exitTagCircleButton = UIBarButtonItem(title: String(localized: "batchEditor.exit"), style: .plain, target: self, action: #selector(exitTagCircleAction))
+        exitTagCircleButton?.tintColor = AppColor.dynamicColor
     }
     
     private func configureHierarchy() {
@@ -142,8 +162,8 @@ class BatchEditorViewController: UIViewController {
             make.top.equalTo(view)
             make.leading.trailing.bottom.equalTo(view)
         }
-        collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 28.0, left: 0.0, bottom: 10.0, right: 0.0)
-        collectionView.contentInset = .init(top: 0.0, left: 0.0, bottom: 100.0, right: 0.0)
+        collectionView.scrollIndicatorInsets = UIEdgeInsets(top: CGFloat.leastNormalMagnitude, left: 0.0, bottom: 0.0, right: 0.0)
+        collectionView.contentInset = .init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
     }
     
     private func configureDataSource() {
@@ -368,6 +388,81 @@ class BatchEditorViewController: UIViewController {
 }
 
 extension BatchEditorViewController {
+    func addTagCircleEditor() {
+        let tagCircleEditor = TagCircleEditorViewController()
+        guard let editorView = tagCircleEditor.view else { return }
+        
+        addChild(tagCircleEditor)
+        view.addSubview(editorView)
+        tagCircleEditor.didMove(toParent: self)
+        
+        editorView.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(view)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            make.height.equalTo(140.0)
+        }
+        
+        self.tagCircleEditor = tagCircleEditor
+        
+        toolbarItems = [exitTagCircleButton, .flexibleSpace(), applyTagCircleButton].compactMap{ $0 }
+    }
+    
+    func removeTagCircleEditor() {
+        tagCircleEditor?.willMove(toParent: nil)
+        tagCircleEditor?.view.removeFromSuperview()
+        tagCircleEditor?.removeFromParent()
+        tagCircleEditor = nil
+        
+        toolbarItems = [stateButton, .flexibleSpace(), resetButton, replaceButton, appendButton].compactMap{ $0 }
+    }
+    
+    @objc
+    func exitTagCircleAction() {
+        removeTagCircleEditor()
+    }
+    
+    @objc
+    func applyTagCircleAction() {
+        if let tagCirle = tagCircleEditor?.tagCache, tagCirle.count > 0 {
+            var newRecords: [DayRecord] = []
+            if isReplacing {
+                let targetDays: [Int64] = selectedDays.map{ Int64($0.julianDay) }
+                
+                newRecords = records.filter({ record in
+                    return !targetDays.contains(record.day)
+                })
+            } else {
+                newRecords = records
+            }
+            
+            var addRecords: [DayRecord] = []
+            
+            let tagCirleDayCount = tagCirle.count
+            let sortedDay = selectedDays.sorted(by: { $0.julianDay < $1.julianDay })
+            for (dayIndex, day) in sortedDay.enumerated() {
+                let tags = tagCirle[dayIndex % tagCirleDayCount]
+                
+                let lastOrder: Int64 = newRecords.filter({ $0.day == Int64(day.julianDay) }).map({ $0.order }).max() ?? -1
+                
+                addRecords.append(contentsOf: tags.enumerated().map({ (tagIndex, tag) in
+                    var newValue: Int64 = Int64(UUID().hashValue)
+                    if newValue > 0 {
+                        newValue *= -1
+                    }
+                    let newRecord = DayRecord(id: newValue, bookID: tag.bookID, tagID: tag.id ?? 0, day: Int64(day.julianDay), order: lastOrder + 1 + Int64(tagIndex))
+                    return newRecord
+                }))
+            }
+            
+            records = newRecords + addRecords
+            
+            reloadData()
+        }
+        removeTagCircleEditor()
+    }
+}
+
+extension BatchEditorViewController {
     func updateBottomBarItems() {
         let count = selectedDays.count
         let isEnabled = count > 0
@@ -397,8 +492,9 @@ extension BatchEditorViewController {
         })
         let singleSelectionMenu = UIMenu(title: String(localized: "batchEditor.singleTag"), image: UIImage(systemName: "tag"), children: tagElements)
         
-        let tagsCircleAction: UIAction = UIAction(title: String(localized: "batchEditor.tagsCircle"), image: UIImage(systemName: "repeat")) { _ in
-            
+        let tagsCircleAction: UIAction = UIAction(title: String(localized: "batchEditor.tagsCircle"), image: UIImage(systemName: "repeat")) { [weak self] _ in
+            self?.isReplacing = true
+            self?.addTagCircleEditor()
         }
         
         return UIMenu(children: [singleSelectionMenu, tagsCircleAction].reversed())
@@ -412,8 +508,9 @@ extension BatchEditorViewController {
         })
         let singleSelectionMenu = UIMenu(title: String(localized: "batchEditor.singleTag"), image: UIImage(systemName: "tag"), children: tagElements)
         
-        let tagsCircleAction: UIAction = UIAction(title: String(localized: "batchEditor.tagsCircle"), image: UIImage(systemName: "repeat")) { _ in
-            
+        let tagsCircleAction: UIAction = UIAction(title: String(localized: "batchEditor.tagsCircle"), image: UIImage(systemName: "repeat")) { [weak self] _ in
+            self?.isReplacing = false
+            self?.addTagCircleEditor()
         }
         
         return UIMenu(children: [singleSelectionMenu, tagsCircleAction].reversed())
@@ -459,7 +556,8 @@ extension BatchEditorViewController {
             if newValue > 0 {
                 newValue *= -1
             }
-            let newRecord = DayRecord(id: newValue, bookID: tag.bookID, tagID: tag.id ?? 0, day: Int64(day.julianDay), order: 0)
+            let lastOrder: Int64 = records.filter({ $0.day == Int64(day.julianDay) }).map({ $0.order }).max() ?? -1
+            let newRecord = DayRecord(id: newValue, bookID: tag.bookID, tagID: tag.id ?? 0, day: Int64(day.julianDay), order: lastOrder + 1)
             return newRecord
         }))
         
@@ -470,6 +568,19 @@ extension BatchEditorViewController {
 }
 
 extension BatchEditorViewController {
+    func getAddRecords() -> [DayRecord] {
+        let addRecords = records.filter{ ($0.id ?? 0) < 0 }
+        return addRecords
+    }
+    
+    func getDeleteRecords() -> [DayRecord] {
+        let storedRecords = DataManager.shared.dayRecords
+        let deleteRecords = storedRecords.filter { record in
+            !records.contains(record)
+        }
+        return deleteRecords
+    }
+    
     func updateYearButton() {
         yearButton?.title = String(format: (String(localized: "calendar.title.year%i")), currentYear)
     }
@@ -480,12 +591,60 @@ extension BatchEditorViewController {
     
     @objc
     func saveAction() {
-        print("save")
+        let addRecords = getAddRecords()
+        let deleteRecords = getDeleteRecords()
+
+        guard !(addRecords.count == 0 && deleteRecords.count == 0) else {
+            dismissAction()
+            return
+        }
+        let alertController = UIAlertController(title: String(localized: "batchEditor.alert.save.title"), message: String(format: String(localized: "batchEditor.alert.save.message%d%d"), addRecords.count, deleteRecords.count), preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: String(localized: "button.cancel"), style: .cancel) { _ in
+            //
+        }
+        let okAction = UIAlertAction(title: String(localized: "button.ok"), style: .default) { [weak self] _ in
+            self?.update(add: addRecords, delete: deleteRecords)
+        }
+
+        alertController.addAction(cancelAction)
+        alertController.addAction(okAction)
+        present(alertController, animated: ConsideringUser.animated, completion: nil)
+    }
+    
+    func update(add: [DayRecord], delete: [DayRecord]) {
+        _ = DataManager.shared.delete(dayRecords: delete)
+        _ = DataManager.shared.add(dayRecords: add.map({ dayRecord in
+            var newRecord = dayRecord
+            newRecord.id = nil
+            return newRecord
+        }))
+        
+        dismissAction()
     }
     
     @objc
     func dismissAction() {
-        self.dismiss(animated: ConsideringUser.animated)
+        let addRecords = getAddRecords()
+        let deleteRecords = getDeleteRecords()
+        if addRecords.count == 0 && deleteRecords.count == 0 {
+            dismiss(animated: ConsideringUser.animated)
+        } else {
+            showDismissAlert()
+        }
+    }
+    
+    func showDismissAlert() {
+        let alertController = UIAlertController(title: String(localized: "batchEditor.alert.dismiss.title"), message: nil, preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: String(localized: "button.cancel"), style: .cancel) { _ in
+            //
+        }
+        let okAction = UIAlertAction(title: String(localized: "button.confirm"), style: .default) { [weak self] _ in
+            self?.dismiss(animated: ConsideringUser.animated)
+        }
+
+        alertController.addAction(cancelAction)
+        alertController.addAction(okAction)
+        present(alertController, animated: ConsideringUser.animated, completion: nil)
     }
     
     @objc
@@ -529,7 +688,18 @@ extension BatchEditorViewController: UIPopoverPresentationControllerDelegate {
     }
     
     func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
-        return true
+        if (presentationController.presentedViewController as? NavigationController)?.children.first == self {
+            let addRecords = getAddRecords()
+            let deleteRecords = getDeleteRecords()
+            if addRecords.count == 0 && deleteRecords.count == 0 {
+                return true
+            } else {
+                showDismissAlert()
+                return false
+            }
+        } else {
+            return true
+        }
     }
 }
 

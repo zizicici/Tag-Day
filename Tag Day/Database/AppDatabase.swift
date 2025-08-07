@@ -355,6 +355,27 @@ extension AppDatabase {
         return saveRecord
     }
     
+    func add(dayRecords: [DayRecord]) -> Bool {
+        guard !dayRecords.contains(where: { $0.id != nil }) else {
+            // Should No ID
+            return false
+        }
+        do {
+            _ = try dbWriter?.write{ db in
+                for dayRecord in dayRecords {
+                    var saveRecord = dayRecord
+                    try saveRecord.save(db)
+                }
+            }
+        }
+        catch {
+            print(error)
+            return false
+        }
+        NotificationCenter.default.post(Notification(name: Notification.Name.DatabaseUpdated))
+        return true
+    }
+    
     func delete(dayRecord: DayRecord) -> Bool {
         guard let recordID = dayRecord.id else {
             return false
@@ -362,6 +383,24 @@ extension AppDatabase {
         do {
             _ = try dbWriter?.write{ db in
                 try DayRecord.deleteAll(db, ids: [recordID])
+            }
+        }
+        catch {
+            print(error)
+            return false
+        }
+        NotificationCenter.default.post(Notification(name: Notification.Name.DatabaseUpdated))
+        return true
+    }
+    
+    func delete(dayRecords: [DayRecord]) -> Bool {
+        guard !dayRecords.contains(where: { $0.id == nil }) else {
+            // No ID
+            return false
+        }
+        do {
+            _ = try dbWriter?.write{ db in
+                try DayRecord.deleteAll(db, ids: dayRecords.map{ $0.id })
             }
         }
         catch {

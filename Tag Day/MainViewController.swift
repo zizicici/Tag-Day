@@ -31,7 +31,7 @@ class MainViewController: CalendarViewController {
         })
         configuration.titleLineBreakMode = .byTruncatingTail
         configuration.cornerStyle = .large
-        configuration.image = UIImage(systemName: "book.closed")?.withConfiguration( UIImage.SymbolConfiguration(textStyle: .body, scale: .default))
+        configuration.image = UIImage(systemName: "book.closed")?.withConfiguration(UIImage.SymbolConfiguration(textStyle: .body, scale: .default))
         configuration.imagePadding = 10.0
         configuration.baseForegroundColor = .white
         let button = UIButton(configuration: configuration)

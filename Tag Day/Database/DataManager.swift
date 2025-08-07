@@ -514,8 +514,16 @@ extension DataManager {
         return AppDatabase.shared.add(dayRecord: dayRecord)
     }
     
+    func add(dayRecords: [DayRecord]) -> Bool {
+        return AppDatabase.shared.add(dayRecords: dayRecords)
+    }
+    
     func delete(dayRecord: DayRecord) -> Bool {
         return AppDatabase.shared.delete(dayRecord: dayRecord)
+    }
+    
+    func delete(dayRecords: [DayRecord]) -> Bool {
+        return AppDatabase.shared.delete(dayRecords: dayRecords)
     }
     
     func resetDayRecord(bookID: Int64, day: Int64) -> Bool {
