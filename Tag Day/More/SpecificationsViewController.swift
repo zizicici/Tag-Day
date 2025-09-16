@@ -73,7 +73,7 @@ class SpecificationsViewController: UIViewController {
                 case .publisher:
                     return "ZIZICICI LIMITED"
                 case .date:
-                    return "2025/08/07"
+                    return "2025/09/16"
                 case .license:
                     return "粤ICP备2025448771号-1A"
                 }
