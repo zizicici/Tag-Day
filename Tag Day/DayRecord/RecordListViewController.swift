@@ -82,6 +82,8 @@ class RecordListViewController: UIViewController {
         if records.count == 0 {
             newAction()
         }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(presentingClose), name: .CurrentBookChanged, object: nil)
     }
     
     override func accessibilityPerformEscape() -> Bool {
@@ -168,6 +170,11 @@ class RecordListViewController: UIViewController {
         day = day - 1
         updateTitle()
         reloadData()
+    }
+    
+    @objc
+    private func presentingClose() {
+        presentingViewController?.dismiss(animated: ConsideringUser.animated)
     }
 }
 
