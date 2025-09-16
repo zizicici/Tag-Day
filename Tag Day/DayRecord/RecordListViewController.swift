@@ -466,7 +466,7 @@ extension UIViewController {
                 remainingTime -= 1
                 alertController.message = String(format: String(localized: "dayDetail.tagMenu.alert.message%i"), remainingTime)
                 
-                if remainingTime <= 1 {
+                if remainingTime <= 0 {
                     timer.invalidate()
                     alertController.dismiss(animated: ConsideringUser.animated, completion: nil)
                 }
