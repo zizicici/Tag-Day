@@ -114,51 +114,37 @@ class RecordListCell: RecordListBaseCell {
     private func setupViewsIfNeeded(using state: UICellConfigurationState) {
         guard tagButton.superview == nil else { return }
         
-        if let detailItem = state.detailItem {
-            contentView.addSubview(tagButton)
-            tagButton.snp.makeConstraints { make in
-                make.leading.equalTo(contentView).inset(10)
-                make.trailing.equalTo(contentView).inset(44)
-                make.height.equalTo(44.0)
-            }
-            
-            contentView.addSubview(moreButton)
-            moreButton.snp.makeConstraints { make in
-                make.width.equalTo(34.0)
-                make.height.equalTo(44.0)
-                make.top.equalTo(tagButton)
-                make.trailing.equalTo(contentView)
-            }
-            
-            if detailItem.record.getTime() != nil {
-                contentView.addSubview(timeButton)
-                timeButton.snp.makeConstraints { make in
-                    make.leading.equalTo(contentView).inset(ConsideringUser.buttonShapesEnabled ? 10 : 6)
-                    make.trailing.lessThanOrEqualTo(contentView).inset(44)
-                    make.top.equalTo(contentView)
-                }
-                tagButton.snp.makeConstraints { make in
-                    make.top.equalTo(timeButton.snp.bottom).offset(ConsideringUser.buttonShapesEnabled ? 4 : 0)
-                }
-            } else {
-                tagButton.snp.makeConstraints { make in
-                    make.top.equalTo(contentView)
-                }
-            }
-            
-            if detailItem.record.comment != nil {
-                contentView.addSubview(commentButton)
-                commentButton.snp.makeConstraints { make in
-                    make.leading.equalTo(contentView).inset(ConsideringUser.buttonShapesEnabled ? 10 : 6)
-                    make.trailing.lessThanOrEqualTo(tagButton)
-                    make.top.equalTo(tagButton.snp.bottom).offset(ConsideringUser.buttonShapesEnabled ? 4 : 0)
-                    make.bottom.equalTo(contentView)
-                }
-            } else {
-                tagButton.snp.makeConstraints { make in
-                    make.bottom.equalTo(contentView)
-                }
-            }
+        contentView.addSubview(tagButton)
+        tagButton.snp.makeConstraints { make in
+            make.leading.equalTo(contentView).inset(10)
+            make.trailing.equalTo(contentView).inset(44)
+            make.height.equalTo(44.0)
+        }
+        
+        contentView.addSubview(moreButton)
+        moreButton.snp.makeConstraints { make in
+            make.width.equalTo(34.0)
+            make.height.equalTo(44.0)
+            make.top.equalTo(tagButton)
+            make.trailing.equalTo(contentView)
+        }
+        
+        contentView.addSubview(timeButton)
+        timeButton.snp.makeConstraints { make in
+            make.leading.equalTo(contentView).inset(ConsideringUser.buttonShapesEnabled ? 10 : 6)
+            make.trailing.lessThanOrEqualTo(contentView).inset(44)
+            make.top.equalTo(contentView)
+        }
+        tagButton.snp.makeConstraints { make in
+            make.top.equalTo(timeButton.snp.bottom).offset(ConsideringUser.buttonShapesEnabled ? 4 : 0)
+        }
+        
+        contentView.addSubview(commentButton)
+        commentButton.snp.makeConstraints { make in
+            make.leading.equalTo(contentView).inset(ConsideringUser.buttonShapesEnabled ? 10 : 6)
+            make.trailing.lessThanOrEqualTo(tagButton)
+            make.top.equalTo(tagButton.snp.bottom).offset(ConsideringUser.buttonShapesEnabled ? 4 : 0)
+            make.bottom.equalTo(contentView)
         }
 
         timeButton.addTarget(self, action: #selector(timeButtonAction), for: .touchUpInside)
@@ -182,8 +168,8 @@ class RecordListCell: RecordListBaseCell {
                     
                     button.accessibilityValue = detailItem.record.getTime(timeFormatStyle: .standard)
                 } else {
-                    config?.title = String(localized: "dayRecord.time")
-                    config?.baseForegroundColor = AppColor.text.withAlphaComponent(0.5)
+                    config?.title = String(localized: "dayRecord.time.hint")
+                    config?.baseForegroundColor = AppColor.text.withAlphaComponent(0.4)
                     
                     button.accessibilityValue = nil
                 }
@@ -217,8 +203,8 @@ class RecordListCell: RecordListBaseCell {
                     
                     button.accessibilityValue = commentText
                 } else {
-                    config?.title = String(localized: "dayRecord.comment")
-                    config?.baseForegroundColor = AppColor.text.withAlphaComponent(0.4)
+                    config?.title = String(localized: "dayRecord.comment.hint")
+                    config?.baseForegroundColor = AppColor.text.withAlphaComponent(0.32)
                     
                     button.accessibilityValue = nil
                 }
@@ -235,11 +221,6 @@ class RecordListCell: RecordListBaseCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        
-        tagButton.removeFromSuperview()
-        moreButton.removeFromSuperview()
-        commentButton.removeFromSuperview()
-        timeButton.removeFromSuperview()
     }
     
     @objc
