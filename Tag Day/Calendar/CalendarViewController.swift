@@ -373,8 +373,8 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
                 }
             }
         }
-        dataSource.supplementaryViewProvider = { (view, kind, index) in
-            return self.collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: index)
+        dataSource.supplementaryViewProvider = { [weak self] (view, kind, index) in
+            return self?.collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: index)
         }
     }
     
