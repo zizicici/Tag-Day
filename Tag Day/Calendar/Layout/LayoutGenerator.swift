@@ -69,10 +69,9 @@ struct LayoutGenerater {
             if MonthlyStatsType.getValue() != .hidden {
                 snapshot.appendSections([.info(gregorianMonth)])
                 
-                let tagStatics = getTagStatistics(in: items, matching: tags)
-                let isLoggedCount = MonthlyStatsType.getValue() == .loggedCount
+                let tagStatics = getTagStatistics(in: items, matching: tags, statsType: MonthlyStatsType.getValue())
                 
-                snapshot.appendItems(tagStatics.map{ Item.info(InfoItem(tag: $0.tag, count: isLoggedCount ? $0.totalCount : $0.dayCount, month: gregorianMonth)) }, toSection: .info(gregorianMonth))
+                snapshot.appendItems(tagStatics.map{ Item.info(InfoItem(tag: $0.tag, count: $0.totalCount, month: gregorianMonth)) }, toSection: .info(gregorianMonth))
             }
         }
     }
@@ -112,10 +111,9 @@ struct LayoutGenerater {
         let totalCount: Int          // 出现的总次数
         let totalDuration: Int64?    // duration总长度
         let durationRecordCount: Int // 有duration信息的总次数
-        let dayCount: Int
     }
 
-    static func getTagStatistics(in blockItems: [BlockItem], matching tags: [Tag]) -> [TagStatistics] {
+    static func getTagStatistics(in blockItems: [BlockItem], matching tags: [Tag], statsType: MonthlyStatsType) -> [TagStatistics] {
         // 1. 统计所有 tagID 的数据（包括 blockCount）
         var tagIDStats = [Int64: (
             totalCount: Int,          // 该 tagID 在所有 records 中出现的总次数
@@ -162,12 +160,20 @@ struct LayoutGenerater {
         // 3. 过滤并匹配结果，转换为 TagStatistics（增加 dayCount）
         let matchedResults = tagIDStats.compactMap { (tagID, stats) -> TagStatistics? in
             guard let matchingTag = tagDictionary[tagID] else { return nil }
+            let totalCount: Int
+            switch statsType {
+            case .hidden:
+                totalCount = 0
+            case .loggedCount:
+                totalCount = stats.totalCount
+            case .dayCount:
+                totalCount = stats.dayIDs.count
+            }
             return TagStatistics(
                 tag: matchingTag,
-                totalCount: stats.totalCount,
+                totalCount: totalCount,
                 totalDuration: stats.totalDuration,
-                durationRecordCount: stats.durationRecordCount,
-                dayCount: stats.dayIDs.count // 新增：包含该 tagID 的 Day 数量
+                durationRecordCount: stats.durationRecordCount
             )
         }
         
