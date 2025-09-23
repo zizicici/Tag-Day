@@ -96,7 +96,11 @@ class PlaceholderTextView: UITextView {
     override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
         setupViews()
-        addDoneButtonOnKeyboard()
+        if #available(iOS 26.0, *) {
+            //
+        } else {
+            addDoneButtonOnKeyboard()
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
