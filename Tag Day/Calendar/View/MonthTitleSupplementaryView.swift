@@ -25,6 +25,8 @@ class MonthTitleSupplementaryView: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         configure(frame: frame)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadIfNeeded), name: .SettingsUpdate, object: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -56,5 +58,10 @@ class MonthTitleSupplementaryView: UICollectionReusableView {
         weekdayOrderView.startWeekdayOrder = startWeekOrder
         isAccessibilityElement = true
         accessibilityLabel = text
+    }
+    
+    @objc
+    func reloadIfNeeded() {
+        weekdayOrderView.startWeekdayOrder = WeekdayOrder(rawValue: WeekStartType.current.rawValue) ?? WeekdayOrder.firstDayOfWeek
     }
 }
