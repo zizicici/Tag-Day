@@ -3700,6 +3700,18 @@
             "state" : "translated",
             "value" : "无备注"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無備註"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無備註"
+          }
         }
       }
     },
@@ -3799,6 +3811,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "无时间"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無時間"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無時間"
           }
         }
       }
