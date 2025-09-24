@@ -530,11 +530,11 @@ class TagDetailViewController: UIViewController {
     }
     
     func showNewTagLimitationAlert() {
-        let alertController = UIAlertController(title: String(localized: "tags.detail.limitation.alert.title"), message: nil, preferredStyle: .alert)
+        let alertController = UIAlertController(title: String(localized: "tags.detail.limitation.alert.title"), message:  String(localized: "tags.detail.limitation.alert.message"), preferredStyle: .alert)
         let purchaseAction = UIAlertAction(title: String(localized: "membership.purchase"), style: .default) { [weak self] _ in
             self?.purchaseAction()
         }
-        let cancelAction = UIAlertAction(title: String(localized: "button.ok"), style: .cancel) { [weak self] _ in
+        let cancelAction = UIAlertAction(title: String(localized: "button.cancel"), style: .cancel) { [weak self] _ in
             self?.dismissViewController()
         }
         alertController.addAction(purchaseAction)

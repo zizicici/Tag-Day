@@ -5652,25 +5652,25 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Upgrade"
+            "value" : "Purchase Pro"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "升级"
+            "value" : "付费升级"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "升級"
+            "value" : "付费升级"
           }
         },
         "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "升級"
+            "value" : "付费升级"
           }
         }
       }
@@ -9130,7 +9130,7 @@
         }
       }
     },
-    "tags.detail.limitation.alert.title" : {
+    "tags.detail.limitation.alert.message" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -9154,6 +9154,34 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pro用戶可以創建不限數目的標籤（當前限制爲5個標籤）"
+          }
+        }
+      }
+    },
+    "tags.detail.limitation.alert.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Purchase Pro"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "付费升级为Pro"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "付费升级为Pro"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "付费升级为Pro"
           }
         }
       }
