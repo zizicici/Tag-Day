@@ -13,56 +13,6 @@ import Collections
 class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate {
     static let sectionHeaderElementKind = "sectionHeaderElementKind"
     
-    enum EditMode {
-        case normal
-        case overwrite
-        
-        var image: String {
-            switch self {
-            case .normal:
-                return "pencil"
-            case .overwrite:
-                return "bolt"
-            }
-        }
-        
-        var title: String {
-            switch self {
-            case .normal:
-                return String(localized: "editMode.normal")
-            case .overwrite:
-                return String(localized: "editMode.overwrite")
-            }
-        }
-        
-        var subtitle: String? {
-            switch self {
-            case .normal:
-                return String(localized: "editMode.normal.hint")
-            case .overwrite:
-                return String(localized: "editMode.overwrite.hint")
-            }
-        }
-        
-        var attributes: UIMenuElement.Attributes {
-            switch self {
-            case .normal:
-                return []
-            case .overwrite:
-                return [.destructive]
-            }
-        }
-        
-        var options: UIMenu.Options {
-            switch self {
-            case .normal:
-                return []
-            case .overwrite:
-                return [.destructive]
-            }
-        }
-    }
-    
     static let monthTagElementKind: String = "monthTagElementKind"
     
     // UIBarButtonItem
@@ -77,14 +27,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     // Data
     
     internal var dataSource: UICollectionViewDiffableDataSource<Section, Item>! = nil
-    private var book: Book? {
-        didSet {
-            if oldValue?.id != book?.id {
-                // Book Changed
-                switchEditMode(to: .normal)
-            }
-        }
-    }
+    private var book: Book?
     private var tags: [Tag] = []
     private var records: [DayRecord] = []
     
@@ -104,8 +47,6 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
             }
         }
     }
-    
-    private var editMode: EditMode = .normal
     
     private var calendarTransitionDelegate: CalendarTransitionDelegate?
     
@@ -277,34 +218,26 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     
     private func tap(in targetView: UIView, for blockItem: BlockItem) {
         guard let current = self.book else { return }
-        switch editMode {
-        case .normal:
-            if blockItem.records.count == 0 {
-                let detailViewController = FastEditorViewController(day: blockItem.day, book: current, editMode: .add)
-                detailViewController.delegate = self
-                let nav = NavigationController(rootViewController: detailViewController)
-                if !UIAccessibility.isVoiceOverRunning {
-                    showPopoverView(at: targetView, contentViewController: nav, width: 240.0, height: 300.0)
-                } else {
-                    present(nav, animated: ConsideringUser.animated)
-                }
-            } else {
-                let detailViewController = RecordListViewController(day: blockItem.day, book: current)
-                detailViewController.dayPresenter = self
-                let nav = NavigationController(rootViewController: detailViewController)
-                if !UIAccessibility.isVoiceOverRunning {
-                    let cellFrame = targetView.convert(targetView.bounds, to: nil)
-                    nav.modalPresentationStyle = .custom
-                    calendarTransitionDelegate = CalendarTransitionDelegate(originFrame: cellFrame, cellBackgroundColor: AppColor.background, detailSize: CGSize(width: min(view.frame.width - 80.0, 300), height: min(view.frame.height * 0.7, 480)))
-                    nav.transitioningDelegate = calendarTransitionDelegate
-                }
-                present(nav, animated: ConsideringUser.animated)
-            }
-        case .overwrite:
-            let detailViewController = FastEditorViewController(day: blockItem.day, book: current, editMode: .overwrite)
+        if blockItem.records.count == 0 {
+            let detailViewController = FastEditorViewController(day: blockItem.day, book: current, editMode: .add)
             detailViewController.delegate = self
             let nav = NavigationController(rootViewController: detailViewController)
-            showPopoverView(at: targetView, contentViewController: nav, width: 240.0, height: 300.0)
+            if !UIAccessibility.isVoiceOverRunning {
+                showPopoverView(at: targetView, contentViewController: nav, width: 240.0, height: 300.0)
+            } else {
+                present(nav, animated: ConsideringUser.animated)
+            }
+        } else {
+            let detailViewController = RecordListViewController(day: blockItem.day, book: current)
+            detailViewController.dayPresenter = self
+            let nav = NavigationController(rootViewController: detailViewController)
+            if !UIAccessibility.isVoiceOverRunning {
+                let cellFrame = targetView.convert(targetView.bounds, to: nil)
+                nav.modalPresentationStyle = .custom
+                calendarTransitionDelegate = CalendarTransitionDelegate(originFrame: cellFrame, cellBackgroundColor: AppColor.background, detailSize: CGSize(width: min(view.frame.width - 80.0, 300), height: min(view.frame.height * 0.7, 480)))
+                nav.transitioningDelegate = calendarTransitionDelegate
+            }
+            present(nav, animated: ConsideringUser.animated)
         }
     }
     
@@ -470,16 +403,6 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         moreButton?.menu = getMoreMenu()
     }
     
-    private func getEditModeDivider() -> UIMenu {
-        let editActions: [UIAction] = [EditMode.normal, EditMode.overwrite].map { mode in
-            return UIAction(title: mode.title, subtitle: mode.subtitle, image: UIImage(systemName: mode.image), attributes: mode.attributes, state: editMode == mode ? .on : .off) { [weak self] _ in
-                self?.switchEditMode(to: mode)
-            }
-        }
-        
-        return UIMenu(title: String(localized: "editMode.title"), subtitle: editMode.title, image: UIImage(systemName: editMode.image), options: editMode.options, children: editActions)
-    }
-    
     func getMoreMenu() -> UIMenu {
         var children: [UIMenuElement] = []
         
@@ -517,11 +440,6 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         let buttonView = navigationItem.leftBarButtonItem?.value(forKey: "view") as? UIView
         
         showPopoverView(at: buttonView ?? view, contentViewController: picker, width: 140)
-    }
-    
-    func switchEditMode(to editMode: EditMode) {
-        self.editMode = editMode
-        updateSettingsMenu()
     }
     
     var searchText: String? {
@@ -573,19 +491,6 @@ extension CalendarViewController: FastEditorNavigator {
             presentedViewController?.dismiss(animated: ConsideringUser.animated) { [weak self] in
                 self?.showRecordAlert(for: savedRecord)
             }
-        }
-    }
-    
-    func reset(day: GregorianDay, tag: Tag?) {
-        guard let bookID = book?.id else { return }
-        let result = DataManager.shared.resetDayRecord(bookID: bookID, day: Int64(day.julianDay))
-        if result, let tag = tag, let tagID = tag.id {
-            _ = DataManager.shared.add(dayRecord: DayRecord(bookID: bookID, tagID: tagID, day: Int64(day.julianDay), order: 0))
-        }
-        
-        // Dismiss
-        presentedViewController?.dismiss(animated: ConsideringUser.animated) {
-            self.tap(day: day + 1)
         }
     }
 }

@@ -248,10 +248,6 @@ extension TagCircleDayViewController: UIPopoverPresentationControllerDelegate {
 }
 
 extension TagCircleDayViewController: FastEditorNavigator {
-    func reset(day: GregorianDay, tag: Tag?) {
-        //
-    }
-    
     func add(day: GregorianDay, tag: Tag) {
         currentTags.append(tag)
         

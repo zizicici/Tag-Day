@@ -366,10 +366,6 @@ extension RecordListViewController {
 }
 
 extension RecordListViewController: FastEditorNavigator {
-    func reset(day: GregorianDay, tag: Tag?) {
-        //
-    }
-    
     func add(day: GregorianDay, tag: Tag) {
         guard let bookID = book.id, let tagID = tag.id else {
             return

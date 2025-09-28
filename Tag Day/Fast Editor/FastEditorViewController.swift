@@ -10,7 +10,6 @@ import SnapKit
 import ZCCalendar
 
 protocol FastEditorNavigator: NSObjectProtocol {
-    func reset(day: GregorianDay, tag: Tag?)
     func add(day: GregorianDay, tag: Tag)
     func replace(day: GregorianDay, tag: Tag, for record: DayRecord)
 }
@@ -23,7 +22,6 @@ class FastEditorViewController: UIViewController {
     enum EditMode {
         case add
         case replace(Tag, DayRecord)
-        case overwrite
         
         var tag: Tag? {
             switch self {
@@ -31,8 +29,6 @@ class FastEditorViewController: UIViewController {
                 return nil
             case .replace(let tag, _):
                 return tag
-            case .overwrite:
-                return nil
             }
         }
         
@@ -42,8 +38,6 @@ class FastEditorViewController: UIViewController {
                 return nil
             case .replace(_, let record):
                 return record
-            case .overwrite:
-                return nil
             }
         }
     }
@@ -89,8 +83,6 @@ class FastEditorViewController: UIViewController {
             self.title = String(localized: "dayDetail.new")
         case .replace:
             self.title = String(localized: "dayDetail.replace")
-        case .overwrite:
-            self.title = day.formatString()
         case .none:
             break
         }
@@ -110,10 +102,6 @@ class FastEditorViewController: UIViewController {
             let editTagItem = UIBarButtonItem(title: String(localized: "tag.edit"), style: .plain, target: self, action: #selector(editTagAction))
             editTagItem.tintColor = AppColor.dynamicColor
             items.append(editTagItem)
-        case .overwrite:
-            let resetItem = UIBarButtonItem(title: String(localized: "fastEditor.reset"), style: .plain, target: self, action: #selector(resetAction))
-            resetItem.tintColor = .systemRed
-            items.append(resetItem)
         case .none:
             break
         }
@@ -181,11 +169,6 @@ class FastEditorViewController: UIViewController {
     }
     
     @objc
-    func resetAction() {
-        delegate?.reset(day: day, tag: nil)
-    }
-    
-    @objc
     func newTagAction() {
         guard let bookID = DataManager.shared.currentBook?.id else {
             return
@@ -212,8 +195,6 @@ class FastEditorViewController: UIViewController {
         switch editMode {
         case .add:
             delegate?.add(day: day, tag: tag)
-        case .overwrite:
-            delegate?.reset(day: day, tag: tag)
         case .replace:
             guard let record = editMode.dayRecord else { return }
             delegate?.replace(day: day, tag: tag, for: record)
