@@ -119,24 +119,30 @@ class RecordListCell: RecordListBaseCell {
             make.leading.equalTo(contentView).inset(10)
             make.trailing.equalTo(contentView).inset(44)
             make.height.equalTo(44.0)
+            make.top.height.equalTo(contentView).inset(30.0)
         }
         
         contentView.addSubview(moreButton)
         moreButton.snp.makeConstraints { make in
             make.width.equalTo(34.0)
             make.height.equalTo(44.0)
-            make.top.equalTo(tagButton)
+            make.centerY.equalTo(tagButton)
             make.trailing.equalTo(contentView)
         }
-        
+
+        timeButton.addTarget(self, action: #selector(timeButtonAction), for: .touchUpInside)
+        tagButton.addTarget(self, action: #selector(tagButtonAction), for: .touchUpInside)
+        commentButton.addTarget(self, action: #selector(commentButtonAction), for: .touchUpInside)
+    }
+    
+    private func addButtonsIfNeeded() {
+        guard timeButton.superview == nil else { return }
         contentView.addSubview(timeButton)
         timeButton.snp.makeConstraints { make in
             make.leading.equalTo(contentView).inset(ConsideringUser.buttonShapesEnabled ? 10 : 6)
             make.trailing.lessThanOrEqualTo(contentView).inset(44)
+            make.bottom.equalTo(tagButton.snp.top).offset(ConsideringUser.buttonShapesEnabled ? -4 : 0)
             make.top.equalTo(contentView)
-        }
-        tagButton.snp.makeConstraints { make in
-            make.top.equalTo(timeButton.snp.bottom).offset(ConsideringUser.buttonShapesEnabled ? 4 : 0)
         }
         
         contentView.addSubview(commentButton)
@@ -146,15 +152,12 @@ class RecordListCell: RecordListBaseCell {
             make.top.equalTo(tagButton.snp.bottom).offset(ConsideringUser.buttonShapesEnabled ? 4 : 0)
             make.bottom.equalTo(contentView)
         }
-
-        timeButton.addTarget(self, action: #selector(timeButtonAction), for: .touchUpInside)
-        tagButton.addTarget(self, action: #selector(tagButtonAction), for: .touchUpInside)
-        commentButton.addTarget(self, action: #selector(commentButtonAction), for: .touchUpInside)
     }
     
     override func updateConfiguration(using state: UICellConfigurationState) {
         super.updateConfiguration(using: state)
         setupViewsIfNeeded(using: state)
+        addButtonsIfNeeded()
         
         if let detailItem = state.detailItem, let tag = detailItem.tags.first(where: { $0.id == detailItem.record.tagID }) {
             let title = tag.title
@@ -221,6 +224,9 @@ class RecordListCell: RecordListBaseCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        
+        timeButton.removeFromSuperview()
+        commentButton.removeFromSuperview()
     }
     
     @objc
