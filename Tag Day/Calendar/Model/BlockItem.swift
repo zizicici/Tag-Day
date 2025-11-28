@@ -10,7 +10,22 @@ import ZCCalendar
 import UIKit
 import Collections
 
-struct BlockItem: Hashable {
+protocol BlockCellProtocol: Hashable {
+    var index: Int { get set }
+    var backgroundColor: UIColor { get set }
+    var foregroundColor: UIColor { get set }
+    var isToday: Bool { get set }
+    var secondaryCalendar: String? { get set }
+    var a11ySecondaryCalendar: String? { get set }
+    
+    func getTagData() -> [(tag: Tag, count: Int)]
+    func getDay() -> String
+    func getA11yLabel() -> String
+    func getA11yHint() -> String
+    func getA11yValue() -> String
+}
+
+struct BlockItem: BlockCellProtocol {
     private static let dateFormatterCache = NSCache<NSNumber, NSString>()
     
     var index: Int
@@ -22,6 +37,45 @@ struct BlockItem: Hashable {
     var tagDisplayType: TagDisplayType
     var secondaryCalendar: String?
     var a11ySecondaryCalendar: String?
+    
+    func getTagData() -> [(tag: Tag, count: Int)] {
+        let tagData: [(tag: Tag, count: Int)]
+        switch tagDisplayType {
+        case .normal:
+            tagData = records.compactMap { record in
+                tags.first(where: { $0.id == record.tagID }).map { (tag: $0, count: 1) }
+            }
+        case .aggregation:
+            var orderedCounts = OrderedDictionary<Int64, Int>()
+            for record in records {
+                orderedCounts[record.tagID, default: 0] += 1
+            }
+            tagData = orderedCounts.compactMap { key, value in
+                tags.first(where: { $0.id == key }).map { (tag: $0, count: value) }
+            }
+        }
+        return tagData
+    }
+    
+    func getDay() -> String {
+        return day.dayString()
+    }
+    
+    func getA11yLabel() -> String {
+        if isToday {
+            return String(localized: "weekCalendar.today") + "," + calendarString + "," + (a11ySecondaryCalendar ?? "")
+        } else {
+            return calendarString + "," + (a11ySecondaryCalendar ?? "")
+        }
+    }
+    
+    func getA11yHint() -> String {
+        return records.count == 0 ? String(localized: "a11y.block.hint.add") : String(localized: "a11y.block.hint.review")
+    }
+    
+    func getA11yValue() -> String {
+        return recordString
+    }
 }
 
 extension BlockItem {

@@ -19,6 +19,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         
     private var yearButton: UIBarButtonItem?
     private var settingsButton: UIBarButtonItem?
+    private var actionButton: UIBarButtonItem?
     private var moreButton: UIBarButtonItem?
     
     // Search
@@ -104,14 +105,23 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         
         addGestures()
         
-        settingsButton = UIBarButtonItem(image: UIImage(systemName: "slider.horizontal.2.square", withConfiguration: UIImage.SymbolConfiguration(weight: .medium)), style: .plain, target: nil, action: nil)
+        settingsButton = UIBarButtonItem(image: UIImage(systemName: "slider.horizontal.2.square"), style: .plain, target: nil, action: nil)
         settingsButton?.accessibilityLabel = String(localized: "display.settings")
         settingsButton?.tintColor = AppColor.dynamicColor
         
-        moreButton = UIBarButtonItem(image: UIImage(systemName: "ellipsis", withConfiguration: UIImage.SymbolConfiguration(weight: .medium)), style: .plain, target: nil, action: nil)
-        moreButton?.tintColor = AppColor.dynamicColor
+        actionButton = UIBarButtonItem(image: UIImage(systemName: "square.grid.2x2"), style: .plain, target: nil, action: nil)
+        actionButton?.accessibilityLabel = String(localized: "edit.action")
+        actionButton?.tintColor = AppColor.dynamicColor
         
-        navigationItem.rightBarButtonItems = [moreButton, settingsButton].compactMap{ $0 }
+        moreButton = UIBarButtonItem(image: UIImage(systemName: "ellipsis"), style: .plain, target: nil, action: nil)
+        moreButton?.tintColor = AppColor.dynamicColor
+        if #available(iOS 26.0, *) {
+            moreButton?.sharesBackground = false
+        } else {
+            // Fallback on earlier versions
+        }
+        
+        navigationItem.rightBarButtonItems = [moreButton, actionButton, settingsButton].compactMap{ $0 }
         
         yearButton = UIBarButtonItem(title: displayHandler.getTitle(), style: .plain, target: self, action: #selector(showYearPicker))
         yearButton?.tintColor = AppColor.dynamicColor
@@ -333,6 +343,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         yearButton?.title = displayHandler.getTitle()
         
         updateMoreMenu()
+        updateActionMenu()
         updateSettingsMenu()
         navigationItem.leftBarButtonItems?.forEach { $0.tintColor = AppColor.dynamicColor }
         navigationItem.rightBarButtonItems?.forEach { $0.tintColor = AppColor.dynamicColor }
@@ -399,11 +410,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         return UIMenu(children: children)
     }
     
-    private func updateMoreMenu() {        
-        moreButton?.menu = getMoreMenu()
-    }
-    
-    func getMoreMenu() -> UIMenu {
+    private func updateActionMenu() {
         var children: [UIMenuElement] = []
         
         let batchEditorAction = UIAction(title: String(localized: "controller.batchEditor.title"), image: UIImage(systemName: "square.grid.2x2")) { [weak self] _ in
@@ -411,23 +418,43 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         }
         children.append(batchEditorAction)
         
+        actionButton?.menu = UIMenu(children: children)
+    }
+    
+    private func updateMoreMenu() {        
+        moreButton?.menu = getMoreMenu()
+    }
+    
+    func getMoreMenu() -> UIMenu {
+        var children: [UIMenuElement] = []
+        
+        let calendarAction = UIAction(title: String(localized: "books.calendar"), image: UIImage(systemName: "calendar")) { [weak self] action in
+            self?.showCalendar()
+        }
+        children.append(calendarAction)
+        
         let searchAction = UIAction(title: String(localized: "search"), image: UIImage(systemName: "magnifyingglass")) { [weak self] _ in
             self?.showSearchBar()
         }
         children.append(searchAction)
         
         let moreAction = UIAction(title: String(localized: "controller.more.title"), image: UIImage(systemName: "ellipsis.circle")) { [weak self] _ in
-            self?.moreAction()
+            self?.showMore()
         }
         
-        let currentPageDivider = UIMenu(title: "", options: .displayInline, children: [moreAction])
-        children.append(currentPageDivider)
+        children.append(moreAction)
         
         return UIMenu(children: children)
     }
     
+    func showCalendar() {
+        let overviewViewController = OverviewViewController()
+        
+        navigationController?.present(NavigationController(rootViewController: overviewViewController), animated: ConsideringUser.animated)
+    }
+    
     @objc
-    func moreAction() {
+    func showMore() {
         navigationController?.present(NavigationController(rootViewController: MoreViewController()), animated: ConsideringUser.animated)
     }
     

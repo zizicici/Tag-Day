@@ -270,8 +270,6 @@ class MoreViewController: UIViewController {
         
         view.backgroundColor = AppColor.background
         
-        navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.largeTitleDisplayMode = .automatic
         navigationController?.navigationBar.tintColor = AppColor.dynamicColor
         
         configureHierarchy()

@@ -139,6 +139,7 @@ class MainViewController: CalendarViewController {
         bookPickerButton.accessibilityLabel = String(localized: "a11y.bookPicker")
     }
     
+    @available(iOS 26.0, *)
     func setupBottomBarItems() {
         let bookItem = UIBarButtonItem(image: UIImage(systemName: "book"), style: .done, target: nil, action: nil)
         bookItem.tintColor = AppColor.dynamicColor

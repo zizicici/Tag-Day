@@ -14,17 +14,25 @@ fileprivate extension UIConfigurationStateCustomKey {
 }
 
 private extension UICellConfigurationState {
-    var blockItem: BlockItem? {
-        set { self[.blockItem] = newValue }
-        get { return self[.blockItem] as? BlockItem }
+    var blockItem: (any BlockCellProtocol)? {
+        set { self[.blockItem] = newValue as? AnyHashable }
+        get { return self[.blockItem] as? (any BlockCellProtocol) }
     }
 }
 
 class BlockBaseCell: UICollectionViewCell {
-    private var blockItem: BlockItem? = nil
+    private var blockItem: (any BlockCellProtocol)? = nil
     
-    func update(with newBlockItem: BlockItem) {
-        guard blockItem != newBlockItem else { return }
+    func update(with newBlockItem: (any BlockCellProtocol)?) {
+        switch (blockItem, newBlockItem) {
+        case (nil, nil):
+            return
+        case (let lhs?, let rhs?) where areEqual(lhs, rhs):
+            return
+        default:
+            break
+        }
+        
         blockItem = newBlockItem
         setNeedsUpdateConfiguration()
     }
@@ -33,6 +41,10 @@ class BlockBaseCell: UICollectionViewCell {
         var state = super.configurationState
         state.blockItem = self.blockItem
         return state
+    }
+    
+    private func areEqual(_ lhs: any BlockCellProtocol, _ rhs: any BlockCellProtocol) -> Bool {
+        return type(of: lhs) == type(of: rhs) && lhs.hashValue == rhs.hashValue
     }
 }
 
@@ -116,24 +128,10 @@ class BlockCell: BlockBaseCell, HoverableCell {
                 backgroundColor = highlightColor.overlay(on: backgroundColor)
             }
             
-            dateLayer.update(text: item.day.dayString(), secondaryText: item.secondaryCalendar ?? "", textColor: item.foregroundColor)
+            dateLayer.update(text: item.getDay(), secondaryText: item.secondaryCalendar ?? "", textColor: item.foregroundColor)
             
             // 获取需要显示的tag数据
-            let tagData: [(tag: Tag, count: Int)]
-            switch item.tagDisplayType {
-            case .normal:
-                tagData = item.records.compactMap { record in
-                    item.tags.first(where: { $0.id == record.tagID }).map { (tag: $0, count: 1) }
-                }
-            case .aggregation:
-                var orderedCounts = OrderedDictionary<Int64, Int>()
-                for record in item.records {
-                    orderedCounts[record.tagID, default: 0] += 1
-                }
-                tagData = orderedCounts.compactMap { key, value in
-                    item.tags.first(where: { $0.id == key }).map { (tag: $0, count: value) }
-                }
-            }
+            let tagData: [(tag: Tag, count: Int)] = item.getTagData()
             
             // 复用或创建tagViews
             while cachedTagLayers.count > tagData.count {
@@ -155,13 +153,9 @@ class BlockCell: BlockBaseCell, HoverableCell {
             
             updateTagFramesIfNeeded()
             
-            if item.isToday {
-                accessibilityLabel = String(localized: "weekCalendar.today") + "," + item.calendarString + "," + (item.a11ySecondaryCalendar ?? "")
-            } else {
-                accessibilityLabel = item.calendarString + "," + (item.a11ySecondaryCalendar ?? "")
-            }
-            accessibilityValue = item.recordString
-            accessibilityHint = item.records.count == 0 ? String(localized: "a11y.block.hint.add") : String(localized: "a11y.block.hint.review")
+            accessibilityLabel = item.getA11yLabel()
+            accessibilityValue = item.getA11yValue()
+            accessibilityHint = item.getA11yHint()
             
             backgroundConfiguration = BlockCellBackgroundConfiguration.configuration(for: state, backgroundColor: backgroundColor, cornerRadius: 6.0, showStroke: item.isToday, strokeColor: UIColor.systemYellow, strokeWidth: 1.5, strokeOutset: 1.0)
         }

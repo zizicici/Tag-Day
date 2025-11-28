@@ -17,18 +17,21 @@
 		147E83FC2E1288AB00736D9F /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D3A2DC5179F001B61D5 /* UIColor+Extension.swift */; };
 		147E84012E12BCF400736D9F /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147E84002E12BCF400736D9F /* Extension.swift */; };
 		147E84022E12BD4700736D9F /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147E84002E12BCF400736D9F /* Extension.swift */; };
-		147E84042E12C1FC00736D9F /* ZCCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 147E84032E12C1FC00736D9F /* ZCCalendar */; };
 		147E84062E12C20B00736D9F /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 147E84052E12C20B00736D9F /* Collections */; };
 		14833D352DC50310001B61D5 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D342DC50310001B61D5 /* Book.swift */; };
 		14833D372DC50420001B61D5 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D362DC50420001B61D5 /* Tag.swift */; };
 		14833D392DC504B9001B61D5 /* DayRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D382DC504B9001B61D5 /* DayRecord.swift */; };
 		14833D3B2DC5179F001B61D5 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D3A2DC5179F001B61D5 /* UIColor+Extension.swift */; };
+		14840ED02ED95F7200BB5A43 /* OverviewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14840ECF2ED95F7200BB5A43 /* OverviewItem.swift */; };
+		14908A0B2EC8B2E30065A1EC /* ZCCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 14908A0A2EC8B2E30065A1EC /* ZCCalendar */; };
+		14908A102EC8B52E0065A1EC /* ZCCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 14908A0F2EC8B52E0065A1EC /* ZCCalendar */; };
 		14980E2D2E110E95009622BF /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14980E2C2E110E95009622BF /* WidgetKit.framework */; };
 		14980E2F2E110E95009622BF /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14980E2E2E110E95009622BF /* SwiftUI.framework */; };
 		14980E322E110E95009622BF /* TagWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14980E312E110E95009622BF /* TagWidgetBundle.swift */; };
 		14980E342E110E95009622BF /* Widget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14980E332E110E95009622BF /* Widget.swift */; };
 		14980E362E110E95009622BF /* ConfigurationAppIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14980E352E110E95009622BF /* ConfigurationAppIntent.swift */; };
 		14980E3C2E110E96009622BF /* Tag Widget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 14980E2A2E110E95009622BF /* Tag Widget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		149B875C2E8D79EE00948316 /* OverviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149B875B2E8D79EE00948316 /* OverviewViewController.swift */; };
 		14AA3E072DCDB31300E1F4F8 /* RecordListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AA3E062DCDB31300E1F4F8 /* RecordListViewController.swift */; };
 		14AA3E0B2DCDF3BE00E1F4F8 /* RecordListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AA3E0A2DCDF3BE00E1F4F8 /* RecordListCell.swift */; };
 		14AA90542DFE7EDE00EA331A /* TagInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AA90532DFE7EDE00EA331A /* TagInfoCell.swift */; };
@@ -41,6 +44,7 @@
 		14AD28862DC5C21E0018DAF3 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AD28852DC5C21E0018DAF3 /* DataManager.swift */; };
 		14AD28882DC5C8EC0018DAF3 /* TagCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AD28872DC5C8EC0018DAF3 /* TagCell.swift */; };
 		14AD288D2DC5E2DE0018DAF3 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AD288C2DC5E2DE0018DAF3 /* MainViewController.swift */; };
+		14AE7ACF2ECAE98B006B7467 /* AppInfo in Frameworks */ = {isa = PBXBuildFile; productRef = 14AE7ACE2ECAE98B006B7467 /* AppInfo */; };
 		14B239B62DBF13F30007152C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B239B22DBF13F30007152C /* SceneDelegate.swift */; };
 		14B239B72DBF13F30007152C /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B239B32DBF13F30007152C /* CalendarViewController.swift */; };
 		14B239B82DBF13F30007152C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B239AE2DBF13F30007152C /* AppDelegate.swift */; };
@@ -49,8 +53,6 @@
 		14B239C72DBF765B0007152C /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 14B239C62DBF765B0007152C /* Localizable.xcstrings */; };
 		14B239CC2DBF77B10007152C /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 14B239CB2DBF77B10007152C /* SnapKit */; };
 		14B239CF2DBF78CD0007152C /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = 14B239CE2DBF78CD0007152C /* GRDB */; };
-		14B239D22DBF78F10007152C /* AppInfo in Frameworks */ = {isa = PBXBuildFile; productRef = 14B239D12DBF78F10007152C /* AppInfo */; };
-		14B239D52DBF790A0007152C /* ZCCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 14B239D42DBF790A0007152C /* ZCCalendar */; };
 		14B239D82DBF791E0007152C /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 14B239D72DBF791E0007152C /* Toast */; };
 		14B2BE0E2E447A9C0024E508 /* TagCircleDayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B2BE0D2E447A9C0024E508 /* TagCircleDayViewController.swift */; };
 		14B468F02DFFE5B500415529 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 14B468EF2DFFE5B500415529 /* Collections */; };
@@ -204,6 +206,7 @@
 		14833D362DC50420001B61D5 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
 		14833D382DC504B9001B61D5 /* DayRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRecord.swift; sourceTree = "<group>"; };
 		14833D3A2DC5179F001B61D5 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
+		14840ECF2ED95F7200BB5A43 /* OverviewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverviewItem.swift; sourceTree = "<group>"; };
 		14980E2A2E110E95009622BF /* Tag Widget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Tag Widget.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		14980E2C2E110E95009622BF /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		14980E2E2E110E95009622BF /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
@@ -211,6 +214,7 @@
 		14980E332E110E95009622BF /* Widget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Widget.swift; sourceTree = "<group>"; };
 		14980E352E110E95009622BF /* ConfigurationAppIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationAppIntent.swift; sourceTree = "<group>"; };
 		14980E392E110E96009622BF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		149B875B2E8D79EE00948316 /* OverviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverviewViewController.swift; sourceTree = "<group>"; };
 		14AA3E062DCDB31300E1F4F8 /* RecordListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListViewController.swift; sourceTree = "<group>"; };
 		14AA3E0A2DCDF3BE00E1F4F8 /* RecordListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListCell.swift; sourceTree = "<group>"; };
 		14AA90532DFE7EDE00EA331A /* TagInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagInfoCell.swift; sourceTree = "<group>"; };
@@ -334,7 +338,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				14980E2F2E110E95009622BF /* SwiftUI.framework in Frameworks */,
-				147E84042E12C1FC00736D9F /* ZCCalendar in Frameworks */,
+				14908A102EC8B52E0065A1EC /* ZCCalendar in Frameworks */,
 				147E84062E12C20B00736D9F /* Collections in Frameworks */,
 				14980E2D2E110E95009622BF /* WidgetKit.framework in Frameworks */,
 			);
@@ -344,9 +348,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				14AE7ACF2ECAE98B006B7467 /* AppInfo in Frameworks */,
 				14B468F02DFFE5B500415529 /* Collections in Frameworks */,
-				14B239D22DBF78F10007152C /* AppInfo in Frameworks */,
-				14B239D52DBF790A0007152C /* ZCCalendar in Frameworks */,
+				14908A0B2EC8B2E30065A1EC /* ZCCalendar in Frameworks */,
 				14EBE0862DD7679700F7609A /* DurationPicker in Frameworks */,
 				14B239CC2DBF77B10007152C /* SnapKit in Frameworks */,
 				14CC10652E0FFE1A0076E988 /* SymbolPicker in Frameworks */,
@@ -375,6 +379,14 @@
 			path = ActionIntent;
 			sourceTree = "<group>";
 		};
+		14840ED12ED95F7900BB5A43 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				14840ECF2ED95F7200BB5A43 /* OverviewItem.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		14980E2B2E110E95009622BF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -395,6 +407,15 @@
 				147E84002E12BCF400736D9F /* Extension.swift */,
 			);
 			path = "Tag Widget";
+			sourceTree = "<group>";
+		};
+		149B875D2E8D79FA00948316 /* Overview */ = {
+			isa = PBXGroup;
+			children = (
+				149B875B2E8D79EE00948316 /* OverviewViewController.swift */,
+				14840ED12ED95F7900BB5A43 /* Model */,
+			);
+			path = Overview;
 			sourceTree = "<group>";
 		};
 		14AA3E092DCDB32A00E1F4F8 /* DayRecord */ = {
@@ -486,6 +507,7 @@
 				14AD287F2DC5B7090018DAF3 /* Tag */,
 				14AA3E092DCDB32A00E1F4F8 /* DayRecord */,
 				14BFEBDC2E3E58D900BF7923 /* Batch Editor */,
+				149B875D2E8D79FA00948316 /* Overview */,
 				14D272BC2DC0884E00267572 /* More */,
 				14D272AD2DC073EB00267572 /* Database */,
 				14FF82A22E03F78500D3000B /* Backup */,
@@ -843,8 +865,8 @@
 			);
 			name = "Tag Widget";
 			packageProductDependencies = (
-				147E84032E12C1FC00736D9F /* ZCCalendar */,
 				147E84052E12C20B00736D9F /* Collections */,
+				14908A0F2EC8B52E0065A1EC /* ZCCalendar */,
 			);
 			productName = WidgetExtension;
 			productReference = 14980E2A2E110E95009622BF /* Tag Widget.appex */;
@@ -868,13 +890,13 @@
 			packageProductDependencies = (
 				14B239CB2DBF77B10007152C /* SnapKit */,
 				14B239CE2DBF78CD0007152C /* GRDB */,
-				14B239D12DBF78F10007152C /* AppInfo */,
-				14B239D42DBF790A0007152C /* ZCCalendar */,
 				14B239D72DBF791E0007152C /* Toast */,
 				14EBE0852DD7679700F7609A /* DurationPicker */,
 				14B468EF2DFFE5B500415529 /* Collections */,
 				14FF82A62E03F9B100D3000B /* ZipArchive */,
 				14CC10642E0FFE1A0076E988 /* SymbolPicker */,
+				14908A0A2EC8B2E30065A1EC /* ZCCalendar */,
+				14AE7ACE2ECAE98B006B7467 /* AppInfo */,
 			);
 			productName = "Tag Day";
 			productReference = 14CD76AD2DBE6BA10035DF1F /* Tag Day.app */;
@@ -913,13 +935,13 @@
 			packageReferences = (
 				14B239CA2DBF77B10007152C /* XCRemoteSwiftPackageReference "SnapKit" */,
 				14B239CD2DBF78CD0007152C /* XCRemoteSwiftPackageReference "GRDB" */,
-				14B239D02DBF78F10007152C /* XCRemoteSwiftPackageReference "AppInfo" */,
-				14B239D32DBF790A0007152C /* XCRemoteSwiftPackageReference "ZCCalendar" */,
 				14B239D62DBF791E0007152C /* XCRemoteSwiftPackageReference "Toast-Swift" */,
 				14EBE0842DD7679700F7609A /* XCRemoteSwiftPackageReference "DurationPicker" */,
 				14B468EE2DFFE5B500415529 /* XCRemoteSwiftPackageReference "swift-collections" */,
 				14FF82A52E03F9B100D3000B /* XCRemoteSwiftPackageReference "ZipArchive" */,
 				14CC10632E0FFE1A0076E988 /* XCRemoteSwiftPackageReference "SymbolPicker" */,
+				14908A092EC8B2E30065A1EC /* XCRemoteSwiftPackageReference "ZCCalendar" */,
+				14AE7ACD2ECAE98B006B7467 /* XCRemoteSwiftPackageReference "AppInfo" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 14CD76AE2DBE6BA10035DF1F /* Products */;
@@ -1028,6 +1050,7 @@
 				14BFEBDE2E3E58EF00BF7923 /* BatchEditorViewController.swift in Sources */,
 				14ACBE562DBFAD2E0056B1FD /* TabbarController.swift in Sources */,
 				144A9C0B2E4390C700190205 /* TagCircleEditorViewController.swift in Sources */,
+				149B875C2E8D79EE00948316 /* OverviewViewController.swift in Sources */,
 				14AA90542DFE7EDE00EA331A /* TagInfoCell.swift in Sources */,
 				14D2729F2DC072D700267572 /* Settings.swift in Sources */,
 				14EBE0882DD76B0B00F7609A /* DurationCell.swift in Sources */,
@@ -1071,6 +1094,7 @@
 				14F92E382E1C11F500712D87 /* BookConfig.swift in Sources */,
 				14D272BF2DC0884E00267572 /* MoreViewController.swift in Sources */,
 				14AD28812DC5BCC50018DAF3 /* BookCell.swift in Sources */,
+				14840ED02ED95F7200BB5A43 /* OverviewItem.swift in Sources */,
 				14D272B12DC073EB00267572 /* Date+Extension.swift in Sources */,
 				14D2B3CC2E07B9280000CE05 /* DateLayer.swift in Sources */,
 				14D272B22DC073EB00267572 /* AppDatabase.swift in Sources */,
@@ -1409,6 +1433,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		14908A092EC8B2E30065A1EC /* XCRemoteSwiftPackageReference "ZCCalendar" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/zizicici/ZCCalendar";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.4;
+			};
+		};
+		14AE7ACD2ECAE98B006B7467 /* XCRemoteSwiftPackageReference "AppInfo" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/zizicici/AppInfo";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.3.0;
+			};
+		};
 		14B239CA2DBF77B10007152C /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit";
@@ -1423,22 +1463,6 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 7.0.0;
-			};
-		};
-		14B239D02DBF78F10007152C /* XCRemoteSwiftPackageReference "AppInfo" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/zizicici/AppInfo";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.1.0;
-			};
-		};
-		14B239D32DBF790A0007152C /* XCRemoteSwiftPackageReference "ZCCalendar" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/zizicici/ZCCalendar";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.1.4;
 			};
 		};
 		14B239D62DBF791E0007152C /* XCRemoteSwiftPackageReference "Toast-Swift" */ = {
@@ -1484,15 +1508,25 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		147E84032E12C1FC00736D9F /* ZCCalendar */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 14B239D32DBF790A0007152C /* XCRemoteSwiftPackageReference "ZCCalendar" */;
-			productName = ZCCalendar;
-		};
 		147E84052E12C20B00736D9F /* Collections */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 14B468EE2DFFE5B500415529 /* XCRemoteSwiftPackageReference "swift-collections" */;
 			productName = Collections;
+		};
+		14908A0A2EC8B2E30065A1EC /* ZCCalendar */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 14908A092EC8B2E30065A1EC /* XCRemoteSwiftPackageReference "ZCCalendar" */;
+			productName = ZCCalendar;
+		};
+		14908A0F2EC8B52E0065A1EC /* ZCCalendar */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 14908A092EC8B2E30065A1EC /* XCRemoteSwiftPackageReference "ZCCalendar" */;
+			productName = ZCCalendar;
+		};
+		14AE7ACE2ECAE98B006B7467 /* AppInfo */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 14AE7ACD2ECAE98B006B7467 /* XCRemoteSwiftPackageReference "AppInfo" */;
+			productName = AppInfo;
 		};
 		14B239CB2DBF77B10007152C /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -1503,16 +1537,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 14B239CD2DBF78CD0007152C /* XCRemoteSwiftPackageReference "GRDB" */;
 			productName = GRDB;
-		};
-		14B239D12DBF78F10007152C /* AppInfo */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 14B239D02DBF78F10007152C /* XCRemoteSwiftPackageReference "AppInfo" */;
-			productName = AppInfo;
-		};
-		14B239D42DBF790A0007152C /* ZCCalendar */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 14B239D32DBF790A0007152C /* XCRemoteSwiftPackageReference "ZCCalendar" */;
-			productName = ZCCalendar;
 		};
 		14B239D72DBF791E0007152C /* Toast */ = {
 			isa = XCSwiftPackageProductDependency;
