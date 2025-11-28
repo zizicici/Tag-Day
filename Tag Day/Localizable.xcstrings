@@ -723,6 +723,34 @@
         }
       }
     },
+    "appjun.more" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Explore More"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "探索更多"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "探索更多"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "探索更多"
+          }
+        }
+      }
+    },
     "backup.alert.folderName.message" : {
       "comment" : "It is recommended to input Arabic numerals or English letters.",
       "localizations" : {

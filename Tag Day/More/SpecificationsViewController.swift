@@ -73,7 +73,7 @@ class SpecificationsViewController: UIViewController {
                 case .publisher:
                     return "ZIZICICI LIMITED"
                 case .date:
-                    return "2025/09/23"
+                    return "2025/11/28"
                 case .license:
                     return "粤ICP备2025448771号-1A"
                 }
@@ -89,7 +89,7 @@ class SpecificationsViewController: UIViewController {
                 let GRDB = ThirdParty(
                     urlString: "https://github.com/groue/GRDB.swift",
                     name: "GRDB",
-                    version: "7.4.1"
+                    version: "7.8.0"
                 )
                 let SnapKit = ThirdParty(
                     urlString: "https://github.com/SnapKit/SnapKit",
