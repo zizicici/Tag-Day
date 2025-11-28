@@ -347,7 +347,7 @@ extension RecordListViewController: RecordListCellDelegate {
     }
 }
 
-extension RecordListViewController {
+extension UIViewController {
     func showDeleteAlert(for record: DayRecord) {
         guard record.id != nil else { return }
         

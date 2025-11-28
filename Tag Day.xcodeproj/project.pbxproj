@@ -23,6 +23,7 @@
 		14833D392DC504B9001B61D5 /* DayRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D382DC504B9001B61D5 /* DayRecord.swift */; };
 		14833D3B2DC5179F001B61D5 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14833D3A2DC5179F001B61D5 /* UIColor+Extension.swift */; };
 		14840ED02ED95F7200BB5A43 /* OverviewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14840ECF2ED95F7200BB5A43 /* OverviewItem.swift */; };
+		14840ED32ED97F5500BB5A43 /* OverviewListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14840ED22ED97F5500BB5A43 /* OverviewListViewController.swift */; };
 		14908A0B2EC8B2E30065A1EC /* ZCCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 14908A0A2EC8B2E30065A1EC /* ZCCalendar */; };
 		14908A102EC8B52E0065A1EC /* ZCCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 14908A0F2EC8B52E0065A1EC /* ZCCalendar */; };
 		14980E2D2E110E95009622BF /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14980E2C2E110E95009622BF /* WidgetKit.framework */; };
@@ -207,6 +208,7 @@
 		14833D382DC504B9001B61D5 /* DayRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayRecord.swift; sourceTree = "<group>"; };
 		14833D3A2DC5179F001B61D5 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		14840ECF2ED95F7200BB5A43 /* OverviewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverviewItem.swift; sourceTree = "<group>"; };
+		14840ED22ED97F5500BB5A43 /* OverviewListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverviewListViewController.swift; sourceTree = "<group>"; };
 		14980E2A2E110E95009622BF /* Tag Widget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Tag Widget.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		14980E2C2E110E95009622BF /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		14980E2E2E110E95009622BF /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
@@ -413,6 +415,7 @@
 			isa = PBXGroup;
 			children = (
 				149B875B2E8D79EE00948316 /* OverviewViewController.swift */,
+				14840ED22ED97F5500BB5A43 /* OverviewListViewController.swift */,
 				14840ED12ED95F7900BB5A43 /* Model */,
 			);
 			path = Overview;
@@ -1091,6 +1094,7 @@
 				14D272BD2DC0884E00267572 /* SpecificationsViewController.swift in Sources */,
 				14D272BE2DC0884E00267572 /* SettingOptionsViewController.swift in Sources */,
 				14CC8A462DCF04970062F8BA /* FastEditorViewController.swift in Sources */,
+				14840ED32ED97F5500BB5A43 /* OverviewListViewController.swift in Sources */,
 				14F92E382E1C11F500712D87 /* BookConfig.swift in Sources */,
 				14D272BF2DC0884E00267572 /* MoreViewController.swift in Sources */,
 				14AD28812DC5BCC50018DAF3 /* BookCell.swift in Sources */,

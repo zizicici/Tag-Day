@@ -26,6 +26,7 @@ class OverviewViewController: UIViewController {
     private var closeButton: UIBarButtonItem?
     
     private var dataSource: UICollectionViewDiffableDataSource<Section, Item>! = nil
+    private var calendarTransitionDelegate: CalendarTransitionDelegate?
     
     private var books: [Book] = []
     private var tags: [Tag] = []
@@ -76,6 +77,8 @@ class OverviewViewController: UIViewController {
         configureHierarchy()
         configureDataSource()
         reloadData()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .DatabaseUpdated, object: nil)
     }
     
     private func configureHierarchy() {
@@ -134,12 +137,18 @@ class OverviewViewController: UIViewController {
 }
 
 extension OverviewViewController: DisplayHandlerDelegate {
+    @objc
     func reloadData() {
         yearButton?.title = displayHandler.getTitle()
         
         books = (try? DataManager.shared.fetchAllBooks()) ?? []
         tags = (try? DataManager.shared.fetchAllTags()) ?? []
         records = (try? DataManager.shared.fetchAllDayRecords(after: Int64(displayHandler.getLeading()))) ?? []
+        
+        applyData()
+    }
+    
+    func applyData() {
         let filterRecord = records.filter { record in
             return record.day <= displayHandler.getTrailing()
         }
@@ -209,11 +218,11 @@ extension OverviewViewController: DisplayHandlerDelegate {
             
             snapshot.appendItems(items.map{ Item.block($0) }, toSection: .row(gregorianMonth))
             sectionRecordMaxCount = getMaxRecordsPerSection(from: snapshot)
-            
-            dataSource.apply(snapshot, animatingDifferences: true) { [weak self] in
-                guard let self = self, !self.didScrollToday else { return }
-                self.didScrollToday = true
-            }
+        }
+        
+        dataSource.apply(snapshot, animatingDifferences: true) { [weak self] in
+            guard let self = self, !self.didScrollToday else { return }
+            self.didScrollToday = true
         }
     }
     
@@ -320,6 +329,32 @@ extension OverviewViewController {
 extension OverviewViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
+        
+        guard let cell = collectionView.cellForItem(at: indexPath) else {
+            return
+        }
+        guard let item = dataSource.itemIdentifier(for: indexPath) else {
+            return
+        }
+        
+        switch item {
+        case .block(let overviewItem):
+            let recordsInADay = records.filter { record in
+                record.day == overviewItem.index
+            }
+            let detailViewController = OverviewListViewController(day: overviewItem.day)
+            detailViewController.dayPresenter = self
+            let nav = NavigationController(rootViewController: detailViewController)
+            if !UIAccessibility.isVoiceOverRunning {
+                let cellFrame = cell.convert(cell.bounds, to: nil)
+                nav.modalPresentationStyle = .custom
+                calendarTransitionDelegate = CalendarTransitionDelegate(originFrame: cellFrame, cellBackgroundColor: AppColor.background, detailSize: CGSize(width: min(view.frame.width - 80.0, 300), height: min(view.frame.height * 0.7, 480)))
+                nav.transitioningDelegate = calendarTransitionDelegate
+            }
+            present(nav, animated: ConsideringUser.animated)
+        case .invisible:
+            break
+        }
     }
 }
 
@@ -384,5 +419,25 @@ extension OverviewViewController: UIPopoverPresentationControllerDelegate {
     
     func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
         return true
+    }
+}
+
+extension OverviewViewController: DayPresenter {
+    func show(day: GregorianDay) {
+        guard let popover = presentedViewController?.popoverPresentationController else { return }
+        guard let targetItem = dataSource.snapshot().itemIdentifiers.first (where: { item in
+            switch item {
+            case .block(let blockItem):
+                return blockItem.day == day
+            case .invisible:
+                return false
+            }
+        }) else { return }
+        guard let indexPath = dataSource.indexPath(for: targetItem) else { return }
+        guard let cell = collectionView.cellForItem(at: indexPath) else { return }
+        collectionView.scrollRectToVisible(cell.frame, animated: ConsideringUser.animated)
+        
+        popover.sourceView = cell
+        popover.sourceRect = cell.bounds
     }
 }
