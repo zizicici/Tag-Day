@@ -23,13 +23,19 @@ struct OverviewItem: BlockCellProtocol {
     var secondaryCalendar: String?
     var a11ySecondaryCalendar: String?
     
+    var isSymbol: Bool
+    
     var day: GregorianDay {
         return GregorianDay(JDN: index)
     }
     
     func getTagData() -> [(tag: Tag, count: Int)] {
         let fakeTagData = bookInfo.map { bookInfo in
-            return (Tag(bookID: bookInfo.book.id!, title: bookInfo.book.title, subtitle: "", color: bookInfo.book.color, order: 0), bookInfo.count)
+            if isSymbol {
+                return (Tag(bookID: bookInfo.book.id!, title: bookInfo.book.symbol, subtitle: "", color: UIColor.clear.generateLightDarkString(), titleColor: bookInfo.book.color, order: 0), bookInfo.count)
+            } else {
+                return (Tag(bookID: bookInfo.book.id!, title: bookInfo.book.title, subtitle: "", color: bookInfo.book.color, order: 0), bookInfo.count)
+            }
         }
         
         return fakeTagData

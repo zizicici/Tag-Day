@@ -17,6 +17,7 @@ protocol BlockCellProtocol: Hashable {
     var isToday: Bool { get set }
     var secondaryCalendar: String? { get set }
     var a11ySecondaryCalendar: String? { get set }
+    var isSymbol: Bool { get set }
     
     func getTagData() -> [(tag: Tag, count: Int)]
     func getDay() -> String
@@ -37,6 +38,7 @@ struct BlockItem: BlockCellProtocol {
     var tagDisplayType: TagDisplayType
     var secondaryCalendar: String?
     var a11ySecondaryCalendar: String?
+    var isSymbol: Bool = false
     
     func getTagData() -> [(tag: Tag, count: Int)] {
         let tagData: [(tag: Tag, count: Int)]

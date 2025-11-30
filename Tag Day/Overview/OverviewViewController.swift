@@ -23,7 +23,7 @@ class OverviewViewController: UIViewController {
     }
     
     private var yearButton: UIBarButtonItem?
-    private var closeButton: UIBarButtonItem?
+    private var displayButton: UIBarButtonItem?
     
     private var dataSource: UICollectionViewDiffableDataSource<Section, Item>! = nil
     private var calendarTransitionDelegate: CalendarTransitionDelegate?
@@ -35,6 +35,12 @@ class OverviewViewController: UIViewController {
     private var displayHandler: DisplayHandler!
     
     private var sectionRecordMaxCount: [Int: Int] = [:]
+    
+    private var isSymbol: Bool = false {
+        didSet {
+            reloadData()
+        }
+    }
     
     private var didScrollToday: Bool = false {
         willSet {
@@ -73,6 +79,10 @@ class OverviewViewController: UIViewController {
         yearButton = UIBarButtonItem(title: displayHandler.getTitle(), style: .plain, target: self, action: #selector(showYearPicker))
         yearButton?.tintColor = AppColor.dynamicColor
         navigationItem.leftBarButtonItems = [yearButton].compactMap{ $0 }
+        
+        displayButton = UIBarButtonItem(image: UIImage(systemName: "slider.horizontal.2.square"), style: .plain, target: nil, action: nil)
+        displayButton?.tintColor = AppColor.dynamicColor
+        navigationItem.rightBarButtonItems = [displayButton].compactMap{ $0 }
         
         configureHierarchy()
         configureDataSource()
@@ -140,6 +150,7 @@ extension OverviewViewController: DisplayHandlerDelegate {
     @objc
     func reloadData() {
         yearButton?.title = displayHandler.getTitle()
+        displayButton?.menu = getSettingsMenu()
         
         books = (try? DataManager.shared.fetchAllBooks()) ?? []
         tags = (try? DataManager.shared.fetchAllTags()) ?? []
@@ -211,7 +222,7 @@ extension OverviewViewController: DisplayHandlerDelegate {
                 let recordsInADay = filterRecord.filter{ $0.day == julianDay }
                 let bookInfo = getBookCounts(records: recordsInADay, books: books)
                 
-                return OverviewItem(index: julianDay, backgroundColor: backgroundColor, foregroundColor: foregroundColor, isToday: isToday, bookInfo: bookInfo)
+                return OverviewItem(index: julianDay, backgroundColor: backgroundColor, foregroundColor: foregroundColor, isToday: isToday, bookInfo: bookInfo, isSymbol: isSymbol)
                 
 //                return BlockItem(index: julianDay, backgroundColor: backgroundColor, foregroundColor: foregroundColor, isToday: isToday, tags: tags, records: records.filter{ $0.day == gregorianDay.julianDay }, tagDisplayType: TagDisplayType.getValue(), secondaryCalendar: secondaryCalendar, a11ySecondaryCalendar: a11ySecondaryCallendar)
             })
@@ -262,6 +273,31 @@ extension OverviewViewController: DisplayHandlerDelegate {
         }
         
         return result
+    }
+}
+
+extension OverviewViewController {
+    func getSettingsMenu() -> UIMenu {
+        var children: [UIMenuElement] = []
+        
+        let tagDisplayMenu = getTagDisplayTypeMenu()
+        
+        children = [tagDisplayMenu]
+        
+        return UIMenu(children: children)
+    }
+    
+    func getTagDisplayTypeMenu() -> UIMenu {
+        let normalAction = UIAction(title: String(localized: "overview.normal"), state: isSymbol ? .off : .on) { [weak self] _ in
+            self?.isSymbol = false
+        }
+        let symbolAction = UIAction(title: String(localized: "overview.symbol"), state: isSymbol ? .on : .off) { [weak self] _ in
+            self?.isSymbol = true
+        }
+        let tagDisplayActions = [normalAction, symbolAction]
+        let tagDisplayTypeMenu = UIMenu(title: String(localized: "overview.display"), subtitle: isSymbol ? symbolAction.title : normalAction.title, image: UIImage(systemName: "swatchpalette"), children: tagDisplayActions)
+    
+        return tagDisplayTypeMenu
     }
 }
 
@@ -339,9 +375,6 @@ extension OverviewViewController: UICollectionViewDelegate {
         
         switch item {
         case .block(let overviewItem):
-            let recordsInADay = records.filter { record in
-                record.day == overviewItem.index
-            }
             let detailViewController = OverviewListViewController(day: overviewItem.day)
             detailViewController.dayPresenter = self
             let nav = NavigationController(rootViewController: detailViewController)
