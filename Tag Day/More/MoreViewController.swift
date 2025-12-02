@@ -434,7 +434,7 @@ class MoreViewController: UIViewController {
         
         var appItems: [Item] = []
 
-        var otherApps: [App] = [.moontake, .lemon, .offDay, .tagDay, .one, .pigeon, .pin, .coconut]
+        var otherApps: [App] = [.moontake, .lemon, .offDay, .one, .pigeon, .pin, .coconut]
         
         if Language.type() == .zh {
             otherApps.append(.festivals)
