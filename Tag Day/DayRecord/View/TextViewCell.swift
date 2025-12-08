@@ -32,7 +32,7 @@ class TextViewCell: UITableViewCell {
         textView.snp.makeConstraints { make in
             make.top.bottom.equalTo(contentView)
             make.leading.trailing.equalTo(contentView).inset(0.0)
-            make.height.greaterThanOrEqualTo(100.0)
+            make.height.greaterThanOrEqualTo(200.0)
         }
         textView.delegate = self
     }
@@ -44,6 +44,10 @@ class TextViewCell: UITableViewCell {
     func update(text: String?, placeholder: String?) {
         textView.text = text
         textView.placeholder = placeholder
+        
+        if text?.count ?? 0 > 0 {
+            textView.layoutIfNeeded()
+        }
     }
     
     override var isFirstResponder: Bool {
