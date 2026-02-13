@@ -18,6 +18,7 @@ extension UserDefaults {
         case CrossYearMonthDisplay = "com.zizicici.tag.settings.CrossYearMonthDisplay"
         case TagDisplayType = "com.zizicici.tag.settings.TagDisplayType"
         case MonthlyStatsType = "com.zizicici.tag.settings.MonthlyStatsType"
+        case YearlyStatsType = "com.zizicici.tag.settings.YearlyStatsType"
         case DynamicColor = "com.zizicici.tag.settings.DynamicColor"
         case BookTitleDisplay = "com.zizicici.tag.settings.BookTitleDisplay"
         case AutoDismissInterval = "com.zizicici.tag.settings.AutoDismissInterval"
@@ -286,6 +287,58 @@ extension MonthlyStatsType: UserDefaultSettable {
     
     static func getFooter() -> String? {
         return nil
+    }
+}
+
+enum YearlyStatsType: Int, CaseIterable, Codable {
+    case hidden
+    case loggedCount
+    case dayCount
+}
+
+extension YearlyStatsType: UserDefaultSettable {
+    static func getKey() -> UserDefaults.Settings {
+        return .YearlyStatsType
+    }
+    
+    static var defaultOption: YearlyStatsType {
+        return .loggedCount
+    }
+    
+    func getName() -> String {
+        switch self {
+        case .hidden:
+            return String(localized: "settings.monthlyStatsType.hidden")
+        case .loggedCount:
+            return String(localized: "settings.monthlyStatsType.loggedCount")
+        case .dayCount:
+            return String(localized: "settings.monthlyStatsType.dayCount")
+        }
+    }
+    
+    static func getTitle() -> String {
+        return String(localized: "settings.yearlyStatsType.title")
+    }
+    
+    static func getHeader() -> String? {
+        return nil
+    }
+    
+    static func getFooter() -> String? {
+        return nil
+    }
+}
+
+extension YearlyStatsType {
+    var asMonthlyStatsType: MonthlyStatsType {
+        switch self {
+        case .hidden:
+            return .hidden
+        case .loggedCount:
+            return .loggedCount
+        case .dayCount:
+            return .dayCount
+        }
     }
 }
 

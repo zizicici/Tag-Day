@@ -88,9 +88,8 @@ class TagInfoCell: InfoBaseCell, HoverableCell {
         
         if let item = state.infoItem {
             tagView.update(tag: item.tag)
-            
             label.text = String(format: "× %i", item.count)
-            
+            label.textColor = AppColor.text.withAlphaComponent(0.6)
             isAccessibilityElement = true
             accessibilityTraits = .button
             accessibilityLabel = String(format: "%@ × %i", item.tag.title, item.count)
@@ -101,6 +100,36 @@ class TagInfoCell: InfoBaseCell, HoverableCell {
         } else {
             backgroundConfiguration = InfoCellBackgroundConfiguration.configuration(for: state)
         }
+    }
+}
+
+class InfoEmptyCell: UICollectionViewCell {
+    private let label: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 12.0, weight: .regular)
+        label.textAlignment = .center
+        label.textColor = AppColor.text.withAlphaComponent(0.45)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        contentView.addSubview(label)
+        NSLayoutConstraint.activate([
+            label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            label.topAnchor.constraint(equalTo: contentView.topAnchor),
+            label.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        ])
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func update(text: String) {
+        label.text = text
     }
 }
 

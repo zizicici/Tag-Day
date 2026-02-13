@@ -74,7 +74,7 @@ class DayDisplayHandler: DisplayHandler {
 
         let filterRecords = records.filter { ($0.day >= leading) && ($0.day <= trailing) }
 
-        LayoutGenerater.dayLayout(for: &snapshot, months: displayMonths, tags: tags, records: filterRecords)
+        LayoutGenerater.dayLayout(for: &snapshot, months: displayMonths, tags: tags, records: filterRecords, allRecords: records, selectedYear: selectedYear)
 
         return snapshot
     }

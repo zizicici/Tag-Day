@@ -12,6 +12,7 @@ import Collections
 
 class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate {
     static let sectionHeaderElementKind = "sectionHeaderElementKind"
+    static let yearlyStatsHeaderElementKind = "yearlyStatsHeaderElementKind"
     
     static let monthTagElementKind: String = "monthTagElementKind"
     
@@ -183,13 +184,14 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         switch item {
         case .invisible:
             break
+        case .empty:
+            break
         case .block(let blockItem):
             impactFeedbackGeneratorCoourred()
             tap(in: cell, for: blockItem)
         case .info(let infoItem):
-            guard case .info(let gregorianMonth) = dataSource.sectionIdentifier(for: indexPath.section) else { return }
             impactFeedbackGeneratorCoourred()
-            tap(in: cell, for: infoItem, month: gregorianMonth)
+            tap(in: cell, for: infoItem)
         }
     }
     
@@ -251,8 +253,9 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         }
     }
     
-    private func tap(in targetView: UIView, for infoItem: InfoItem, month: GregorianMonth) {
-        let statisticViewController = TagStatisticsViewController(tag: infoItem.tag, start: month.startDay, end: month.endDay)
+    private func tap(in targetView: UIView, for infoItem: InfoItem) {
+        guard let range = infoItem.displayRange else { return }
+        let statisticViewController = TagStatisticsViewController(tag: infoItem.tag, start: range.start, end: range.end)
         let nav = NavigationController(rootViewController: statisticViewController)
 
         showPopoverView(at: targetView, contentViewController: nav, width: 280.0, height: 400.0)
@@ -277,6 +280,11 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         let blockCellRegistration = getBlockCellRegistration()
         let invisibleCellRegistration = UICollectionView.CellRegistration<UICollectionViewCell, Item> { (cell, indexPath, identifier) in }
         let infoCellRegistration = getInfoCellRegistration()
+        let emptyInfoCellRegistration = UICollectionView.CellRegistration<InfoEmptyCell, Item> { (cell, indexPath, identifier) in
+            if case .empty(let text) = identifier {
+                cell.update(text: text)
+            }
+        }
         
         let headerRegistration = UICollectionView.SupplementaryRegistration
         <MonthTitleSupplementaryView>(elementKind: Self.sectionHeaderElementKind) { [weak self] (supplementaryView, string, indexPath) in
@@ -289,6 +297,18 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
                 supplementaryView.update(monthText: monthHeader.month, yearText: monthHeader.year, startWeekOrder: startWeekdayOrder)
             case .info:
                 break
+            }
+        }
+        
+        let yearlyHeaderRegistration = UICollectionView.SupplementaryRegistration
+        <YearlyStatsSupplementaryView>(elementKind: Self.yearlyStatsHeaderElementKind) { [weak self] (supplementaryView, string, indexPath) in
+            guard let self = self else { return }
+            guard let section = self.dataSource.sectionIdentifier(for: indexPath.section) else { return }
+            switch section {
+            case .info(let gregorianMonth, .yearly):
+                supplementaryView.update(title: yearlyStatsTitle(for: gregorianMonth.year))
+            default:
+                supplementaryView.update(title: nil)
             }
         }
         
@@ -306,6 +326,8 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
                     return collectionView.dequeueConfiguredReusableCell(using: invisibleCellRegistration, for: indexPath, item: identifier)
                 case .info:
                     return nil
+                case .empty:
+                    return nil
                 }
             case .info:
                 switch identifier {
@@ -313,11 +335,20 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
                     return nil
                 case .info:
                     return collectionView.dequeueConfiguredReusableCell(using: infoCellRegistration, for: indexPath, item: identifier)
+                case .empty:
+                    return collectionView.dequeueConfiguredReusableCell(using: emptyInfoCellRegistration, for: indexPath, item: identifier)
                 }
             }
         }
         dataSource.supplementaryViewProvider = { [weak self] (view, kind, index) in
-            return self?.collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: index)
+            guard let self = self else { return nil }
+            if kind == Self.sectionHeaderElementKind {
+                return self.collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: index)
+            }
+            if kind == Self.yearlyStatsHeaderElementKind {
+                return self.collectionView.dequeueConfiguredReusableSupplementary(using: yearlyHeaderRegistration, for: index)
+            }
+            return nil
         }
     }
     
@@ -374,7 +405,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     func scroll(to day: GregorianDay, animated: Bool) {
         let item = dataSource.snapshot().itemIdentifiers.first { item in
             switch item {
-            case .invisible, .info:
+            case .invisible, .info, .empty:
                 return false
             case .block(let blockItem):
                 if blockItem.day == day {
@@ -398,10 +429,11 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         
         let tagDisplayMenu = getTagDisplayTypeMenu()
         let monthlyStatsMenu = getMonthlyStatsTypeMenu()
+        let yearlyStatsMenu = getYearlyStatsTypeMenu()
         let todayIndicatorMenu = getTodayIndicatorMenu()
         let crossYearDisplayMenu = getCrossYearMonthDisplayMenu()
         
-        children = [todayIndicatorMenu, crossYearDisplayMenu, tagDisplayMenu, monthlyStatsMenu]
+        children = [todayIndicatorMenu, crossYearDisplayMenu, tagDisplayMenu, monthlyStatsMenu, yearlyStatsMenu]
         
         if #available(iOS 26.0, *) {
         } else {
@@ -529,7 +561,7 @@ extension CalendarViewController {
             switch item {
             case .block(let blockItem):
                 return blockItem.day == day
-            case .invisible, .info:
+            case .invisible, .info, .empty:
                 return false
             }
         }
@@ -551,7 +583,7 @@ extension CalendarViewController: DayPresenter {
             switch item {
             case .block(let blockItem):
                 return blockItem.day == day
-            case .invisible, .info:
+            case .invisible, .info, .empty:
                 return false
             }
         }) else { return }
@@ -627,6 +659,10 @@ private extension CalendarViewController {
         }
 
         return (monthName, nil)
+    }
+    
+    func yearlyStatsTitle(for year: Int) -> String {
+        return "\(year)"
     }
 }
 

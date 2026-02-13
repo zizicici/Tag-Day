@@ -17,6 +17,8 @@ class MonthTitleSupplementaryView: UICollectionReusableView {
         label.textAlignment = .center
         label.textColor = AppColor.text
         label.lineBreakMode = .byTruncatingTail
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.5
         
         return label
     }()
@@ -30,6 +32,8 @@ class MonthTitleSupplementaryView: UICollectionReusableView {
         label.lineBreakMode = .byTruncatingTail
         label.layer.cornerRadius = 8.0
         label.layer.masksToBounds = true
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.5
 
         return label
     }()
