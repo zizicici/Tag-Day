@@ -509,6 +509,7 @@ extension DataManager {
                 result = try DayRecord
                     .filter(tagIDColumn == tagID)
                     .filter(dayColumn <= to && dayColumn >= from)
+                    .order(dayColumn.asc)
                     .fetchAll(db)
             }
             catch {
