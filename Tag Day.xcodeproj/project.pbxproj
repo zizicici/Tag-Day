@@ -111,7 +111,6 @@
 		14D272872DC0719400267572 /* DayGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D272842DC0719400267572 /* DayGrid.swift */; };
 		14D2728A2DC071A500267572 /* BlockItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D272882DC071A500267572 /* BlockItem.swift */; };
 		14D272942DC071B000267572 /* MonthTitleSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D2728D2DC071B000267572 /* MonthTitleSupplementaryView.swift */; };
-		14F1E0B72F00123400B4C9D1 /* YearlyStatsSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14F1E0B62F00123400B4C9D1 /* YearlyStatsSupplementaryView.swift */; };
 		14D272952DC071B000267572 /* ImpactGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D272912DC071B000267572 /* ImpactGenerator.swift */; };
 		14D272962DC071B000267572 /* WeekdayOrderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D2728E2DC071B000267572 /* WeekdayOrderView.swift */; };
 		14D272972DC071B000267572 /* BlockCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D2728B2DC071B000267572 /* BlockCell.swift */; };
@@ -129,7 +128,6 @@
 		14D272BE2DC0884E00267572 /* SettingOptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D272BA2DC0884E00267572 /* SettingOptionsViewController.swift */; };
 		14D272BF2DC0884E00267572 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D272B92DC0884E00267572 /* MoreViewController.swift */; };
 		14D2B3CC2E07B9280000CE05 /* DateLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D2B3CB2E07B9280000CE05 /* DateLayer.swift */; };
-		14F1E0BB2F07C0A100B4C9D1 /* RenderMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14F1E0BA2F07C0A100B4C9D1 /* RenderMetrics.swift */; };
 		14D8EADE2E79147C0019A88F /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 14D8EADD2E79147C0019A88F /* AppIcon.icon */; };
 		14E71B182E138B6D001CA8EE /* ChineseCalendarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FF82AA2E04511000D3000B /* ChineseCalendarManager.swift */; };
 		14E71B192E138B72001CA8EE /* YearRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FF82AB2E04511000D3000B /* YearRange.swift */; };
@@ -148,6 +146,8 @@
 		14EBE0882DD76B0B00F7609A /* DurationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14EBE0872DD76B0B00F7609A /* DurationCell.swift */; };
 		14ED21102E39FACC00BB2C77 /* CheckRecordTagByTextIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14ED210F2E39FACC00BB2C77 /* CheckRecordTagByTextIntent.swift */; };
 		14ED63D12DC702F000384068 /* CalendarYearPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14ED63D02DC702F000384068 /* CalendarYearPickerViewController.swift */; };
+		14F1E0B72F00123400B4C9D1 /* YearlyStatsSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14F1E0B62F00123400B4C9D1 /* YearlyStatsSupplementaryView.swift */; };
+		14F1E0BB2F07C0A100B4C9D1 /* RenderMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14F1E0BA2F07C0A100B4C9D1 /* RenderMetrics.swift */; };
 		14F4DEA62E11982B0006EB31 /* RecordContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14F4DEA42E1197FA0006EB31 /* RecordContainerView.swift */; };
 		14F92E252E1B839200712D87 /* OverlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14F92E242E1B839200712D87 /* OverlayViewController.swift */; };
 		14F92E262E1B84A500712D87 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BD5DF22E1A62600063DCA9 /* Store.swift */; };
@@ -290,7 +290,6 @@
 		14D272882DC071A500267572 /* BlockItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockItem.swift; sourceTree = "<group>"; };
 		14D2728B2DC071B000267572 /* BlockCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockCell.swift; sourceTree = "<group>"; };
 		14D2728D2DC071B000267572 /* MonthTitleSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthTitleSupplementaryView.swift; sourceTree = "<group>"; };
-		14F1E0B62F00123400B4C9D1 /* YearlyStatsSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearlyStatsSupplementaryView.swift; sourceTree = "<group>"; };
 		14D2728E2DC071B000267572 /* WeekdayOrderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekdayOrderView.swift; sourceTree = "<group>"; };
 		14D2728F2DC071B000267572 /* HoverGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoverGestureRecognizer.swift; sourceTree = "<group>"; };
 		14D272902DC071B000267572 /* UIDraggableCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDraggableCollectionView.swift; sourceTree = "<group>"; };
@@ -307,7 +306,6 @@
 		14D272BA2DC0884E00267572 /* SettingOptionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingOptionsViewController.swift; sourceTree = "<group>"; };
 		14D272BB2DC0884E00267572 /* SpecificationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpecificationsViewController.swift; sourceTree = "<group>"; };
 		14D2B3CB2E07B9280000CE05 /* DateLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateLayer.swift; sourceTree = "<group>"; };
-		14F1E0BA2F07C0A100B4C9D1 /* RenderMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderMetrics.swift; sourceTree = "<group>"; };
 		14D8EADD2E79147C0019A88F /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		14E900BE2E1376EC00F9D0DC /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
 		14E900C12E13773D00F9D0DC /* Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entry.swift; sourceTree = "<group>"; };
@@ -316,6 +314,8 @@
 		14ED210F2E39FACC00BB2C77 /* CheckRecordTagByTextIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckRecordTagByTextIntent.swift; sourceTree = "<group>"; };
 		14ED63D02DC702F000384068 /* CalendarYearPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarYearPickerViewController.swift; sourceTree = "<group>"; };
 		14ED63D22DC72FF100384068 /* Tag Day.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Tag Day.entitlements"; sourceTree = "<group>"; };
+		14F1E0B62F00123400B4C9D1 /* YearlyStatsSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearlyStatsSupplementaryView.swift; sourceTree = "<group>"; };
+		14F1E0BA2F07C0A100B4C9D1 /* RenderMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderMetrics.swift; sourceTree = "<group>"; };
 		14F4DEA42E1197FA0006EB31 /* RecordContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordContainerView.swift; sourceTree = "<group>"; };
 		14F92E242E1B839200712D87 /* OverlayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayViewController.swift; sourceTree = "<group>"; };
 		14F92E272E1B84F600712D87 /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
@@ -1186,7 +1186,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.zizicici.tag.widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1215,7 +1215,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.zizicici.tag.widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1247,7 +1247,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.zizicici.tag;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1278,7 +1278,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.zizicici.tag;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
