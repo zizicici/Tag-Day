@@ -52,7 +52,6 @@ class TagLayer: CALayer {
         var tagColor: String
         var textColor: String
         var boundWidth: CGFloat
-        var isDark: Bool
         var isSymbol: Bool
     }
     
@@ -60,8 +59,6 @@ class TagLayer: CALayer {
         didSet {
             if oldValue != displayInfo {
                 setNeedsDisplay()
-            } else {
-                print("no changes")
             }
         }
     }
@@ -72,12 +69,57 @@ class TagLayer: CALayer {
             var point: CGPoint
         }
         
-        enum CacheKey: Hashable {
-            case title(DisplayInfo)
-            case count(DisplayInfo)
+        struct TitleCacheKey: Hashable {
+            var title: String
+            var textColor: String
+            var boundWidth: CGFloat
+            var hasCountSuffix: Bool
         }
         
-        static var renderInfos: [CacheKey: RenderInfo] = [:]
+        struct CountCacheKey: Hashable {
+            var count: Int
+            var textColor: String
+            var boundWidth: CGFloat
+        }
+        
+        private static let maxRenderCacheEntries = 1500
+        private static var titleRenderInfos: [TitleCacheKey: RenderInfo] = [:]
+        private static var countRenderInfos: [CountCacheKey: RenderInfo] = [:]
+        static let symbolImageCache = NSCache<NSString, UIImage>()
+        
+        static func titleRenderInfo(for key: TitleCacheKey) -> RenderInfo? {
+            cacheQueue.sync {
+                titleRenderInfos[key]
+            }
+        }
+        
+        static func countRenderInfo(for key: CountCacheKey) -> RenderInfo? {
+            cacheQueue.sync {
+                countRenderInfos[key]
+            }
+        }
+        
+        static func setTitleRenderInfo(_ renderInfo: RenderInfo, for key: TitleCacheKey) {
+            cacheQueue.async(flags: .barrier) {
+                titleRenderInfos[key] = renderInfo
+                trimCachesIfNeeded()
+            }
+        }
+        
+        static func setCountRenderInfo(_ renderInfo: RenderInfo, for key: CountCacheKey) {
+            cacheQueue.async(flags: .barrier) {
+                countRenderInfos[key] = renderInfo
+                trimCachesIfNeeded()
+            }
+        }
+        
+        private static func trimCachesIfNeeded() {
+            let totalEntries = titleRenderInfos.count + countRenderInfos.count
+            guard totalEntries > maxRenderCacheEntries else { return }
+            titleRenderInfos.removeAll(keepingCapacity: true)
+            countRenderInfos.removeAll(keepingCapacity: true)
+        }
+        
         static let cacheQueue = DispatchQueue(label: "com.zizicic.tag.TagLayer.cache", qos: .userInteractive, attributes: .concurrent)
     }
     
@@ -87,8 +129,8 @@ class TagLayer: CALayer {
     private let countFontSize: CGFloat = 10.0
     private let symbolSize: CGFloat = 12.0
     private let minimumScaleFactor: CGFloat = 0.5
-    private var tagColor: UIColor = AppColor.paper
-    private var textColor: UIColor = AppColor.text
+    private var resolvedTextColor: UIColor = AppColor.text
+    private var resolvedTextCGColor: CGColor = AppColor.text.cgColor
     
     // MARK: - Initialization
     override init() {
@@ -110,13 +152,13 @@ class TagLayer: CALayer {
         masksToBounds = true
         cornerRadius = 3.0
         contentsScale = UIScreen.main.scale
-        backgroundColor = UIColor.clear.cgColor
         needsDisplayOnBoundsChange = true
         drawsAsynchronously = true
     }
     
     // MARK: - Update Content
     func update(title: String, count: Int = 1, tagColor: String, textColor: String, isDark: Bool, isSymbol: Bool = false) {
+        RenderMetrics.increment("tag.update.calls")
         var tagColor = tagColor
         var textColor = textColor
         if tagColor.isEmpty || tagColor.isBlank {
@@ -124,32 +166,60 @@ class TagLayer: CALayer {
             tagColor = tag.dynamicColor.generateLightDarkString(isDark ? .dark : .light)
             textColor = tag.dynamicTitleColor.generateLightDarkString(isDark ? .dark : .light)
         }
-        displayInfo = DisplayInfo(title: title, count: count, tagColor: tagColor, textColor: textColor, boundWidth: bounds.width, isDark: isDark, isSymbol: isSymbol)
+        let nextDisplayInfo = DisplayInfo(
+            title: title,
+            count: count,
+            tagColor: tagColor,
+            textColor: textColor,
+            boundWidth: bounds.width,
+            isSymbol: isSymbol
+        )
+        guard nextDisplayInfo != displayInfo else {
+            RenderMetrics.increment("tag.update.skipped")
+            return
+        }
+        RenderMetrics.increment("tag.update.applied")
+        
+        let nextTagColor = UIColor(hex: tagColor) ?? AppColor.paper
+        let nextTextColor = UIColor(hex: textColor) ?? AppColor.text
+        
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        if backgroundColor != nextTagColor.cgColor {
+            backgroundColor = nextTagColor.cgColor
+        }
+        CATransaction.commit()
+        
+        resolvedTextColor = nextTextColor
+        resolvedTextCGColor = nextTextColor.cgColor
+        
+        displayInfo = nextDisplayInfo
+    }
+    
+    private func displayInfoForCurrentBounds() -> DisplayInfo? {
+        guard var displayInfo = displayInfo else { return nil }
+        displayInfo.boundWidth = bounds.width
+        return displayInfo
     }
     
     // MARK: - Drawing
     override func draw(in ctx: CGContext) {
-        super.draw(in: ctx)
+        let metricsStart = RenderMetrics.begin()
+        defer { RenderMetrics.end("tag.draw.ms", from: metricsStart) }
+        RenderMetrics.increment("tag.draw.calls")
         
-        displayInfo?.boundWidth = bounds.width
-        guard let displayInfo = displayInfo else { return }
-        guard let tagColor = UIColor(hex: displayInfo.tagColor) else { return }
-        guard let textColor = UIColor(hex: displayInfo.textColor) else { return }
-        self.tagColor = tagColor
-        self.textColor = textColor
-        
-        // 绘制背景
-        ctx.setFillColor(tagColor.cgColor)
-        ctx.fill(bounds)
+        guard let displayInfo = displayInfoForCurrentBounds() else { return }
         
         // 保存上下文状态
         ctx.saveGState()
         defer { ctx.restoreGState() }
         
         if displayInfo.isSymbol {
+            RenderMetrics.increment("tag.draw.symbol")
             // 绘制 SF Symbol
             drawSymbol(in: ctx, displayInfo: displayInfo)
         } else {
+            RenderMetrics.increment("tag.draw.text")
             // 绘制文本
             drawText(in: ctx, displayInfo: displayInfo)
         }
@@ -173,7 +243,7 @@ class TagLayer: CALayer {
         }
         
         // 绘制 SF Symbol
-        drawSFSymbol(named: displayInfo.title, in: symbolRect, context: ctx, color: textColor)
+        drawSFSymbol(named: displayInfo.title, in: symbolRect, context: ctx, color: resolvedTextColor, colorHex: displayInfo.textColor)
         
         // 绘制计数文本（如果需要）
         if count > 0 {
@@ -182,6 +252,7 @@ class TagLayer: CALayer {
             ctx.translateBy(x: 0, y: bounds.height)
             ctx.scaleBy(x: 1.0, y: -1.0)
             drawCountText(in: ctx, displayInfo: displayInfo)
+            ctx.restoreGState()
         }
     }
     
@@ -192,13 +263,18 @@ class TagLayer: CALayer {
         ctx.scaleBy(x: 1.0, y: -1.0)
         
         let count = displayInfo.count
-        let titleKey = SharedCache.CacheKey.title(displayInfo)
+        let titleKey = SharedCache.TitleCacheKey(
+            title: displayInfo.title,
+            textColor: displayInfo.textColor,
+            boundWidth: displayInfo.boundWidth,
+            hasCountSuffix: count > 1
+        )
         
-        if let titleRenderInfo = SharedCache.cacheQueue.sync(execute: {
-            SharedCache.renderInfos[titleKey]
-        }) {
+        if let titleRenderInfo = SharedCache.titleRenderInfo(for: titleKey) {
+            RenderMetrics.increment("tag.title_cache.hit")
             render(for: titleRenderInfo, context: ctx)
         } else {
+            RenderMetrics.increment("tag.title_cache.miss")
             // 绘制主文本
             if let attributedString = getAttributedString() {
                 let textRect = count > 1 ?
@@ -210,10 +286,7 @@ class TagLayer: CALayer {
                           height: bounds.height)
                 
                 let (resultLine, resultPoint) = drawScaledText(attributedString: attributedString, in: textRect, context: ctx)
-                SharedCache.cacheQueue.async(flags: .barrier) {
-                    let newRenderInfo = SharedCache.RenderInfo(line: resultLine, point: resultPoint)
-                    SharedCache.renderInfos[titleKey] = newRenderInfo
-                }
+                SharedCache.setTitleRenderInfo(.init(line: resultLine, point: resultPoint), for: titleKey)
             }
         }
         
@@ -224,55 +297,52 @@ class TagLayer: CALayer {
     
     private func drawCountText(in ctx: CGContext, displayInfo: DisplayInfo) {
         // 翻转坐标系（用于计数文本绘制）
-        let countKey = SharedCache.CacheKey.count(displayInfo)
-        if let countRenderInfo = SharedCache.cacheQueue.sync(execute: {
-            SharedCache.renderInfos[countKey]
-        }) {
+        let countKey = SharedCache.CountCacheKey(
+            count: displayInfo.count,
+            textColor: displayInfo.textColor,
+            boundWidth: displayInfo.boundWidth
+        )
+        
+        if let countRenderInfo = SharedCache.countRenderInfo(for: countKey) {
+            RenderMetrics.increment("tag.count_cache.hit")
             render(for: countRenderInfo, context: ctx)
         } else {
+            RenderMetrics.increment("tag.count_cache.miss")
             // 绘制计数文本
             if let countString = getCountAttributedString() {
                 let countRect = CGRect(x: bounds.width - countLabelWidth, y: 8,
                                        width: countLabelWidth, height: 12)
                 let (resultLine, resultPoint) = drawScaledText(attributedString: countString, in: countRect, context: ctx)
-                SharedCache.cacheQueue.async(flags: .barrier) {
-                    let newRenderInfo = SharedCache.RenderInfo(line: resultLine, point: resultPoint)
-                    SharedCache.renderInfos[countKey] = newRenderInfo
-                }
+                SharedCache.setCountRenderInfo(.init(line: resultLine, point: resultPoint), for: countKey)
+            }
+        }
+    }
+    
+    private func drawSFSymbol(named symbolName: String, in rect: CGRect, context: CGContext, color: UIColor, colorHex: String) {
+        let cacheKey = "\(symbolName)|\(colorHex)|\(symbolSize)" as NSString
+        let symbolImage: UIImage?
+        
+        if let cachedImage = SharedCache.symbolImageCache.object(forKey: cacheKey) {
+            RenderMetrics.increment("tag.symbol_cache.hit")
+            symbolImage = cachedImage
+        } else {
+            RenderMetrics.increment("tag.symbol_cache.miss")
+            // 使用 UIImage(systemName:) 获取 SF Symbol 图像
+            let config = UIImage.SymbolConfiguration(pointSize: symbolSize, weight: .medium)
+            symbolImage = UIImage(systemName: symbolName, withConfiguration: config)?.withTintColor(color, renderingMode: .alwaysOriginal)
+            if let symbolImage {
+                SharedCache.symbolImageCache.setObject(symbolImage, forKey: cacheKey)
             }
         }
         
-        ctx.restoreGState()
-    }
-    
-    private func drawSFSymbol(named symbolName: String, in rect: CGRect, context: CGContext, color: UIColor) {
-        // 使用 UIImage(systemName:) 获取 SF Symbol 图像
-        let config = UIImage.SymbolConfiguration(pointSize: symbolSize, weight: .medium)
-        guard let symbolImage = UIImage(systemName: symbolName, withConfiguration: config) else {
-            // 如果找不到对应的 SF Symbol，回退到显示文本
+        guard let symbolImage else {
+            RenderMetrics.increment("tag.symbol_fallback_text")
             drawFallbackText(symbolName, in: rect, context: context, color: color)
             return
         }
         
-        // 创建一个新的图像上下文来渲染带颜色的符号
-        let imageSize = symbolImage.size
-        let renderer = UIGraphicsImageRenderer(size: imageSize)
-        let tintedImage = renderer.image { _ in
-            // 设置填充颜色
-            color.set()
-            
-            // 绘制符号作为模板图像
-            let fillRect = CGRect(origin: .zero, size: imageSize)
-            if let cgImage = symbolImage.cgImage {
-                // 使用 Core Graphics 绘制模板图像
-                if let context = UIGraphicsGetCurrentContext() {
-                    context.clip(to: fillRect, mask: cgImage)
-                    context.fill(fillRect)
-                }
-            }
-        }
-        
         // 计算图像在矩形中的居中位置
+        let imageSize = symbolImage.size
         let imageRect = CGRect(
             x: rect.minX + (rect.width - imageSize.width) / 2,
             y: rect.minY + (rect.height - imageSize.height) / 2,
@@ -281,7 +351,7 @@ class TagLayer: CALayer {
         )
         
         // 绘制图像（不翻转坐标系）
-        if let cgImage = tintedImage.cgImage {
+        if let cgImage = symbolImage.cgImage {
             context.draw(cgImage, in: imageRect)
         }
     }
@@ -339,8 +409,10 @@ class TagLayer: CALayer {
         
         // 如果不需要缩放，直接绘制
         guard scaleFactor < 1.0 else {
+            RenderMetrics.increment("tag.text_scale.no_scale")
             return drawSingleLineCentered(attributedString: attributedString, in: rect, context: context)
         }
+        RenderMetrics.increment("tag.text_scale.scaled")
         
         // 创建缩放后的属性字符串
         let scaledFont = originalFont.withSize(scaledFontSize)
@@ -384,7 +456,7 @@ class TagLayer: CALayer {
         
         let attributes: [NSAttributedString.Key: Any] = [
             .font: font,
-            .foregroundColor: textColor.cgColor
+            .foregroundColor: resolvedTextCGColor
         ]
         
         let string = NSAttributedString(string: text, attributes: attributes)
@@ -399,7 +471,7 @@ class TagLayer: CALayer {
         
         let attributes: [NSAttributedString.Key: Any] = [
             .font: font,
-            .foregroundColor: textColor.cgColor
+            .foregroundColor: resolvedTextCGColor
         ]
         
         let string = NSAttributedString(string: countText, attributes: attributes)

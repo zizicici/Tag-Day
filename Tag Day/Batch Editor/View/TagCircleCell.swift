@@ -56,6 +56,8 @@ class TagCircleCell: TagCircleBaseCell {
     }()
     
     private var cachedTagLayers: [TagLayer] = []
+    private var renderedItem: TagCircle.Item?
+    private var renderedIsDarkMode: Bool?
     
     private var highlightColor: UIColor = .gray.withAlphaComponent(0.25)
     
@@ -82,8 +84,32 @@ class TagCircleCell: TagCircleBaseCell {
     }
     
     private func updateColor() {
-        for layer in tagContainerView.layer.sublayers ?? [] {
-            layer.setNeedsDisplay()
+        renderedItem = nil
+        renderedIsDarkMode = nil
+        setNeedsUpdateConfiguration()
+    }
+    
+    private func updateTagLayers(tagData: [(tag: Tag, count: Int)], isDark: Bool) {
+        while cachedTagLayers.count > tagData.count {
+            let layer = cachedTagLayers.removeLast()
+            layer.removeFromSuperlayer()
+        }
+        
+        while cachedTagLayers.count < tagData.count {
+            let tagLayer = TagLayer()
+            tagContainerView.layer.addSublayer(tagLayer)
+            cachedTagLayers.append(tagLayer)
+        }
+        
+        for (index, (tag, count)) in tagData.enumerated() {
+            let tagLayer = cachedTagLayers[index]
+            tagLayer.update(
+                title: tag.title,
+                count: count,
+                tagColor: tag.getColorString(isDark: isDark),
+                textColor: tag.getTitleColorString(isDark: isDark),
+                isDark: isDark
+            )
         }
     }
     
@@ -109,33 +135,22 @@ class TagCircleCell: TagCircleBaseCell {
                 backgroundColor = highlightColor.overlay(on: backgroundColor)
             }
             
-            label.text = item.title
-            label.textColor = item.foregroundColor
-            
-            let tagData: [(tag: Tag, count: Int)] = item.tags.map { (tag: $0, count: 1) }
-            
-            while cachedTagLayers.count > tagData.count {
-                let view = cachedTagLayers.removeLast()
-                view.removeFromSuperlayer()
-            }
-            
-            while cachedTagLayers.count < tagData.count {
-                let tagLayer = TagLayer()
-                tagContainerView.layer.addSublayer(tagLayer)
-                cachedTagLayers.append(tagLayer)
-            }
-            
-            for (index, (tag, count)) in tagData.enumerated() {
-                let tagLayer = cachedTagLayers[index]
-                let isDark = traitCollection.userInterfaceStyle == .dark
-                tagLayer.update(title: tag.title, count: count, tagColor: tag.getColorString(isDark: isDark), textColor: tag.getTitleColorString(isDark: isDark), isDark: isDark)
+            let isDark = traitCollection.userInterfaceStyle == .dark
+            if renderedItem != item || renderedIsDarkMode != isDark {
+                renderedItem = item
+                renderedIsDarkMode = isDark
+                
+                label.text = item.title
+                label.textColor = item.foregroundColor
+                
+                let tagData: [(tag: Tag, count: Int)] = item.tags.map { (tag: $0, count: 1) }
+                updateTagLayers(tagData: tagData, isDark: isDark)
+                
+                accessibilityLabel = item.title
+                accessibilityValue = item.recordString
             }
             
             updateTagFramesIfNeeded()
-            
-            accessibilityLabel = item.title
-
-            accessibilityValue = item.recordString
             
             backgroundConfiguration = BlockCellBackgroundConfiguration.configuration(for: state, backgroundColor: backgroundColor, cornerRadius: 6.0, showStroke: false, strokeColor: UIColor.systemYellow, strokeWidth: 1.5, strokeOutset: 1.0)
         }
