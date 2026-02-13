@@ -15,6 +15,7 @@ extension UserDefaults {
         case SecondaryCalendar = "com.zizicici.tag.settings.SecondaryCalendar"
         case WeekStartType = "com.zizicici.tag.settings.WeekStartType"
         case TodayIndicator = "com.zizicici.tag.settings.TodayIndicator"
+        case CrossYearMonthDisplay = "com.zizicici.tag.settings.CrossYearMonthDisplay"
         case TagDisplayType = "com.zizicici.tag.settings.TagDisplayType"
         case MonthlyStatsType = "com.zizicici.tag.settings.MonthlyStatsType"
         case DynamicColor = "com.zizicici.tag.settings.DynamicColor"
@@ -151,6 +152,34 @@ extension TodayIndicator: UserDefaultSettable {
     
     static func getTitle() -> String {
         return String(localized: "settings.todayIndicator.title")
+    }
+}
+
+enum CrossYearMonthDisplay: Int, CaseIterable, Codable {
+    case disable
+    case enable
+}
+
+extension CrossYearMonthDisplay: UserDefaultSettable {
+    static func getKey() -> UserDefaults.Settings {
+        return .CrossYearMonthDisplay
+    }
+
+    static var defaultOption: CrossYearMonthDisplay {
+        return .disable
+    }
+
+    func getName() -> String {
+        switch self {
+        case .disable:
+            return String(localized: "settings.crossYearMonthDisplay.disable")
+        case .enable:
+            return String(localized: "settings.crossYearMonthDisplay.enable")
+        }
+    }
+
+    static func getTitle() -> String {
+        return String(localized: "settings.crossYearMonthDisplay.title")
     }
 }
 

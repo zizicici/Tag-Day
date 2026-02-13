@@ -76,6 +76,23 @@ extension CalendarViewController {
         return todayIndicatorMenu
     }
     
+    func getCrossYearMonthDisplay() -> CrossYearMonthDisplay {
+        return CrossYearMonthDisplay.getValue()
+    }
+
+    func getCrossYearMonthDisplayMenu() -> UIMenu {
+        let displayCases: [CrossYearMonthDisplay] = CrossYearMonthDisplay.allCases
+        let displayActions = displayCases.map { type in
+            let action = UIAction(title: type.getName(), state: type == getCrossYearMonthDisplay() ? .on : .off) { _ in
+                CrossYearMonthDisplay.setValue(type)
+            }
+            return action
+        }
+        let displayMenu = UIMenu(title: CrossYearMonthDisplay.getTitle(), subtitle: getCrossYearMonthDisplay().getName(), image: UIImage(systemName: "arrow.left.and.right.circle"), children: displayActions)
+
+        return displayMenu
+    }
+
     func getBookTitleDisplay() -> BookTitleDisplay {
         return BookTitleDisplay.getValue()
     }

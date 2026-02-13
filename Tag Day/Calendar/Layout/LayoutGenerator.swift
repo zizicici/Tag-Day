@@ -9,21 +9,21 @@ import UIKit
 import ZCCalendar
 
 struct LayoutGenerater {
-    static func dayLayout(for snapshot: inout NSDiffableDataSourceSnapshot<Section, Item>, year: Int, tags: [Tag], records: [DayRecord]) {
+    static func dayLayout(for snapshot: inout NSDiffableDataSourceSnapshot<Section, Item>, months: [GregorianMonth], tags: [Tag], records: [DayRecord]) {
         let firstDayOfWeek: WeekdayOrder = WeekdayOrder(rawValue: WeekStartType.current.rawValue) ?? WeekdayOrder.firstDayOfWeek
         
-        for month in Month.allCases {
+        for gregorianMonth in months {
+            let month = gregorianMonth.month
+            let year = gregorianMonth.year
             let firstDay = GregorianDay(year: year, month: month, day: 1)
             let firstWeekOrder = firstDay.weekdayOrder()
             
             let firstOffset = (firstWeekOrder.rawValue - (firstDayOfWeek.rawValue % 7) + 7) % 7
 
-            let gregorianMonth = GregorianMonth(year: year, month: month)
-            
             snapshot.appendSections([.row(gregorianMonth)])
             if firstOffset >= 1 {
                 snapshot.appendItems(Array(1...firstOffset).map({ index in
-                    let uuid = "\(month)-\(index)"
+                    let uuid = "\(year)-\(month.rawValue)-\(index)"
                     return Item.invisible(uuid)
                 }))
             }

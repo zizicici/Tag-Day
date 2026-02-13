@@ -18,11 +18,17 @@ class DayDisplayHandler: DisplayHandler {
     }
     
     func getLeading() -> Int {
-        return GregorianDay(year: selectedYear, month: .jan, day: 1).julianDay
+        guard let firstMonth = getDisplayMonths().first else {
+            return GregorianDay(year: selectedYear, month: .jan, day: 1).julianDay
+        }
+        return ZCCalendar.manager.firstDay(at: firstMonth.month, year: firstMonth.year).julianDay
     }
     
     func getTrailing() -> Int {
-        return GregorianDay(year: selectedYear, month: .dec, day: 31).julianDay
+        guard let lastMonth = getDisplayMonths().last else {
+            return GregorianDay(year: selectedYear, month: .dec, day: 31).julianDay
+        }
+        return ZCCalendar.manager.lastDay(at: lastMonth.month, year: lastMonth.year).julianDay
     }
     
     private var selectedYear: Int {
@@ -57,16 +63,37 @@ class DayDisplayHandler: DisplayHandler {
     
     func getSnapshot(tags: [Tag], records: [DayRecord]) -> NSDiffableDataSourceSnapshot<Section, Item>? {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
-        
-        let filterRecords = records.filter { ($0.day >= ZCCalendar.manager.firstDay(at: .jan, year: selectedYear).julianDay) && ($0.day <= ZCCalendar.manager.lastDay(at: .dec, year: selectedYear).julianDay) }
-        
-        LayoutGenerater.dayLayout(for: &snapshot, year: selectedYear, tags: tags, records: filterRecords)
-        
+        let displayMonths = getDisplayMonths()
+        guard let firstMonth = displayMonths.first,
+              let lastMonth = displayMonths.last else {
+            return snapshot
+        }
+
+        let leading = ZCCalendar.manager.firstDay(at: firstMonth.month, year: firstMonth.year).julianDay
+        let trailing = ZCCalendar.manager.lastDay(at: lastMonth.month, year: lastMonth.year).julianDay
+
+        let filterRecords = records.filter { ($0.day >= leading) && ($0.day <= trailing) }
+
+        LayoutGenerater.dayLayout(for: &snapshot, months: displayMonths, tags: tags, records: filterRecords)
+
         return snapshot
     }
     
     func getTitle() -> String {
         let title = String(format: (String(localized: "calendar.title.year%i")), selectedYear)
         return title
+    }
+}
+
+private extension DayDisplayHandler {
+    func getDisplayMonths() -> [GregorianMonth] {
+        var months = Month.allCases.map { GregorianMonth(year: selectedYear, month: $0) }
+
+        if CrossYearMonthDisplay.getValue() == .enable {
+            months.insert(GregorianMonth(year: selectedYear - 1, month: .dec), at: 0)
+            months.append(GregorianMonth(year: selectedYear + 1, month: .jan))
+        }
+
+        return months
     }
 }

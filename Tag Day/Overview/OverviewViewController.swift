@@ -127,7 +127,7 @@ class OverviewViewController: UIViewController {
             case .row(let gregorianMonth):
                 let month = gregorianMonth.month
                 let startWeekdayOrder = WeekdayOrder(rawValue: WeekStartType.current.rawValue) ?? WeekdayOrder.firstDayOfWeek
-                supplementaryView.update(text: month.name, startWeekOrder: startWeekdayOrder)
+                supplementaryView.update(monthText: month.name, yearText: nil, startWeekOrder: startWeekdayOrder)
             }
         }
         

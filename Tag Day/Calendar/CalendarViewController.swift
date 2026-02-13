@@ -284,9 +284,9 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
             guard let section = self.dataSource.sectionIdentifier(for: indexPath.section) else { return }
             switch section {
             case .row(let gregorianMonth):
-                let month = gregorianMonth.month
                 let startWeekdayOrder = WeekdayOrder(rawValue: WeekStartType.current.rawValue) ?? WeekdayOrder.firstDayOfWeek
-                supplementaryView.update(text: month.name, startWeekOrder: startWeekdayOrder)
+                let monthHeader = monthHeader(for: gregorianMonth)
+                supplementaryView.update(monthText: monthHeader.month, yearText: monthHeader.year, startWeekOrder: startWeekdayOrder)
             case .info:
                 break
             }
@@ -399,8 +399,9 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
         let tagDisplayMenu = getTagDisplayTypeMenu()
         let monthlyStatsMenu = getMonthlyStatsTypeMenu()
         let todayIndicatorMenu = getTodayIndicatorMenu()
+        let crossYearDisplayMenu = getCrossYearMonthDisplayMenu()
         
-        children = [todayIndicatorMenu, tagDisplayMenu, monthlyStatsMenu]
+        children = [todayIndicatorMenu, crossYearDisplayMenu, tagDisplayMenu, monthlyStatsMenu]
         
         if #available(iOS 26.0, *) {
         } else {
@@ -612,6 +613,20 @@ extension CalendarViewController: UISearchControllerDelegate {
         UIView.animate(withDuration: 0.2) {
             self.navigationItem.searchController = nil
         }
+    }
+}
+
+private extension CalendarViewController {
+    func monthHeader(for gregorianMonth: GregorianMonth) -> (month: String, year: String?) {
+        let monthName = gregorianMonth.month.name
+        let selectedYear = displayHandler.getSelectedYear()
+
+        if CrossYearMonthDisplay.getValue() == .enable, gregorianMonth.year != selectedYear {
+            let yearText = "\(gregorianMonth.year)"
+            return (monthName, yearText)
+        }
+
+        return (monthName, nil)
     }
 }
 
