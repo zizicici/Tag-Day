@@ -327,9 +327,11 @@ class TagLayer: CALayer {
             symbolImage = cachedImage
         } else {
             RenderMetrics.increment("tag.symbol_cache.miss")
-            // 使用 UIImage(systemName:) 获取 SF Symbol 图像
+            // 先将 Symbol 栅格化，避免直接使用符号 cgImage 导致颜色丢失
             let config = UIImage.SymbolConfiguration(pointSize: symbolSize, weight: .medium)
-            symbolImage = UIImage(systemName: symbolName, withConfiguration: config)?.withTintColor(color, renderingMode: .alwaysOriginal)
+            let tintedImage = UIImage(systemName: symbolName, withConfiguration: config)?
+                .withTintColor(color, renderingMode: .alwaysOriginal)
+            symbolImage = tintedImage.flatMap { rasterizedSymbolImage(from: $0) } ?? tintedImage
             if let symbolImage {
                 SharedCache.symbolImageCache.setObject(symbolImage, forKey: cacheKey)
             }
@@ -350,9 +352,31 @@ class TagLayer: CALayer {
             height: imageSize.height
         )
         
-        // 绘制图像（不翻转坐标系）
+        // 在 CALayer 的绘制上下文中绘制 cgImage 需要翻转 Y 轴，避免图标倒置
         if let cgImage = symbolImage.cgImage {
-            context.draw(cgImage, in: imageRect)
+            context.saveGState()
+            context.translateBy(x: 0, y: bounds.height)
+            context.scaleBy(x: 1.0, y: -1.0)
+            let flippedRect = CGRect(
+                x: imageRect.minX,
+                y: bounds.height - imageRect.maxY,
+                width: imageRect.width,
+                height: imageRect.height
+            )
+            context.draw(cgImage, in: flippedRect)
+            context.restoreGState()
+        }
+    }
+    
+    private func rasterizedSymbolImage(from image: UIImage) -> UIImage? {
+        let imageSize = image.size
+        guard imageSize.width > 0, imageSize.height > 0 else { return nil }
+        
+        let format = UIGraphicsImageRendererFormat.default()
+        format.scale = max(image.scale, contentsScale, 1.0)
+        format.opaque = false
+        return UIGraphicsImageRenderer(size: imageSize, format: format).image { _ in
+            image.draw(in: CGRect(origin: .zero, size: imageSize))
         }
     }
     
