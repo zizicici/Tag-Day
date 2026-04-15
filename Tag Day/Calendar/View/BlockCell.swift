@@ -8,6 +8,7 @@
 import UIKit
 import ZCCalendar
 import Collections
+import MoreKit
 
 fileprivate extension UIConfigurationStateCustomKey {
     static let blockItem = UIConfigurationStateCustomKey("com.zizicici.tag.cell.block.item")

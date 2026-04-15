@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import ZCCalendar
+import MoreKit
 
 class RecordDetailViewController: UIViewController {
     private var record: DayRecord!

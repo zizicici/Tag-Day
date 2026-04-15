@@ -7,6 +7,7 @@
 
 import SwiftUI
 import UIKit
+import MoreKit
 
 extension Tag {
     var widgetColor: Color {

@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import ZCCalendar
+import MoreKit
 
 fileprivate extension UIConfigurationStateCustomKey {
     static let dayDetailItem = UIConfigurationStateCustomKey("com.zizicici.tag.detail.cell.item")

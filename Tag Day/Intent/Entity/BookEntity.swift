@@ -8,6 +8,7 @@
 import AppIntents
 import ZCCalendar
 import UIKit
+import MoreKit
 
 struct BookEntity: Identifiable, Hashable, Equatable, AppEntity {
     static var typeDisplayRepresentation = TypeDisplayRepresentation(name: "intent.book.type")

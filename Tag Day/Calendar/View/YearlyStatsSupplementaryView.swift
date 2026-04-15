@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import MoreKit
 
 final class YearlyStatsSupplementaryView: UICollectionReusableView {
     private let titleLabel: UILabel = {

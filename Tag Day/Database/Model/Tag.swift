@@ -8,6 +8,7 @@
 import Foundation
 import GRDB
 import UIKit
+import MoreKit
 
 extension Tag: TableRecord {
     static var databaseTableName: String = "tag"

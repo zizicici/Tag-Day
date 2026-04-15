@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import SnapKit
+import MoreKit
 
 fileprivate extension UIConfigurationStateCustomKey {
     static let bookItem = UIConfigurationStateCustomKey("com.zizicici.tag.cell.tag.item")

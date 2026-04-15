@@ -8,6 +8,7 @@
 import Foundation
 import GRDB
 import UIKit
+import MoreKit
 
 extension Book: TableRecord {
     static var databaseTableName: String = "book"

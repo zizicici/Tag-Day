@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import MoreKit
 
 class TagPreviewView: UIView {
     var paperView: UIView = {

@@ -9,6 +9,7 @@ import UIKit
 import ZCCalendar
 import WidgetKit
 import StoreKit
+import MoreKit
 
 extension UserDefaults {
     enum Support: String {
@@ -20,7 +21,17 @@ extension UserDefaults {
 class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        
+
+        MoreKit.configure(
+            productIDs: ["com.zizicici.tag.pro"],
+            appGroupID: AppConfig.appGroupID,
+            membershipKey: "com.zizicici.tag.Store.LifetimeMembership"
+        )
+        MoreKitAppearance.shared = MoreKitAppearance(
+            backgroundColor: AppColor.background,
+            tintColor: AppColor.main
+        )
+
         DataManager.shared.syncSharedData()
         
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 5.0) {

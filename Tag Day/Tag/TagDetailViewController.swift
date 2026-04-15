@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import MoreKit
 
 class TagDetailViewController: UIViewController {
     private var tag: Tag!

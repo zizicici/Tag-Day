@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import MoreKit
 
 class TagView: UIView {
     var tagLayer = TagLayer()

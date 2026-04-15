@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import ZCCalendar
+import MoreKit
 
 protocol FastEditorNavigator: NSObjectProtocol {
     func add(day: GregorianDay, tag: Tag)

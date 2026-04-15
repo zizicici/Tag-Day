@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import MoreKit
 
 struct AppColor {
     static let main = UIColor.main

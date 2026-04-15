@@ -7,6 +7,7 @@
 
 import Foundation
 import ZCCalendar
+import MoreKit
 
 extension UserDefaults {
     enum Settings: String {
@@ -25,104 +26,26 @@ extension UserDefaults {
     }
 }
 
-extension Notification.Name {
-    static let SettingsUpdate = Notification.Name(rawValue: "com.zizicici.common.settings.updated")
-}
-
-protocol SettingsOption: Hashable, Equatable {
-    func getName() -> String
-    static func getHeader() -> String?
-    static func getFooter() -> String?
-    static func getTitle() -> String
-    static func getOptions() -> [Self]
-    static var current: Self { get set}
-}
-
-extension SettingsOption {
-    static func getHeader() -> String? {
-        return nil
-    }
-    
-    static func getFooter() -> String? {
-        return nil
-    }
-}
-
-extension SettingsOption {
-    static func == (lhs: Self, rhs: Self) -> Bool {
-        if type(of: lhs) != type(of: rhs) {
-            return false
-        } else {
-            return lhs.getName() == rhs.getName()
-        }
-    }
-}
-
-protocol UserDefaultSettable: SettingsOption {
-    static func getKey() -> UserDefaults.Settings
-    static var defaultOption: Self { get }
-}
-
-extension UserDefaultSettable where Self: RawRepresentable, Self.RawValue == Int {
-    static func getValue() -> Self {
-        if let intValue = UserDefaults.standard.getInt(forKey: getKey().rawValue), let value = Self(rawValue: intValue) {
-            return value
-        } else {
-            return defaultOption
-        }
-    }
-    
-    static func setValue(_ value: Self) {
-        UserDefaults.standard.set(value.rawValue, forKey: getKey().rawValue)
-        NotificationCenter.default.post(name: NSNotification.Name.SettingsUpdate, object: nil)
-    }
-    
-    static func getOptions<T: CaseIterable>() -> [T] {
-        return Array(T.allCases)
-    }
-    
-    static var current: Self {
-        get {
-            return getValue()
-        }
-        set {
-            setValue(newValue)
-        }
-    }
-}
-
-extension UserDefaults {
-    func getInt(forKey key: String) -> Int? {
-        return object(forKey: key) as? Int
-    }
-    
-    func getBool(forKey key: String) -> Bool? {
-        return object(forKey: key) as? Bool
-    }
-    
-    func getString(forKey key: String) -> String? {
-        return object(forKey: key) as? String
-    }
-}
-
 enum AutoBackup: Int, CaseIterable, Codable {
     case enable
     case disable
 }
 
 extension AutoBackup: UserDefaultSettable {
-    static func getKey() -> UserDefaults.Settings {
-        return .AutoBackup
+    static func getKey() -> String {
+        return UserDefaults.Settings.AutoBackup.rawValue
     }
-    
+
+    static var userDefaults: UserDefaults { .standard }
+
     static var defaultOption: AutoBackup {
         return .disable
     }
-    
+
     func getName() -> String {
         return ""
     }
-    
+
     static func getTitle() -> String {
         return ""
     }
@@ -134,14 +57,16 @@ enum TodayIndicator: Int, CaseIterable, Codable {
 }
 
 extension TodayIndicator: UserDefaultSettable {
-    static func getKey() -> UserDefaults.Settings {
-        return .TodayIndicator
+    static func getKey() -> String {
+        return UserDefaults.Settings.TodayIndicator.rawValue
     }
-    
+
+    static var userDefaults: UserDefaults { .standard }
+
     static var defaultOption: TodayIndicator {
         return .enable
     }
-    
+
     func getName() -> String {
         switch self {
         case .enable:
@@ -150,7 +75,7 @@ extension TodayIndicator: UserDefaultSettable {
             return String(localized: "settings.todayIndicator.disable")
         }
     }
-    
+
     static func getTitle() -> String {
         return String(localized: "settings.todayIndicator.title")
     }
@@ -162,9 +87,11 @@ enum CrossYearMonthDisplay: Int, CaseIterable, Codable {
 }
 
 extension CrossYearMonthDisplay: UserDefaultSettable {
-    static func getKey() -> UserDefaults.Settings {
-        return .CrossYearMonthDisplay
+    static func getKey() -> String {
+        return UserDefaults.Settings.CrossYearMonthDisplay.rawValue
     }
+
+    static var userDefaults: UserDefaults { .standard }
 
     static var defaultOption: CrossYearMonthDisplay {
         return .disable
@@ -191,14 +118,16 @@ enum SecondaryCalendar: Int, CaseIterable, Codable {
 }
 
 extension SecondaryCalendar: UserDefaultSettable {
-    static func getKey() -> UserDefaults.Settings {
-        return .SecondaryCalendar
+    static func getKey() -> String {
+        return UserDefaults.Settings.SecondaryCalendar.rawValue
     }
-    
+
+    static var userDefaults: UserDefaults { .standard }
+
     static var defaultOption: SecondaryCalendar {
         return .none
     }
-    
+
     func getName() -> String {
         switch self {
         case .none:
@@ -209,7 +138,7 @@ extension SecondaryCalendar: UserDefaultSettable {
             return String(localized: "settings.secondaryCalendar.rokuyo")
         }
     }
-    
+
     static func getTitle() -> String {
         return String(localized: "settings.secondaryCalendar.title")
     }
@@ -221,14 +150,16 @@ enum TagDisplayType: Int, CaseIterable, Codable {
 }
 
 extension TagDisplayType: UserDefaultSettable {
-    static func getKey() -> UserDefaults.Settings {
-        return .TagDisplayType
+    static func getKey() -> String {
+        return UserDefaults.Settings.TagDisplayType.rawValue
     }
-    
+
+    static var userDefaults: UserDefaults { .standard }
+
     static var defaultOption: TagDisplayType {
         return .normal
     }
-    
+
     func getName() -> String {
         switch self {
         case .normal:
@@ -237,15 +168,15 @@ extension TagDisplayType: UserDefaultSettable {
             return String(localized: "settings.tagDisplayType.aggregation")
         }
     }
-    
+
     static func getTitle() -> String {
         return String(localized: "settings.tagDisplayType.title")
     }
-    
+
     static func getHeader() -> String? {
         return nil
     }
-    
+
     static func getFooter() -> String? {
         return nil
     }
@@ -258,14 +189,16 @@ enum MonthlyStatsType: Int, CaseIterable, Codable {
 }
 
 extension MonthlyStatsType: UserDefaultSettable {
-    static func getKey() -> UserDefaults.Settings {
-        return .MonthlyStatsType
+    static func getKey() -> String {
+        return UserDefaults.Settings.MonthlyStatsType.rawValue
     }
-    
+
+    static var userDefaults: UserDefaults { .standard }
+
     static var defaultOption: MonthlyStatsType {
         return .loggedCount
     }
-    
+
     func getName() -> String {
         switch self {
         case .hidden:
@@ -276,15 +209,15 @@ extension MonthlyStatsType: UserDefaultSettable {
             return String(localized: "settings.monthlyStatsType.dayCount")
         }
     }
-    
+
     static func getTitle() -> String {
         return String(localized: "settings.monthlyStatsType.title")
     }
-    
+
     static func getHeader() -> String? {
         return nil
     }
-    
+
     static func getFooter() -> String? {
         return nil
     }
@@ -297,14 +230,16 @@ enum YearlyStatsType: Int, CaseIterable, Codable {
 }
 
 extension YearlyStatsType: UserDefaultSettable {
-    static func getKey() -> UserDefaults.Settings {
-        return .YearlyStatsType
+    static func getKey() -> String {
+        return UserDefaults.Settings.YearlyStatsType.rawValue
     }
-    
+
+    static var userDefaults: UserDefaults { .standard }
+
     static var defaultOption: YearlyStatsType {
         return .loggedCount
     }
-    
+
     func getName() -> String {
         switch self {
         case .hidden:
@@ -315,15 +250,15 @@ extension YearlyStatsType: UserDefaultSettable {
             return String(localized: "settings.monthlyStatsType.dayCount")
         }
     }
-    
+
     static func getTitle() -> String {
         return String(localized: "settings.yearlyStatsType.title")
     }
-    
+
     static func getHeader() -> String? {
         return nil
     }
-    
+
     static func getFooter() -> String? {
         return nil
     }
@@ -354,14 +289,16 @@ enum WeekStartType: Int, CaseIterable, Codable {
 }
 
 extension WeekStartType: UserDefaultSettable {
-    static func getKey() -> UserDefaults.Settings {
-        return .WeekStartType
+    static func getKey() -> String {
+        return UserDefaults.Settings.WeekStartType.rawValue
     }
-    
+
+    static var userDefaults: UserDefaults { .standard }
+
     static var defaultOption: WeekStartType {
         return .followSystem
     }
-    
+
     func getName() -> String {
         switch self {
         case .followSystem:
@@ -370,15 +307,15 @@ extension WeekStartType: UserDefaultSettable {
             return (WeekdayOrder(rawValue: rawValue) ?? .mon).getShortSymbol()
         }
     }
-    
+
     static func getTitle() -> String {
         return String(localized: "settings.weekStartType.title")
     }
-    
+
     static func getHeader() -> String? {
         return nil
     }
-    
+
     static func getFooter() -> String? {
         return nil
     }
@@ -390,14 +327,16 @@ enum DynamicColorType: Int, CaseIterable, Codable {
 }
 
 extension DynamicColorType: UserDefaultSettable {
-    static func getKey() -> UserDefaults.Settings {
-        return .DynamicColor
+    static func getKey() -> String {
+        return UserDefaults.Settings.DynamicColor.rawValue
     }
-    
+
+    static var userDefaults: UserDefaults { .standard }
+
     static var defaultOption: DynamicColorType {
         return .disable
     }
-    
+
     func getName() -> String {
         switch self {
         case .disable:
@@ -406,11 +345,11 @@ extension DynamicColorType: UserDefaultSettable {
             return String(localized: "settings.dynamicColor.enable")
         }
     }
-    
+
     static func getTitle() -> String {
         return String(localized: "settings.dynamicColor.title")
     }
-    
+
     static func getFooter() -> String? {
         return String(localized: "settings.dynamicColor.hint")
     }
@@ -422,14 +361,16 @@ enum BookTitleDisplay: Int, CaseIterable, Codable {
 }
 
 extension BookTitleDisplay: UserDefaultSettable {
-    static func getKey() -> UserDefaults.Settings {
-        return .BookTitleDisplay
+    static func getKey() -> String {
+        return UserDefaults.Settings.BookTitleDisplay.rawValue
     }
-    
+
+    static var userDefaults: UserDefaults { .standard }
+
     static var defaultOption: BookTitleDisplay {
         return .display
     }
-    
+
     func getName() -> String {
         switch self {
         case .hidden:
@@ -438,15 +379,15 @@ extension BookTitleDisplay: UserDefaultSettable {
             return String(localized: "settings.bookTitleDisplay.display")
         }
     }
-    
+
     static func getTitle() -> String {
         return String(localized: "settings.bookTitleDisplay.title")
     }
-    
+
     static func getHeader() -> String? {
         return nil
     }
-    
+
     static func getFooter() -> String? {
         return nil
     }
@@ -460,14 +401,16 @@ enum AutoDismissInterval: Int, CaseIterable, Codable {
 }
 
 extension AutoDismissInterval: UserDefaultSettable {
-    static func getKey() -> UserDefaults.Settings {
-        return .AutoDismissInterval
+    static func getKey() -> String {
+        return UserDefaults.Settings.AutoDismissInterval.rawValue
     }
-    
+
+    static var userDefaults: UserDefaults { .standard }
+
     static var defaultOption: AutoDismissInterval {
         return .five
     }
-    
+
     func getName() -> String {
         switch self {
         case .zero:
@@ -480,19 +423,19 @@ extension AutoDismissInterval: UserDefaultSettable {
             return String(localized: "settings.autoDismissInterval.ten")
         }
     }
-    
+
     static func getTitle() -> String {
         return String(localized: "settings.autoDismissInterval.title")
     }
-    
+
     static func getHeader() -> String? {
         return nil
     }
-    
+
     static func getFooter() -> String? {
         return nil
     }
-    
+
     var timeInterval: Int {
         switch self {
         case .zero:

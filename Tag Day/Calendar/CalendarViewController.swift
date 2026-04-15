@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 import ZCCalendar
 import Collections
+import MoreKit
 
 class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate {
     static let sectionHeaderElementKind = "sectionHeaderElementKind"
@@ -488,7 +489,7 @@ class CalendarViewController: CalendarBaseViewController, DisplayHandlerDelegate
     
     @objc
     func showMore() {
-        navigationController?.present(NavigationController(rootViewController: MoreViewController()), animated: ConsideringUser.animated)
+        navigationController?.present(NavigationController(rootViewController: MoreViewController.makeTagDay()), animated: ConsideringUser.animated)
     }
     
     @objc
