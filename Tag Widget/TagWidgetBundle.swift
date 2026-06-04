@@ -12,8 +12,7 @@ import MoreKit
 @main
 struct TagWidgetBundle: WidgetBundle {
     init() {
-        MoreKit.configure(
-            productIDs: ["com.zizicici.tag.pro"],
+        MoreKit.configureForReadOnlyAccess(
             appGroupID: AppConfig.appGroupID,
             membershipKey: "com.zizicici.tag.Store.LifetimeMembership"
         )

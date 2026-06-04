@@ -50,32 +50,16 @@ extension MoreViewController {
                 titleHighlight: "Pro",
                 content: String(localized: "grateful.content")
             ),
-            contactItems: [
-                ContactItemConfiguration(
-                    id: "email",
-                    title: String(localized: "more.item.contact.email"),
-                    value: "tagday@zi.ci",
-                    image: UIImage(systemName: "envelope"),
-                    handler: .email("tagday@zi.ci")
-                ),
-                ContactItemConfiguration(
-                    id: "xiaohongshu",
-                    title: String(localized: "more.item.contact.xiaohongshu"),
-                    value: "@App\u{541b}",
-                    image: UIImage(systemName: "book.closed"),
-                    handler: .url("https://www.xiaohongshu.com/user/profile/63f05fc5000000001001e524")
-                ),
-            ],
+            email: "tagday@zi.ci",
             appStoreId: "6745145597",
-            eulaURL: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/",
             privacyPolicyURL: "https://zizicici.medium.com/privacy-policy-for-tag-day-app-e284ee9f654c",
             specificationsConfig: SpecificationsConfiguration(
                 summaryItems: [
                     .init(type: .name, value: SpecificationsViewController.getAppName() ?? ""),
                     .init(type: .version, value: SpecificationsViewController.getAppVersion() ?? ""),
-                    .init(type: .manufacturer, value: "@App\u{541b}"),
+                    .init(type: .manufacturer, value: "@App君"),
                     .init(type: .publisher, value: "ZIZICICI LIMITED"),
-                    .init(type: .dateOfProduction, value: "2026/02/14"),
+                    .init(type: .dateOfProduction, value: "2026/06/06"),
                     .init(type: .license, value: "\u{7ca4}ICP\u{5907}2025448771\u{53f7}-1A"),
                 ],
                 thirdPartyLibraries: [

@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
 
         MoreKit.configure(
-            productIDs: ["com.zizicici.tag.pro"],
+            productID: "com.zizicici.tag.pro",
             appGroupID: AppConfig.appGroupID,
             membershipKey: "com.zizicici.tag.Store.LifetimeMembership"
         )

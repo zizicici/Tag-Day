@@ -547,8 +547,11 @@ class TagDetailViewController: UIViewController {
         showOverlayViewController()
         Task {
             do {
-                if let _ = try await Store.shared.purchaseLifetimeMembership() {
+                switch try await Store.shared.purchaseLifetimeMembership() {
+                case .success, .alreadyOwned:
                     reloadData()
+                case .pending, .cancelled:
+                    break
                 }
             }
             catch {
