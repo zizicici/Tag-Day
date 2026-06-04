@@ -9,9 +9,16 @@ import Foundation
 import GRDB
 import ZipArchive
 
+private struct DatabaseReplacementResult {
+    let imported: Bool
+    let backupURL: URL?
+}
+
 extension AppDatabase {
     // Backup
     func backupToTempPath() -> String? {
+        guard let dbWriter = dbWriter else { return nil }
+        
         // Build a temporary path
         let fileName = "db.sqlite"
         let dateFormatter = DateFormatter()
@@ -30,7 +37,7 @@ extension AppDatabase {
 
         // Export
         do {
-            try dbWriter?.backup(to: DatabasePool(path: filePath))
+            try dbWriter.backup(to: DatabasePool(path: filePath))
         }
         catch {
             print(error)
@@ -55,11 +62,45 @@ extension AppDatabase {
     public func importDatabase(_ fileURL: URL) {
         do {
             try copyFileToTempImportDirectory(fileURL)
-            if try findDatabaseFileInImportDirectory() {
-                disconnect()
-                _ = try copySQLiteFilesToDestination(AppDatabase.databaseFolderURL())
-                reconnect()
-                NotificationCenter.default.post(name: Notification.Name.DatabaseUpdated, object: nil)
+            guard try findDatabaseFileInImportDirectory() else {
+                return
+            }
+            
+            let importedDatabaseURL = try findSingleSQLiteFileInImportDirectory()
+            try validateImportedDatabase(at: importedDatabaseURL)
+            
+            let destinationURL = try AppDatabase.databaseFolderURL()
+            disconnect()
+            do {
+                let replacement = try replaceDatabase(with: importedDatabaseURL, destinationURL: destinationURL)
+                guard reconnect() else {
+                    try restoreDatabaseBackup(at: replacement.backupURL, destinationURL: destinationURL)
+                    guard reconnect() else {
+                        throw NSError(
+                            domain: "DatabaseImportError",
+                            code: -3,
+                            userInfo: [NSLocalizedDescriptionKey: "Imported database could not be opened, and the previous database could not be restored."]
+                        )
+                    }
+                    throw NSError(
+                        domain: "DatabaseImportError",
+                        code: -2,
+                        userInfo: [NSLocalizedDescriptionKey: "Imported database could not be opened. The previous database has been restored."]
+                    )
+                }
+                
+                if let backupURL = replacement.backupURL {
+                    try? FileManager.default.removeItem(at: backupURL)
+                }
+                
+                if replacement.imported {
+                    NotificationCenter.default.post(name: Notification.Name.DatabaseUpdated, object: nil)
+                }
+            } catch {
+                if dbWriter == nil {
+                    _ = reconnect()
+                }
+                throw error
             }
         } catch {
             print(error)
@@ -175,33 +216,103 @@ extension AppDatabase {
         return findDatabase
     }
     
-    func copySQLiteFilesToDestination(_ destinationURL: URL) throws -> Bool {
-        var result = false
+    func findSingleSQLiteFileInImportDirectory() throws -> URL {
+        let sourceURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("import", isDirectory: true)
+        let contents = try FileManager.default.contentsOfDirectory(at: sourceURL, includingPropertiesForKeys: nil)
+        let sqliteFiles = contents.filter { $0.pathExtension == "sqlite" }
+        
+        guard sqliteFiles.count == 1, let sqliteFile = sqliteFiles.first else {
+            throw NSError(
+                domain: "DatabaseImportError",
+                code: -1,
+                userInfo: [NSLocalizedDescriptionKey: "Expected exactly one sqlite database file, found \(sqliteFiles.count)."]
+            )
+        }
+        
+        return sqliteFile
+    }
+    
+    func validateImportedDatabase(at databaseURL: URL) throws {
+        let pool = try DatabasePool(path: databaseURL.path)
+        defer {
+            try? pool.close()
+        }
+        try pool.read { db in
+            _ = try Book
+                .select(Book.Columns.id, Book.Columns.title, Book.Columns.color, Book.Columns.symbol, Book.Columns.bookType, Book.Columns.order)
+                .limit(0)
+                .fetchAll(db)
+            _ = try Tag
+                .select(Tag.Columns.id, Tag.Columns.bookID, Tag.Columns.title, Tag.Columns.subtitle, Tag.Columns.color, Column(Tag.CodingKeys.titleColor), Tag.Columns.order)
+                .limit(0)
+                .fetchAll(db)
+            _ = try DayRecord
+                .select(DayRecord.Columns.id, DayRecord.Columns.bookID, DayRecord.Columns.tagID, DayRecord.Columns.day, DayRecord.Columns.comment, DayRecord.Columns.startTime, DayRecord.Columns.endTime, DayRecord.Columns.duration, DayRecord.Columns.order)
+                .limit(0)
+                .fetchAll(db)
+            _ = try BookConfig
+                .select(BookConfig.Columns.id, BookConfig.Columns.bookID, Column(BookConfig.CodingKeys.notificationTime), Column(BookConfig.CodingKeys.notificationText), Column(BookConfig.CodingKeys.repeatWeekday))
+                .limit(0)
+                .fetchAll(db)
+        }
+    }
+    
+    private func replaceDatabase(with importedDatabaseURL: URL, destinationURL: URL) throws -> DatabaseReplacementResult {
         let fileManager = FileManager.default
-        // 获取 temp/import 目录
-        var sourceURL = URL(fileURLWithPath: NSTemporaryDirectory())
-        sourceURL.appendPathComponent("import", isDirectory: true)
+        let parentURL = destinationURL.deletingLastPathComponent()
+        let stagingURL = parentURL.appendingPathComponent("database_import_\(UUID().uuidString)", isDirectory: true)
+        let backupURL = parentURL.appendingPathComponent("database_backup_\(UUID().uuidString)", isDirectory: true)
+        let stagedDatabaseURL = stagingURL.appendingPathComponent(AppDatabase.dbName)
+        var didMoveOriginal = false
         
-        // 检查源目录是否存在
-        guard fileManager.fileExists(atPath: sourceURL.path) else {
-            return result
-        }
+        try fileManager.createDirectory(at: parentURL, withIntermediateDirectories: true)
+        try fileManager.createDirectory(at: stagingURL, withIntermediateDirectories: true)
+        try backupDatabase(from: importedDatabaseURL, to: stagedDatabaseURL)
         
-        try fileManager.removeItem(at: destinationURL)
-        try fileManager.createDirectory(at: destinationURL, withIntermediateDirectories: true)
-        
-        // 查找所有 .sqlite 文件并复制它们
-        let unfilteredContents = try fileManager.contentsOfDirectory(at: sourceURL, includingPropertiesForKeys: nil)
-        
-        for itemURL in unfilteredContents {
-            if itemURL.pathExtension == "sqlite" {
-                let destinationFileURL = destinationURL.appendingPathComponent("db.sqlite")
-                try fileManager.copyItem(at: itemURL, to: destinationFileURL)
-                result = true
+        do {
+            if fileManager.fileExists(atPath: destinationURL.path) {
+                try fileManager.moveItem(at: destinationURL, to: backupURL)
+                didMoveOriginal = true
             }
+            
+            try fileManager.moveItem(at: stagingURL, to: destinationURL)
+            AppDatabase.setProtectionForDirectory(at: destinationURL)
+            
+            return DatabaseReplacementResult(imported: true, backupURL: didMoveOriginal ? backupURL : nil)
+        } catch {
+            if fileManager.fileExists(atPath: destinationURL.path) {
+                try? fileManager.removeItem(at: destinationURL)
+            }
+            if didMoveOriginal, fileManager.fileExists(atPath: backupURL.path) {
+                try? fileManager.moveItem(at: backupURL, to: destinationURL)
+            }
+            try? fileManager.removeItem(at: stagingURL)
+            throw error
+        }
+    }
+    
+    private func restoreDatabaseBackup(at backupURL: URL?, destinationURL: URL) throws {
+        let fileManager = FileManager.default
+        if fileManager.fileExists(atPath: destinationURL.path) {
+            try fileManager.removeItem(at: destinationURL)
+        }
+        if let backupURL, fileManager.fileExists(atPath: backupURL.path) {
+            try fileManager.moveItem(at: backupURL, to: destinationURL)
+            AppDatabase.setProtectionForDirectory(at: destinationURL)
+        }
+    }
+    
+    private func backupDatabase(from sourceURL: URL, to destinationURL: URL) throws {
+        let sourcePool = try DatabasePool(path: sourceURL.path)
+        defer {
+            try? sourcePool.close()
         }
         
-        return result
+        let destinationPool = try DatabasePool(path: destinationURL.path)
+        defer {
+            try? destinationPool.close()
+        }
+        
+        try sourcePool.backup(to: destinationPool)
     }
 }
-

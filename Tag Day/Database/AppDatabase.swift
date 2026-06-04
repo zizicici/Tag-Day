@@ -120,13 +120,16 @@ final class AppDatabase {
         self.dbWriter = nil
     }
     
-    public func reconnect() {
+    @discardableResult
+    public func reconnect() -> Bool {
         do {
             let databasePool = try AppDatabase.generateDatabasePool()
             try migrator.migrate(databasePool)
             self.dbWriter = databasePool
+            return true
         } catch {
             print(error)
+            return false
         }
     }
 }
@@ -138,8 +141,9 @@ extension AppDatabase {
             // No ID
             return false
         }
+        guard let dbWriter = dbWriter else { return false }
         do {
-            _ = try dbWriter?.write{ db in
+            _ = try dbWriter.write{ db in
                 try book.update(db)
             }
         }
@@ -156,8 +160,9 @@ extension AppDatabase {
             // No ID
             return false
         }
+        guard let dbWriter = dbWriter else { return false }
         do {
-            _ = try dbWriter?.write{ db in
+            _ = try dbWriter.write{ db in
                 for book in books {
                     try book.update(db)
                 }
@@ -176,9 +181,10 @@ extension AppDatabase {
             // Should no ID
             return false
         }
+        guard let dbWriter = dbWriter else { return false }
         var saveBook: Book = book
         do {
-            _ = try dbWriter?.write{ db in
+            _ = try dbWriter.write{ db in
                 try saveBook.save(db)
             }
         }
@@ -194,8 +200,9 @@ extension AppDatabase {
         guard let bookID = book.id else {
             return false
         }
+        guard let dbWriter = dbWriter else { return false }
         do {
-            _ = try dbWriter?.write{ db in
+            _ = try dbWriter.write{ db in
                 try Book.deleteAll(db, ids: [bookID])
                 // Delete Day Records
                 let bookIDColumnInDayRecord = DayRecord.Columns.bookID
@@ -223,8 +230,9 @@ extension AppDatabase {
             // No ID
             return false
         }
+        guard let dbWriter = dbWriter else { return false }
         do {
-            _ = try dbWriter?.write{ db in
+            _ = try dbWriter.write{ db in
                 try tag.update(db)
             }
         }
@@ -241,8 +249,9 @@ extension AppDatabase {
             // No ID
             return false
         }
+        guard let dbWriter = dbWriter else { return false }
         do {
-            _ = try dbWriter?.write{ db in
+            _ = try dbWriter.write{ db in
                 for tag in tags {
                     try tag.update(db)
                 }
@@ -261,9 +270,10 @@ extension AppDatabase {
             // Should no ID
             return false
         }
+        guard let dbWriter = dbWriter else { return false }
         var saveTag: Tag = tag
         do {
-            _ = try dbWriter?.write{ db in
+            _ = try dbWriter.write{ db in
                 try saveTag.save(db)
             }
         }
@@ -279,8 +289,9 @@ extension AppDatabase {
         guard let tagID = tag.id else {
             return false
         }
+        guard let dbWriter = dbWriter else { return false }
         do {
-            _ = try dbWriter?.write{ db in
+            _ = try dbWriter.write{ db in
                 try Tag.deleteAll(db, ids: [tagID])
                 // Delete Day Records
                 let tagIDColumnInDayRecord = DayRecord.Columns.tagID
@@ -304,8 +315,9 @@ extension AppDatabase {
             // No ID
             return false
         }
+        guard let dbWriter = dbWriter else { return false }
         do {
-            _ = try dbWriter?.write{ db in
+            _ = try dbWriter.write{ db in
                 try dayRecord.update(db)
             }
         }
@@ -322,8 +334,9 @@ extension AppDatabase {
             // No ID
             return false
         }
+        guard let dbWriter = dbWriter else { return false }
         do {
-            _ = try dbWriter?.write{ db in
+            _ = try dbWriter.write{ db in
                 for dayRecord in dayRecords {
                     try dayRecord.update(db)
                 }
@@ -342,9 +355,10 @@ extension AppDatabase {
             // Should no ID
             return nil
         }
+        guard let dbWriter = dbWriter else { return nil }
         var saveRecord: DayRecord = dayRecord
         do {
-            _ = try dbWriter?.write{ db in
+            _ = try dbWriter.write{ db in
                 try saveRecord.save(db)
             }
         }
@@ -361,8 +375,9 @@ extension AppDatabase {
             // Should No ID
             return false
         }
+        guard let dbWriter = dbWriter else { return false }
         do {
-            _ = try dbWriter?.write{ db in
+            _ = try dbWriter.write{ db in
                 for dayRecord in dayRecords {
                     var saveRecord = dayRecord
                     try saveRecord.save(db)
@@ -381,8 +396,9 @@ extension AppDatabase {
         guard let recordID = dayRecord.id else {
             return false
         }
+        guard let dbWriter = dbWriter else { return false }
         do {
-            _ = try dbWriter?.write{ db in
+            _ = try dbWriter.write{ db in
                 try DayRecord.deleteAll(db, ids: [recordID])
             }
         }
@@ -399,8 +415,9 @@ extension AppDatabase {
             // No ID
             return false
         }
+        guard let dbWriter = dbWriter else { return false }
         do {
-            _ = try dbWriter?.write{ db in
+            _ = try dbWriter.write{ db in
                 try DayRecord.deleteAll(db, ids: dayRecords.map{ $0.id })
             }
         }
@@ -413,8 +430,9 @@ extension AppDatabase {
     }
     
     func resetDayRecord(bookID: Int64, day: Int64) -> Bool {
+        guard let dbWriter = dbWriter else { return false }
         do {
-            _ = try dbWriter?.write{ db in
+            _ = try dbWriter.write{ db in
                 let bookIDColumn = DayRecord.Columns.bookID
                 let dayColumn = DayRecord.Columns.day
                 try DayRecord.filter(bookIDColumn == bookID && dayColumn == day).deleteAll(db)
@@ -436,8 +454,9 @@ extension AppDatabase {
             // No ID
             return false
         }
+        guard let dbWriter = dbWriter else { return false }
         do {
-            _ = try dbWriter?.write{ db in
+            _ = try dbWriter.write{ db in
                 try bookConfig.update(db)
             }
         }
@@ -454,8 +473,9 @@ extension AppDatabase {
             // No ID
             return false
         }
+        guard let dbWriter = dbWriter else { return false }
         do {
-            _ = try dbWriter?.write{ db in
+            _ = try dbWriter.write{ db in
                 for book in bookConfigs {
                     try book.update(db)
                 }
@@ -474,9 +494,10 @@ extension AppDatabase {
             // Should no ID
             return false
         }
+        guard let dbWriter = dbWriter else { return false }
         var saveBookConfig: BookConfig = bookConfig
         do {
-            _ = try dbWriter?.write{ db in
+            _ = try dbWriter.write{ db in
                 try saveBookConfig.save(db)
             }
         }
@@ -492,8 +513,9 @@ extension AppDatabase {
         guard let bookConfigID = bookConfig.id else {
             return false
         }
+        guard let dbWriter = dbWriter else { return false }
         do {
-            _ = try dbWriter?.write{ db in
+            _ = try dbWriter.write{ db in
                 try BookConfig.deleteAll(db, ids: [bookConfigID])
                 // Delete Day Records
                 let bookIDColumnInDayRecord = DayRecord.Columns.bookID
