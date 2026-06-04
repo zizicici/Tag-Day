@@ -613,14 +613,18 @@ extension BatchEditorViewController {
     }
     
     func update(add: [DayRecord], delete: [DayRecord]) {
-        _ = DataManager.shared.delete(dayRecords: delete)
-        _ = DataManager.shared.add(dayRecords: add.map({ dayRecord in
+        let addRecords = add.map({ dayRecord in
             var newRecord = dayRecord
             newRecord.id = nil
             return newRecord
-        }))
+        })
         
-        dismiss(animated: ConsideringUser.animated)
+        let result = DataManager.shared.replaceDayRecords(delete: delete, add: addRecords)
+        if result {
+            dismiss(animated: ConsideringUser.animated)
+        } else {
+            view.makeToast(String(localized: "batchEditor.alert.save.failed"), position: .center)
+        }
     }
     
     @objc

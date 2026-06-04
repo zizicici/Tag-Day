@@ -429,6 +429,31 @@ extension AppDatabase {
         return true
     }
     
+    func replaceDayRecords(delete deleteRecords: [DayRecord], add addRecords: [DayRecord]) -> Bool {
+        guard !deleteRecords.contains(where: { $0.id == nil }) else {
+            return false
+        }
+        guard !addRecords.contains(where: { $0.id != nil }) else {
+            return false
+        }
+        guard let dbWriter = dbWriter else { return false }
+        do {
+            _ = try dbWriter.write { db in
+                try DayRecord.deleteAll(db, ids: deleteRecords.map(\.id))
+                for dayRecord in addRecords {
+                    var saveRecord = dayRecord
+                    try saveRecord.save(db)
+                }
+            }
+        }
+        catch {
+            print(error)
+            return false
+        }
+        NotificationCenter.default.post(Notification(name: Notification.Name.DatabaseUpdated))
+        return true
+    }
+
     func resetDayRecord(bookID: Int64, day: Int64) -> Bool {
         guard let dbWriter = dbWriter else { return false }
         do {

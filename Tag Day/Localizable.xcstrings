@@ -1271,6 +1271,34 @@
         }
       }
     },
+    "batchEditor.alert.save.failed": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Failed to save changes"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存修改失败"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存修改失敗"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存修改失敗"
+          }
+        }
+      }
+    },
     "batchEditor.alert.save.message%d%d": {
       "localizations": {
         "en": {
