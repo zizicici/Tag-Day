@@ -67,4 +67,45 @@ struct SharedDataManager {
         
         return result
     }
+
+    @discardableResult
+    static func mutateSharedData(_ transform: (inout SharedData) throws -> Void) throws -> SharedData {
+        guard let fileURL = sharedContainerURL else {
+            throw NSError(domain: "SharedDataError", code: -1, userInfo: [NSLocalizedDescriptionKey: "无法访问共享目录"])
+        }
+
+        let coordinator = NSFileCoordinator()
+        var coordinationError: NSError?
+        var mutationError: Error?
+        var result: SharedData?
+
+        coordinator.coordinate(writingItemAt: fileURL, options: [], error: &coordinationError) { url in
+            do {
+                let data = try Data(contentsOf: url)
+                let sharedData = try JSONDecoder().decode(SharedData.self, from: data)
+                var mutatedData = sharedData
+                try transform(&mutatedData)
+
+                let jsonData = try JSONEncoder().encode(mutatedData)
+                try jsonData.write(to: url, options: .atomic)
+                result = mutatedData
+            } catch {
+                mutationError = error
+            }
+        }
+
+        if let coordinationError {
+            throw coordinationError
+        }
+
+        if let mutationError {
+            throw mutationError
+        }
+
+        guard let result else {
+            throw NSError(domain: "SharedDataError", code: -3, userInfo: [NSLocalizedDescriptionKey: "共享数据修改失败"])
+        }
+
+        return result
+    }
 }

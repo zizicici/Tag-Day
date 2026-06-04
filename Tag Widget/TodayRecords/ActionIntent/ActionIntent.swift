@@ -219,18 +219,23 @@ struct WidgetSelectTagActionIntent: AppIntent {
             return .result(value: false)
         }
         
-        guard var data = try? SharedDataManager.read(SharedData.self) else {
+        do {
+            try SharedDataManager.mutateSharedData { data in
+                let maxSavedOrder = data.dayRecord
+                    .filter { $0.bookID == bookID && $0.day == day }
+                    .map(\.order)
+                    .max() ?? 0
+                let maxQueuedOrder = data.widgetAddDayRecords
+                    .filter { $0.bookID == bookID && $0.day == day }
+                    .map { Int64($0.order) }
+                    .max() ?? 0
+                let maxOrder = max(maxSavedOrder, maxQueuedOrder)
+                let newRecord = WidgetAddDayRecord(tagID: tagID, bookID: bookID, day: day, date: Int(Date().nanoSecondSince1970), order: Int(maxOrder) + 1)
+                data.widgetAddDayRecords.append(newRecord)
+            }
+        } catch {
             return .result(value: false)
         }
-        
-        var maxOrder = data.dayRecord.filter({ $0.bookID == bookID && $0.day == day }).sorted(by: { $0.order > $1.order }).first?.order ?? 0
-        if let otherWidgetRecord = data.widgetAddDayRecords.filter({ $0.bookID == bookID && $0.day == day }).sorted(by: { $0.order > $1.order }).first {
-            maxOrder = Int64(otherWidgetRecord.order)
-        }
-        
-        let newRecord = WidgetAddDayRecord(tagID: tagID, bookID: bookID, day: day, date: Int(Date().nanoSecondSince1970), order: Int(maxOrder) + 1)
-        data.widgetAddDayRecords = data.widgetAddDayRecords + [newRecord]
-        try? SharedDataManager.write(data)
         
         let stateManager = WidgetStateManager.shared
         stateManager.saveState(kind: kind, family: family, bookID: bookID, state: .idle)
