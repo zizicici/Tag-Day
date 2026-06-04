@@ -212,6 +212,10 @@ extension AppDatabase {
                 let bookIDColumnInTag = Tag.Columns.bookID
                 let tagRequest = Tag.filter(bookIDColumnInTag == bookID)
                 try tagRequest.deleteAll(db)
+                // Delete Book Configs
+                let bookIDColumnInBookConfig = BookConfig.Columns.bookID
+                let bookConfigRequest = BookConfig.filter(bookIDColumnInBookConfig == bookID)
+                try bookConfigRequest.deleteAll(db)
             }
         }
         catch {
@@ -524,32 +528,6 @@ extension AppDatabase {
         do {
             _ = try dbWriter.write{ db in
                 try saveBookConfig.save(db)
-            }
-        }
-        catch {
-            print(error)
-            return false
-        }
-        NotificationCenter.default.post(Notification(name: Notification.Name.DatabaseUpdated))
-        return true
-    }
-    
-    func delete(bookConfig: BookConfig) -> Bool {
-        guard let bookConfigID = bookConfig.id else {
-            return false
-        }
-        guard let dbWriter = dbWriter else { return false }
-        do {
-            _ = try dbWriter.write{ db in
-                try BookConfig.deleteAll(db, ids: [bookConfigID])
-                // Delete Day Records
-                let bookIDColumnInDayRecord = DayRecord.Columns.bookID
-                let dayRecordRequest = DayRecord.filter(bookIDColumnInDayRecord == bookConfigID)
-                try dayRecordRequest.deleteAll(db)
-                // Delete Tags
-                let bookIDColumnInTag = Tag.Columns.bookID
-                let tagRequest = Tag.filter(bookIDColumnInTag == bookConfigID)
-                try tagRequest.deleteAll(db)
             }
         }
         catch {

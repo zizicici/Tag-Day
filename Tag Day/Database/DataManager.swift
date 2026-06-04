@@ -604,10 +604,6 @@ extension DataManager {
     func update(bookConfig: BookConfig) -> Bool {
         return AppDatabase.shared.update(bookConfig: bookConfig)
     }
-    
-    func delete(bookConfig: BookConfig) -> Bool {
-        return AppDatabase.shared.delete(bookConfig: bookConfig)
-    }
 }
 
 extension DataManager {
