@@ -229,6 +229,51 @@ extension AppDatabase {
 
 // Tag
 extension AppDatabase {
+    private enum MoveTagError: Error {
+        case invalidRequest
+    }
+
+    private func move(tagID: Int64, toBookID targetBookID: Int64, in db: Database) throws -> Bool {
+        guard var tag = try Tag.fetchOne(db, id: tagID) else { return false }
+        guard try Book.fetchOne(db, id: targetBookID) != nil else { return false }
+        guard tag.bookID != targetBookID else { return false }
+        let sourceBookID = tag.bookID
+        let maxTagOrder = try Int.fetchOne(db, sql: "SELECT MAX(\"order\") FROM \"tag\" WHERE \"book_id\" = ?", arguments: [targetBookID]) ?? -1
+        tag.bookID = targetBookID
+        tag.order = maxTagOrder + 1
+        try tag.update(db)
+        let movingRecords = try DayRecord
+            .filter(DayRecord.Columns.bookID == sourceBookID)
+            .filter(DayRecord.Columns.tagID == tagID)
+            .order(DayRecord.Columns.day.asc)
+            .order(DayRecord.Columns.order.asc)
+            .fetchAll(db)
+        var seenDays = Set<Int64>()
+        let movingDays = movingRecords.compactMap { record in
+            seenDays.insert(record.day).inserted ? record.day : nil
+        }
+        var nextOrders: [Int64: Int64] = [:]
+        if !movingDays.isEmpty {
+            let placeholders = Array(repeating: "?", count: movingDays.count).joined(separator: ", ")
+            let arguments = [targetBookID] + movingDays
+            let rows = try Row.fetchAll(db, sql: "SELECT \"day\", MAX(\"order\") AS \"max_order\" FROM \"day_record\" WHERE \"book_id\" = ? AND \"day\" IN (\(placeholders)) GROUP BY \"day\"", arguments: StatementArguments(arguments))
+            nextOrders = Dictionary(uniqueKeysWithValues: movingDays.map { ($0, Int64(0)) })
+            for row in rows {
+                let day: Int64 = row["day"]
+                let maxOrder: Int64? = row["max_order"]
+                nextOrders[day] = (maxOrder ?? -1) + 1
+            }
+        }
+        for record in movingRecords {
+            var movingRecord = record
+            movingRecord.bookID = targetBookID
+            movingRecord.order = nextOrders[record.day] ?? 0
+            nextOrders[record.day] = movingRecord.order + 1
+            try movingRecord.update(db)
+        }
+        return true
+    }
+
     func update(tag: Tag) -> Bool {
         guard tag.id != nil else {
             // No ID
@@ -301,6 +346,41 @@ extension AppDatabase {
                 let tagIDColumnInDayRecord = DayRecord.Columns.tagID
                 let dayRecordRequest = DayRecord.filter(tagIDColumnInDayRecord == tagID)
                 try dayRecordRequest.deleteAll(db)
+            }
+        }
+        catch {
+            print(error)
+            return false
+        }
+        NotificationCenter.default.post(Notification(name: Notification.Name.DatabaseUpdated))
+        return true
+    }
+
+    func move(tagID: Int64, toBookID targetBookID: Int64) -> Bool {
+        guard let dbWriter = dbWriter else { return false }
+        do {
+            let moved = try dbWriter.write { db in
+                try move(tagID: tagID, toBookID: targetBookID, in: db)
+            }
+            guard moved else { return false }
+        }
+        catch {
+            print(error)
+            return false
+        }
+        NotificationCenter.default.post(Notification(name: Notification.Name.DatabaseUpdated))
+        return true
+    }
+
+    func move(tagID: Int64, toNewBook book: Book) -> Bool {
+        guard book.id == nil else { return false }
+        guard let dbWriter = dbWriter else { return false }
+        var saveBook = book
+        do {
+            try dbWriter.write { db in
+                try saveBook.save(db)
+                guard let bookID = saveBook.id else { throw MoveTagError.invalidRequest }
+                guard try move(tagID: tagID, toBookID: bookID, in: db) else { throw MoveTagError.invalidRequest }
             }
         }
         catch {

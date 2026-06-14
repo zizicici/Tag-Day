@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Toast
 import MoreKit
 
 class TagDetailViewController: UIViewController {
@@ -124,6 +125,7 @@ class TagDetailViewController: UIViewController {
         case subtitle
         case tagColor
         case titleColor
+        case move
         case delete
         
         var header: String? {
@@ -138,6 +140,8 @@ class TagDetailViewController: UIViewController {
                 return String(localized: "tags.detail.color")
             case .titleColor:
                 return String(localized: "tags.detail.color.text")
+            case .move:
+                return nil
             case .delete:
                 return nil
             }
@@ -155,6 +159,8 @@ class TagDetailViewController: UIViewController {
                 return nil
             case .titleColor:
                 return nil
+            case .move:
+                return nil
             case .delete:
                 return nil
             }
@@ -170,6 +176,7 @@ class TagDetailViewController: UIViewController {
         case titleColorToggle(Bool)
         case titleLightColor(ColorPickerItem)
         case titleDarkColor(ColorPickerItem)
+        case move
         case delete
     }
     
@@ -370,6 +377,16 @@ class TagDetailViewController: UIViewController {
                     }
                 }
                 return cell
+            case .move:
+                let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(UITableViewCell.self), for: indexPath)
+                cell.accessoryType = .none
+                cell.accessoryView = nil
+                var content = cell.defaultContentConfiguration()
+                content.text = String(localized: "tag.move")
+                content.textProperties.color = AppColor.dynamicColor
+                content.textProperties.alignment = .center
+                cell.contentConfiguration = content
+                return cell
             case .delete:
                 let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(UITableViewCell.self), for: indexPath)
                 cell.accessoryType = .none
@@ -408,6 +425,8 @@ class TagDetailViewController: UIViewController {
             ], toSection: .titleColor)
         }
         if isEditMode() {
+            snapshot.appendSections([.move])
+            snapshot.appendItems([.move], toSection: .move)
             snapshot.appendSections([.delete])
             snapshot.appendItems([.delete], toSection: .delete)
         }
@@ -506,6 +525,14 @@ class TagDetailViewController: UIViewController {
         dismiss(animated: ConsideringUser.animated)
     }
     
+    func dismissMoveFlow() {
+        if let presentingViewController = navigationController?.presentingViewController {
+            presentingViewController.dismiss(animated: ConsideringUser.animated)
+        } else {
+            dismissViewController()
+        }
+    }
+
     func delete() {
         let result = DataManager.shared.delete(tag: tag)
         if result {
@@ -513,6 +540,86 @@ class TagDetailViewController: UIViewController {
         }
     }
     
+    func savePendingChangesForMove() -> Bool {
+        guard isEdited else { return true }
+        guard allowSave() else { return false }
+        let result = DataManager.shared.update(tag: tag)
+        if result {
+            isEdited = false
+            updateSaveButtonStatus()
+        }
+        return result
+    }
+
+    func showMoveAlert(from indexPath: IndexPath) {
+        guard savePendingChangesForMove() else {
+            view.makeToast(String(localized: "backup.alert.result.failed", comment: "Operation failed"), position: .center)
+            return
+        }
+        let alertController = UIAlertController(title: String(localized: "tag.move"), message: nil, preferredStyle: .actionSheet)
+        let targetBooks = DataManager.shared.books.compactMap { book -> Book? in
+            guard let bookID = book.id, book.bookType == .active, bookID != tag.bookID else { return nil }
+            return book
+        }.sorted(by: { $0.order < $1.order })
+        for book in targetBooks {
+            alertController.addAction(UIAlertAction(title: book.title, style: .default) { [weak self] _ in
+                self?.move(to: book)
+            })
+        }
+        alertController.addAction(UIAlertAction(title: String(localized: "books.new"), style: .default) { [weak self] _ in
+            self?.showMoveToNewBookAlert()
+        })
+        alertController.addAction(UIAlertAction(title: String(localized: "button.cancel"), style: .cancel))
+        if let popover = alertController.popoverPresentationController, let cell = tableView.cellForRow(at: indexPath) {
+            popover.sourceView = cell
+            popover.sourceRect = cell.bounds
+        }
+        present(alertController, animated: ConsideringUser.animated)
+    }
+
+    func showMoveToNewBookAlert() {
+        let alertController = UIAlertController(title: String(localized: "books.new"), message: nil, preferredStyle: .alert)
+        let moveAction = UIAlertAction(title: String(localized: "button.ok"), style: .default) { [weak self, weak alertController] _ in
+            let title = alertController?.textFields?.first?.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            self?.moveToNewBook(title: title)
+        }
+        moveAction.isEnabled = false
+        alertController.addTextField { textField in
+            textField.placeholder = String(localized: "books.detail.title.hint")
+            textField.clearButtonMode = .whileEditing
+            textField.addAction(UIAction { [weak textField, weak moveAction] _ in
+                let title = textField?.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+                moveAction?.isEnabled = title.isValidBookTitle()
+            }, for: .editingChanged)
+        }
+        alertController.addAction(moveAction)
+        alertController.addAction(UIAlertAction(title: String(localized: "button.cancel"), style: .cancel))
+        present(alertController, animated: ConsideringUser.animated)
+    }
+
+    func move(to book: Book) {
+        if DataManager.shared.move(tag: tag, to: book) {
+            dismissMoveFlow()
+        } else {
+            view.makeToast(String(localized: "backup.alert.result.failed", comment: "Operation failed"), position: .center)
+        }
+    }
+
+    func moveToNewBook(title: String) {
+        guard title.isValidBookTitle() else {
+            view.makeToast(String(localized: "backup.alert.result.failed", comment: "Operation failed"), position: .center)
+            return
+        }
+        let activeBooks = DataManager.shared.books.filter({ $0.bookType == .active }).sorted(by: { $0.order < $1.order })
+        let bookOrder = (activeBooks.last?.order ?? -1) + 1
+        let newBook = Book(title: title, color: AppColor.dynamicColor.generateLightDarkString(), symbol: "book.closed", order: bookOrder)
+        if DataManager.shared.move(tag: tag, toNewBook: newBook) {
+            dismissMoveFlow()
+        } else {
+            view.makeToast(String(localized: "backup.alert.result.failed", comment: "Operation failed"), position: .center)
+        }
+    }
+
     func showDeleteAlert() {
         guard let tagID = tag.id else { return }
         guard let records = try? DataManager.shared.fetchAllDayRecords(tagID: tagID) else { return }
@@ -580,6 +687,8 @@ extension TagDetailViewController: UITableViewDelegate {
                 break
             case .titleLightColor, .titleDarkColor:
                 break
+            case .move:
+                showMoveAlert(from: indexPath)
             case .delete:
                 showDeleteAlert()
             }

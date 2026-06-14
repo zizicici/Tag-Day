@@ -435,6 +435,18 @@ extension DataManager {
     func delete(tag: Tag) -> Bool {
         return AppDatabase.shared.delete(tag: tag)
     }
+
+    func move(tag: Tag, to book: Book) -> Bool {
+        guard let tagID = tag.id, let bookID = book.id else { return false }
+        guard tag.bookID != bookID else { return false }
+        return AppDatabase.shared.move(tagID: tagID, toBookID: bookID)
+    }
+
+    func move(tag: Tag, toNewBook book: Book) -> Bool {
+        guard let tagID = tag.id else { return false }
+        guard book.id == nil else { return false }
+        return AppDatabase.shared.move(tagID: tagID, toNewBook: book)
+    }
 }
 
 // Day Records
