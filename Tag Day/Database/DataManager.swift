@@ -154,6 +154,61 @@ class DataManager {
     }
 }
 
+fileprivate extension DataManager {
+    func hasBook(id: Int64) -> Bool {
+        return (try? fetchBook(id: id)) != nil
+    }
+
+    func validate(tag: Tag, shouldExist: Bool) -> Bool {
+        if shouldExist {
+            guard let tagID = tag.id, let storedTag = try? fetchTag(id: tagID) else { return false }
+            guard storedTag.bookID == tag.bookID else { return false }
+        } else {
+            guard tag.id == nil else { return false }
+        }
+
+        return hasBook(id: tag.bookID)
+    }
+
+    func validate(tags: [Tag], shouldExist: Bool) -> Bool {
+        return !tags.contains { !validate(tag: $0, shouldExist: shouldExist) }
+    }
+
+    func validate(dayRecord: DayRecord, shouldExist: Bool) -> Bool {
+        return validate(dayRecords: [dayRecord], shouldExist: shouldExist)
+    }
+
+    func validate(dayRecords: [DayRecord], shouldExist: Bool) -> Bool {
+        if shouldExist {
+            guard !dayRecords.contains(where: { $0.id == nil }) else { return false }
+        } else {
+            guard !dayRecords.contains(where: { $0.id != nil }) else { return false }
+        }
+
+        let tagIDs = Set(dayRecords.map(\.tagID))
+        let storedTags = (try? fetchTags(ids: Array(tagIDs))) ?? []
+        guard Set(storedTags.compactMap(\.id)) == tagIDs else { return false }
+
+        let tagBookIDs = Dictionary(uniqueKeysWithValues: storedTags.compactMap { tag in
+            tag.id.map { ($0, tag.bookID) }
+        })
+
+        return !dayRecords.contains { record in
+            tagBookIDs[record.tagID] != record.bookID
+        }
+    }
+
+    func validate(bookConfig: BookConfig, shouldExist: Bool) -> Bool {
+        if shouldExist {
+            guard bookConfig.id != nil else { return false }
+        } else {
+            guard bookConfig.id == nil else { return false }
+        }
+
+        return hasBook(id: bookConfig.bookID)
+    }
+}
+
 // Book
 extension DataManager {
     func fetchBook(id: Int64) throws -> Book? {
@@ -363,14 +418,17 @@ extension DataManager {
     }
     
     func update(tag: Tag) -> Bool {
+        guard validate(tag: tag, shouldExist: true) else { return false }
         return AppDatabase.shared.update(tag: tag)
     }
     
     func update(tags: [Tag]) -> Bool {
+        guard validate(tags: tags, shouldExist: true) else { return false }
         return AppDatabase.shared.update(tags: tags)
     }
     
     func add(tag: Tag) -> Bool {
+        guard validate(tag: tag, shouldExist: false) else { return false }
         return AppDatabase.shared.add(tag: tag)
     }
     
@@ -521,20 +579,22 @@ extension DataManager {
     }
     
     func update(dayRecord: DayRecord) -> Bool {
+        guard validate(dayRecord: dayRecord, shouldExist: true) else { return false }
         return AppDatabase.shared.update(dayRecord: dayRecord)
     }
     
     func update(dayRecords: [DayRecord]) -> Bool {
+        guard validate(dayRecords: dayRecords, shouldExist: true) else { return false }
         return AppDatabase.shared.update(dayRecords: dayRecords)
     }
     
     func add(dayRecord: DayRecord) -> DayRecord? {
-        guard let tag = try? fetchTag(id: Int64(dayRecord.tagID)), tag.bookID == dayRecord.bookID else { return nil }
-        
+        guard validate(dayRecord: dayRecord, shouldExist: false) else { return nil }
         return AppDatabase.shared.add(dayRecord: dayRecord)
     }
     
     func add(dayRecords: [DayRecord]) -> Bool {
+        guard validate(dayRecords: dayRecords, shouldExist: false) else { return false }
         return AppDatabase.shared.add(dayRecords: dayRecords)
     }
     
@@ -547,6 +607,7 @@ extension DataManager {
     }
     
     func replaceDayRecords(delete deleteRecords: [DayRecord], add addRecords: [DayRecord]) -> Bool {
+        guard validate(dayRecords: addRecords, shouldExist: false) else { return false }
         return AppDatabase.shared.replaceDayRecords(delete: deleteRecords, add: addRecords)
     }
 
@@ -598,10 +659,12 @@ extension DataManager {
     }
     
     func add(bookConfig: BookConfig) -> Bool {
+        guard validate(bookConfig: bookConfig, shouldExist: false) else { return false }
         return AppDatabase.shared.add(bookConfig: bookConfig)
     }
     
     func update(bookConfig: BookConfig) -> Bool {
+        guard validate(bookConfig: bookConfig, shouldExist: true) else { return false }
         return AppDatabase.shared.update(bookConfig: bookConfig)
     }
 }
