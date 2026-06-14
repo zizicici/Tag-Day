@@ -1413,7 +1413,7 @@
 			repositoryURL = "https://github.com/zizicici/MoreKit";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.9.1;
+				minimumVersion = 2.0.0;
 			};
 		};
 		14908A092EC8B2E30065A1EC /* XCRemoteSwiftPackageReference "ZCCalendar" */ = {
