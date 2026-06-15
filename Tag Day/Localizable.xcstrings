@@ -1187,12 +1187,12 @@
       }
     },
     "backup.section.toggle.hint2" : {
-      "comment" : "This function required iCloud access.",
+      "comment" : "This feature requires iCloud access.",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This function required iCloud Drive access."
+            "value" : "This feature requires iCloud Drive access."
           }
         },
         "zh-Hans" : {
@@ -1449,7 +1449,7 @@
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%d项已选"
+                  "value" : "%d項已選"
                 }
               }
             }
@@ -1461,7 +1461,7 @@
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%d项已选"
+                  "value" : "%d項已選"
                 }
               }
             }
@@ -1898,7 +1898,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Delete this Tag? %1$i tag(s) and %2$i record(s) will be removed."
+            "value" : "Delete this book? %1$i tag(s) and %2$i record(s) will be removed."
           }
         },
         "zh-Hans" : {
@@ -2386,13 +2386,13 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "删除"
+            "value" : "刪除"
           }
         },
         "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "删除"
+            "value" : "刪除"
           }
         }
       }
@@ -2526,13 +2526,13 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%i"
+            "value" : "%i年"
           }
         },
         "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%i"
+            "value" : "%i年"
           }
         }
       }
@@ -2778,13 +2778,13 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "这是一个备注"
+            "value" : "這是一個備註"
           }
         },
         "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "这是一个备注"
+            "value" : "這是一個備註"
           }
         }
       }
@@ -3158,7 +3158,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Depends on Start Time and End Time."
+            "value" : "Calculated from Start Time and End Time."
           }
         },
         "zh-Hans" : {
@@ -3357,13 +3357,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Auto-dismiss in %i second."
+                  "value" : "Dismisses automatically in %i second."
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Auto-dismiss in %i seconds."
+                  "value" : "Dismisses automatically in %i seconds."
                 }
               }
             }
@@ -3468,7 +3468,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "More Action"
+            "value" : "More Actions"
           }
         },
         "zh-Hans" : {
@@ -3608,7 +3608,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The End Time should exceed the Start Time."
+            "value" : "End Time must be later than Start Time."
           }
         },
         "zh-Hans" : {
@@ -4056,7 +4056,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Backup the Database File to iCloud Drive"
+            "value" : "Back Up the Database File to iCloud Drive"
           }
         },
         "zh-Hans" : {
@@ -4140,7 +4140,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Backup Database to iCloud Drive"
+            "value" : "Back Up Database to iCloud Drive"
           }
         },
         "zh-Hans" : {
@@ -4168,7 +4168,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Backup Database to iCloud Drive"
+            "value" : "Back Up Database to iCloud Drive"
           }
         },
         "zh-Hans" : {
@@ -4476,7 +4476,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This function required iCloud Drive access."
+            "value" : "This feature requires iCloud Drive access."
           }
         },
         "zh-Hans" : {
@@ -4728,7 +4728,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Check Book at Date has Records"
+            "value" : "Check Whether a Book Has Records on a Date"
           }
         },
         "zh-Hans" : {
@@ -4756,7 +4756,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Check ${book} contains records at ${date}"
+            "value" : "Check whether ${book} has records on ${date}"
           }
         },
         "zh-Hans" : {
@@ -4784,7 +4784,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Check has Records by Book and Date"
+            "value" : "Check Records by Book and Date"
           }
         },
         "zh-Hans" : {
@@ -4812,25 +4812,25 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Check ${book} contains ${targetTag} at ${date}"
+            "value" : "Check whether ${book} contains ${targetTag} on ${date}"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "检查${book}在${date}包含 ${targetTag} "
+            "value" : "检查${book}在${date}包含${targetTag}"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "檢查${book}在${date}包含 ${targetTag} "
+            "value" : "檢查${book}在${date}包含${targetTag}"
           }
         },
         "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "檢查${book}在${date}包含 ${targetTag} "
+            "value" : "檢查${book}在${date}包含${targetTag}"
           }
         }
       }
@@ -4840,7 +4840,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Check Book at Date has Records Contain Specific Tag by Text"
+            "value" : "Check Whether a Book Has Records with Tags Matching Text on a Date"
           }
         },
         "zh-Hans" : {
@@ -4868,7 +4868,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Check ${book} contains ${targetString} at ${date}"
+            "value" : "Check whether ${book} has records matching ${targetString} on ${date}"
           }
         },
         "zh-Hans" : {
@@ -4896,7 +4896,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Records contain specific Tag by Text"
+            "value" : "Check Records by Tag Text"
           }
         },
         "zh-Hans" : {
@@ -4924,7 +4924,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Records contain specific Tag"
+            "value" : "Check Records by Tag"
           }
         },
         "zh-Hans" : {
@@ -4952,25 +4952,25 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Check ${book} contains ${targetTag} at tomorrow"
+            "value" : "Check whether ${book} contains ${targetTag} tomorrow"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "检查${book}在明天包含 ${targetTag} "
+            "value" : "检查${book}明天包含${targetTag}"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "檢查${book}在明天包含 ${targetTag} "
+            "value" : "檢查${book}明天包含${targetTag}"
           }
         },
         "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "檢查${book}在明天包含 ${targetTag} "
+            "value" : "檢查${book}明天包含${targetTag}"
           }
         }
       }
@@ -4980,7 +4980,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tomorrow Records contain specific Tag"
+            "value" : "Check Tomorrow's Records by Tag"
           }
         },
         "zh-Hans" : {
@@ -5008,7 +5008,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Comment(Optional)"
+            "value" : "Comment (Optional)"
           }
         },
         "zh-Hans" : {
@@ -5092,7 +5092,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Duration(by minutes, Optional)"
+            "value" : "Duration (minutes, optional)"
           }
         },
         "zh-Hans" : {
@@ -5120,7 +5120,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "End Time(Optional)"
+            "value" : "End Time (Optional)"
           }
         },
         "zh-Hans" : {
@@ -5260,7 +5260,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Start Time(Optional)"
+            "value" : "Start Time (Optional)"
           }
         },
         "zh-Hans" : {
@@ -5456,7 +5456,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Contain"
+            "value" : "Contains"
           }
         },
         "zh-Hans" : {
@@ -5484,7 +5484,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Equal"
+            "value" : "Equals"
           }
         },
         "zh-Hans" : {
@@ -5681,7 +5681,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Advanced Function"
+            "value" : "Advanced"
           }
         },
         "zh-Hans" : {
@@ -6129,7 +6129,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This function required Pro Membership."
+            "value" : "This feature requires Pro."
           }
         },
         "zh-Hans" : {
@@ -8803,13 +8803,13 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "付费升级为Pro"
+            "value" : "付費升級為Pro"
           }
         },
         "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "付费升级为Pro"
+            "value" : "付費升級為Pro"
           }
         }
       }
@@ -9015,7 +9015,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Preferred Columns Count"
+            "value" : "Preferred Column Count"
           }
         },
         "zh-Hans" : {
@@ -9155,25 +9155,25 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Top Items"
+            "value" : "Most Used Tags"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "数量最多的项目"
+            "value" : "记录数最多的标签"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "數量最多的項目"
+            "value" : "記錄數最多的標籤"
           }
         },
         "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "數量最多的項目"
+            "value" : "記錄數最多的標籤"
           }
         }
       }
@@ -9183,25 +9183,25 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "First Items"
+            "value" : "First Tags"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "最开头的项目"
+            "value" : "排序最前的标签"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "最開頭的項目"
+            "value" : "排序最前的標籤"
           }
         },
         "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "最開頭的項目"
+            "value" : "排序最前的標籤"
           }
         }
       }
@@ -9211,25 +9211,25 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Last Items"
+            "value" : "Last Tags"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "最末尾的项目"
+            "value" : "排序最后的标签"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "最末尾的項目"
+            "value" : "排序最後的標籤"
           }
         },
         "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "最末尾的項目"
+            "value" : "排序最後的標籤"
           }
         }
       }

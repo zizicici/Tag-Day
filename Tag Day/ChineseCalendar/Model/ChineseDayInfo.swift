@@ -214,32 +214,7 @@ enum ChineseZodiac: Int, Codable {
     case zhu
 
     func name() -> String {
-        switch self {
-        case .shu:
-            return "鼠"
-        case .niu:
-            return "牛"
-        case .hu:
-            return "虎"
-        case .tu:
-            return "兔"
-        case .long:
-            return "龙"
-        case .she:
-            return "蛇"
-        case .ma:
-            return "马"
-        case .yang:
-            return "羊"
-        case .hou:
-            return "猴"
-        case .ji:
-            return "鸡"
-        case .gou:
-            return "狗"
-        case .zhu:
-            return "猪"
-        }
+        ChineseCalendarText.zodiacName(for: self)
     }
 }
 
@@ -389,7 +364,7 @@ struct ChineseDayInfo {
         let chineseZodiac = year.sexagenaryCycleInfo.chineseZodiac().name()
         let monthString = month.rawValue
         let dayString = day.displayString()
-        return "农历" + yearString + "\(chineseZodiac)" + "年" + monthString + dayString
+        return ChineseCalendarText.lunarPrefix + yearString + "\(chineseZodiac)" + "年" + monthString + dayString
     }
     
     func pronounceString() -> String {

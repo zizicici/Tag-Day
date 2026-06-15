@@ -37,7 +37,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Notifications are used to notify add records by your settings."
+            "value" : "Notifications remind you to add records at the times you set."
           }
         },
         "zh-Hans" : {

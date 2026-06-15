@@ -7,6 +7,55 @@
 
 import Foundation
 
+enum ChineseCalendarText {
+    static var usesTraditionalChinese: Bool {
+        Locale.preferredLanguages.contains { identifier in
+            let normalizedIdentifier = identifier.replacingOccurrences(of: "_", with: "-")
+            return normalizedIdentifier.hasPrefix("zh-Hant")
+                || normalizedIdentifier.hasPrefix("zh-HK")
+                || normalizedIdentifier.hasPrefix("zh-TW")
+                || normalizedIdentifier.hasPrefix("zh-MO")
+        }
+    }
+
+    static var lunarPrefix: String {
+        usesTraditionalChinese ? "農曆" : "农历"
+    }
+
+    static var twelfthMonthShortName: String {
+        usesTraditionalChinese ? "臘" : "腊"
+    }
+
+    static func zodiacName(for zodiac: ChineseZodiac) -> String {
+        switch zodiac {
+        case .shu:
+            return "鼠"
+        case .niu:
+            return "牛"
+        case .hu:
+            return "虎"
+        case .tu:
+            return "兔"
+        case .long:
+            return usesTraditionalChinese ? "龍" : "龙"
+        case .she:
+            return "蛇"
+        case .ma:
+            return usesTraditionalChinese ? "馬" : "马"
+        case .yang:
+            return "羊"
+        case .hou:
+            return "猴"
+        case .ji:
+            return usesTraditionalChinese ? "雞" : "鸡"
+        case .gou:
+            return "狗"
+        case .zhu:
+            return usesTraditionalChinese ? "豬" : "猪"
+        }
+    }
+}
+
 enum ChineseMonth: Int {
     case yi = 1
     case er = 2
@@ -48,9 +97,9 @@ enum ChineseMonth: Int {
         case .dong:
             result = showShort ? "冬" : "十一"
         case .la:
-            result = showShort ? "腊" : "十二"
+            result = showShort ? ChineseCalendarText.twelfthMonthShortName : "十二"
         case .laPlus:
-            result = showShort ? "腊*" : "十二*"
+            result = showShort ? ChineseCalendarText.twelfthMonthShortName + "*" : "十二*"
         }
         if showMonth {
             result += "月"
