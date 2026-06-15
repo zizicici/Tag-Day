@@ -1,65 +1,197 @@
 {
-  "sourceLanguage" : "en",
-  "strings" : {
-    "CFBundleName" : {
-      "comment" : "Bundle name",
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Tag Day"
+  "sourceLanguage": "en",
+  "strings": {
+    "CFBundleName": {
+      "comment": "Bundle name",
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Tag Day"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "标签日"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "标签日"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "標籤日"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "標籤日"
           }
         },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "標籤日"
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "標籤日"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tag Day"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tag Day"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tag Day"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tag Day"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tag Day"
+          }
+        },
+        "es-419": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tag Day"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tag Day"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tag Day"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tag Day"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tag Day"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tag Day"
           }
         }
       }
     },
-    "NSUserNotificationsUsageDescription" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Notifications remind you to add records at the times you set."
+    "NSUserNotificationsUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications remind you to add records at the times you set."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "通知用于在用户设定的时间点提醒记录。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "通知用于在用户设定的时间点提醒记录。"
           }
         },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "通知用於在用戶設定的時間點提醒記錄。"
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "通知用於在用戶設定的時間點提醒記錄。"
           }
         },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "通知用於在用戶設定的時間點提醒記錄。"
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "通知用於在用戶設定的時間點提醒記錄。"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les notifications vous rappellent d’ajouter des enregistrements aux heures définies."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Benachrichtigungen erinnern Sie daran, zu den festgelegten Zeiten Einträge hinzuzufügen."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "設定した時刻に記録を追加するよう通知します。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "알림은 설정한 시간에 기록을 추가하도록 알려줍니다."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Las notificaciones te recuerdan añadir registros a las horas definidas."
+          }
+        },
+        "es-419": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Las notificaciones te recuerdan agregar registros en los horarios definidos."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As notificações lembram-no de adicionar registos às horas definidas."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As notificações lembram você de adicionar registros nos horários definidos."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le notifiche ti ricordano di aggiungere registrazioni agli orari impostati."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Уведомления напоминают добавить записи в заданное время."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сповіщення нагадують додати записи у встановлений час."
           }
         }
       }
     }
   },
-  "version" : "1.0"
+  "version": "1.0"
 }
