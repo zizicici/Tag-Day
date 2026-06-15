@@ -64,7 +64,7 @@ extension MoreViewController {
                 ],
                 thirdPartyLibraries: [
                     .init(name: "SnapKit", version: "5.7.1", urlString: "https://github.com/SnapKit/SnapKit"),
-                    .init(name: "GRDB", version: "7.8.0", urlString: "https://github.com/groue/GRDB.swift"),
+                    .init(name: "GRDB", version: "7.10.0", urlString: "https://github.com/groue/GRDB.swift"),
                     .init(name: "Toast", version: "5.1.1", urlString: "https://github.com/scalessec/Toast-Swift"),
                     .init(name: "DurationPicker", version: "1.0.2", urlString: "https://github.com/mac-gallagher/DurationPicker"),
                     .init(name: "SymbolPicker", version: "1.6.2", urlString: "https://github.com/xnth97/SymbolPicker"),
