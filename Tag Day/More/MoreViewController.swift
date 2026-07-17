@@ -59,7 +59,7 @@ extension MoreViewController {
                     .init(type: .version, value: SpecificationsViewController.getAppVersion() ?? ""),
                     .init(type: .manufacturer, value: "@App君"),
                     .init(type: .publisher, value: "ZIZICICI LIMITED"),
-                    .init(type: .dateOfProduction, value: "2026/06/15"),
+                    .init(type: .dateOfProduction, value: "2026/07/17"),
                     .init(type: .license, value: "粤ICP备2025448771号-1A"),
                 ],
                 thirdPartyLibraries: [
