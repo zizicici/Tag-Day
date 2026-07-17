@@ -180,7 +180,19 @@ fileprivate extension DataManager {
 
     func validate(dayRecords: [DayRecord], shouldExist: Bool) -> Bool {
         if shouldExist {
-            guard !dayRecords.contains(where: { $0.id == nil }) else { return false }
+            let recordIDs = dayRecords.compactMap(\.id)
+            guard recordIDs.count == dayRecords.count else { return false }
+            guard Set(recordIDs).count == recordIDs.count else { return false }
+
+            let storedRecords = (try? fetchAllDayRecords(recordIDs: recordIDs)) ?? []
+            guard storedRecords.count == dayRecords.count else { return false }
+            let storedBookIDs = Dictionary(uniqueKeysWithValues: storedRecords.compactMap { record in
+                record.id.map { ($0, record.bookID) }
+            })
+            guard !dayRecords.contains(where: { record in
+                guard let recordID = record.id else { return true }
+                return storedBookIDs[recordID] != record.bookID
+            }) else { return false }
         } else {
             guard !dayRecords.contains(where: { $0.id != nil }) else { return false }
         }
@@ -618,9 +630,12 @@ extension DataManager {
         return AppDatabase.shared.delete(dayRecords: dayRecords)
     }
     
-    func replaceDayRecords(delete deleteRecords: [DayRecord], add addRecords: [DayRecord]) -> Bool {
+    func replaceDayRecords(bookID: Int64, delete deleteRecords: [DayRecord], add addRecords: [DayRecord]) -> Bool {
+        guard !deleteRecords.contains(where: { $0.bookID != bookID }) else { return false }
+        guard !addRecords.contains(where: { $0.bookID != bookID }) else { return false }
+        guard validate(dayRecords: deleteRecords, shouldExist: true) else { return false }
         guard validate(dayRecords: addRecords, shouldExist: false) else { return false }
-        return AppDatabase.shared.replaceDayRecords(delete: deleteRecords, add: addRecords)
+        return AppDatabase.shared.replaceDayRecords(bookID: bookID, delete: deleteRecords, add: addRecords)
     }
 
     func resetDayRecord(bookID: Int64, day: Int64) -> Bool {

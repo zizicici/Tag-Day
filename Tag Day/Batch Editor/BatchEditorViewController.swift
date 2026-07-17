@@ -63,6 +63,7 @@ class BatchEditorViewController: UIViewController {
     }
     private var book: Book?
     private var tags: [Tag] = []
+    private var originalRecords: [DayRecord] = []
     private var records: [DayRecord] = []
     
     // Select Items -> selectedDay -> Update Selected Items
@@ -91,6 +92,7 @@ class BatchEditorViewController: UIViewController {
         book = DataManager.shared.currentBook
         tags = DataManager.shared.activeTags
         records = DataManager.shared.dayRecords
+        originalRecords = records
         
         setupTopBarItems()
         setupBottomBarItems()
@@ -575,9 +577,10 @@ extension BatchEditorViewController {
     }
     
     func getDeleteRecords() -> [DayRecord] {
-        let storedRecords = DataManager.shared.dayRecords
-        let deleteRecords = storedRecords.filter { record in
-            !records.contains(record)
+        let retainedRecordIDs = Set(records.compactMap(\.id))
+        let deleteRecords = originalRecords.filter { record in
+            guard let recordID = record.id else { return false }
+            return !retainedRecordIDs.contains(recordID)
         }
         return deleteRecords
     }
@@ -613,13 +616,18 @@ extension BatchEditorViewController {
     }
     
     func update(add: [DayRecord], delete: [DayRecord]) {
+        guard let bookID = book?.id else {
+            view.makeToast(String(localized: "batchEditor.alert.save.failed"), position: .center)
+            return
+        }
+
         let addRecords = add.map({ dayRecord in
             var newRecord = dayRecord
             newRecord.id = nil
             return newRecord
         })
         
-        let result = DataManager.shared.replaceDayRecords(delete: delete, add: addRecords)
+        let result = DataManager.shared.replaceDayRecords(bookID: bookID, delete: delete, add: addRecords)
         if result {
             dismiss(animated: ConsideringUser.animated)
         } else {

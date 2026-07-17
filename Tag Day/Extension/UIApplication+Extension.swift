@@ -8,6 +8,23 @@
 import UIKit
 
 extension UIApplication {
+    func hasPresentedModal() -> Bool {
+        for case let windowScene as UIWindowScene in connectedScenes {
+            for window in windowScene.windows where containsPresentedViewController(in: window.rootViewController) {
+                return true
+            }
+        }
+        return false
+    }
+
+    private func containsPresentedViewController(in viewController: UIViewController?) -> Bool {
+        guard let viewController = viewController else { return false }
+        if viewController.presentedViewController != nil {
+            return true
+        }
+        return viewController.children.contains(where: { containsPresentedViewController(in: $0) })
+    }
+
     func topViewController() -> UIViewController? {
         var topViewController: UIViewController? = nil
         for scene in connectedScenes {

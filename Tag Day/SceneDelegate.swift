@@ -67,19 +67,30 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func handleURL(_ url: URL) {
         if url.scheme == "tagday", url.host == "book", let bookIDString = url.pathComponents.dropFirst().first, let bookID = Int64(bookIDString) {
-            DataManager.shared.select(bookID: bookID)
+            navigate(toBookID: bookID)
         }
     }
     
     func handleNotificationUserInfo(_ userInfo: [AnyHashable : Any]) {
-        guard let bookID = userInfo["bookID"] as? Int64 else { return }
+        guard let number = userInfo["bookID"] as? NSNumber else { return }
+        navigate(toBookID: number.int64Value)
+    }
+
+    private func navigate(toBookID bookID: Int64) {
+        guard DataManager.shared.books.contains(where: { $0.id == bookID }) else { return }
+        guard DataManager.shared.currentBook?.id != bookID else { return }
+        guard !UIApplication.shared.hasPresentedModal() else { return }
+
         DataManager.shared.select(bookID: bookID)
     }
 }
 
 extension SceneDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        handleNotificationUserInfo(response.notification.request.content.userInfo)
-        completionHandler()
+        let userInfo = response.notification.request.content.userInfo
+        DispatchQueue.main.async { [weak self] in
+            self?.handleNotificationUserInfo(userInfo)
+            completionHandler()
+        }
     }
 }

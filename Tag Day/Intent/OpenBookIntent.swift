@@ -28,6 +28,10 @@ struct OpenBookIntent: AppIntent {
     
     @MainActor
     func perform() async throws -> some IntentResult & ReturnsValue<Bool> {
+        guard !UIApplication.shared.hasPresentedModal() else {
+            return .result(value: false)
+        }
+
         DataManager.shared.select(bookID: Int64(book.id))
         if let date = date {
             let day = GregorianDay(from: date)

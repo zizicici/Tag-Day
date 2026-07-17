@@ -394,6 +394,10 @@ extension AppDatabase {
 
 // Day Records
 extension AppDatabase {
+    private enum ReplaceDayRecordsError: Error {
+        case invalidRequest
+    }
+
     func update(dayRecord: DayRecord) -> Bool {
         guard dayRecord.id != nil else {
             // No ID
@@ -513,17 +517,39 @@ extension AppDatabase {
         return true
     }
     
-    func replaceDayRecords(delete deleteRecords: [DayRecord], add addRecords: [DayRecord]) -> Bool {
-        guard !deleteRecords.contains(where: { $0.id == nil }) else {
-            return false
-        }
+    func replaceDayRecords(bookID: Int64, delete deleteRecords: [DayRecord], add addRecords: [DayRecord]) -> Bool {
+        let deleteRecordIDs = deleteRecords.compactMap(\.id)
+        guard deleteRecordIDs.count == deleteRecords.count else { return false }
+        guard Set(deleteRecordIDs).count == deleteRecordIDs.count else { return false }
         guard !addRecords.contains(where: { $0.id != nil }) else {
             return false
         }
+        guard !deleteRecords.contains(where: { $0.bookID != bookID }) else { return false }
+        guard !addRecords.contains(where: { $0.bookID != bookID }) else { return false }
         guard let dbWriter = dbWriter else { return false }
         do {
             _ = try dbWriter.write { db in
-                try DayRecord.deleteAll(db, ids: deleteRecords.map(\.id))
+                guard try Book.fetchOne(db, id: bookID) != nil else {
+                    throw ReplaceDayRecordsError.invalidRequest
+                }
+
+                let storedDeleteRecords = try DayRecord.fetchAll(db, ids: deleteRecordIDs)
+                guard storedDeleteRecords.count == deleteRecordIDs.count,
+                      !storedDeleteRecords.contains(where: { $0.bookID != bookID }) else {
+                    throw ReplaceDayRecordsError.invalidRequest
+                }
+
+                let addTagIDs = Set(addRecords.map(\.tagID))
+                let storedAddTags = try Tag.fetchAll(db, ids: Array(addTagIDs))
+                guard storedAddTags.count == addTagIDs.count,
+                      !storedAddTags.contains(where: { $0.bookID != bookID }) else {
+                    throw ReplaceDayRecordsError.invalidRequest
+                }
+
+                let deletedCount = try DayRecord.deleteAll(db, ids: deleteRecordIDs)
+                guard deletedCount == deleteRecordIDs.count else {
+                    throw ReplaceDayRecordsError.invalidRequest
+                }
                 for dayRecord in addRecords {
                     var saveRecord = dayRecord
                     try saveRecord.save(db)
