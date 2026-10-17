@@ -37,12 +37,6 @@ class OverviewViewController: UIViewController {
     
     private var sectionRecordMaxCount: [Int: Int] = [:]
     
-    private var isSymbol: Bool = false {
-        didSet {
-            reloadData()
-        }
-    }
-    
     private var didScrollToday: Bool = false {
         willSet {
             if didScrollToday == false, newValue == true {
@@ -90,6 +84,7 @@ class OverviewViewController: UIViewController {
         reloadData()
         
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .DatabaseUpdated, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .SettingsUpdate, object: nil)
     }
     
     private func configureHierarchy() {
@@ -168,6 +163,8 @@ extension OverviewViewController: DisplayHandlerDelegate {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
         
         let year = displayHandler.getSelectedYear()
+        let isSymbol = OverviewDisplayMode.getValue() == .symbol
+        let showsCounts = OverviewCountDisplay.getValue() == .display
         
         let firstDayOfWeek: WeekdayOrder = WeekdayOrder(rawValue: WeekStartType.current.rawValue) ?? WeekdayOrder.firstDayOfWeek
         
@@ -223,7 +220,7 @@ extension OverviewViewController: DisplayHandlerDelegate {
                 let recordsInADay = filterRecord.filter{ $0.day == julianDay }
                 let bookInfo = getBookCounts(records: recordsInADay, books: books)
                 
-                return OverviewItem(index: julianDay, backgroundColor: backgroundColor, foregroundColor: foregroundColor, isToday: isToday, bookInfo: bookInfo, isSymbol: isSymbol)
+                return OverviewItem(index: julianDay, backgroundColor: backgroundColor, foregroundColor: foregroundColor, isToday: isToday, bookInfo: bookInfo, isSymbol: isSymbol, showsCounts: showsCounts)
                 
 //                return BlockItem(index: julianDay, backgroundColor: backgroundColor, foregroundColor: foregroundColor, isToday: isToday, tags: tags, records: records.filter{ $0.day == gregorianDay.julianDay }, tagDisplayType: TagDisplayType.getValue(), secondaryCalendar: secondaryCalendar, a11ySecondaryCalendar: a11ySecondaryCallendar)
             })
@@ -282,23 +279,31 @@ extension OverviewViewController {
         var children: [UIMenuElement] = []
         
         let tagDisplayMenu = getTagDisplayTypeMenu()
+        let countDisplayMenu = getCountDisplayMenu()
         
-        children = [tagDisplayMenu]
+        children = [tagDisplayMenu, countDisplayMenu]
         
         return UIMenu(children: children)
     }
     
     func getTagDisplayTypeMenu() -> UIMenu {
-        let normalAction = UIAction(title: String(localized: "overview.normal"), state: isSymbol ? .off : .on) { [weak self] _ in
-            self?.isSymbol = false
+        let current = OverviewDisplayMode.getValue()
+        let actions = OverviewDisplayMode.allCases.map { option in
+            UIAction(title: option.getName(), state: option == current ? .on : .off) { _ in
+                OverviewDisplayMode.setValue(option)
+            }
         }
-        let symbolAction = UIAction(title: String(localized: "overview.symbol"), state: isSymbol ? .on : .off) { [weak self] _ in
-            self?.isSymbol = true
+        return UIMenu(title: OverviewDisplayMode.getTitle(), subtitle: current.getName(), image: UIImage(systemName: "swatchpalette"), options: .singleSelection, children: actions)
+    }
+
+    func getCountDisplayMenu() -> UIMenu {
+        let current = OverviewCountDisplay.getValue()
+        let actions = OverviewCountDisplay.allCases.map { option in
+            UIAction(title: option.getName(), state: option == current ? .on : .off) { _ in
+                OverviewCountDisplay.setValue(option)
+            }
         }
-        let tagDisplayActions = [normalAction, symbolAction]
-        let tagDisplayTypeMenu = UIMenu(title: String(localized: "overview.display"), subtitle: isSymbol ? symbolAction.title : normalAction.title, image: UIImage(systemName: "swatchpalette"), children: tagDisplayActions)
-    
-        return tagDisplayTypeMenu
+        return UIMenu(title: OverviewCountDisplay.getTitle(), subtitle: current.getName(), image: UIImage(systemName: "number"), options: .singleSelection, children: actions)
     }
 }
 

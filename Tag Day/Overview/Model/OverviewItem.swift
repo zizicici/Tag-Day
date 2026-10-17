@@ -25,6 +25,7 @@ struct OverviewItem: BlockCellProtocol {
     var a11ySecondaryCalendar: String?
     
     var isSymbol: Bool
+    var showsCounts: Bool = true
     
     var day: GregorianDay {
         return GregorianDay(JDN: index)
@@ -32,10 +33,11 @@ struct OverviewItem: BlockCellProtocol {
     
     func getTagData() -> [(tag: Tag, count: Int)] {
         let fakeTagData = bookInfo.map { bookInfo in
+            let displayCount = showsCounts ? bookInfo.count : 0
             if isSymbol {
-                return (Tag(bookID: bookInfo.book.id!, title: bookInfo.book.symbol, subtitle: "", color: UIColor.clear.generateLightDarkString(), titleColor: bookInfo.book.color, order: 0), bookInfo.count)
+                return (Tag(bookID: bookInfo.book.id!, title: bookInfo.book.symbol, subtitle: "", color: UIColor.clear.generateLightDarkString(), titleColor: bookInfo.book.color, order: 0), displayCount)
             } else {
-                return (Tag(bookID: bookInfo.book.id!, title: bookInfo.book.title, subtitle: "", color: bookInfo.book.color, order: 0), bookInfo.count)
+                return (Tag(bookID: bookInfo.book.id!, title: bookInfo.book.title, subtitle: "", color: bookInfo.book.color, order: 0), displayCount)
             }
         }
         

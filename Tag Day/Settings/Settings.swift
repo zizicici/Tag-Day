@@ -18,6 +18,8 @@ extension UserDefaults {
         case TodayIndicator = "com.zizicici.tag.settings.TodayIndicator"
         case CrossYearMonthDisplay = "com.zizicici.tag.settings.CrossYearMonthDisplay"
         case TagDisplayType = "com.zizicici.tag.settings.TagDisplayType"
+        case OverviewDisplayMode = "com.zizicici.tag.settings.OverviewDisplayMode"
+        case OverviewCountDisplay = "com.zizicici.tag.settings.OverviewCountDisplay"
         case MonthlyStatsType = "com.zizicici.tag.settings.MonthlyStatsType"
         case YearlyStatsType = "com.zizicici.tag.settings.YearlyStatsType"
         case DynamicColor = "com.zizicici.tag.settings.DynamicColor"
@@ -179,6 +181,66 @@ extension TagDisplayType: UserDefaultSettable {
 
     static func getFooter() -> String? {
         return nil
+    }
+}
+
+enum OverviewDisplayMode: Int, CaseIterable, Codable {
+    case normal
+    case symbol
+}
+
+extension OverviewDisplayMode: UserDefaultSettable {
+    static func getKey() -> String {
+        return UserDefaults.Settings.OverviewDisplayMode.rawValue
+    }
+
+    static var userDefaults: UserDefaults { .standard }
+
+    static var defaultOption: OverviewDisplayMode {
+        return .normal
+    }
+
+    func getName() -> String {
+        switch self {
+        case .normal:
+            return String(localized: "overview.normal")
+        case .symbol:
+            return String(localized: "overview.symbol")
+        }
+    }
+
+    static func getTitle() -> String {
+        return String(localized: "overview.display")
+    }
+}
+
+enum OverviewCountDisplay: Int, CaseIterable, Codable {
+    case hidden
+    case display
+}
+
+extension OverviewCountDisplay: UserDefaultSettable {
+    static func getKey() -> String {
+        return UserDefaults.Settings.OverviewCountDisplay.rawValue
+    }
+
+    static var userDefaults: UserDefaults { .standard }
+
+    static var defaultOption: OverviewCountDisplay {
+        return .display
+    }
+
+    func getName() -> String {
+        switch self {
+        case .hidden:
+            return String(localized: "overview.countDisplay.hidden")
+        case .display:
+            return String(localized: "overview.countDisplay.display")
+        }
+    }
+
+    static func getTitle() -> String {
+        return String(localized: "overview.countDisplay.title")
     }
 }
 
