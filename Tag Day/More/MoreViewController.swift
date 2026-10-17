@@ -59,7 +59,7 @@ extension MoreViewController {
                     .init(type: .version, value: SpecificationsViewController.getAppVersion() ?? ""),
                     .init(type: .manufacturer, value: "@App君"),
                     .init(type: .publisher, value: "ZIZICICI LIMITED"),
-                    .init(type: .dateOfProduction, value: "2026/07/17"),
+                    .init(type: .dateOfProduction, value: "2026/10/17"),
                     .init(type: .license, value: "粤ICP备2025448771号-1A"),
                 ],
                 thirdPartyLibraries: [
@@ -71,8 +71,10 @@ extension MoreViewController {
                     .init(name: "ZipArchive", version: "2.6.0", urlString: "https://github.com/ZipArchive/ZipArchive"),
                 ]
             ),
-            otherApps: [.moontake, .lemon, .offDay, .one, .pigeon, .pin, .coconut],
-            otherAppsDisplayCount: 3
+            appShowcase: AppShowcaseConfiguration(
+                apps: [.moontake, .lemon, .offDay, .watermelon, .pin],
+                displayCount: 3
+            )
         )
 
         return MoreViewController(configuration: config, dataSource: TagDayMoreDataSource())
