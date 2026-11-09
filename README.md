@@ -131,7 +131,7 @@ Tag Day.xcodeproj/      # Xcode 工程
 - iOS Deployment Target: `17.0+`
 - Swift: `5.0`
 - SPM 依赖（`Package.resolved`）：
-  - `MoreKit` `2.2.1`
+  - `MoreKit` `2.2.2`
   - `GRDB.swift` `7.8.0`
   - `SnapKit` `5.7.1`
   - `ZCCalendar` `0.1.4`

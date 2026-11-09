@@ -276,6 +276,7 @@
 		14D0D3C82FDFB7A9004712E4 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		14D0D3C92FDFB7AF004712E4 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		14D0D3CA2FDFB7B9004712E4 /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		147AC0012FF0000000A10001 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		14D2726F2DC0709300267572 /* CalendarBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarBaseViewController.swift; sourceTree = "<group>"; };
 		14D272712DC0712A00267572 /* AppColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColor.swift; sourceTree = "<group>"; };
 		14D272732DC0716E00267572 /* CalendarViewController+CellRegistration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CalendarViewController+CellRegistration.swift"; sourceTree = "<group>"; };
@@ -926,6 +927,7 @@
 				fr,
 				ja,
 				ko,
+				pl,
 				"es-419",
 				es,
 				uk,
@@ -1156,6 +1158,7 @@
 				14D0D3C82FDFB7A9004712E4 /* ru */,
 				14D0D3C92FDFB7AF004712E4 /* pt-BR */,
 				14D0D3CA2FDFB7B9004712E4 /* pt-PT */,
+				147AC0012FF0000000A10001 /* pl */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -1446,7 +1449,7 @@
 			repositoryURL = "https://github.com/zizicici/MoreKit";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 2.2.1;
+				minimumVersion = 2.2.2;
 			};
 		};
 		14908A092EC8B2E30065A1EC /* XCRemoteSwiftPackageReference "ZCCalendar" */ = {

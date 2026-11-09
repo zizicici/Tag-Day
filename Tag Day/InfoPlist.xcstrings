@@ -94,6 +94,12 @@
             "state": "translated",
             "value": "Tag Day"
           }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tag Day"
+          }
         }
       }
     },
@@ -115,13 +121,13 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "通知用於在用戶設定的時間點提醒記錄。"
+            "value": "通知會在你設定的時間提醒你新增記錄。"
           }
         },
         "zh-HK": {
           "stringUnit": {
             "state": "translated",
-            "value": "通知用於在用戶設定的時間點提醒記錄。"
+            "value": "通知會在你設定的時間提醒你新增記錄。"
           }
         },
         "fr": {
@@ -188,6 +194,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Сповіщення нагадують додати записи у встановлений час."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Powiadomienia przypominają o dodawaniu wpisów o wybranych porach."
           }
         }
       }

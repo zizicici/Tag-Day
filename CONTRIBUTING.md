@@ -51,6 +51,18 @@ docs: improve setup section in README
 - 在复杂逻辑处添加必要注释
 - 避免引入未使用依赖
 
+## 本地化用词
+
+- `Book` 指承载标签和记录的日历簿，不是实体书；同一语言内保持同一种称呼。
+- `Tag`、`Record`、`Comment` 分别指标签、记录、备注，不应在同一语言内混用其他数据概念。
+- 波兰语统一使用 `Kalendarz`（日历簿）、`Tag`（标签）、`Wpis`（记录）、`Notatka`（备注）。
+- 标签聚合选项表示把相同标签的多条记录合并显示；普通模式逐条显示记录。
+- 批量编辑确认框显示的是将要添加和删除的记录数，使用待执行语气。
+- 保留 `%i`、`%1$@`、`${book}` 等占位符的类型和参数编号；复数需按目标语言分别处理，波兰语包含 `one`、`few`、`many`、`other`。
+- 添加语言时，同步更新 `Localizable.xcstrings`、`InfoPlist.xcstrings`、工程的 `knownRegions` 和启动屏本地化。主 App 与 Widget 共用 `Localizable.xcstrings`。
+- MoreKit 的共享界面文案在 MoreKit 仓库维护；仅在 Tag Day 增加语言不会翻译依赖包内的文案。
+- 英语节气名称参考[国务院新闻办公室的二十四节气词表](https://english.scio.gov.cn/m/featured/chinakeywords/2024-08/30/content_117397318.htm)。
+
 ## 测试建议
 
 当前项目尚未建立完整自动化测试体系。请至少进行手工验证：
