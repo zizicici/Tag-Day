@@ -72,8 +72,9 @@ extension MoreViewController {
                 ]
             ),
             appShowcase: AppShowcaseConfiguration(
-                apps: [.moontake, .lemon, .offDay, .watermelon, .pin],
-                displayCount: 3
+                apps: [.passcord, .watermelon],
+                displayCount: 2,
+                automaticallyIncludesFestivalsForChineseLocales: false
             )
         )
 
